@@ -1,0 +1,41 @@
+plugins {
+    id "org.jetbrains.intellij" version "0.0.43"
+}
+
+apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'java'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+// updating this version would automatically updates plugins version
+version '0.1.0'
+
+intellij {
+    version '15.0.3'
+    pluginName 'Neo4j'
+    updateSinceUntilBuild false
+    sameSinceUntilBuild false
+
+    publish {
+        pluginId '0000' // todo: add pluginId
+        if (project.hasProperty('intellijUsername')) {
+            username intellijUsername
+        }
+        if (project.hasProperty('intellijPassword')) {
+            password intellijPassword
+        }
+    }
+
+    if (System.getenv("BUILD_ENV") == "travis") {
+        downloadSources false
+    } else {
+        downloadSources true
+    }
+}

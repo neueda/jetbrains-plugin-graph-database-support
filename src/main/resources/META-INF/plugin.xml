@@ -1,0 +1,31 @@
+<idea-plugin version="2">
+    <id>com.neueda4j.jetbrains.plugin.neo4j</id>
+    <name>Neo4j</name>
+    <!-- Should be automatically replaced by gradle build -->
+    <version>9.9.9</version>
+    <vendor email="dmitry.vrublevsky@neueda.com" url="https://neueda4j.com">Neueda4j</vendor>
+
+    <description><![CDATA[
+      Neo4j database support.<br>
+    ]]></description>
+
+    <change-notes><![CDATA[
+        <br>
+        <b>0.1.0</b><br>
+        <br>
+        ]]></change-notes>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="141.0" until-build="144.99999"/>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>
