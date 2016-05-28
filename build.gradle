@@ -18,8 +18,8 @@ targetCompatibility = 1.8
 version '0.1.0'
 
 intellij {
-    version '15.0.3'
-    pluginName 'Neo4j'
+    version '2016.1.2'
+    pluginName 'Graph Database Support'
     updateSinceUntilBuild false
     sameSinceUntilBuild false
 
@@ -38,4 +38,7 @@ intellij {
     } else {
         downloadSources true
     }
+}
+
+dependencies {
 }

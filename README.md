@@ -5,16 +5,18 @@ Neo4j - Jetbrains IDE plugin
 
 Plugin provides [Neo4j](http://neo4j.com/) database support to **all** Jetbrains IDE's.
 
-**WARNING:** Currently plugin is in beta-stage.  
-If any bugs, incompatibilities or other issues occurs - report by creating issue on Github.
+**WARNING:** Currently plugin is in alpha-stage.  
+Report any bugs, incompatibilities or feature requests by creating issue on Github.
 
 Maintained by [Neueda4j](http://neueda4j.com).
 
 # Features
 
+TODO: add some awesome features!
+
 # Installation
 
-Plugin is [available](https://plugins.jetbrains.com/plugin/TODO) via Jetbrains repositories.
+Plugin is *link_to_be_provided* via Jetbrains repositories.
 
 Go to `Preferences` -> `Plugins` -> `Browser repositories...` and search for "Neo4j".
 Install plugin and restart your IDE.
