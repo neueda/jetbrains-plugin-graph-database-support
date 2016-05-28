@@ -1,0 +1,31 @@
+plugins {
+    id "org.jetbrains.intellij" version "0.1.4"
+}
+
+apply plugin: 'org.jetbrains.intellij'
+
+dependencies {
+}
+
+intellij {
+    version '2016.1.2'
+    pluginName 'GraphDatabaseSupport'
+    updateSinceUntilBuild false
+    sameSinceUntilBuild false
+
+    publish {
+        pluginId '0000' // todo: add pluginId
+        if (project.hasProperty('intellijUsername')) {
+            username intellijUsername
+        }
+        if (project.hasProperty('intellijPassword')) {
+            password intellijPassword
+        }
+    }
+
+    if (System.getenv("BUILD_ENV") == "travis") {
+        downloadSources false
+    } else {
+        downloadSources true
+    }
+}

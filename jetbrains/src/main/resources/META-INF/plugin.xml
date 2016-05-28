@@ -1,13 +1,13 @@
 <idea-plugin version="2">
-    <id>lv.neueda.jetbrains.plugin.neo4j</id>
+    <id>lv.neueda.jetbrains.plugin.graphdb</id>
     <name>Graph Database support</name>
     <!-- Should be automatically replaced by gradle build -->
     <version>9.9.9</version>
     <vendor email="dmitry.vrublevsky@neueda.com" url="https://neueda.lv">Neueda</vendor>
 
     <description><![CDATA[
-      Graph Database support.<br>
-    ]]></description>
+        Graph Database support.<br>
+        ]]></description>
 
     <change-notes><![CDATA[
         <br>
@@ -23,6 +23,12 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
+        <!-- Not defined: icon, conditionClass -->
+        <toolWindow id="Graph Database"
+                    anchor="bottom"
+                    secondary="false"
+                    factoryClass="lv.neueda.jetbrains.plugin.graphdb.GraphDatabaseSupportToolWindow"
+                    icon="/graphdb-images/tool-windows-icon.png"/>
     </extensions>
 
     <actions>
