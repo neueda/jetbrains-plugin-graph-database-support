@@ -1,9 +1,8 @@
-Neo4j - Jetbrains IDE plugin
+Graph Database Support - Jetbrains IDE plugin
 ======================
-[![Build Status](https://travis-ci.org/Neueda4j/jetbrains-plugin-neo4j.svg?branch=master)](https://travis-ci.org/Neueda4j/jetbrains-plugin-cypher)
-[![ZenHub] (https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png)] (https://zenhub.io)
 
-Plugin provides [Neo4j](http://neo4j.com/) database support to **all** Jetbrains IDE's.
+Plugin provides Graph Database support to **all** Jetbrains IDE's.  
+Supported databases: Neo4j.
 
 **WARNING:** Currently plugin is in alpha-stage.  
 Report any bugs, incompatibilities or feature requests by creating issue on Github.
@@ -37,6 +36,8 @@ Plugin is not tested (yet) with all existing Jetbrains products. However it shou
 without any issues.
 
 # Screenshots
+
+TODO: add awesome screenshots
 
 # Development
 

@@ -1,12 +1,12 @@
 <idea-plugin version="2">
     <id>lv.neueda.jetbrains.plugin.neo4j</id>
-    <name>Neo4j</name>
+    <name>Graph Database support</name>
     <!-- Should be automatically replaced by gradle build -->
     <version>9.9.9</version>
     <vendor email="dmitry.vrublevsky@neueda.com" url="https://neueda.lv">Neueda</vendor>
 
     <description><![CDATA[
-      Neo4j database support.<br>
+      Graph Database support.<br>
     ]]></description>
 
     <change-notes><![CDATA[
