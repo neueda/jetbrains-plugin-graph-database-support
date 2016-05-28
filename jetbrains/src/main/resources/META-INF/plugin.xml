@@ -33,5 +33,13 @@
 
     <actions>
         <!-- Add your actions here -->
+        <group id="GraphDatabaseActionGroup"
+               text="Graph Database" description="Execute graph database queries"
+               icon="/graphdb-images/tool-windows-icon.png" popup="true">
+
+            <action id="GraphDatabaseActionGroup.ExecuteQuery"
+                    class="lv.neueda.jetbrains.plugin.graphdb.action.ExecuteQueryAction" text="Execute query" description="Execute query"/>
+            <add-to-group group-id="EditorPopupMenu"/>
+        </group>
     </actions>
 </idea-plugin>
