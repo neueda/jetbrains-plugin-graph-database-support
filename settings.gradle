@@ -1,4 +1,6 @@
 include 'visualization'
 include 'jetbrains'
 include 'common'
+include 'dumb-graph-database'
+include 'manual-tests'
 

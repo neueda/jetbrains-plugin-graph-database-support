@@ -1,0 +1,5 @@
+dependencies {
+    testCompile project(':common')
+    testCompile project(':visualization')
+    testCompile project(':dumb-graph-database')
+}
