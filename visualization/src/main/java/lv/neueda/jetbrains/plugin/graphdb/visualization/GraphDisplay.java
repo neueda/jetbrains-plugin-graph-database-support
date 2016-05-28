@@ -1,7 +1,7 @@
 package lv.neueda.jetbrains.plugin.graphdb.visualization;
 
-import lv.neueda.jetbrains.plugin.graphdb.visualization.domain.GraphNode;
-import lv.neueda.jetbrains.plugin.graphdb.visualization.domain.GraphRelationship;
+import lv.neueda.jetbrains.plugin.graphdb.common.GraphNode;
+import lv.neueda.jetbrains.plugin.graphdb.common.GraphRelationship;
 import prefuse.Display;
 import prefuse.Visualization;
 import prefuse.action.ActionList;

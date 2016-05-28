@@ -1,9 +1,9 @@
 package lv.neueda.jetbrains.plugin.graphdb.visualization;
 
-import lv.neueda.jetbrains.plugin.graphdb.visualization.domain.GraphNode;
-import lv.neueda.jetbrains.plugin.graphdb.visualization.domain.GraphRelationship;
+import lv.neueda.jetbrains.plugin.graphdb.common.GraphNode;
+import lv.neueda.jetbrains.plugin.graphdb.common.GraphRelationship;
 
-import javax.swing.*;
+import javax.swing.JFrame;
 
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
@@ -17,8 +17,8 @@ public class VisualizationImpl implements VisualizationApi {
     }
 
     @Override
-    public void addRelation(GraphNode start, GraphNode end) {
-        display.addRelationship(new GraphRelationship(start, end));
+    public void addRelation(GraphRelationship relationship) {
+        display.addRelationship(relationship);
     }
 
     @Override

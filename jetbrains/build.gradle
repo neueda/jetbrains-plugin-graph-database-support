@@ -5,6 +5,8 @@ plugins {
 apply plugin: 'org.jetbrains.intellij'
 
 dependencies {
+    compile project(':common')
+    compile project(':visualization')
 }
 
 intellij {
