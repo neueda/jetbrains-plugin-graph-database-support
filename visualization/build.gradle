@@ -1,0 +1,4 @@
+dependencies {
+    compile 'de.sciss:prefuse-core:1.0.0'
+    compile 'de.sciss:prefuse-demos:1.0.0'
+}

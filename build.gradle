@@ -3,19 +3,22 @@ plugins {
 }
 
 apply plugin: 'org.jetbrains.intellij'
-apply plugin: 'java'
 apply plugin: 'idea'
 
-repositories {
-    mavenCentral()
-    mavenLocal()
+allprojects {
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    // updating this version would automatically updates plugins version
+    version '0.1.0'
 }
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-// updating this version would automatically updates plugins version
-version '0.1.0'
 
 intellij {
     version '2016.1.2'
