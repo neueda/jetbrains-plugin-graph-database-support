@@ -2,8 +2,11 @@ package lv.neueda.jetbrains.plugin.graphdb.visualization;
 
 import lv.neueda.jetbrains.plugin.graphdb.common.GraphNode;
 import lv.neueda.jetbrains.plugin.graphdb.common.GraphRelationship;
+import lv.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 
 import javax.swing.JFrame;
+
+import java.util.function.Consumer;
 
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
@@ -29,6 +32,10 @@ public class VisualizationImpl implements VisualizationApi {
     @Override
     public void paint() {
 
+    }
+
+    public void addNodeListener(EventType type, Consumer<String> action) {
+        display.addNodeListener(type, action);
     }
 
     @Override
