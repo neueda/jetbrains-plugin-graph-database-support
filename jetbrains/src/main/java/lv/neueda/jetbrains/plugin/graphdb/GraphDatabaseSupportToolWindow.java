@@ -8,6 +8,8 @@ import com.intellij.ui.content.ContentFactory;
 import com.intellij.util.messages.MessageBus;
 import lv.neueda.jetbrains.plugin.graphdb.event.ExecuteQueryEvent;
 import lv.neueda.jetbrains.plugin.graphdb.execution.QueryExecutionService;
+import lv.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
+import lv.neueda.jetbrains.plugin.graphdb.visualization.VisualizationImpl;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,27 +24,38 @@ public class GraphDatabaseSupportToolWindow implements ToolWindowFactory {
     private QueryExecutionService queryExecutionService;
 
     private JPanel toolWindowContent;
+    private JPanel canvas;
 
     public GraphDatabaseSupportToolWindow() {
     }
 
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
+        VisualizationImpl visualization = new VisualizationImpl();
         this.toolWindow = toolWindow;
-        this.queryExecutionService = new QueryExecutionService();
+        this.queryExecutionService = new QueryExecutionService(visualization);
 
+        initializeContent(visualization);
         registerSubscriber(project.getMessageBus());
-        initializeContent();
     }
 
-    private void initializeContent() {
+    private void initializeContent(VisualizationApi visualization) {
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(toolWindowContent, "", false);
         toolWindow.getContentManager().addContent(content);
+
+        canvas.add(visualization.getCanvas());
     }
 
     private void registerSubscriber(MessageBus messageBus) {
         messageBus.connect()
                 .subscribe(ExecuteQueryEvent.EXECUTE_QUERY_TOPIC, queryExecutionService::executeQuery);
+    }
+
+    /**
+     * Custom initialization.
+     */
+    private void createUIComponents() {
+        canvas = new JPanel();
     }
 }

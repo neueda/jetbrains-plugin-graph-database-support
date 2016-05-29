@@ -4,6 +4,7 @@ import lv.neueda.jetbrains.plugin.graphdb.common.GraphNode;
 import lv.neueda.jetbrains.plugin.graphdb.common.GraphRelationship;
 import lv.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import java.util.function.Consumer;
@@ -26,12 +27,16 @@ public class VisualizationImpl implements VisualizationApi {
 
     @Override
     public void clear() {
-
+        display.removeAll();
     }
 
     @Override
     public void paint() {
+        display.run();
+    }
 
+    public JComponent getCanvas() {
+        return display;
     }
 
     public void addNodeListener(EventType type, Consumer<GraphNode> action) {
@@ -48,5 +53,4 @@ public class VisualizationImpl implements VisualizationApi {
 
         display.run();
     }
-
 }
