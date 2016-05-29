@@ -27,7 +27,7 @@
         <toolWindow id="Graph Database"
                     anchor="bottom"
                     secondary="false"
-                    factoryClass="lv.neueda.jetbrains.plugin.graphdb.GraphDatabaseSupportToolWindow"
+                    factoryClass="lv.neueda.jetbrains.plugin.graphdb.ui.GraphDatabaseSupportToolWindow"
                     icon="/graphdb-images/tool-windows-icon.png"/>
     </extensions>
 

@@ -1,4 +1,4 @@
-package lv.neueda.jetbrains.plugin.graphdb;
+package lv.neueda.jetbrains.plugin.graphdb.ui;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import java.awt.GridLayout;
 
 public class GraphDatabaseSupportToolWindow implements ToolWindowFactory {
 
@@ -25,6 +27,7 @@ public class GraphDatabaseSupportToolWindow implements ToolWindowFactory {
 
     private JPanel toolWindowContent;
     private JPanel canvas;
+    private JScrollPane content;
 
     public GraphDatabaseSupportToolWindow() {
     }
@@ -56,6 +59,6 @@ public class GraphDatabaseSupportToolWindow implements ToolWindowFactory {
      * Custom initialization.
      */
     private void createUIComponents() {
-        canvas = new JPanel();
+        canvas = new JPanel(new GridLayout(0, 1));
     }
 }

@@ -1,5 +1,15 @@
+plugins {
+    id "org.jetbrains.intellij" version "0.1.4"
+}
+
+apply plugin: 'org.jetbrains.intellij'
+
 dependencies {
-    testCompile project(':common')
-    testCompile project(':visualization')
-    testCompile project(':dumb-graph-database')
+    compile project(':jetbrains')
+}
+
+intellij {
+    version '2016.1.2'
+    pluginName 'GraphDatabaseSupport'
+    downloadSources false
 }

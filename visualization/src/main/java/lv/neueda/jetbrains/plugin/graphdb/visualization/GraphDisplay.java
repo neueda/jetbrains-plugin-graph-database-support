@@ -56,8 +56,6 @@ public class GraphDisplay extends Display {
 
         setupRenderer();
         createLayout();
-        setSize(500, 500);
-        pan(250, 250);
         setHighQuality(true);
         addControlListener(new DragControl());
         addControlListener(new NodePopup());
