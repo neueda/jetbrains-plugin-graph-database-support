@@ -6,8 +6,6 @@ public class DumbNode implements GraphNode {
 
     private String id;
 
-    public DumbNode() {}
-
     public DumbNode(String id) {
         this.id = id;
     }
@@ -19,5 +17,12 @@ public class DumbNode implements GraphNode {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "DumbNode{" +
+                "id='" + id + '\'' +
+                '}';
     }
 }

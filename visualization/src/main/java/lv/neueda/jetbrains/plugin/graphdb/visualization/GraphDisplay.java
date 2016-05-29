@@ -12,11 +12,13 @@ import prefuse.action.layout.graph.ForceDirectedLayout;
 import prefuse.activity.Activity;
 import prefuse.controls.ControlAdapter;
 import prefuse.controls.DragControl;
+import prefuse.data.Edge;
 import prefuse.data.Graph;
 import prefuse.data.Node;
 import prefuse.render.DefaultRendererFactory;
 import prefuse.render.EdgeRenderer;
 import prefuse.util.ColorLib;
+import prefuse.visual.EdgeItem;
 import prefuse.visual.NodeItem;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
@@ -40,6 +42,7 @@ public class GraphDisplay extends Display {
 
     private Map<String, Node> nodeMap = new HashMap<>();
     private Map<String, GraphNode> graphNodeMap = new HashMap<>();
+    private Map<String, GraphRelationship> graphRelationshipMap = new HashMap<>();
 
     public GraphDisplay() {
         super(new Visualization());
@@ -59,7 +62,7 @@ public class GraphDisplay extends Display {
     }
 
     public void addNodeListener(EventType type, Consumer<GraphNode> action) {
-        ControlAdapter focusListener = new ControlAdapter() {
+        ControlAdapter listener = new ControlAdapter() {
             @Override
             public void itemEntered(VisualItem item, MouseEvent e) {
                 if (type == EventType.HOVER && item instanceof NodeItem) {
@@ -74,7 +77,26 @@ public class GraphDisplay extends Display {
                 }
             }
         };
-        addControlListener(focusListener);
+        addControlListener(listener);
+    }
+
+    public void addEdgeListener(EventType type, Consumer<GraphRelationship> action) {
+        ControlAdapter listener = new ControlAdapter() {
+            @Override
+            public void itemEntered(VisualItem item, MouseEvent e) {
+                if (type == EventType.HOVER && item instanceof EdgeItem) {
+                    action.accept(graphRelationshipMap.get(item.get("id")));
+                }
+            }
+
+            @Override
+            public void itemClicked(VisualItem item, MouseEvent e) {
+                if (type == EventType.CLICK && item instanceof EdgeItem) {
+                    action.accept(graphRelationshipMap.get(item.get("id")));
+                }
+            }
+        };
+        addControlListener(listener);
     }
 
     public void addNode(GraphNode graphNode) {
@@ -87,7 +109,10 @@ public class GraphDisplay extends Display {
     public void addRelationship(GraphRelationship graphRelationship) {
         String start = graphRelationship.getStart().getId();
         String end = graphRelationship.getEnd().getId();
-        graph.addEdge(nodeMap.get(start), nodeMap.get(end));
+
+        Edge edge = graph.addEdge(nodeMap.get(start), nodeMap.get(end));
+        edge.set("id", graphRelationship.getId());
+        graphRelationshipMap.put(graphRelationship.getId(), graphRelationship);
     }
 
     private void setupRenderer() {
@@ -129,7 +154,11 @@ public class GraphDisplay extends Display {
         return colors;
     }
 
-    public void run() {
+    public void startLayout() {
         m_vis.run("layout");
+    }
+
+    public void stopLayout() {
+        m_vis.cancel("layout");
     }
 }

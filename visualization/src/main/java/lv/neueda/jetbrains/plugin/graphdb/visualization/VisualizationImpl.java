@@ -4,7 +4,7 @@ import lv.neueda.jetbrains.plugin.graphdb.common.GraphNode;
 import lv.neueda.jetbrains.plugin.graphdb.common.GraphRelationship;
 import lv.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 import java.util.function.Consumer;
 
 public class VisualizationImpl implements VisualizationApi {
@@ -28,7 +28,11 @@ public class VisualizationImpl implements VisualizationApi {
 
     @Override
     public void paint() {
-        display.run();
+        display.startLayout();
+    }
+
+    public void stop() {
+        display.stopLayout();
     }
 
     public JComponent getCanvas() {
@@ -37,5 +41,9 @@ public class VisualizationImpl implements VisualizationApi {
 
     public void addNodeListener(EventType type, Consumer<GraphNode> action) {
         display.addNodeListener(type, action);
+    }
+
+    public void addEdgeListener(EventType type, Consumer<GraphRelationship> action) {
+        display.addEdgeListener(type, action);
     }
 }

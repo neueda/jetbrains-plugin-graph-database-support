@@ -5,14 +5,27 @@ import lv.neueda.jetbrains.plugin.graphdb.common.GraphRelationship;
 
 public class DumbRelationship implements GraphRelationship {
 
+    private String id;
     private GraphNode start;
     private GraphNode end;
 
-    public DumbRelationship() {}
+    public DumbRelationship(String id) {
+        this.id = id;
+    }
 
-    public DumbRelationship(GraphNode start, GraphNode end) {
+    public DumbRelationship(String id, GraphNode start, GraphNode end) {
+        this.id = id;
         this.start = start;
         this.end = end;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override
@@ -31,5 +44,12 @@ public class DumbRelationship implements GraphRelationship {
 
     public void setEnd(GraphNode end) {
         this.end = end;
+    }
+
+    @Override
+    public String toString() {
+        return "DumbRelationship{" +
+                "id='" + id + '\'' +
+                '}';
     }
 }
