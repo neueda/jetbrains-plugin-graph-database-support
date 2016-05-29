@@ -31,6 +31,7 @@
         </constraints>
         <properties>
           <firstComponent value="99bfb"/>
+          <proportion value="0.7"/>
           <secondComponent value="bcb0c"/>
         </properties>
       </component>

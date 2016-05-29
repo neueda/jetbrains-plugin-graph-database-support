@@ -24,9 +24,9 @@ public class QueryExecutionService {
         GraphNode node2 = getGraphNode("2");
         GraphNode node3 = getGraphNode("3");
 
-        visualization.addRelation(new DumbRelationship(node1, node2));
-        visualization.addRelation(new DumbRelationship(node1, node3));
-        visualization.addRelation(new DumbRelationship(node2, node3));
+        visualization.addRelation(new DumbRelationship("1", node1, node2));
+        visualization.addRelation(new DumbRelationship("2", node1, node3));
+        visualization.addRelation(new DumbRelationship("3", node2, node3));
 
         for (int i = 0; i < random.nextInt(10); i++) {
             visualization.addNode(getGraphNode("r" + i));
