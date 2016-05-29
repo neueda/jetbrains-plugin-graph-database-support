@@ -5,11 +5,7 @@ import lv.neueda.jetbrains.plugin.graphdb.common.GraphRelationship;
 import lv.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 
 import javax.swing.JComponent;
-import javax.swing.JFrame;
-
 import java.util.function.Consumer;
-
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
 public class VisualizationImpl implements VisualizationApi {
 
@@ -41,16 +37,5 @@ public class VisualizationImpl implements VisualizationApi {
 
     public void addNodeListener(EventType type, Consumer<GraphNode> action) {
         display.addNodeListener(type, action);
-    }
-
-    @Override
-    public void run() {
-        JFrame frame = new JFrame("Liquid Lama");
-        frame.getContentPane().add(display);
-        frame.pack();
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        frame.setVisible(true);
-
-        display.run();
     }
 }

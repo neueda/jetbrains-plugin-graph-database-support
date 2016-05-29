@@ -16,6 +16,4 @@ public interface VisualizationApi {
     void clear();
 
     void paint();
-
-    void run();
 }

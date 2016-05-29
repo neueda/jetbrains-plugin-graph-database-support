@@ -6,7 +6,12 @@ import lv.neueda.jetbrains.plugin.graphdb.domain.DumbRelationship;
 import lv.neueda.jetbrains.plugin.graphdb.visualization.VisualizationImpl;
 import lv.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 
+import javax.swing.JFrame;
+
+import static javax.swing.JFrame.EXIT_ON_CLOSE;
+
 public class TestSimpleGraph {
+
     public static void main(String[] argv) {
         VisualizationImpl v = new VisualizationImpl();
 
@@ -21,7 +26,13 @@ public class TestSimpleGraph {
         v.addNodeListener(EventType.CLICK, (id) -> System.out.println("Node clicked: " + id.getId()));
         v.addNodeListener(EventType.HOVER, (id) -> System.out.println("Node hovered: " + id.getId()));
 
-        v.run();
+        JFrame frame = new JFrame("Liquid Lama");
+        frame.getContentPane().add(v.getCanvas());
+        frame.pack();
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
+        v.paint();
     }
 
     private static GraphNode getGraphNode(VisualizationImpl visualizationImpl, String id) {
