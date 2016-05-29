@@ -34,7 +34,7 @@ public class VisualizationImpl implements VisualizationApi {
 
     }
 
-    public void addNodeListener(EventType type, Consumer<String> action) {
+    public void addNodeListener(EventType type, Consumer<GraphNode> action) {
         display.addNodeListener(type, action);
     }
 

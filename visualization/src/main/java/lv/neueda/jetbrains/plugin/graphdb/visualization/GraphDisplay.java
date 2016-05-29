@@ -39,6 +39,7 @@ public class GraphDisplay extends Display {
     private Graph graph;
 
     private Map<String, Node> nodeMap = new HashMap<>();
+    private Map<String, GraphNode> graphNodeMap = new HashMap<>();
 
     public GraphDisplay() {
         super(new Visualization());
@@ -57,19 +58,19 @@ public class GraphDisplay extends Display {
         addControlListener(new DragControl());
     }
 
-    public void addNodeListener(EventType type, Consumer<String> action) {
+    public void addNodeListener(EventType type, Consumer<GraphNode> action) {
         ControlAdapter focusListener = new ControlAdapter() {
             @Override
             public void itemEntered(VisualItem item, MouseEvent e) {
                 if (type == EventType.HOVER && item instanceof NodeItem) {
-                    action.accept((String)item.get("id"));
+                    action.accept(graphNodeMap.get(item.get("id")));
                 }
             }
 
             @Override
             public void itemClicked(VisualItem item, MouseEvent e) {
                 if (type == EventType.CLICK && item instanceof NodeItem) {
-                    action.accept((String)item.get("id"));
+                    action.accept(graphNodeMap.get(item.get("id")));
                 }
             }
         };
@@ -80,6 +81,7 @@ public class GraphDisplay extends Display {
         Node node = graph.addNode();
         node.set("id", graphNode.getId());
         nodeMap.put(graphNode.getId(), node);
+        graphNodeMap.put(graphNode.getId(), graphNode);
     }
 
     public void addRelationship(GraphRelationship graphRelationship) {

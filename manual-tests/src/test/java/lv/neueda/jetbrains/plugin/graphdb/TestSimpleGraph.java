@@ -18,8 +18,8 @@ public class TestSimpleGraph {
         v.addRelation(new DumbRelationship(node1, node3));
         v.addRelation(new DumbRelationship(node2, node3));
 
-        v.addNodeListener(EventType.CLICK, (id) -> System.out.println("Node clicked: " + id));
-        v.addNodeListener(EventType.HOVER, (id) -> System.out.println("Node hovered: " + id));
+        v.addNodeListener(EventType.CLICK, (id) -> System.out.println("Node clicked: " + id.getId()));
+        v.addNodeListener(EventType.HOVER, (id) -> System.out.println("Node hovered: " + id.getId()));
 
         v.run();
     }
