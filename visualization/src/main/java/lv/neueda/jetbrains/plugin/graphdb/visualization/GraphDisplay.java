@@ -3,6 +3,7 @@ package lv.neueda.jetbrains.plugin.graphdb.visualization;
 import lv.neueda.jetbrains.plugin.graphdb.common.GraphNode;
 import lv.neueda.jetbrains.plugin.graphdb.common.GraphRelationship;
 import lv.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
+import lv.neueda.jetbrains.plugin.graphdb.visualization.events.NodePopup;
 import prefuse.Display;
 import prefuse.Visualization;
 import prefuse.action.ActionList;
@@ -59,6 +60,7 @@ public class GraphDisplay extends Display {
         pan(250, 250);
         setHighQuality(true);
         addControlListener(new DragControl());
+        addControlListener(new NodePopup());
     }
 
     public void addNodeListener(EventType type, Consumer<GraphNode> action) {
