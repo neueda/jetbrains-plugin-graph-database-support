@@ -1,18 +1,18 @@
 package lv.neueda.jetbrains.plugin.graphdb;
 
-import lv.neueda.jetbrains.plugin.graphdb.common.GraphNode;
+import lv.neueda.jetbrains.plugin.graphdb.databases.api.GraphNode;
 import lv.neueda.jetbrains.plugin.graphdb.domain.DumbDatabase;
-import lv.neueda.jetbrains.plugin.graphdb.visualization.VisualizationImpl;
+import lv.neueda.jetbrains.plugin.graphdb.visualization.PrefuseVisualization;
 import lv.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 
-import javax.swing.*;
+import javax.swing.JFrame;
 
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
 public class TestSimpleGraph {
 
     public static void main(String[] argv) {
-        VisualizationImpl v = new VisualizationImpl();
+        PrefuseVisualization v = new PrefuseVisualization();
         DumbDatabase db = new DumbDatabase();
 
         GraphNode node1 = db.createNode();

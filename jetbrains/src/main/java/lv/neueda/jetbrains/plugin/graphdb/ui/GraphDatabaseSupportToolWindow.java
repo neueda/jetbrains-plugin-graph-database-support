@@ -6,10 +6,11 @@ import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.util.messages.MessageBus;
+import lv.neueda.jetbrains.plugin.graphdb.domain.DumbDatabase;
 import lv.neueda.jetbrains.plugin.graphdb.event.ExecuteQueryEvent;
 import lv.neueda.jetbrains.plugin.graphdb.execution.QueryExecutionService;
 import lv.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
-import lv.neueda.jetbrains.plugin.graphdb.visualization.VisualizationImpl;
+import lv.neueda.jetbrains.plugin.graphdb.visualization.PrefuseVisualization;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ public class GraphDatabaseSupportToolWindow implements ToolWindowFactory {
     private static final Logger log = LoggerFactory.getLogger(GraphDatabaseSupportToolWindow.class);
 
     private ToolWindow toolWindow;
+    private DumbDatabase dumbDatabase;
     private QueryExecutionService queryExecutionService;
 
     private JPanel toolWindowContent;
@@ -34,9 +36,10 @@ public class GraphDatabaseSupportToolWindow implements ToolWindowFactory {
 
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
-        VisualizationImpl visualization = new VisualizationImpl();
+        PrefuseVisualization visualization = new PrefuseVisualization();
         this.toolWindow = toolWindow;
         this.queryExecutionService = new QueryExecutionService(visualization);
+        this.dumbDatabase = new DumbDatabase();
 
         initializeContent(visualization);
         registerSubscriber(project.getMessageBus());
@@ -51,8 +54,8 @@ public class GraphDatabaseSupportToolWindow implements ToolWindowFactory {
     }
 
     private void registerSubscriber(MessageBus messageBus) {
-        messageBus.connect()
-                .subscribe(ExecuteQueryEvent.EXECUTE_QUERY_TOPIC, queryExecutionService::executeQuery);
+        messageBus.connect().subscribe(ExecuteQueryEvent.EXECUTE_QUERY_TOPIC,
+                (query) -> queryExecutionService.executeQuery(dumbDatabase, query));
     }
 
     /**

@@ -1,7 +1,7 @@
 package lv.neueda.jetbrains.plugin.graphdb.visualization;
 
-import lv.neueda.jetbrains.plugin.graphdb.common.GraphNode;
-import lv.neueda.jetbrains.plugin.graphdb.common.GraphRelationship;
+import lv.neueda.jetbrains.plugin.graphdb.databases.api.GraphNode;
+import lv.neueda.jetbrains.plugin.graphdb.databases.api.GraphRelationship;
 import lv.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 import lv.neueda.jetbrains.plugin.graphdb.visualization.events.NodePopup;
 import prefuse.Display;
@@ -59,6 +59,10 @@ public class GraphDisplay extends Display {
         setHighQuality(true);
         addControlListener(new DragControl());
         addControlListener(new NodePopup());
+    }
+
+    public void clearGraph() {
+        graph.clear();
     }
 
     public void addNodeListener(EventType type, Consumer<GraphNode> action) {

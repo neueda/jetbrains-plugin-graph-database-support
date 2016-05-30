@@ -1,0 +1,3 @@
+dependencies {
+    compile 'org.neo4j.driver:neo4j-java-driver:1.0.1'
+}

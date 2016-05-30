@@ -1,13 +1,17 @@
-plugins {
-    id "org.jetbrains.intellij" version "0.1.4"
+buildscript {
+  repositories {
+    maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
+  }
 }
 
-apply plugin: 'org.jetbrains.intellij'
+plugins {
+  id "org.jetbrains.intellij" version "0.1.5"
+}
 
 dependencies {
-    compile project(':common')
+    compile project(':database:api')
+    compile project(':database:dumb')
     compile project(':visualization')
-    compile project(':dumb-graph-database')
 }
 
 intellij {

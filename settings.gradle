@@ -1,6 +1,7 @@
+include 'database'
+include 'database:api'
+include 'database:dumb'
+include 'database:neo4j'
 include 'visualization'
 include 'jetbrains'
-include 'common'
-include 'dumb-graph-database'
 include 'manual-tests'
-
