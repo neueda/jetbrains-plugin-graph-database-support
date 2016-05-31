@@ -38,7 +38,9 @@
                icon="/graphdb-images/tool-windows-icon.png" popup="true">
 
             <action id="GraphDatabaseActionGroup.ExecuteQuery"
-                    class="lv.neueda.jetbrains.plugin.graphdb.action.ExecuteQueryAction" text="Execute query" description="Execute query"/>
+                    class="lv.neueda.jetbrains.plugin.graphdb.bus.ExecuteQueryAction" text="Execute query" description="Execute query">
+                <keyboard-shortcut first-keystroke="control F5" keymap="$default"/>
+            </action>
             <add-to-group group-id="EditorPopupMenu"/>
         </group>
     </actions>

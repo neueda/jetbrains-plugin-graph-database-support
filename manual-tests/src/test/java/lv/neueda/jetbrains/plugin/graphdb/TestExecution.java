@@ -1,7 +1,7 @@
 package lv.neueda.jetbrains.plugin.graphdb;
 
 import lv.neueda.jetbrains.plugin.graphdb.domain.DumbDatabase;
-import lv.neueda.jetbrains.plugin.graphdb.execution.QueryExecutionService;
+import lv.neueda.jetbrains.plugin.graphdb.database.QueryExecutionService;
 import lv.neueda.jetbrains.plugin.graphdb.visualization.PrefuseVisualization;
 
 import javax.swing.JFrame;
