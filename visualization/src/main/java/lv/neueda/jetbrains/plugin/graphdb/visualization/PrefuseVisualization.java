@@ -1,7 +1,7 @@
 package lv.neueda.jetbrains.plugin.graphdb.visualization;
 
-import lv.neueda.jetbrains.plugin.graphdb.databases.api.GraphNode;
-import lv.neueda.jetbrains.plugin.graphdb.databases.api.GraphRelationship;
+import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
+import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphRelationship;
 import lv.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 
 import javax.swing.JComponent;
@@ -31,6 +31,7 @@ public class PrefuseVisualization implements VisualizationApi {
         display.startLayout();
     }
 
+    @Override
     public void stop() {
         display.stopLayout();
     }

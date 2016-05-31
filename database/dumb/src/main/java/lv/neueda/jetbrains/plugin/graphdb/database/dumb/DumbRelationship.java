@@ -1,7 +1,7 @@
-package lv.neueda.jetbrains.plugin.graphdb.domain;
+package lv.neueda.jetbrains.plugin.graphdb.database.dumb;
 
-import lv.neueda.jetbrains.plugin.graphdb.databases.api.GraphNode;
-import lv.neueda.jetbrains.plugin.graphdb.databases.api.GraphRelationship;
+import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
+import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphRelationship;
 
 public class DumbRelationship implements GraphRelationship {
 

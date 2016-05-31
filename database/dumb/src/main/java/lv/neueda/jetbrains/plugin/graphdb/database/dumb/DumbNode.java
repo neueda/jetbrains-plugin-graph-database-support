@@ -1,6 +1,6 @@
-package lv.neueda.jetbrains.plugin.graphdb.domain;
+package lv.neueda.jetbrains.plugin.graphdb.database.dumb;
 
-import lv.neueda.jetbrains.plugin.graphdb.databases.api.GraphNode;
+import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
 
 public class DumbNode implements GraphNode {
 

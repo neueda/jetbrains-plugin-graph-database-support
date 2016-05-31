@@ -1,10 +1,14 @@
-package lv.neueda.jetbrains.plugin.graphdb.domain;
+package lv.neueda.jetbrains.plugin.graphdb.database.dumb;
 
-import lv.neueda.jetbrains.plugin.graphdb.databases.api.GraphDatabase;
-import lv.neueda.jetbrains.plugin.graphdb.databases.api.GraphNode;
-import lv.neueda.jetbrains.plugin.graphdb.databases.api.GraphQueryResult;
+import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
+import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
+import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphQueryResult;
 
-public class DumbDatabase implements GraphDatabase {
+/**
+ * Just some simple dumb graph database implementation.
+ * Used primarily for testing purposes.
+ */
+public class DumbDatabase implements GraphDatabaseApi {
 
     private static int nodeIdCounter;
     private static int relationshipIdCounter;

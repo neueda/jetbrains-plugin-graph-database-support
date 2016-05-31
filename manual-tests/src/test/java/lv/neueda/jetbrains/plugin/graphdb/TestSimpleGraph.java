@@ -1,7 +1,7 @@
 package lv.neueda.jetbrains.plugin.graphdb;
 
-import lv.neueda.jetbrains.plugin.graphdb.databases.api.GraphNode;
-import lv.neueda.jetbrains.plugin.graphdb.domain.DumbDatabase;
+import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
+import lv.neueda.jetbrains.plugin.graphdb.database.dumb.DumbDatabase;
 import lv.neueda.jetbrains.plugin.graphdb.visualization.PrefuseVisualization;
 import lv.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 

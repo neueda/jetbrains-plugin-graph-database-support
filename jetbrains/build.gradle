@@ -11,6 +11,7 @@ plugins {
 dependencies {
     compile project(':database:api')
     compile project(':database:dumb')
+    compile project(':database:neo4j_v3')
     compile project(':visualization')
 }
 

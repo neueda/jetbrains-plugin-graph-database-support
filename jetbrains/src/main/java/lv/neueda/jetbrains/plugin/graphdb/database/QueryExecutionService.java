@@ -1,8 +1,8 @@
 package lv.neueda.jetbrains.plugin.graphdb.database;
 
 import lv.neueda.jetbrains.plugin.graphdb.bus.ExecuteQueryPayload;
-import lv.neueda.jetbrains.plugin.graphdb.databases.api.GraphDatabase;
-import lv.neueda.jetbrains.plugin.graphdb.databases.api.GraphQueryResult;
+import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
+import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphQueryResult;
 import lv.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
 
 public class QueryExecutionService {
@@ -16,9 +16,10 @@ public class QueryExecutionService {
     }
 
     public void executeQuery(ExecuteQueryPayload payload) {
+        visualization.stop();
         visualization.clear();
 
-        GraphDatabase database = databaseManager.getActiveDatabase();
+        GraphDatabaseApi database = databaseManager.getActiveDatabase();
         GraphQueryResult result = database.execute(payload.getContent());
 
         result.getNodes().forEach(visualization::addNode);

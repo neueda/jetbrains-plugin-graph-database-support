@@ -1,4 +1,4 @@
-package lv.neueda.jetbrains.plugin.graphdb.databases.api;
+package lv.neueda.jetbrains.plugin.graphdb.database.api;
 
 public interface GraphRelationship {
 
