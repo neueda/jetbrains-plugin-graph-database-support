@@ -3,6 +3,9 @@ package lv.neueda.jetbrains.plugin.graphdb.database.dumb;
 import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
 import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphRelationship;
 
+import java.util.Collections;
+import java.util.Map;
+
 public class DumbRelationship implements GraphRelationship {
 
     private String id;
@@ -22,6 +25,11 @@ public class DumbRelationship implements GraphRelationship {
     @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public Map<String, Object> getProperties() {
+        return Collections.emptyMap();
     }
 
     public void setId(String id) {

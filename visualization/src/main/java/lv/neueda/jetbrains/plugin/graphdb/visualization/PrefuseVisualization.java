@@ -36,14 +36,17 @@ public class PrefuseVisualization implements VisualizationApi {
         display.stopLayout();
     }
 
+    @Override
     public JComponent getCanvas() {
         return display;
     }
 
+    @Override
     public void addNodeListener(EventType type, Consumer<GraphNode> action) {
         display.addNodeListener(type, action);
     }
 
+    @Override
     public void addEdgeListener(EventType type, Consumer<GraphRelationship> action) {
         display.addEdgeListener(type, action);
     }

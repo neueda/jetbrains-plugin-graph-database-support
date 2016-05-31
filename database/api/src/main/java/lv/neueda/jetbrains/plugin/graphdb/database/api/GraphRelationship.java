@@ -1,8 +1,6 @@
 package lv.neueda.jetbrains.plugin.graphdb.database.api;
 
-public interface GraphRelationship {
-
-    String getId();
+public interface GraphRelationship extends GraphEntity {
 
     GraphNode getStart();
 

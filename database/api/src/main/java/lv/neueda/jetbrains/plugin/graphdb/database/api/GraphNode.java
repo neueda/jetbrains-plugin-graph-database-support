@@ -1,6 +1,4 @@
 package lv.neueda.jetbrains.plugin.graphdb.database.api;
 
-public interface GraphNode {
-
-    String getId();
+public interface GraphNode extends GraphEntity {
 }

@@ -17,14 +17,6 @@
         <border type="none"/>
         <children/>
       </grid>
-      <scrollpane id="bcb0c" binding="content">
-        <constraints>
-          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-        <border type="none"/>
-        <children/>
-      </scrollpane>
       <component id="f6d55" class="com.intellij.ui.JBSplitter">
         <constraints>
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -32,9 +24,44 @@
         <properties>
           <firstComponent value="99bfb"/>
           <proportion value="0.7"/>
-          <secondComponent value="bcb0c"/>
+          <secondComponent value="bea0f"/>
         </properties>
       </component>
+      <scrollpane id="bea0f" binding="contentScrollPane">
+        <constraints>
+          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="e7d06" binding="contentPane" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="b3a9e" class="javax.swing.JLabel" binding="entityDataTableLabel">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Select entity..."/>
+                </properties>
+              </component>
+              <component id="a040a" class="com.intellij.ui.table.JBTable" binding="entityDataTable">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <autoCreateRowSorter value="true"/>
+                  <fillsViewportHeight value="false"/>
+                  <striped value="true"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </scrollpane>
     </children>
   </grid>
 </form>
