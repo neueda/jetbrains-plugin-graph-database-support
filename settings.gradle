@@ -1,7 +1,22 @@
+// Languages
+include 'language'
+include 'language:cypher'
+
+// Database adaptors
 include 'database'
 include 'database:api'
 include 'database:dumb'
 include 'database:neo4j_v3'
-include 'visualization'
-include 'jetbrains'
-include 'manual-tests'
+
+// UI
+include 'ui'
+include 'ui:visualization'
+include 'ui:jetbrains'
+
+// Testing
+include 'testing'
+include 'testing:manual'
+
+// Plugin
+include 'graph-database-support-plugin'
+

@@ -1,16 +1,31 @@
+plugins {
+    id 'idea'
+    id 'java'
+    id "org.jetbrains.intellij" version "0.1.5"
+}
+
 apply plugin: 'idea'
 
 allprojects {
-    apply plugin: 'java'
+    // updating this version would automatically updates plugins version
+    version '0.1.0'
+
+    ext {
+        intellijSdkVersion = "2016.1.2"
+    }
 
     repositories {
         mavenCentral()
         mavenLocal()
+        maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
     }
+
+    apply plugin: 'java'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
-    // updating this version would automatically updates plugins version
-    version '0.1.0'
+    intellij {
+        version intellijSdkVersion
+    }
 }

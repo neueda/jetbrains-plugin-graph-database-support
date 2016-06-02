@@ -1,0 +1,10 @@
+apply plugin: "org.jetbrains.intellij"
+
+intellij {
+    version intellijSdkVersion
+}
+
+dependencies {
+    compile project(':ui:jetbrains')
+}
+

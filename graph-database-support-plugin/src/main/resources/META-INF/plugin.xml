@@ -1,0 +1,52 @@
+<idea-plugin version="2">
+    <id>lv.neueda.jetbrains.plugin.graphdb</id>
+    <name>Graph Database support</name>
+    <!-- Should be automatically replaced by gradle build -->
+    <version>9.9.9</version>
+    <vendor email="dmitry.vrublevsky@neueda.com" url="https://neueda.lv">Neueda</vendor>
+
+    <description><![CDATA[
+        Graph Database support.<br>
+        ]]></description>
+
+    <change-notes><![CDATA[
+        <br>
+        <b>0.1.0</b><br>
+        <br>
+        ]]></change-notes>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="145"/>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <!-- Not defined: conditionClass -->
+        <toolWindow id="Graph Database Console"
+                    anchor="bottom"
+                    secondary="false"
+                    factoryClass="lv.neueda.jetbrains.plugin.graphdb.ui.GraphDatabaseConsoleToolWindow"
+                    icon="/graphdb-images/tool-windows-icon.png"/>
+        <toolWindow id="Graph Database"
+                    anchor="right"
+                    secondary="false"
+                    factoryClass="lv.neueda.jetbrains.plugin.graphdb.ui.GraphDatabaseToolWindow"
+                    icon="/graphdb-images/tool-windows-icon.png"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <group id="GraphDatabaseActionGroup"
+               text="Graph Database" description="Execute graph database queries"
+               icon="/graphdb-images/tool-windows-icon.png" popup="true">
+
+            <action id="GraphDatabaseActionGroup.ExecuteQuery"
+                    class="lv.neueda.jetbrains.plugin.graphdb.bus.ExecuteQueryAction" text="Execute query" description="Execute query">
+                <keyboard-shortcut first-keystroke="control F5" keymap="$default"/>
+            </action>
+            <add-to-group group-id="EditorPopupMenu"/>
+        </group>
+    </actions>
+</idea-plugin>
