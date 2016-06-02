@@ -14,12 +14,12 @@ import lv.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import prefuse.visual.VisualItem;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
 import java.util.Map;
 
 public class GraphDatabaseSupportToolWindow implements ToolWindowFactory {
@@ -76,12 +76,12 @@ public class GraphDatabaseSupportToolWindow implements ToolWindowFactory {
         entityDataTable.setModel(entityDataTableModel);
     }
 
-    public void showNodeData(GraphNode node) {
+    public void showNodeData(GraphNode node, VisualItem item, MouseEvent e) {
         entityDataTableLabel.setText(node.getId() + ", Node:<TODOLABELS>");
         showEntityData(node);
     }
 
-    public void showRelationshipData(GraphRelationship relationship) {
+    public void showRelationshipData(GraphRelationship relationship, VisualItem item, MouseEvent e) {
         entityDataTableLabel.setText(relationship.getId() + ", Relationship:<TODOTYPE>");
         showEntityData(relationship);
     }
@@ -96,5 +96,12 @@ public class GraphDatabaseSupportToolWindow implements ToolWindowFactory {
             Object[] data = {entry.getKey(), entry.getValue()};
             entityDataTableModel.addRow(data);
         }
+    }
+
+    public void showTooltip(GraphEntity entity, VisualItem item, MouseEvent e) {
+        String id = (String) item.get("id");
+        JPopupMenu jpub = new JPopupMenu();
+        jpub.add("Id: " + id);
+        jpub.show(e.getComponent(), (int) item.getX(), (int) item.getY());
     }
 }

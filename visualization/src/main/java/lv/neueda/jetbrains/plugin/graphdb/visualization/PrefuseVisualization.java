@@ -3,9 +3,10 @@ package lv.neueda.jetbrains.plugin.graphdb.visualization;
 import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
 import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphRelationship;
 import lv.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
+import lv.neueda.jetbrains.plugin.graphdb.visualization.events.NodeCallback;
+import lv.neueda.jetbrains.plugin.graphdb.visualization.events.RelationshipCallback;
 
-import javax.swing.JComponent;
-import java.util.function.Consumer;
+import javax.swing.*;
 
 public class PrefuseVisualization implements VisualizationApi {
 
@@ -42,12 +43,12 @@ public class PrefuseVisualization implements VisualizationApi {
     }
 
     @Override
-    public void addNodeListener(EventType type, Consumer<GraphNode> action) {
+    public void addNodeListener(EventType type, NodeCallback action) {
         display.addNodeListener(type, action);
     }
 
     @Override
-    public void addEdgeListener(EventType type, Consumer<GraphRelationship> action) {
+    public void addEdgeListener(EventType type, RelationshipCallback action) {
         display.addEdgeListener(type, action);
     }
 }

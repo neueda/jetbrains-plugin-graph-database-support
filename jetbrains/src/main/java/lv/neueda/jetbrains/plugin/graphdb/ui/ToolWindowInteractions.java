@@ -32,5 +32,7 @@ public class ToolWindowInteractions {
     private void registerVisualisationEvents() {
         visualization.addNodeListener(EventType.CLICK, window::showNodeData);
         visualization.addEdgeListener(EventType.CLICK, window::showRelationshipData);
+        visualization.addNodeListener(EventType.HOVER_START, window::showTooltip);
+        visualization.addEdgeListener(EventType.HOVER_START, window::showTooltip);
     }
 }

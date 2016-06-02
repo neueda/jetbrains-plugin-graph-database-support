@@ -27,10 +27,10 @@ public class TestSimpleGraph {
         v.addRelation(db.createRelationship(node1, node3));
         v.addRelation(db.createRelationship(node2, node3));
 
-        v.addNodeListener(EventType.CLICK, (id) -> System.out.println("Node clicked: " + id));
-        v.addNodeListener(EventType.HOVER, (id) -> System.out.println("Node hovered: " + id));
-        v.addEdgeListener(EventType.CLICK, (id) -> System.out.println("Edge clicked: " + id));
-        v.addEdgeListener(EventType.HOVER, (id) -> System.out.println("Edge hovered: " + id));
+        v.addNodeListener(EventType.CLICK, (id, item, event) -> System.out.println("Node clicked: " + id));
+        v.addNodeListener(EventType.HOVER_START, (id, item, event) -> System.out.println("Node hovered: " + id));
+        v.addEdgeListener(EventType.CLICK, (id, item, event) -> System.out.println("Edge clicked: " + id));
+        v.addEdgeListener(EventType.HOVER_START, (id, item, event) -> System.out.println("Edge hovered: " + id));
 
         JFrame frame = new JFrame("Liquid Lama");
         frame.getContentPane().add(v.getCanvas());

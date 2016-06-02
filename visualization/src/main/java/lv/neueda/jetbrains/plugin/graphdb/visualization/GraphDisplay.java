@@ -3,7 +3,8 @@ package lv.neueda.jetbrains.plugin.graphdb.visualization;
 import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
 import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphRelationship;
 import lv.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
-import lv.neueda.jetbrains.plugin.graphdb.visualization.events.NodePopup;
+import lv.neueda.jetbrains.plugin.graphdb.visualization.events.NodeCallback;
+import lv.neueda.jetbrains.plugin.graphdb.visualization.events.RelationshipCallback;
 import prefuse.Display;
 import prefuse.Visualization;
 import prefuse.action.ActionList;
@@ -27,7 +28,6 @@ import prefuse.visual.expression.InGroupPredicate;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import static prefuse.Constants.EDGE_TYPE_LINE;
 import static prefuse.Constants.SHAPE_ELLIPSE;
@@ -58,45 +58,58 @@ public class GraphDisplay extends Display {
         createLayout();
         setHighQuality(true);
         addControlListener(new DragControl());
-        addControlListener(new NodePopup());
     }
 
     public void clearGraph() {
         graph.clear();
     }
 
-    public void addNodeListener(EventType type, Consumer<GraphNode> action) {
+    public void addNodeListener(EventType type, NodeCallback callback) {
         ControlAdapter listener = new ControlAdapter() {
             @Override
             public void itemEntered(VisualItem item, MouseEvent e) {
-                if (type == EventType.HOVER && item instanceof NodeItem) {
-                    action.accept(graphNodeMap.get(item.get("id")));
+                if (type == EventType.HOVER_START && item instanceof NodeItem) {
+                    callback.accept(graphNodeMap.get(item.get("id")), item, e);
+                }
+            }
+
+            @Override
+            public void itemExited(VisualItem item, MouseEvent e) {
+                if (type == EventType.HOVER_END && item instanceof NodeItem) {
+                    callback.accept(graphNodeMap.get(item.get("id")), item, e);
                 }
             }
 
             @Override
             public void itemClicked(VisualItem item, MouseEvent e) {
                 if (type == EventType.CLICK && item instanceof NodeItem) {
-                    action.accept(graphNodeMap.get(item.get("id")));
+                    callback.accept(graphNodeMap.get(item.get("id")), item, e);
                 }
             }
         };
         addControlListener(listener);
     }
 
-    public void addEdgeListener(EventType type, Consumer<GraphRelationship> action) {
+    public void addEdgeListener(EventType type, RelationshipCallback action) {
         ControlAdapter listener = new ControlAdapter() {
             @Override
             public void itemEntered(VisualItem item, MouseEvent e) {
-                if (type == EventType.HOVER && item instanceof EdgeItem) {
-                    action.accept(graphRelationshipMap.get(item.get("id")));
+                if (type == EventType.HOVER_START && item instanceof EdgeItem) {
+                    action.accept(graphRelationshipMap.get(item.get("id")), item, e);
+                }
+            }
+
+            @Override
+            public void itemExited(VisualItem item, MouseEvent e) {
+                if (type == EventType.HOVER_END && item instanceof EdgeItem) {
+                    action.accept(graphRelationshipMap.get(item.get("id")), item, e);
                 }
             }
 
             @Override
             public void itemClicked(VisualItem item, MouseEvent e) {
                 if (type == EventType.CLICK && item instanceof EdgeItem) {
-                    action.accept(graphRelationshipMap.get(item.get("id")));
+                    action.accept(graphRelationshipMap.get(item.get("id")), item, e);
                 }
             }
         };
