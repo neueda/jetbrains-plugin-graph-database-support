@@ -7,4 +7,6 @@ public interface GraphEntity {
     String getId();
 
     Map<String, Object> getProperties();
+
+    String getRepresentation();
 }

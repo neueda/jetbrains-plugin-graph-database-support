@@ -1,10 +1,16 @@
 package lv.neueda.jetbrains.plugin.graphdb.ui;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.popup.Balloon;
+import com.intellij.openapi.ui.popup.BalloonBuilder;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
+import com.intellij.ui.ColorUtil;
+import com.intellij.ui.awt.RelativePoint;
+import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
+import com.intellij.ui.popup.BalloonPopupBuilderImpl;
 import com.intellij.ui.table.JBTable;
 import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphEntity;
 import lv.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
@@ -18,7 +24,7 @@ import prefuse.visual.VisualItem;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Map;
 
@@ -37,6 +43,10 @@ public class GraphDatabaseSupportToolWindow implements ToolWindowFactory {
     private JScrollPane contentScrollPane;
     private DefaultTableModel entityDataTableModel;
 
+    private BalloonBuilder balloonPopupBuilder;
+    private Balloon balloon;
+    private JBLabel balloonLabel;
+
     public GraphDatabaseSupportToolWindow() {
     }
 
@@ -49,6 +59,8 @@ public class GraphDatabaseSupportToolWindow implements ToolWindowFactory {
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(toolWindowContent, "", false);
         toolWindow.getContentManager().addContent(content);
+
+        balloonBuilder();
 
         initializeUiComponents();
 
@@ -87,8 +99,7 @@ public class GraphDatabaseSupportToolWindow implements ToolWindowFactory {
     }
 
     private void showEntityData(GraphEntity entity) {
-        for( int i = entityDataTableModel.getRowCount() - 1; i >= 0; i-- )
-        {
+        for (int i = entityDataTableModel.getRowCount() - 1; i >= 0; i--) {
             entityDataTableModel.removeRow(i);
         }
 
@@ -98,10 +109,47 @@ public class GraphDatabaseSupportToolWindow implements ToolWindowFactory {
         }
     }
 
+    public void balloonBuilder() {
+        balloonLabel = new JBLabel("LiquidLama");
+        final BalloonPopupBuilderImpl builder = new BalloonPopupBuilderImpl(null, balloonLabel);
+        final Color bg = UIManager.getColor("Panel.background");
+        final Color borderOriginal = Color.darkGray;
+        final Color border = ColorUtil.toAlpha(borderOriginal, 75);
+        builder
+                .setDialogMode(false)
+                .setAnimationCycle(20)
+                .setFillColor(bg).setBorderColor(border).setHideOnClickOutside(true)
+                .setHideOnKeyOutside(false)
+                .setHideOnAction(false)
+                .setCloseButtonEnabled(false)
+                .setShadow(true);
+
+        balloonPopupBuilder = builder;
+    }
+
     public void showTooltip(GraphEntity entity, VisualItem item, MouseEvent e) {
-        String id = (String) item.get("id");
-        JPopupMenu jpub = new JPopupMenu();
-        jpub.add("Id: " + id);
-        jpub.show(e.getComponent(), (int) item.getX(), (int) item.getY());
+        if (balloon != null && !balloon.isDisposed())
+            balloon.hide();
+
+        balloonPopupBuilder.setTitle(entity.getRepresentation());
+        balloonLabel.setText(getFiveProperties(entity.getProperties()));
+
+        balloon = balloonPopupBuilder.createBalloon();
+        balloon.show(new RelativePoint(e), Balloon.Position.below);
+    }
+
+    private String getFiveProperties(Map<String, Object> properties) {
+        StringBuilder sb = new StringBuilder();
+
+        properties.entrySet().stream()
+                .limit(5)
+                .forEach(entry -> sb
+                        .append("<p><b>")
+                        .append(entry.getKey())
+                        .append("</b>: ")
+                        .append(entry.getValue())
+                        .append("</p>"));
+
+        return "<html>" + sb.toString() + "</html>";
     }
 }
