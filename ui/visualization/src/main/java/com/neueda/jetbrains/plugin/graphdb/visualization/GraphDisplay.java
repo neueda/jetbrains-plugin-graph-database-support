@@ -2,6 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.visualization;
 
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphRelationship;
+import com.neueda.jetbrains.plugin.graphdb.visualization.decorators.CenteredLayout;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.NodeCallback;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.RelationshipCallback;
@@ -17,9 +18,14 @@ import prefuse.controls.DragControl;
 import prefuse.data.Edge;
 import prefuse.data.Graph;
 import prefuse.data.Node;
+import prefuse.data.Schema;
 import prefuse.render.DefaultRendererFactory;
 import prefuse.render.EdgeRenderer;
+import prefuse.render.LabelRenderer;
+import prefuse.render.ShapeRenderer;
 import prefuse.util.ColorLib;
+import prefuse.util.FontLib;
+import prefuse.util.PrefuseLib;
 import prefuse.visual.EdgeItem;
 import prefuse.visual.NodeItem;
 import prefuse.visual.VisualItem;
@@ -38,6 +44,12 @@ public class GraphDisplay extends Display {
     private static final String NODES = "graph.nodes";
     private static final String EDGES = "graph.edges";
     private static final boolean DIRECTED = true;
+    private static final int NODE_DIAMETER = 25;
+    private static final String NODE_LABEL = "nodelabel";
+    private static final String LAYOUT = "layout";
+    private static final String FONT = "Tahoma";
+    private static final int FONT_SIZE = 12;
+    private static final int FONT_COLOR = ColorLib.rgb(15, 15, 45);
 
     private Graph graph;
 
@@ -133,8 +145,18 @@ public class GraphDisplay extends Display {
     }
 
     private void setupRenderer() {
-        DefaultRendererFactory rf = new DefaultRendererFactory();
-        rf.add(new InGroupPredicate(EDGES), new EdgeRenderer(EDGE_TYPE_LINE));
+        ShapeRenderer nodeRenderer = new ShapeRenderer();
+
+        nodeRenderer.setBaseSize(NODE_DIAMETER);
+        DefaultRendererFactory rf = new DefaultRendererFactory(nodeRenderer, new EdgeRenderer(EDGE_TYPE_LINE));
+        rf.add(new InGroupPredicate(NODE_LABEL), new LabelRenderer("id"));
+
+        final Schema decoratorSchema = PrefuseLib.getVisualItemSchema();
+        decoratorSchema.setDefault(VisualItem.INTERACTIVE, false);
+        decoratorSchema.setDefault(VisualItem.TEXTCOLOR, FONT_COLOR);
+        decoratorSchema.setDefault(VisualItem.FONT, FontLib.getFont(FONT, FONT_SIZE));
+        m_vis.addDecorators(NODE_LABEL, NODES, decoratorSchema);
+
         m_vis.setRendererFactory(rf);
     }
 
@@ -143,8 +165,9 @@ public class GraphDisplay extends Display {
         layout.add(getColors());
         layout.add(new ForceDirectedLayout(GRAPH, true));
         layout.add(new RepaintAction());
+        layout.add(new CenteredLayout(NODE_LABEL));
 
-        m_vis.putAction("layout", layout);
+        m_vis.putAction(LAYOUT, layout);
     }
 
     private ActionList getColors() {
@@ -172,10 +195,10 @@ public class GraphDisplay extends Display {
     }
 
     public void startLayout() {
-        m_vis.run("layout");
+        m_vis.run(LAYOUT);
     }
 
     public void stopLayout() {
-        m_vis.cancel("layout");
+        m_vis.cancel(LAYOUT);
     }
 }
