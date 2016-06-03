@@ -1,12 +1,14 @@
 <idea-plugin version="2">
-    <id>lv.neueda.jetbrains.plugin.graphdb</id>
+    <id>com.neueda.jetbrains.plugin.graphdb</id>
     <name>Graph Database support</name>
     <!-- Should be automatically replaced by gradle build -->
     <version>9.9.9</version>
-    <vendor email="dmitry.vrublevsky@neueda.com" url="https://neueda.lv">Neueda</vendor>
+    <vendor email="dmitry.vrublevsky@neueda.com" url="https://neueda.com">Neueda R&amp;D</vendor>
 
     <description><![CDATA[
         Graph Database support.<br>
+        Features: <br>
+        - Cypher query language<br>
         ]]></description>
 
     <change-notes><![CDATA[
@@ -20,30 +22,56 @@
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
+    <depends>com.intellij.modules.lang</depends>
+    <depends optional="true">com.intellij.modules.java</depends>
+    <depends optional="true" config-file="intellilang-cypher-support.xml">org.intellij.intelliLang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
+        <!-- Graph database support -->
         <!-- Not defined: conditionClass -->
         <toolWindow id="Graph Database Console"
                     anchor="bottom"
                     secondary="false"
-                    factoryClass="lv.neueda.jetbrains.plugin.graphdb.ui.GraphDatabaseConsoleToolWindow"
+                    factoryClass="com.neueda.jetbrains.plugin.graphdb.ui.GraphDatabaseConsoleToolWindow"
                     icon="/graphdb-images/tool-windows-icon.png"/>
         <toolWindow id="Graph Database"
                     anchor="right"
                     secondary="false"
-                    factoryClass="lv.neueda.jetbrains.plugin.graphdb.ui.GraphDatabaseToolWindow"
+                    factoryClass="com.neueda.jetbrains.plugin.graphdb.ui.GraphDatabaseToolWindow"
                     icon="/graphdb-images/tool-windows-icon.png"/>
+
+        <!-- Cypher -->
+        <fileTypeFactory implementation="com.neueda.jetbrains.plugin.cypher.file.CypherFileTypeFactory"/>
+        <lang.parserDefinition
+                language="Cypher" implementationClass="com.neueda.jetbrains.plugin.cypher.parser.CypherParserDefinition"/>
+        <lang.syntaxHighlighterFactory
+                language="Cypher" implementationClass="com.neueda.jetbrains.plugin.cypher.highlight.CypherSyntaxHighlighterFactory"/>
+        <lang.commenter language="Cypher" implementationClass="com.neueda.jetbrains.plugin.cypher.commenter.CypherCommenter"/>
+
+        <colorSettingsPage implementation="com.neueda.jetbrains.plugin.cypher.settings.CypherColorSettingsPage"/>
+
+        <completion.contributor language="Cypher" implementationClass="com.neueda.jetbrains.plugin.cypher.completion.CypherCompletionContributor"/>
+        <psi.referenceContributor implementation="com.neueda.jetbrains.plugin.cypher.references.CypherReferenceContributor"/>
+        <lang.refactoringSupport language="Cypher" implementationClass="com.neueda.jetbrains.plugin.cypher.references.CypherRefactoringSupportProvider"/>
+        <lang.braceMatcher language="Cypher" implementationClass="com.neueda.jetbrains.plugin.cypher.lang.CypherBraceMatcher"/>
+        <renameInputValidator implementation="com.neueda.jetbrains.plugin.cypher.references.CypherRenameInputValidator"/>
+        <lang.namesValidator language="Cypher" implementationClass="com.neueda.jetbrains.plugin.cypher.lang.CypherNameValidator"/>
+        <spellchecker.support language="Cypher" implementationClass="com.neueda.jetbrains.plugin.cypher.lang.CypherSpellcheckingStrategy"/>
+
+        <!-- Todo:
+        lang.documentationProvider
+        gotoSymbolContributor
+        -->
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
+        <!-- Graph Database support -->
         <group id="GraphDatabaseActionGroup"
                text="Graph Database" description="Execute graph database queries"
                icon="/graphdb-images/tool-windows-icon.png" popup="true">
 
             <action id="GraphDatabaseActionGroup.ExecuteQuery"
-                    class="lv.neueda.jetbrains.plugin.graphdb.bus.ExecuteQueryAction" text="Execute query" description="Execute query">
+                    class="com.neueda.jetbrains.plugin.graphdb.bus.ExecuteQueryAction" text="Execute query" description="Execute query">
                 <keyboard-shortcut first-keystroke="control F5" keymap="$default"/>
             </action>
             <add-to-group group-id="EditorPopupMenu"/>

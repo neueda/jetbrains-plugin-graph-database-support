@@ -1,6 +1,7 @@
 apply plugin: "org.jetbrains.intellij"
 
 dependencies {
+    compile project(':language:cypher')
     compile project(':ui:jetbrains')
 }
 

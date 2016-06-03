@@ -1,0 +1,461 @@
+{
+  parserClass="com.neueda.jetbrains.plugin.cypher.parser.CypherParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Cypher"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.neueda.jetbrains.plugin.cypher.psi"
+  psiImplPackage="com.neueda.jetbrains.plugin.cypher.psi.impl"
+
+  elementTypeHolderClass="com.neueda.jetbrains.plugin.cypher.psi.CypherTypes"
+  elementTypeClass="com.neueda.jetbrains.plugin.cypher.psi.CypherElementType"
+  tokenTypeClass="com.neueda.jetbrains.plugin.cypher.psi.CypherTokenType"
+
+  psiImplUtilClass="com.neueda.jetbrains.plugin.cypher.psi.CypherPsiImplUtil"
+
+  tokens=[
+    // keywords
+    K_MATCH="regexp:(M|m)(A|a)(T|t)(C|c)(H|h)"
+    K_RETURN="regexp:(R|r)(E|e)(T|t)(U|u)(R|r)(N|n)"
+    K_DISTINCT="regexp:(D|d)(I|i)(S|s)(T|t)(I|i)(N|n)(C|c)(T|t)"
+    K_UNION="regexp:(U|u)(N|n)(I|i)(O|o)(N|n)"
+    K_ALL="regexp:(A|a)(L|l)(L|l)"
+    K_LOAD="regexp:(L|l)(O|o)(A|a)(D|d)"
+    K_CSV="regexp:(C|c)(S|s)(V|v)"
+    K_WITH="regexp:(W|w)(I|i)(T|t)(H|h)"
+    K_HEADERS="regexp:(H|h)(E|e)(A|a)(D|d)(E|e)(R|r)(S|s)"
+    K_FROM="regexp:(F|f)(R|r)(O|o)(M|m)"
+    K_AS="regexp:(A|a)(S|s)"
+    K_FIELDTERMINATOR="regexp:(F|f)(I|i)(E|e)(L|l)(D|d)(T|t)(E|e)(R|r)(M|m)(I|i)(N|n)(A|a)(T|t)(O|o)(R|r)"
+    K_CREATE="regexp:(C|c)(R|r)(E|e)(A|a)(T|t)(E|e)"
+    K_CONSTRAINT="regexp:(C|c)(O|o)(N|n)(S|s)(T|t)(R|r)(A|a)(I|i)(N|n)(T|t)"
+    K_ON="regexp:(O|o)(N|n)"
+    K_ASSERT="regexp:(A|a)(S|s)(S|s)(E|e)(R|r)(T|t)"
+    K_IS="regexp:(I|i)(S|s)"
+    K_UNIQUE="regexp:(U|u)(N|n)(I|i)(Q|q)(U|u)(E|e)"
+    K_ASSERT="regexp:(A|a)(S|s)(S|s)(E|e)(R|r)(T|t)"
+    K_EXISTS="regexp:(E|e)(X|x)(I|i)(S|s)(T|t)(S|s)"
+    K_INDEX="regexp:(I|i)(N|n)(D|d)(E|e)(X|x)"
+    K_DROP="regexp:(D|d)(R|r)(O|o)(P|p)"
+    K_START="regexp:(S|s)(T|t)(A|a)(R|r)(T|t)"
+    K_WHERE="regexp:(W|w)(H|h)(E|e)(R|r)(E|e)"
+    K_NODE="regexp:(N|n)(O|o)(D|d)(E|e)"
+    K_RELATIONSHIP="regexp:(R|r)(E|e)(L|l)(A|a)(T|t)(I|i)(O|o)(N|n)(S|s)(H|h)(I|i)(P|p)"
+    K_REL="regexp:(R|r)(E|e)(L|l)"
+    K_MATCH="regexp:(M|m)(A|a)(T|t)(C|c)(H|h)"
+    K_OPTIONAL="regexp:(O|o)(P|p)(T|t)(I|i)(O|o)(N|n)(A|a)(L|l)"
+    K_USING="regexp:(U|u)(S|s)(I|i)(N|n)(G|g)"
+    K_JOIN="regexp:(J|j)(O|o)(I|i)(N|n)"
+    K_SCAN="regexp:(S|s)(C|c)(A|a)(N|n)"
+    K_SHORTESTPATH="regexp:(S|s)(H|h)(O|o)(R|r)(T|t)(E|e)(S|s)(T|t)(P|p)(A|a)(T|t)(H|h)"
+    K_ALLSHORTESTPATHS="regexp:(A|a)(L|l)(L|l)(S|s)(H|h)(O|o)(R|r)(T|t)(E|e)(S|s)(T|t)(P|p)(A|a)(T|t)(H|h)(S|s)"
+    K_UNWIND="regexp:(U|u)(N|n)(W|w)(I|i)(N|n)(D|d)"
+    K_MERGE="regexp:(M|m)(E|e)(R|r)(G|g)(E|e)"
+    K_SET="regexp:(S|s)(E|e)(T|t)"
+    K_DELETE="regexp:(D|d)(E|e)(L|l)(E|e)(T|t)(E|e)"
+    K_DETACH="regexp:(D|d)(E|e)(T|t)(A|a)(C|c)(H|h)"
+    K_REMOVE="regexp:(R|r)(E|e)(M|m)(O|o)(V|v)(E|e)"
+    K_FOREACH="regexp:(F|f)(O|o)(R|r)(E|e)(A|a)(C|c)(H|h)"
+    K_IN="regexp:(I|i)(N|n)"
+    K_ORDER="regexp:(O|o)(R|r)(D|d)(E|e)(R|r)"
+    K_BY="regexp:(B|b)(Y|y)"
+    K_DESCENDING="regexp:(D|d)(E|e)(S|s)(C|c)(E|e)(N|n)(D|d)(I|i)(N|n)(G|g)"
+    K_DESC="regexp:(D|d)(E|e)(S|s)(C|c)"
+    K_ASCENDING="regexp:(A|a)(S|s)(C|c)(E|e)(N|n)(D|d)(I|i)(N|n)(G|g)"
+    K_ASC="regexp:(A|a)(S|s)(C|c)"
+    K_SKIP="regexp:(S|s)(K|k)(I|i)(P|p)"
+    K_LIMIT="regexp:(L|l)(I|i)(M|m)(I|i)(T|t)"
+    K_PERIODIC="regexp:(P|p)(E|e)(R|r)(I|i)(O|o)(D|d)(I|i)(C|c)"
+    K_BEGIN="regexp:(B|b)(E|e)(G|g)(I|i)(N|n)"
+    K_COMMIT="regexp:(C|c)(O|o)(M|m)(M|m)(I|i)(T|t)"
+    K_XOR="regexp:(X|x)(O|o)(R|r)"
+    K_OR="regexp:(O|o)(R|r)"
+    K_AND="regexp:(A|a)(N|n)(D|d)"
+    K_NOT="regexp:(N|n)(O|o)(T|t)"
+    K_STARTS="regexp:(S|s)(T|t)(A|a)(R|r)(T|t)(S|s)"
+    K_ENDS="regexp:(E|e)(N|n)(D|d)(S|s)"
+    K_CONTAINS="regexp:(C|c)(O|o)(N|n)(T|t)(A|a)(I|i)(N|n)(S|s)"
+    K_NULL="regexp:(N|n)(U|u)(L|l)(L|l)"
+    K_TRUE="regexp:(T|t)(R|r)(U|u)(E|e)"
+    K_FALSE="regexp:(F|f)(A|a)(L|l)(S|s)(E|e)"
+    K_FILTER="regexp:(F|f)(I|i)(L|l)(T|t)(E|e)(R|r)"
+    K_EXTRACT="regexp:(E|e)(X|x)(T|t)(R|r)(A|a)(C|c)(T|t)"
+    K_REDUCE="regexp:(R|r)(E|e)(D|d)(U|u)(C|c)(E|e)"
+    K_ALL="regexp:(A|a)(L|l)(L|l)"
+    K_ANY="regexp:(A|a)(N|n)(Y|y)"
+    K_NONE="regexp:(N|n)(O|o)(N|n)(E|e)"
+    K_SINGLE="regexp:(S|s)(I|i)(N|n)(G|g)(L|l)(E|e)"
+    K_CASE="regexp:(C|c)(A|a)(S|s)(E|e)"
+    K_DISTINCT="regexp:(D|d)(I|i)(S|s)(T|t)(I|i)(N|n)(C|c)(T|t)"
+    K_ELSE="regexp:(E|e)(L|l)(S|s)(E|e)"
+    K_END="regexp:(E|e)(N|n)(D|d)"
+    K_WHEN="regexp:(W|w)(H|h)(E|e)(N|n)"
+    K_THEN="regexp:(T|t)(H|h)(E|e)(N|n)"
+    K_PROFILE="regexp:(P|p)(R|r)(O|o)(F|f)(I|i)(L|l)(E|e)"
+    K_EXPLAIN="regexp:(E|e)(X|x)(P|p)(L|l)(A|a)(I|i)(N|n)"
+    K_CYPHER="regexp:(C|c)(Y|y)(P|p)(H|h)(E|e)(R|r)"
+    K_CALL="regexp:(C|c)(A|a)(L|l)(L|l)"
+    K_YIELD="regexp:(Y|y)(I|i)(E|e)(L|l)(D|d)"
+
+    // literals
+    l_space="regexp:([\ \t\f]|\r|\n|\r\n)+"
+    l_identifier="regexp:[a-zA-Z_$][a-zA-Z_$0-9]*"
+    l_identifier_text="regexp:\`[^`]+\`"
+    l_decimal="regexp:[+-]?(([1-9]\d+)|([0-9]))\.\d+"
+    l_integer="regexp:[+-]?(([1-9]\d+)|([0-9]))"
+    l_string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
+
+    // base
+    semicolon=";"
+    parenthese_open="("
+    parenthese_close=")"
+    bracket_CurlyOpen="{"
+    bracket_CurlyClose="}"
+    bracket_SquareOpen="["
+    bracket_SquareClose="]"
+    op_colon=":"
+    op_dot="."
+    op_equal="="
+    op_lessThen="<"
+    op_greatherThen=">"
+    op_plus="+"
+    op_minus="-"
+    op_mul="*"
+    op_bactick="`"
+    op_comma=","
+    op_questionSign="?"
+    op_pipe="|"
+    op_range=".."
+    op_plusEquals="+="
+    op_invalidNotEquals="<>"
+    op_notEquals="!="
+    op_lessThanEquals="<="
+    op_greaterThanEquals=">="
+    op_divide="/"
+    op_modulo="%"
+    op_pow="^"
+    op_regexMatch="=~"
+
+    // comments
+    lineComment="regexp://.*"
+    blockComment="regexp:/\*(.|\n)*\*/"
+  ]
+}
+
+cypher ::= StatementItem *
+
+private StatementItem ::= !<<eof>> Statement ';'? {pin=1 recoverWhile=statement_recover}
+private statement_recover::= !(';'
+                        | K_USING
+                        | K_UNION
+                        | K_LOAD
+                        | K_START
+                        | K_MATCH
+                        | K_UNWIND
+                        | K_MERGE
+                        | K_CREATE
+                        | K_DROP
+                        | K_SET
+                        | K_DELETE
+                        | K_REMOVE
+                        | K_FOREACH
+                        | K_WITH
+                        | K_RETURN
+                        | K_BEGIN
+                        | K_COMMIT
+                        | K_CYPHER
+                        | K_PROFILE
+                        | K_EXPLAIN
+                        | K_CALL
+                        | K_OPTIONAL
+                        | K_DETACH)
+
+/*************************
+ * Statement
+ */
+Statement ::= (K_BEGIN) | (K_COMMIT) | (QueryOptions (Command | Query))
+
+/*************************
+ * Statement options
+ */
+QueryOptions ::= AnyCypherOption* ;
+AnyCypherOption ::= CypherOption | Explain | Profile;
+CypherOption ::= K_CYPHER VersionNumber? ConfigurationOption*
+VersionNumber ::= DoubleLiteral
+Explain ::= K_EXPLAIN
+Profile ::= K_PROFILE
+ConfigurationOption ::= SymbolicNameString '=' SymbolicNameString
+
+/*************************
+ * Command
+ */
+Command ::= CreateIndex
+          | DropIndex
+          | CreateUniqueConstraint
+          | DropUniqueConstraint
+          | CreateNodePropertyExistenceConstraint
+          | DropNodePropertyExistenceConstraint
+          | CreateRelationshipPropertyExistenceConstraint
+          | DropRelationshipPropertyExistenceConstraint
+
+CreateIndex ::= K_CREATE K_INDEX K_ON NodeLabel "(" PropertyKeyName ")"
+DropIndex ::= K_DROP K_INDEX K_ON NodeLabel "(" PropertyKeyName ")"
+CreateUniqueConstraint ::= K_CREATE UniqueConstraintSyntax
+DropUniqueConstraint ::= K_DROP UniqueConstraintSyntax
+CreateNodePropertyExistenceConstraint ::= K_CREATE NodePropertyExistenceConstraintSyntax
+DropNodePropertyExistenceConstraint ::= K_DROP NodePropertyExistenceConstraintSyntax
+CreateRelationshipPropertyExistenceConstraint ::= K_CREATE RelationshipPropertyExistenceConstraintSyntax
+DropRelationshipPropertyExistenceConstraint ::= K_DROP RelationshipPropertyExistenceConstraintSyntax
+
+UniqueConstraintSyntax ::= K_CONSTRAINT K_ON "(" Variable NodeLabel ")" K_ASSERT PropertyExpression K_IS K_UNIQUE
+NodePropertyExistenceConstraintSyntax ::= K_CONSTRAINT K_ON "(" Variable NodeLabel ")" K_ASSERT K_EXISTS "(" PropertyExpression ")"
+RelationshipPropertyExistenceConstraintSyntax ::= K_CONSTRAINT K_ON RelationshipPatternSyntax K_ASSERT K_EXISTS "(" PropertyExpression ")"
+RelationshipPatternSyntax ::= ("(" ")" "-" "[" Variable RelType "]" "-" "(" ")")
+      | ("(" ")" "-" "[" Variable RelType "]" "-" ">" "(" ")")
+      | ("(" ")" "<" "-" "[" Variable RelType "]" "-" "(" ")")
+
+/*************************
+ * Query
+ */
+Query ::= RegularQuery | BulkImportQuery
+
+//-- RegularQuery
+RegularQuery ::= SingleQuery Union*
+Union ::= ((K_UNION K_ALL) | K_UNION) SingleQuery
+SingleQuery ::= Clause+
+Clause ::= LoadCSV
+    | Start
+    | Match
+    | Unwind
+    | Merge
+    | Create
+    | SetClause
+    | Delete
+    | Remove
+    | Foreach
+    | With
+    | Return
+    | Call
+
+//-- BulkImportQuery
+BulkImportQuery ::= PeriodicCommitHint LoadCSVQuery
+PeriodicCommitHint ::= K_USING K_PERIODIC K_COMMIT SignedIntegerLiteral?
+LoadCSVQuery ::= LoadCSV Clause*
+
+/*************************
+ * Clauses
+ */
+//-- Load csv
+LoadCSV ::= K_LOAD K_CSV (K_WITH K_HEADERS)? K_FROM Expression K_AS Variable (K_FIELDTERMINATOR StringLiteral)?
+
+//-- Start
+Start ::= K_START (StartPoint ("," StartPoint)*)? Where?
+StartPoint ::= Variable "=" Lookup
+Lookup ::= NodeLookup | RelationshipLookup
+
+NodeLookup ::= K_NODE (IdentifiedIndexLookup | IndexQuery | IdLookup)
+RelationshipLookup ::= (K_RELATIONSHIP | K_REL) (IdentifiedIndexLookup | IndexQuery | IdLookup)
+
+IdentifiedIndexLookup ::= ":" SymbolicNameString "(" SymbolicNameString "=" (StringLiteral | Parameter) ")"
+IndexQuery ::= ":" SymbolicNameString "(" (StringLiteral | Parameter) ")"
+IdLookup ::= "(" (LiteralIds | Parameter | "*") ")"
+LiteralIds ::= UnsignedIntegerLiteral ("," UnsignedIntegerLiteral)*
+
+//-- Match
+Match ::= ((K_OPTIONAL K_MATCH) | K_MATCH) Pattern Hint* Where?
+Hint ::= (K_USING K_INDEX Variable NodeLabel "(" PropertyKeyName ")")
+       | (K_USING K_JOIN K_ON Variable ("," Variable)*)
+       | (K_USING K_SCAN Variable NodeLabel)
+
+//-- Merge
+Merge ::= K_MERGE PatternPart MergeAction*
+MergeAction ::= (K_ON K_MATCH SetClause)
+              | (K_ON K_CREATE SetClause)
+
+//-- SetClause
+SetClause ::= K_SET SetItem ("," SetItem)*
+SetItem ::= (PropertyExpression "=" Expression)
+          | (Variable "=" Expression)
+          | (Variable "+=" Expression)
+          | (Variable NodeLabels)
+
+//-- Remove
+Remove ::= K_REMOVE RemoveItem ("," RemoveItem)*
+RemoveItem ::= (Variable NodeLabels) | PropertyExpression
+
+//-- Return
+With ::= (K_WITH K_DISTINCT ReturnBody Where?)
+       | (K_WITH ReturnBody Where?)
+Return ::= (K_RETURN K_DISTINCT ReturnBody)
+         | (K_RETURN ReturnBody)
+ReturnBody ::= ReturnItems Order? Skip? Limit?
+ReturnItems ::= ("*" ("," ReturnItem)*)
+              | (ReturnItem ("," ReturnItem)*)
+ReturnItem ::= (Expression K_AS Variable) | (Expression)
+Order ::= K_ORDER K_BY SortItem ("," SortItem)*
+SortItem ::= (Expression (K_DESCENDING | K_DESC))
+           | (Expression (K_ASCENDING | K_ASC)?)
+Skip ::= K_SKIP Expression
+Limit ::= K_LIMIT Expression
+
+//-- Call
+Call ::= K_CALL ProcedureNamespace ProcedureName ProcedureArguments ProcedureResults?
+ProcedureNamespace ::= (SymbolicNameString ".")*
+ProcedureArguments ::= "(" Expression? ("," Expression)* ")"
+ProcedureResults ::= K_YIELD ProcedureResult ("," ProcedureResult)*
+ProcedureResult ::= AliasedProcedureResult | SimpleProcedureResult
+AliasedProcedureResult ::= ProcedureOutput K_AS Variable
+SimpleProcedureResult ::= Variable
+ProcedureOutput ::= SymbolicNameString
+
+//-- Other
+Create ::= (K_CREATE K_UNIQUE Pattern)
+         | (K_CREATE Pattern)
+Delete ::= (K_DELETE Expression ("," Expression)*)
+         | (K_DETACH K_DELETE Expression ("," Expression)*)
+Unwind ::= K_UNWIND Expression K_AS Variable
+Foreach ::= K_FOREACH "(" Variable K_IN Expression "|" Clause+ ")"
+Where ::= K_WHERE Expression
+
+/*************************
+ * Patterns
+ */
+Pattern ::= PatternPart ("," PatternPart)*
+PatternPart ::= (Variable "=" AnonymousPatternPart) | AnonymousPatternPart
+AnonymousPatternPart ::= ShortestPathPattern | PatternElement
+ShortestPathPattern ::= (K_SHORTESTPATH "(" PatternElement ")")
+                      | (K_ALLSHORTESTPATHS "(" PatternElement ")")
+PatternElement ::= (NodePattern PatternElementChain*) | ("(" PatternElement ")")
+PatternElementChain ::= RelationshipPattern NodePattern {pin=1}
+
+RelationshipPattern ::= LeftArrowHead? Dash RelationshipDetail? Dash RightArrowHead? {pin=2}
+
+RelationshipDetail ::= "[" Variable? "?"? RelationshipTypes? MaybeVariableLength Properties? "]" {pin=1}
+RelationshipTypes ::= ":" RelTypeName ("|" ":"? RelTypeName)* {pin=1}
+MaybeVariableLength ::= ("*" RangeLiteral?)?
+
+NodePattern ::= "(" Variable? NodeLabels? Properties? ")" {pin=1}
+
+RelationshipsPattern ::= NodePattern PatternElementChain+
+Properties ::= MapLiteral | Parameter
+
+/*************************
+ * Expression
+ */
+Expression ::= Expression12
+private Expression12 ::= Expression11 (K_OR Expression11)*
+private Expression11 ::= Expression10 (K_XOR Expression10)*
+private Expression10 ::= Expression9 (K_AND Expression9)*
+private Expression9 ::= (K_NOT Expression9) | Expression8
+private Expression8 ::= Expression7 PartialComparisonExpression*
+private PartialComparisonExpression ::= ("=" Expression7)
+                                      | ("<>" Expression7)
+                                      | ("!=" Expression7)
+                                      | ("<" Expression7)
+                                      | (">" Expression7)
+                                      | ("<=" Expression7)
+                                      | (">=" Expression7)
+private Expression7 ::= Expression6 (("-" Expression6) | ("+" Expression6))*
+private Expression6 ::= Expression5 (("*" Expression5) | ("/" Expression5) | ("%" Expression5))*
+private Expression5 ::= Expression4 ("^" Expression4)*
+private Expression4 ::= Expression3 | ("-" Expression4) | ("+" Expression4)
+private Expression3 ::= Expression2 (
+    ("[" Expression "]")
+  | ("[" Expression? ".." Expression? "]")
+  | ("=~" Expression2)
+  | (K_IN Expression2)
+  | (K_STARTS K_WITH  Expression2)
+  | (K_ENDS K_WITH  Expression2)
+  | (K_CONTAINS  Expression2)
+  | (K_IS K_NULL)
+  | (K_IS K_NOT K_NULL)
+)*
+private Expression2 ::= Expression1 (PropertyLookup | NodeLabels)*
+private Expression1 ::= NumberLiteral
+              | StringLiteral
+              | Parameter
+              | (K_TRUE)
+              | (K_FALSE)
+              | (K_NULL)
+              | CaseExpression
+              | MapLiteral
+              | ListComprehension
+              | ("[" Expression? ("," Expression)* "]")
+              | (K_FILTER "(" FilterExpression ")")
+              | (K_EXTRACT "(" FilterExpression ("|" Expression)? ")")
+              | (K_REDUCE "(" Variable "=" Expression "," IdInColl "|" Expression ")")
+              | (K_ALL "(" FilterExpression ")")
+              | (K_ANY "(" FilterExpression ")")
+              | (K_NONE "(" FilterExpression ")")
+              | (K_SINGLE "(" FilterExpression ")")
+              | (K_EXISTS "(" Expression ")")
+              | ShortestPathPattern
+              | RelationshipsPattern
+              | parenthesizedExpression
+              | FunctionInvocation
+              | Variable
+
+PropertyLookup ::= "." PropertyKeyName
+ListComprehension ::= "[" FilterExpression ("|"  Expression)? "]"
+FilterExpression ::= IdInColl (K_WHERE)?
+IdInColl ::= Variable K_IN Expression
+parenthesizedExpression ::= "(" Expression ")" {pin=1}
+FunctionInvocation ::= (FunctionName "(" "*" ")")
+                     | (FunctionName "(" K_DISTINCT? Expression? ("," Expression)* ")")
+CaseExpression ::= ((K_CASE CaseAlternatives+) | (K_CASE Expression CaseAlternatives+))
+                   (K_ELSE Expression)?
+                   K_END
+CaseAlternatives ::= K_WHEN Expression K_THEN Expression
+PropertyExpression ::= Expression1 (PropertyLookup)+
+
+/*************************
+ * Literals
+ */
+Variable ::= SymbolicNameString {
+    mixin="com.neueda.jetbrains.plugin.cypher.references.CypherNamedElementImpl"
+    implements="com.neueda.jetbrains.plugin.cypher.references.CypherNamedElement"
+    methods=[getName setName getNameIdentifier getReferences]
+}
+FunctionName ::= l_identifier
+ProcedureName ::= SymbolicNameString
+Parameter ::= "{" (SymbolicNameString | UnsignedDecimalInteger) "}"
+NodeLabel ::= ":" LabelName
+StringLiteral ::= l_string
+LabelName ::= SymbolicNameString {
+    mixin="com.neueda.jetbrains.plugin.cypher.references.CypherNamedElementImpl"
+    implements="com.neueda.jetbrains.plugin.cypher.references.CypherNamedElement"
+    methods=[getName setName getNameIdentifier getReferences]
+}
+RelType ::= ":" RelTypeName
+RelTypeName ::= SymbolicNameString {
+    mixin="com.neueda.jetbrains.plugin.cypher.references.CypherNamedElementImpl"
+    implements="com.neueda.jetbrains.plugin.cypher.references.CypherNamedElement"
+    methods=[getName setName getNameIdentifier getReferences]
+}
+PropertyKeyName ::= SymbolicNameString {
+    mixin="com.neueda.jetbrains.plugin.cypher.references.CypherNamedElementImpl"
+    implements="com.neueda.jetbrains.plugin.cypher.references.CypherNamedElement"
+    methods=[getName setName getNameIdentifier getReferences]
+}
+RangeLiteral ::= (UnsignedIntegerLiteral? ".." UnsignedIntegerLiteral?) | (UnsignedIntegerLiteral)
+MapLiteral ::= "{" (PropertyKeyName ":" Expression)? ("," PropertyKeyName ":" Expression)* "}"
+NodeLabels ::= NodeLabel+
+//SignedIntegerLiteral ::= HexInteger | OctalInteger | DecimalInteger // todo: this is real implementation
+SignedIntegerLiteral ::= SignedDecimalInteger
+UnsignedIntegerLiteral ::= UnsignedDecimalInteger
+NumberLiteral ::= DoubleLiteral | SignedIntegerLiteral
+DoubleLiteral ::= l_decimal // todo: make real double here
+
+/*************************
+ * Base
+ */
+SymbolicNameString ::=  UnescapedSymbolicNameString | EscapedSymbolicNameString
+EscapedSymbolicNameString ::= l_identifier_text
+UnescapedSymbolicNameString ::= l_identifier
+UnsignedDecimalInteger ::= l_integer
+SignedDecimalInteger ::= l_integer
+Dash ::= "-" // todo: migrate all variants
+LeftArrowHead ::= "<" // todo: migrate all variants
+RightArrowHead ::= ">" // todo: migrate all variants
+DigitString ::= l_integer

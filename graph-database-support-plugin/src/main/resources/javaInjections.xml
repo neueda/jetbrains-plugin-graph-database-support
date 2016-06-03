@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="LanguageInjectionConfiguration">
+    <!-- Graph Database Service -->
+    <injection language="Cypher" injector-id="java">
+        <display-name>Neo4j - GraphDatabaseService (org.neo4j.graphdb)</display-name>
+        <place><![CDATA[psiParameter().ofMethod(0, psiMethod().withName("execute").withParameters("java.lang.String", "java.util.Map").definedInClass("org.neo4j.graphdb.GraphDatabaseService"))]]></place>
+        <place><![CDATA[psiParameter().ofMethod(0, psiMethod().withName("execute").withParameters("java.lang.String").definedInClass("org.neo4j.graphdb.GraphDatabaseService"))]]></place>
+    </injection>
+
+    <!-- Neo4j harness -->
+    <injection language="Cypher" injector-id="java">
+        <display-name>Neo4j - Harness TestServerBuilder.class (org.neo4j.harness)</display-name>
+        <place><![CDATA[psiParameter().ofMethod(0, psiMethod().withName("withFixture").withParameters("java.lang.String").definedInClass("org.neo4j.harness.TestServerBuilder"))]]></place>
+    </injection>
+    <injection language="Cypher" injector-id="java">
+        <display-name>Neo4j - Harness Neo4jRule.class (org.neo4j.harness.junit)</display-name>
+        <place><![CDATA[psiParameter().ofMethod(0, psiMethod().withName("withFixture").withParameters("java.lang.String").definedInClass("org.neo4j.harness.junit.Neo4jRule"))]]></place>
+    </injection>
+
+    <!-- Neo4j OGM -->
+    <injection language="Cypher" injector-id="java">
+        <display-name>Neo4j - OGM Session.class (org.neo4j.ogm.session)</display-name>
+        <place><![CDATA[psiParameter().ofMethod(1, psiMethod().withName("queryForObject").withParameters("java.lang.Class", "java.lang.String", "java.util.Map").definedInClass("org.neo4j.ogm.session.Capability.ExecuteQueries"))]]></place>
+        <place><![CDATA[psiParameter().ofMethod(1, psiMethod().withName("query").withParameters("java.lang.Class", "java.lang.String", "java.util.Map").definedInClass("org.neo4j.ogm.session.Capability.ExecuteQueries"))]]></place>
+        <place><![CDATA[psiParameter().ofMethod(0, psiMethod().withName("query").withParameters("java.lang.String", "java.util.Map").definedInClass("org.neo4j.ogm.session.Capability.ExecuteQueries"))]]></place>
+        <place><![CDATA[psiParameter().ofMethod(0, psiMethod().withName("query").withParameters("java.lang.String", "java.util.Map", "boolean").definedInClass("org.neo4j.ogm.session.Capability.ExecuteQueries"))]]></place>
+        <place><![CDATA[psiParameter().ofMethod(0, psiMethod().withName("execute").withParameters("java.lang.String", "java.util.Map").definedInClass("org.neo4j.ogm.session.Capability.ExecuteStatements"))]]></place>
+    </injection>
+
+    <!-- Spring Data Neo4j -->
+    <injection language="Cypher" injector-id="java">
+        <display-name>Neo4j - SDN4 @Query (org.springframework.data.neo4j.annotation)</display-name>
+        <place><![CDATA[psiMethod().withName("value").withParameters().definedInClass("org.springframework.data.neo4j.annotation.Query")]]></place>
+    </injection>
+    <injection language="Cypher" injector-id="java">
+        <display-name>Neo4j - SDN4 Neo4jTemplate.class (org.springframework.data.neo4j.template)</display-name>
+        <place><![CDATA[psiParameter().ofMethod(0, psiMethod().withName("execute").withParameters("java.lang.String", "java.util.Map").definedInClass("org.springframework.data.neo4j.template.Neo4jTemplate"))]]></place>
+        <place><![CDATA[psiParameter().ofMethod(0, psiMethod().withName("query").withParameters("java.lang.String", "java.util.Map").definedInClass("org.springframework.data.neo4j.template.Neo4jTemplate"))]]></place>
+        <place><![CDATA[psiParameter().ofMethod(0, psiMethod().withName("query").withParameters("java.lang.String", "java.util.Map", "boolean").definedInClass("org.springframework.data.neo4j.template.Neo4jTemplate"))]]></place>
+        <place><![CDATA[psiParameter().ofMethod(1, psiMethod().withName("queryForObjects").withParameters("java.lang.Class", "java.lang.String", "java.util.Map").definedInClass("org.springframework.data.neo4j.template.Neo4jTemplate"))]]></place>
+        <place><![CDATA[psiParameter().ofMethod(1, psiMethod().withName("queryForObject").withParameters("java.lang.Class", "java.lang.String", "java.util.Map").definedInClass("org.springframework.data.neo4j.template.Neo4jTemplate"))]]></place>
+    </injection>
+</component>

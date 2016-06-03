@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="LanguageInjectionConfiguration">
+    <injection language="Cypher" injector-id="python">
+        <display-name>Neo4j - py2neo CypherTransaction.class (py2neo.cypher.core.CypherTransaction)</display-name>
+        <place><![CDATA[pyLiteralExpression().and(pyMethodArgument("append", 0, "py2neo.cypher.core.CypherTransaction"))]]></place>
+    </injection>
+
+    <injection language="Cypher" injector-id="python">
+        <display-name>Neo4j - py2neo CypherResource.class (py2neo.cypher.core.CypherResource)</display-name>
+        <place><![CDATA[pyLiteralExpression().and(pyMethodArgument("execute", 0, "py2neo.cypher.core.CypherResource"))]]></place>
+        <place><![CDATA[pyLiteralExpression().and(pyMethodArgument("execute_one", 0, "py2neo.cypher.core.CypherResource"))]]></place>
+        <place><![CDATA[pyLiteralExpression().and(pyMethodArgument("post", 0, "py2neo.cypher.core.CypherResource"))]]></place>
+        <place><![CDATA[pyLiteralExpression().and(pyMethodArgument("run", 0, "py2neo.cypher.core.CypherResource"))]]></place>
+        <place><![CDATA[pyLiteralExpression().and(pyMethodArgument("stream", 0, "py2neo.cypher.core.CypherResource"))]]></place>
+    </injection>
+</component>
