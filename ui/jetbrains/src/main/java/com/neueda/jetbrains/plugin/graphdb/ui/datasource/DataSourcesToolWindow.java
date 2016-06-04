@@ -17,8 +17,11 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.GridLayout;
+import java.util.Enumeration;
+import java.util.List;
 
 public class DataSourcesToolWindow implements ToolWindowFactory {
 
@@ -99,6 +102,28 @@ public class DataSourcesToolWindow implements ToolWindowFactory {
     public void createDataSource(DataSource dataSource) {
         component.addDataSource(dataSource);
         treeRoot.add(new PatchedDefaultMutableTreeNode(dataSource));
+        treeModel.reload();
+    }
+
+    public void removeDataSources(List<DataSource> dataSourcesForRemoval) {
+        component.removeDataSources(dataSourcesForRemoval);
+
+        dataSourcesForRemoval.stream()
+                .map(DataSource::getName)
+                .map(name -> {
+                    Enumeration enumeration = treeRoot.children();
+                    while (enumeration.hasMoreElements()) {
+                        DefaultMutableTreeNode element = (DefaultMutableTreeNode) enumeration.nextElement();
+                        DataSource dataSource = (DataSource) element.getUserObject();
+                        if (dataSource.getName().equals(name)) {
+                            return element;
+                        }
+                    }
+                    return null;
+                })
+                .filter(ds -> ds != null)
+                .forEach(treeRoot::remove);
+
         treeModel.reload();
     }
 }

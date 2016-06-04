@@ -23,12 +23,16 @@ public class DataSourcesComponent implements ProjectComponent, PersistentStateCo
         return possibleDataSource.isPresent();
     }
 
+    public List<DataSource> getDataSources() {
+        return state.dataSources;
+    }
+
     public void addDataSource(DataSource dataSource) {
         state.dataSources.add(dataSource);
     }
 
-    public List<DataSource> getDataSources() {
-        return state.dataSources;
+    public void removeDataSources(List<DataSource> dataSourcesForRemoval) {
+        state.dataSources.removeAll(dataSourcesForRemoval);
     }
 
     /**

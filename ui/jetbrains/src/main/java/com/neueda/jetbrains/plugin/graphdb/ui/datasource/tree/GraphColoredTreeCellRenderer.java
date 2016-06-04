@@ -15,20 +15,22 @@ public class GraphColoredTreeCellRenderer extends ColoredTreeCellRenderer {
     public void customizeCellRenderer(@NotNull JTree tree, Object value, boolean selected, boolean expanded,
                                       boolean leaf, int row, boolean hasFocus) {
         Object userObject = ((DefaultMutableTreeNode) value).getUserObject();
-        if (!(userObject instanceof DataSource)) {
-            return;
-        }
-        DataSource dataSource = (DataSource) userObject;
 
-        append(dataSource.getName(), SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES, true);
+        if (userObject instanceof DataSource) {
+            DataSource dataSource = (DataSource) userObject;
 
-        switch (dataSource.getDataSourceType()) {
-            case NEO4J_BOLT:
-                setIcon(GraphIcons.Database.NEO4J);
-                break;
-            default:
-                setIcon(GraphIcons.Database.UNKNOWN);
-                break;
+            append(dataSource.getName(), SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES, true);
+
+            switch (dataSource.getDataSourceType()) {
+                case NEO4J_BOLT:
+                    setIcon(GraphIcons.Database.NEO4J);
+                    break;
+                default:
+                    setIcon(GraphIcons.Database.UNKNOWN);
+                    break;
+            }
+        } else {
+            append(value.toString());
         }
     }
 }
