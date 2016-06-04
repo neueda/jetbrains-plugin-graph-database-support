@@ -7,15 +7,29 @@ import com.intellij.openapi.components.Storage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-//@State(name = "GraphDatabaseSupport.DataSourcesState")
+import java.util.List;
+import java.util.Optional;
+
 @State(name = "GraphDatabaseSupport.DataSourcesState",
         storages = {@Storage("GraphDatabaseSupport_DataSourcesState.xml")})
-public class DataSourcesComponent implements ProjectComponent, PersistentStateComponent<DataSourcesComponent.State> {
+public class DataSourcesComponent implements ProjectComponent, PersistentStateComponent<DataSourcesComponentState> {
 
-    public static class State {
+    private DataSourcesComponentState state;
+
+    public boolean isDataSourceExists(String dataSourceName) {
+        Optional<DataSource> possibleDataSource = state.dataSources.stream()
+                .filter((dataSource) -> dataSource.getName().equals(dataSourceName))
+                .findAny();
+        return possibleDataSource.isPresent();
     }
 
-    private State state;
+    public void addDataSource(DataSource dataSource) {
+        state.dataSources.add(dataSource);
+    }
+
+    public List<DataSource> getDataSources() {
+        return state.dataSources;
+    }
 
     /**
      * Initialization.
@@ -28,7 +42,7 @@ public class DataSourcesComponent implements ProjectComponent, PersistentStateCo
      * Load persisted state.
      */
     @Override
-    public void loadState(State state) {
+    public void loadState(DataSourcesComponentState state) {
         this.state = state;
     }
 
@@ -38,7 +52,7 @@ public class DataSourcesComponent implements ProjectComponent, PersistentStateCo
     @Override
     public void projectOpened() {
         if (state == null) {
-            state = new State();
+            state = new DataSourcesComponentState();
         }
     }
 
@@ -47,7 +61,7 @@ public class DataSourcesComponent implements ProjectComponent, PersistentStateCo
      */
     @Nullable
     @Override
-    public State getState() {
+    public DataSourcesComponentState getState() {
         return state;
     }
 

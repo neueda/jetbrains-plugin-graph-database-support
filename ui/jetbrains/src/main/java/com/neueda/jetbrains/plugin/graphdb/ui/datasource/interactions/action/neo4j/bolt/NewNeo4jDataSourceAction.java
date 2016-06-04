@@ -1,12 +1,10 @@
-package com.neueda.jetbrains.plugin.graphdb.ui.datasource.interactions.action;
+package com.neueda.jetbrains.plugin.graphdb.ui.datasource.interactions.action.neo4j.bolt;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
-import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
 import com.neueda.jetbrains.plugin.graphdb.ui.datasource.DataSourcesToolWindow;
-import com.neueda.jetbrains.plugin.graphdb.ui.datasource.dialog.CreateDataSourceDialog;
 
 public class NewNeo4jDataSourceAction extends AnAction {
 
@@ -21,20 +19,14 @@ public class NewNeo4jDataSourceAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        CreateDataSourceDialog dataSourceDialog = createDataSourceDialog();
+        Neo4jBoltDataSourceDialog dataSourceDialog = createDataSourceDialog();
         if (dataSourceDialog.showAndGet()) {
-            createDataSource(dataSourceDialog);
+            window.createDataSource(dataSourceDialog.constructDataSource());
         }
     }
 
-    private CreateDataSourceDialog createDataSourceDialog() {
-        return new CreateDataSourceDialog(project);
-    }
-
-    private void createDataSource(CreateDataSourceDialog dataSourceDialog) {
-        PatchedDefaultMutableTreeNode newChild = new PatchedDefaultMutableTreeNode("Neo4j data source" + System.currentTimeMillis());
-        window.getTreeRoot().add(newChild);
-        window.getTreeModel().reload();
+    private Neo4jBoltDataSourceDialog createDataSourceDialog() {
+        return new Neo4jBoltDataSourceDialog(project, window);
     }
 }
 

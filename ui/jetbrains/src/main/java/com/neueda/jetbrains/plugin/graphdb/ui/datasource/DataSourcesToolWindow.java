@@ -1,5 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.ui.datasource;
 
+import com.intellij.openapi.actionSystem.ActionToolbarPosition;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -8,6 +9,7 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.intellij.ui.treeStructure.Tree;
+import com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSource;
 import com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSourcesComponent;
 import com.neueda.jetbrains.plugin.graphdb.ui.datasource.interactions.DataSourceInteractions;
 import com.neueda.jetbrains.plugin.graphdb.ui.datasource.tree.GraphColoredTreeCellRenderer;
@@ -47,6 +49,8 @@ public class DataSourcesToolWindow implements ToolWindowFactory {
         interactions = new DataSourceInteractions(project, this);
 
         replaceTreeWithDecorated();
+
+        showDataSources();
     }
 
     public DataSourcesComponent getComponent() {
@@ -78,11 +82,23 @@ public class DataSourcesToolWindow implements ToolWindowFactory {
 
     private void decorateDataSourceTree() {
         decorator.setPanelBorder(BorderFactory.createEmptyBorder());
-        decorator.setAsUsualTopToolbar();
+        decorator.setToolbarPosition(ActionToolbarPosition.TOP);
     }
 
     private void replaceTreeWithDecorated() {
         JPanel panel = decorator.createPanel();
         treePanel.add(panel);
+    }
+
+    private void showDataSources() {
+        component.getDataSources()
+                .forEach((dataSource) -> treeRoot.add(new PatchedDefaultMutableTreeNode(dataSource)));
+        treeModel.reload();
+    }
+
+    public void createDataSource(DataSource dataSource) {
+        component.addDataSource(dataSource);
+        treeRoot.add(new PatchedDefaultMutableTreeNode(dataSource));
+        treeModel.reload();
     }
 }
