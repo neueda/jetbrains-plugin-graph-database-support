@@ -1,21 +1,21 @@
-package com.neueda.jetbrains.plugin.graphdb.ui.interactions;
+package com.neueda.jetbrains.plugin.graphdb.ui.console.interactions;
 
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.bus.ExecuteQueryEvent;
 import com.neueda.jetbrains.plugin.graphdb.database.QueryExecutionService;
-import com.neueda.jetbrains.plugin.graphdb.ui.GraphDatabaseConsoleToolWindow;
+import com.neueda.jetbrains.plugin.graphdb.ui.console.ConsoleToolWindow;
 import com.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 
-public class GraphDatabaseConsoleToolWindowInteractions {
+public class ConsoleToolWindowInteractions {
 
-    private final GraphDatabaseConsoleToolWindow window;
+    private final ConsoleToolWindow window;
     private final MessageBus messageBus;
     private final QueryExecutionService queryExecutionService;
     private final VisualizationApi visualization;
 
-    public GraphDatabaseConsoleToolWindowInteractions(GraphDatabaseConsoleToolWindow window,
-                                                      MessageBus messageBus, VisualizationApi visualization) {
+    public ConsoleToolWindowInteractions(ConsoleToolWindow window,
+                                         MessageBus messageBus, VisualizationApi visualization) {
         this.window = window;
         this.messageBus = messageBus;
         this.visualization = visualization;

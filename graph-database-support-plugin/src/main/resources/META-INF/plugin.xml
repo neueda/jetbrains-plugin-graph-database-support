@@ -26,19 +26,28 @@
     <depends optional="true">com.intellij.modules.java</depends>
     <depends optional="true" config-file="intellilang-cypher-support.xml">org.intellij.intelliLang</depends>
 
+    <project-components>
+        <!-- Graph Database support - data sources -->
+        <component>
+            <interface-class>com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSourcesComponent</interface-class>
+            <implementation-class>com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSourcesComponent</implementation-class>
+
+            <loadForDefaultProject/>
+        </component>
+    </project-components>
+
     <extensions defaultExtensionNs="com.intellij">
         <!-- Graph database support -->
-        <!-- Not defined: conditionClass -->
         <toolWindow id="Graph Database Console"
                     anchor="bottom"
                     secondary="false"
-                    factoryClass="com.neueda.jetbrains.plugin.graphdb.ui.GraphDatabaseConsoleToolWindow"
-                    icon="/graphdb-images/tool-windows-icon.png"/>
+                    factoryClass="com.neueda.jetbrains.plugin.graphdb.ui.console.ConsoleToolWindow"
+                    icon="/graphdb/icons/window/graph_13x13.png"/>
         <toolWindow id="Graph Database"
                     anchor="right"
                     secondary="false"
-                    factoryClass="com.neueda.jetbrains.plugin.graphdb.ui.GraphDatabaseToolWindow"
-                    icon="/graphdb-images/tool-windows-icon.png"/>
+                    factoryClass="com.neueda.jetbrains.plugin.graphdb.ui.datasource.DataSourcesToolWindow"
+                    icon="/graphdb/icons/window/graph_13x13.png"/>
 
         <!-- Cypher -->
         <fileTypeFactory implementation="com.neueda.jetbrains.plugin.cypher.file.CypherFileTypeFactory"/>

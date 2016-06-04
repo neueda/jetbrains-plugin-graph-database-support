@@ -1,6 +1,6 @@
 package com.neueda.jetbrains.plugin.cypher;
 
-import com.intellij.openapi.util.IconLoader;
+import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
 
 import javax.swing.Icon;
 
@@ -12,5 +12,5 @@ public class CypherIcons {
     /**
      * Cypher icon.
      */
-    public static final Icon FILE = IconLoader.getIcon("/graphdb-images/cypher_logo.png");
+    public static final Icon FILE = GraphIcons.Language.CYPHER;
 }

@@ -27,3 +27,7 @@ intellij {
         downloadSources true
     }
 }
+
+processResources {
+    from 'platform/src/main/resources'
+}

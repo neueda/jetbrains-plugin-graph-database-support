@@ -14,4 +14,6 @@ sourceSets {
 }
 
 dependencies {
+    compile project(":platform")
 }
+
