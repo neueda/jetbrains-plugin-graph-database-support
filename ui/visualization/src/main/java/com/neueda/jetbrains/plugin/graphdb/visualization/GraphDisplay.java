@@ -6,6 +6,8 @@ import com.neueda.jetbrains.plugin.graphdb.visualization.decorators.CenteredLayo
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.NodeCallback;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.RelationshipCallback;
+import com.neueda.jetbrains.plugin.graphdb.visualization.listeners.RelationshipListener;
+import com.neueda.jetbrains.plugin.graphdb.visualization.listeners.NodeListener;
 import prefuse.Display;
 import prefuse.Visualization;
 import prefuse.action.ActionList;
@@ -13,7 +15,6 @@ import prefuse.action.RepaintAction;
 import prefuse.action.assignment.ColorAction;
 import prefuse.action.layout.graph.ForceDirectedLayout;
 import prefuse.activity.Activity;
-import prefuse.controls.ControlAdapter;
 import prefuse.controls.DragControl;
 import prefuse.data.Edge;
 import prefuse.data.Graph;
@@ -24,14 +25,11 @@ import prefuse.render.EdgeRenderer;
 import prefuse.render.LabelRenderer;
 import prefuse.render.ShapeRenderer;
 import prefuse.util.ColorLib;
-import prefuse.util.FontLib;
 import prefuse.util.PrefuseLib;
-import prefuse.visual.EdgeItem;
-import prefuse.visual.NodeItem;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 
-import java.awt.event.MouseEvent;
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,8 +45,6 @@ public class GraphDisplay extends Display {
     private static final int NODE_DIAMETER = 25;
     private static final String NODE_LABEL = "nodelabel";
     private static final String LAYOUT = "layout";
-    private static final String FONT = "Tahoma";
-    private static final int FONT_SIZE = 12;
     private static final int FONT_COLOR = ColorLib.rgb(15, 15, 45);
 
     private Graph graph;
@@ -77,55 +73,11 @@ public class GraphDisplay extends Display {
     }
 
     public void addNodeListener(EventType type, NodeCallback callback) {
-        ControlAdapter listener = new ControlAdapter() {
-            @Override
-            public void itemEntered(VisualItem item, MouseEvent e) {
-                if (type == EventType.HOVER_START && item instanceof NodeItem) {
-                    callback.accept(graphNodeMap.get(item.get("id")), item, e);
-                }
-            }
-
-            @Override
-            public void itemExited(VisualItem item, MouseEvent e) {
-                if (type == EventType.HOVER_END && item instanceof NodeItem) {
-                    callback.accept(graphNodeMap.get(item.get("id")), item, e);
-                }
-            }
-
-            @Override
-            public void itemClicked(VisualItem item, MouseEvent e) {
-                if (type == EventType.CLICK && item instanceof NodeItem) {
-                    callback.accept(graphNodeMap.get(item.get("id")), item, e);
-                }
-            }
-        };
-        addControlListener(listener);
+        addControlListener(new NodeListener(type, callback, graphNodeMap));
     }
 
-    public void addEdgeListener(EventType type, RelationshipCallback action) {
-        ControlAdapter listener = new ControlAdapter() {
-            @Override
-            public void itemEntered(VisualItem item, MouseEvent e) {
-                if (type == EventType.HOVER_START && item instanceof EdgeItem) {
-                    action.accept(graphRelationshipMap.get(item.get("id")), item, e);
-                }
-            }
-
-            @Override
-            public void itemExited(VisualItem item, MouseEvent e) {
-                if (type == EventType.HOVER_END && item instanceof EdgeItem) {
-                    action.accept(graphRelationshipMap.get(item.get("id")), item, e);
-                }
-            }
-
-            @Override
-            public void itemClicked(VisualItem item, MouseEvent e) {
-                if (type == EventType.CLICK && item instanceof EdgeItem) {
-                    action.accept(graphRelationshipMap.get(item.get("id")), item, e);
-                }
-            }
-        };
-        addControlListener(listener);
+    public void addEdgeListener(EventType type, RelationshipCallback callback) {
+        addControlListener(new RelationshipListener(type, callback, graphRelationshipMap));
     }
 
     public void addNode(GraphNode graphNode) {
@@ -154,7 +106,8 @@ public class GraphDisplay extends Display {
         final Schema decoratorSchema = PrefuseLib.getVisualItemSchema();
         decoratorSchema.setDefault(VisualItem.INTERACTIVE, false);
         decoratorSchema.setDefault(VisualItem.TEXTCOLOR, FONT_COLOR);
-        decoratorSchema.setDefault(VisualItem.FONT, FontLib.getFont(FONT, FONT_SIZE));
+        decoratorSchema.setDefault(VisualItem.FONT, UIManager.getFont("Label.font"));
+
         m_vis.addDecorators(NODE_LABEL, NODES, decoratorSchema);
 
         m_vis.setRendererFactory(rf);
