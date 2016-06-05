@@ -6,15 +6,15 @@ import org.neo4j.driver.v1.types.Relationship;
 
 import java.util.Map;
 
-public class Neo4jV3Relationship implements GraphRelationship {
+public class Neo4jBoltRelationship implements GraphRelationship {
 
     private final long id;
     private final GraphNode startNode;
     private final GraphNode endNode;
     private final Map<String, Object> properties;
 
-    public Neo4jV3Relationship(Relationship relationship,
-                               GraphNode startNode, GraphNode endNode) {
+    public Neo4jBoltRelationship(Relationship relationship,
+                                 GraphNode startNode, GraphNode endNode) {
         this.id = relationship.id();
         this.startNode = startNode;
         this.endNode = endNode;

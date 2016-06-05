@@ -2,7 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt;
 
 import java.util.Map;
 
-public class Neo4jV3Configuration {
+public class Neo4jBoltConfiguration {
 
     public static final String HOST = "host";
     public static final String PORT = "port";
@@ -11,7 +11,7 @@ public class Neo4jV3Configuration {
 
     private final Map<String, String> configuration;
 
-    public Neo4jV3Configuration(Map<String, String> configuration) {
+    public Neo4jBoltConfiguration(Map<String, String> configuration) {
         this.configuration = configuration;
     }
 

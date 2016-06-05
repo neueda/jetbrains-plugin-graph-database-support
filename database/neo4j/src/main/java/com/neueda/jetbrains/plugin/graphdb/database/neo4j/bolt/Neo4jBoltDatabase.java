@@ -19,16 +19,16 @@ import java.util.Map;
 /**
  * Communicates with Neo4j 3.0+ database using Bolt driver.
  */
-public class Neo4jV3Database implements GraphDatabaseApi {
+public class Neo4jBoltDatabase implements GraphDatabaseApi {
 
     private final String url;
     private final AuthToken auth;
 
-    public Neo4jV3Database(Map<String, String> configuration) {
-        this(new Neo4jV3Configuration(configuration));
+    public Neo4jBoltDatabase(Map<String, String> configuration) {
+        this(new Neo4jBoltConfiguration(configuration));
     }
 
-    public Neo4jV3Database(Neo4jV3Configuration configuration) {
+    public Neo4jBoltDatabase(Neo4jBoltConfiguration configuration) {
         String host = configuration.getHost();
         Integer port = configuration.getPort();
         String username = configuration.getUser();
@@ -49,7 +49,7 @@ public class Neo4jV3Database implements GraphDatabaseApi {
             List<Record> records = session.run(query).list();
 
 
-            Neo4jV3Buffer buffer = new Neo4jV3Buffer();
+            Neo4jBoltBuffer buffer = new Neo4jBoltBuffer();
 
             for (Record record : records) {
                 List<Value> values = record.values();
@@ -59,11 +59,11 @@ public class Neo4jV3Database implements GraphDatabaseApi {
                 }
             }
 
-            return new Neo4jV3QueryResult(buffer);
+            return new Neo4jBoltQueryResult(buffer);
         }
     }
 
-    private void extractValue(Neo4jV3Buffer buffer, Object object) {
+    private void extractValue(Neo4jBoltBuffer buffer, Object object) {
         if (object instanceof Node) {
             Node node = (Node) object;
             buffer.addNode(node);

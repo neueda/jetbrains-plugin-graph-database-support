@@ -6,12 +6,12 @@ import org.neo4j.driver.v1.types.Relationship;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Neo4jV3Buffer {
+public class Neo4jBoltBuffer {
 
     private Map<Long, Node> nodes;
     private Map<Long, Relationship> relationships;
 
-    public Neo4jV3Buffer() {
+    public Neo4jBoltBuffer() {
         this.nodes = new HashMap<>();
         this.relationships = new HashMap<>();
     }

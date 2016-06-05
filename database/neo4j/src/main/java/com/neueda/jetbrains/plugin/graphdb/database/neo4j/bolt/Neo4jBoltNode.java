@@ -5,12 +5,12 @@ import org.neo4j.driver.v1.types.Node;
 
 import java.util.Map;
 
-public class Neo4jV3Node implements GraphNode {
+public class Neo4jBoltNode implements GraphNode {
 
     private final long id;
     private final Map<String, Object> properties;
 
-    public Neo4jV3Node(Node value) {
+    public Neo4jBoltNode(Node value) {
         this.id = value.id();
         this.properties = value.asMap();
     }

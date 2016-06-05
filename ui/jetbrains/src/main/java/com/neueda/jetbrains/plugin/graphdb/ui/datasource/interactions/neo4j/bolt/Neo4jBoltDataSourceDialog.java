@@ -8,7 +8,7 @@ import com.jgoodies.common.base.Strings;
 import com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSource;
 import com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSourceType;
 import com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSourcesComponent;
-import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.Neo4jV3Configuration;
+import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.Neo4jBoltConfiguration;
 import com.neueda.jetbrains.plugin.graphdb.ui.datasource.DataSourcesToolWindow;
 import com.neueda.jetbrains.plugin.graphdb.ui.datasource.interactions.DataSourceDialog;
 import org.apache.commons.lang.StringUtils;
@@ -76,10 +76,10 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
         extractData();
 
         Map<String, String> configuration = new HashMap<>();
-        configuration.put(Neo4jV3Configuration.HOST, data.host);
-        configuration.put(Neo4jV3Configuration.PORT, data.port);
-        configuration.put(Neo4jV3Configuration.USER, data.user);
-        configuration.put(Neo4jV3Configuration.PASSWORD, data.password);
+        configuration.put(Neo4jBoltConfiguration.HOST, data.host);
+        configuration.put(Neo4jBoltConfiguration.PORT, data.port);
+        configuration.put(Neo4jBoltConfiguration.USER, data.user);
+        configuration.put(Neo4jBoltConfiguration.PASSWORD, data.password);
 
         return new DataSource(DataSourceType.NEO4J_BOLT, data.dataSourceName, configuration);
     }

@@ -11,31 +11,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Neo4jV3QueryResult implements GraphQueryResult {
+public class Neo4jBoltQueryResult implements GraphQueryResult {
 
     private final List<GraphNode> nodes;
     private final List<GraphRelationship> relationships;
 
-    public Neo4jV3QueryResult(Neo4jV3Buffer neo4jV3Buffer) {
+    public Neo4jBoltQueryResult(Neo4jBoltBuffer neo4JBoltBuffer) {
         nodes = new ArrayList<>();
         relationships = new ArrayList<>();
 
         // nodes
         Map<Long, GraphNode> foundNodes = new HashMap<>();
-        Map<Long, Node> bufferNodes = neo4jV3Buffer.getNodes();
+        Map<Long, Node> bufferNodes = neo4JBoltBuffer.getNodes();
         for (Map.Entry<Long, Node> entry : bufferNodes.entrySet()) {
-            foundNodes.put(entry.getKey(), new Neo4jV3Node(entry.getValue()));
+            foundNodes.put(entry.getKey(), new Neo4jBoltNode(entry.getValue()));
         }
         nodes.addAll(foundNodes.values());
 
         // relationships
-        Map<Long, Relationship> bufferRelationships = neo4jV3Buffer.getRelationships();
+        Map<Long, Relationship> bufferRelationships = neo4JBoltBuffer.getRelationships();
         for (Relationship relationship : bufferRelationships.values()) {
             GraphNode startNode = foundNodes.get(relationship.startNodeId());
             GraphNode endNode = foundNodes.get(relationship.endNodeId());
 
             if (startNode != null && endNode != null) {
-                relationships.add(new Neo4jV3Relationship(relationship, startNode, endNode));
+                relationships.add(new Neo4jBoltRelationship(relationship, startNode, endNode));
             } else {
                 // either start or end node are not present in result
             }
