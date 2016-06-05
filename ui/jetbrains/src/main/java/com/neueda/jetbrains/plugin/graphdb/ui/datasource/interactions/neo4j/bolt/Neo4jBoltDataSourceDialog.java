@@ -1,7 +1,6 @@
-package com.neueda.jetbrains.plugin.graphdb.ui.datasource.interactions.action.neo4j.bolt;
+package com.neueda.jetbrains.plugin.graphdb.ui.datasource.interactions.neo4j.bolt;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.components.JBPasswordField;
 import com.intellij.ui.components.JBTextField;
@@ -9,9 +8,9 @@ import com.jgoodies.common.base.Strings;
 import com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSource;
 import com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSourceType;
 import com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSourcesComponent;
-import com.neueda.jetbrains.plugin.graphdb.component.datasource.impl.Neo4jBoltDataSource;
+import com.neueda.jetbrains.plugin.graphdb.component.datasource.type.Neo4jBoltDataSource;
 import com.neueda.jetbrains.plugin.graphdb.ui.datasource.DataSourcesToolWindow;
-import com.neueda.jetbrains.plugin.graphdb.ui.datasource.interactions.action.DataSourceDialog;
+import com.neueda.jetbrains.plugin.graphdb.ui.datasource.interactions.DataSourceDialog;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +22,7 @@ import java.util.Map;
 
 import static com.neueda.jetbrains.plugin.graphdb.ui.util.Validation.validation;
 
-public class Neo4jBoltDataSourceDialog extends DialogWrapper implements DataSourceDialog {
+public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
 
     private final DataSourcesComponent dataSourcesComponent;
 

@@ -1,4 +1,4 @@
-package com.neueda.jetbrains.plugin.graphdb.component.datasource.impl;
+package com.neueda.jetbrains.plugin.graphdb.component.datasource.type;
 
 public final class Neo4jBoltDataSource {
 
