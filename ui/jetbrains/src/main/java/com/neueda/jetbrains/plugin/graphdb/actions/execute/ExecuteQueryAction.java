@@ -3,7 +3,6 @@ package com.neueda.jetbrains.plugin.graphdb.actions.execute;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.CustomShortcutSet;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -23,10 +22,6 @@ public class ExecuteQueryAction extends AnAction {
 
     static {
         SUPPORTED_LANGUAGES.add("Cypher");
-    }
-
-    public ExecuteQueryAction() {
-        setShortcutSet(new CustomShortcutSet());
     }
 
     @Override
