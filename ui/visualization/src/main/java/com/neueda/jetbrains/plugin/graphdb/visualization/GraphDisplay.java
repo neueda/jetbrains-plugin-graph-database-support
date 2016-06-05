@@ -6,8 +6,8 @@ import com.neueda.jetbrains.plugin.graphdb.visualization.decorators.CenteredLayo
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.NodeCallback;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.RelationshipCallback;
-import com.neueda.jetbrains.plugin.graphdb.visualization.listeners.RelationshipListener;
 import com.neueda.jetbrains.plugin.graphdb.visualization.listeners.NodeListener;
+import com.neueda.jetbrains.plugin.graphdb.visualization.listeners.RelationshipListener;
 import prefuse.Display;
 import prefuse.Visualization;
 import prefuse.action.ActionList;
@@ -25,11 +25,13 @@ import prefuse.render.EdgeRenderer;
 import prefuse.render.LabelRenderer;
 import prefuse.render.ShapeRenderer;
 import prefuse.util.ColorLib;
+import prefuse.util.FontLib;
 import prefuse.util.PrefuseLib;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +47,8 @@ public class GraphDisplay extends Display {
     private static final int NODE_DIAMETER = 25;
     private static final String NODE_LABEL = "nodelabel";
     private static final String LAYOUT = "layout";
+
+    private static final int FONT_SIZE = 10;
     private static final int FONT_COLOR = ColorLib.rgb(15, 15, 45);
 
     private Graph graph;
@@ -58,7 +62,12 @@ public class GraphDisplay extends Display {
         graph = new Graph(DIRECTED);
         graph.addColumn("id", String.class);
 
-        m_vis.addGraph(GRAPH, graph);
+        Schema nodeSchema = PrefuseLib.getVisualItemSchema();
+        nodeSchema.setDefault(VisualItem.SHAPE, SHAPE_ELLIPSE);
+
+        Schema edgeSchema = PrefuseLib.getVisualItemSchema();
+
+        m_vis.addGraph(GRAPH, graph, null, nodeSchema, edgeSchema);
         m_vis.setInteractive(EDGES, null, false);
         m_vis.setValue(NODES, null, VisualItem.SHAPE, SHAPE_ELLIPSE);
 
@@ -101,12 +110,16 @@ public class GraphDisplay extends Display {
 
         nodeRenderer.setBaseSize(NODE_DIAMETER);
         DefaultRendererFactory rf = new DefaultRendererFactory(nodeRenderer, new EdgeRenderer(EDGE_TYPE_LINE));
-        rf.add(new InGroupPredicate(NODE_LABEL), new LabelRenderer("id"));
+        LabelRenderer labelRenderer = new LabelRenderer("id");
+        labelRenderer.setMaxTextWidth(NODE_DIAMETER);
+        rf.add(new InGroupPredicate(NODE_LABEL), labelRenderer);
 
         final Schema decoratorSchema = PrefuseLib.getVisualItemSchema();
         decoratorSchema.setDefault(VisualItem.INTERACTIVE, false);
         decoratorSchema.setDefault(VisualItem.TEXTCOLOR, FONT_COLOR);
-        decoratorSchema.setDefault(VisualItem.FONT, UIManager.getFont("Label.font"));
+        Font font = FontLib.getFont(UIManager.getFont("Label.font").getFontName(), FONT_SIZE);
+        decoratorSchema.setDefault(VisualItem.FONT, font);
+//        decoratorSchema.setDefault(VisualItem.BOUNDS, );
 
         m_vis.addDecorators(NODE_LABEL, NODES, decoratorSchema);
 

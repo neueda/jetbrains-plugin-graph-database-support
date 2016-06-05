@@ -21,13 +21,9 @@ import com.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
 import org.jetbrains.annotations.NotNull;
 import prefuse.visual.VisualItem;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Map;
 
@@ -118,7 +114,12 @@ public class ConsoleToolWindow implements ToolWindowFactory {
         balloonLabel.setText(getFiveProperties(entity.getProperties()));
 
         balloon = balloonPopupBuilder.createBalloon();
-        balloon.show(new RelativePoint(e), Balloon.Position.below);
+        Container panel = e.getComponent().getParent();
+
+        final int MAGIC_NUMBER = 15;
+        int heightOffset = balloon.getPreferredSize().height / 2 + MAGIC_NUMBER;
+        int widthOffset = panel.getWidth() - balloon.getPreferredSize().width / 2;
+        balloon.show(new RelativePoint(panel, new Point(widthOffset, heightOffset)), Balloon.Position.below);
     }
 
     private String getFiveProperties(Map<String, Object> properties) {
@@ -143,6 +144,7 @@ public class ConsoleToolWindow implements ToolWindowFactory {
         final Color borderOriginal = Color.darkGray;
         final Color border = ColorUtil.toAlpha(borderOriginal, 75);
         builder
+                .setShowCallout(false)
                 .setDialogMode(false)
                 .setAnimationCycle(20)
                 .setFillColor(bg).setBorderColor(border).setHideOnClickOutside(true)
