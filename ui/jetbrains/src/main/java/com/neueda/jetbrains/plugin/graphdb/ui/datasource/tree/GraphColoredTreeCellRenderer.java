@@ -3,13 +3,19 @@ package com.neueda.jetbrains.plugin.graphdb.ui.datasource.tree;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
 import com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSource;
-import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
+import com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSourcesComponent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class GraphColoredTreeCellRenderer extends ColoredTreeCellRenderer {
+
+    private final DataSourcesComponent component;
+
+    public GraphColoredTreeCellRenderer(DataSourcesComponent component) {
+        this.component = component;
+    }
 
     @Override
     public void customizeCellRenderer(@NotNull JTree tree, Object value, boolean selected, boolean expanded,
@@ -18,17 +24,8 @@ public class GraphColoredTreeCellRenderer extends ColoredTreeCellRenderer {
 
         if (userObject instanceof DataSource) {
             DataSource dataSource = (DataSource) userObject;
-
             append(dataSource.getName(), SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES, true);
-
-            switch (dataSource.getDataSourceType()) {
-                case NEO4J_BOLT:
-                    setIcon(GraphIcons.Database.NEO4J);
-                    break;
-                default:
-                    setIcon(GraphIcons.Database.UNKNOWN);
-                    break;
-            }
+            setIcon(component.getDataSourceIcon(dataSource));
         } else {
             append(value.toString());
         }

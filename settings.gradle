@@ -6,7 +6,7 @@ include 'language:cypher'
 include 'database'
 include 'database:api'
 include 'database:dumb'
-include 'database:neo4j_v3'
+include 'database:neo4j'
 
 // UI
 include 'ui'

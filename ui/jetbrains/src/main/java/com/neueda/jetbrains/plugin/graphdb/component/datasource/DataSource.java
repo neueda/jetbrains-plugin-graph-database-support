@@ -7,7 +7,7 @@ public final class DataSource {
 
     public DataSourceType dataSourceType = DataSourceType.UNKNOWN;
     public String name = "unknown";
-    public Map<String, Object> configuration = new HashMap<>();
+    public Map<String, String> configuration = new HashMap<>();
 
     /**
      * Default constructor for serialization.
@@ -16,7 +16,7 @@ public final class DataSource {
     }
 
     public DataSource(DataSourceType dataSourceType, String name,
-                               Map<String, Object> configuration) {
+                               Map<String, String> configuration) {
         this.dataSourceType = dataSourceType;
         this.name = name;
         this.configuration = configuration;
@@ -30,7 +30,7 @@ public final class DataSource {
         return name;
     }
 
-    public Map<String, Object> getConfiguration() {
+    public Map<String, String> getConfiguration() {
         return configuration;
     }
 }

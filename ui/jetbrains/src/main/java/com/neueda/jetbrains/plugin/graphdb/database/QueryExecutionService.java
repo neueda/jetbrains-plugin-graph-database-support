@@ -1,6 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.database;
 
-import com.neueda.jetbrains.plugin.graphdb.bus.ExecuteQueryPayload;
+import com.neueda.jetbrains.plugin.graphdb.actions.execute.ExecuteQueryPayload;
+import com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSource;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.ui.util.Notifier;
@@ -16,12 +17,18 @@ public class QueryExecutionService {
         this.databaseManager = new DatabaseManager();
     }
 
-    public void executeQuery(ExecuteQueryPayload payload) {
+    public void executeQuery(DataSource dataSource, ExecuteQueryPayload payload) {
         visualization.stop();
         visualization.clear();
 
         try {
-            GraphDatabaseApi database = databaseManager.getActiveDatabase();
+            GraphDatabaseApi database = databaseManager.getDatabaseFor(dataSource);
+            if (database == null) {
+                Notifier.error(
+                        "Unknown database",
+                        String.format("Database for data source [%s] does not exists", dataSource.dataSourceType));
+                return;
+            }
             GraphQueryResult result = database.execute(payload.getContent());
 
             result.getNodes().forEach(visualization::addNode);

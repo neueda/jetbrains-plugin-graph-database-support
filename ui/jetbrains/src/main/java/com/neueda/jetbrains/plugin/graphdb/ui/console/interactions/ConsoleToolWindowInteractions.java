@@ -1,7 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.ui.console.interactions;
 
 import com.intellij.util.messages.MessageBus;
-import com.neueda.jetbrains.plugin.graphdb.bus.ExecuteQueryEvent;
+import com.neueda.jetbrains.plugin.graphdb.actions.execute.ExecuteQueryEvent;
 import com.neueda.jetbrains.plugin.graphdb.database.QueryExecutionService;
 import com.neueda.jetbrains.plugin.graphdb.ui.console.ConsoleToolWindow;
 import com.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;

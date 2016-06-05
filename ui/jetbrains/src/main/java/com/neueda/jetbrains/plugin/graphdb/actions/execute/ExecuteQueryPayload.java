@@ -1,4 +1,4 @@
-package com.neueda.jetbrains.plugin.graphdb.bus;
+package com.neueda.jetbrains.plugin.graphdb.actions.execute;
 
 import com.intellij.openapi.editor.Caret;
 import org.jetbrains.annotations.NotNull;

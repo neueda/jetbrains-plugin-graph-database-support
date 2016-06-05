@@ -8,7 +8,7 @@ import com.jgoodies.common.base.Strings;
 import com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSource;
 import com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSourceType;
 import com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSourcesComponent;
-import com.neueda.jetbrains.plugin.graphdb.component.datasource.type.Neo4jBoltDataSource;
+import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.Neo4jV3Configuration;
 import com.neueda.jetbrains.plugin.graphdb.ui.datasource.DataSourcesToolWindow;
 import com.neueda.jetbrains.plugin.graphdb.ui.datasource.interactions.DataSourceDialog;
 import org.apache.commons.lang.StringUtils;
@@ -73,11 +73,13 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
 
     @Override
     public DataSource constructDataSource() {
-        Map<String, Object> configuration = new HashMap<>();
-        configuration.put(Neo4jBoltDataSource.HOST, data.host);
-        configuration.put(Neo4jBoltDataSource.PORT, data.port);
-        configuration.put(Neo4jBoltDataSource.USER, data.user);
-        configuration.put(Neo4jBoltDataSource.PASSWORD, data.password);
+        extractData();
+
+        Map<String, String> configuration = new HashMap<>();
+        configuration.put(Neo4jV3Configuration.HOST, data.host);
+        configuration.put(Neo4jV3Configuration.PORT, data.port);
+        configuration.put(Neo4jV3Configuration.USER, data.user);
+        configuration.put(Neo4jV3Configuration.PASSWORD, data.password);
 
         return new DataSource(DataSourceType.NEO4J_BOLT, data.dataSourceName, configuration);
     }
@@ -86,7 +88,7 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
         data = new Data();
         data.dataSourceName = dataSourceNameField.getText();
         data.host = hostField.getText();
-        data.port = Integer.getInteger(portField.getText());
+        data.port = portField.getText();
         data.user = userField.getText();
         data.password = String.valueOf(passwordField.getPassword()); // TODO: use password API
     }
@@ -94,7 +96,7 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
     public static final class Data {
         public String dataSourceName;
         public String host;
-        public Integer port;
+        public String port;
         public String user;
         public String password;
     }

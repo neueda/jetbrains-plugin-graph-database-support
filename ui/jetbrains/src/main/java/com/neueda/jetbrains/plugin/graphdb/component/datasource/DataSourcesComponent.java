@@ -4,9 +4,11 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.Icon;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +35,15 @@ public class DataSourcesComponent implements ProjectComponent, PersistentStateCo
 
     public void removeDataSources(List<DataSource> dataSourcesForRemoval) {
         state.dataSources.removeAll(dataSourcesForRemoval);
+    }
+
+    public Icon getDataSourceIcon(DataSource dataSource) {
+        switch (dataSource.getDataSourceType()) {
+            case NEO4J_BOLT:
+                return GraphIcons.Database.NEO4J;
+            default:
+                return GraphIcons.Database.UNKNOWN;
+        }
     }
 
     /**

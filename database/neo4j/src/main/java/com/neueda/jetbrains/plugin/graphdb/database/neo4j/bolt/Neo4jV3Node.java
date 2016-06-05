@@ -1,4 +1,4 @@
-package com.neueda.jetbrains.plugin.graphdb.database.neo4j;
+package com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt;
 
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
 import org.neo4j.driver.v1.types.Node;

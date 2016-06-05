@@ -1,4 +1,4 @@
-package com.neueda.jetbrains.plugin.graphdb.database.neo4j;
+package com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt;
 
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphQueryResult;
@@ -24,10 +24,15 @@ public class Neo4jV3Database implements GraphDatabaseApi {
     private final String url;
     private final AuthToken auth;
 
-    public Neo4jV3Database(String host,
-                           Integer port,
-                           String username,
-                           String password) {
+    public Neo4jV3Database(Map<String, String> configuration) {
+        this(new Neo4jV3Configuration(configuration));
+    }
+
+    public Neo4jV3Database(Neo4jV3Configuration configuration) {
+        String host = configuration.getHost();
+        Integer port = configuration.getPort();
+        String username = configuration.getUser();
+        String password = configuration.getPassword();
         this.url = String.format("bolt://%s:%s", host, port);
         if (username != null && password != null) {
             auth = AuthTokens.basic(username, password);

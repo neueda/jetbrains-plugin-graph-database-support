@@ -8,7 +8,7 @@ dependencies {
     compile project(":platform")
 
     compile project(':database:dumb')
-    compile project(':database:neo4j_v3')
+    compile project(':database:neo4j')
 
     compile project(':ui:visualization')
 }

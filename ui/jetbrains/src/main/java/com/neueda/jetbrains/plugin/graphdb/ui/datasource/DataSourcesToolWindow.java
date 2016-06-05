@@ -78,7 +78,7 @@ public class DataSourcesToolWindow implements ToolWindowFactory {
 
     private void configureDataSourceTree() {
         dataSourceTree.getEmptyText().setText("Create a data source");
-        dataSourceTree.setCellRenderer(new GraphColoredTreeCellRenderer());
+        dataSourceTree.setCellRenderer(new GraphColoredTreeCellRenderer(component));
         dataSourceTree.setModel(treeModel);
         dataSourceTree.setRootVisible(false);
     }
