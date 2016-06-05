@@ -42,7 +42,9 @@ public class ConsoleToolWindow implements ToolWindowFactory {
 
     private BalloonBuilder balloonPopupBuilder;
     private Balloon balloon;
-    private JBLabel balloonLabel;
+    private JBLabel balloonLabel = new JBLabel();
+
+    private static final int LABEL_TEXT_WIDTH = 300;
 
     public ConsoleToolWindow() {
     }
@@ -118,7 +120,14 @@ public class ConsoleToolWindow implements ToolWindowFactory {
 
         final int MAGIC_NUMBER = 15;
         int heightOffset = balloon.getPreferredSize().height / 2 + MAGIC_NUMBER;
-        int widthOffset = panel.getWidth() - balloon.getPreferredSize().width / 2;
+
+        int widthOffset;
+        if(e.getX() > panel.getWidth() / 2) {
+            widthOffset = balloon.getPreferredSize().width / 2;
+        } else {
+            widthOffset = panel.getWidth() - balloon.getPreferredSize().width / 2;
+        }
+
         balloon.show(new RelativePoint(panel, new Point(widthOffset, heightOffset)), Balloon.Position.below);
     }
 
@@ -128,7 +137,7 @@ public class ConsoleToolWindow implements ToolWindowFactory {
         properties.entrySet().stream()
                 .limit(5)
                 .forEach(entry -> sb
-                        .append("<p><b>")
+                        .append("<p width=\"" + LABEL_TEXT_WIDTH + "px\"><b>")
                         .append(entry.getKey())
                         .append("</b>: ")
                         .append(entry.getValue())
@@ -138,7 +147,6 @@ public class ConsoleToolWindow implements ToolWindowFactory {
     }
 
     private void balloonBuilder() {
-        balloonLabel = new JBLabel("LiquidLama");
         final BalloonPopupBuilderImpl builder = new BalloonPopupBuilderImpl(null, balloonLabel);
         final Color bg = UIManager.getColor("Panel.background");
         final Color borderOriginal = Color.darkGray;

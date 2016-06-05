@@ -119,7 +119,6 @@ public class GraphDisplay extends Display {
         decoratorSchema.setDefault(VisualItem.TEXTCOLOR, FONT_COLOR);
         Font font = FontLib.getFont(UIManager.getFont("Label.font").getFontName(), FONT_SIZE);
         decoratorSchema.setDefault(VisualItem.FONT, font);
-//        decoratorSchema.setDefault(VisualItem.BOUNDS, );
 
         m_vis.addDecorators(NODE_LABEL, NODES, decoratorSchema);
 
