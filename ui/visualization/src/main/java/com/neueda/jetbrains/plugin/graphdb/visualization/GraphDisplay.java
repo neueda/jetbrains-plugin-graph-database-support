@@ -8,11 +8,11 @@ import com.neueda.jetbrains.plugin.graphdb.visualization.events.NodeCallback;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.RelationshipCallback;
 import com.neueda.jetbrains.plugin.graphdb.visualization.listeners.NodeListener;
 import com.neueda.jetbrains.plugin.graphdb.visualization.listeners.RelationshipListener;
+import com.neueda.jetbrains.plugin.graphdb.visualization.settings.ColorProvider;
 import prefuse.Display;
 import prefuse.Visualization;
 import prefuse.action.ActionList;
 import prefuse.action.RepaintAction;
-import prefuse.action.assignment.ColorAction;
 import prefuse.action.layout.graph.ForceDirectedLayout;
 import prefuse.activity.Activity;
 import prefuse.controls.DragControl;
@@ -35,21 +35,22 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.GraphGroups.*;
 import static prefuse.Constants.EDGE_TYPE_LINE;
 import static prefuse.Constants.SHAPE_ELLIPSE;
 
 public class GraphDisplay extends Display {
 
-    private static final String GRAPH = "graph";
-    private static final String NODES = "graph.nodes";
-    private static final String EDGES = "graph.edges";
     private static final boolean DIRECTED = true;
     private static final int NODE_DIAMETER = 25;
-    private static final String NODE_LABEL = "nodelabel";
-    private static final String LAYOUT = "layout";
 
+    private static final String UI_DEFAULT_FONT_KEY = "Label.font";
+    private static final String LAYOUT = "layout";
     private static final int FONT_SIZE = 10;
+
     private static final int FONT_COLOR = ColorLib.rgb(15, 15, 45);
+    private static final String ID = "id";
+    private static final String LABEL_FIELD = "id";
 
     private Graph graph;
 
@@ -60,7 +61,7 @@ public class GraphDisplay extends Display {
     public GraphDisplay() {
         super(new Visualization());
         graph = new Graph(DIRECTED);
-        graph.addColumn("id", String.class);
+        graph.addColumn(ID, String.class);
 
         Schema nodeSchema = PrefuseLib.getVisualItemSchema();
         nodeSchema.setDefault(VisualItem.SHAPE, SHAPE_ELLIPSE);
@@ -91,7 +92,7 @@ public class GraphDisplay extends Display {
 
     public void addNode(GraphNode graphNode) {
         Node node = graph.addNode();
-        node.set("id", graphNode.getId());
+        node.set(ID, graphNode.getId());
         nodeMap.put(graphNode.getId(), node);
         graphNodeMap.put(graphNode.getId(), graphNode);
     }
@@ -101,7 +102,7 @@ public class GraphDisplay extends Display {
         String end = graphRelationship.getEnd().getId();
 
         Edge edge = graph.addEdge(nodeMap.get(start), nodeMap.get(end));
-        edge.set("id", graphRelationship.getId());
+        edge.set(ID, graphRelationship.getId());
         graphRelationshipMap.put(graphRelationship.getId(), graphRelationship);
     }
 
@@ -110,14 +111,14 @@ public class GraphDisplay extends Display {
 
         nodeRenderer.setBaseSize(NODE_DIAMETER);
         DefaultRendererFactory rf = new DefaultRendererFactory(nodeRenderer, new EdgeRenderer(EDGE_TYPE_LINE));
-        LabelRenderer labelRenderer = new LabelRenderer("id");
+        LabelRenderer labelRenderer = new LabelRenderer(LABEL_FIELD);
         labelRenderer.setMaxTextWidth(NODE_DIAMETER);
         rf.add(new InGroupPredicate(NODE_LABEL), labelRenderer);
 
         final Schema decoratorSchema = PrefuseLib.getVisualItemSchema();
         decoratorSchema.setDefault(VisualItem.INTERACTIVE, false);
         decoratorSchema.setDefault(VisualItem.TEXTCOLOR, FONT_COLOR);
-        Font font = FontLib.getFont(UIManager.getFont("Label.font").getFontName(), FONT_SIZE);
+        Font font = FontLib.getFont(UIManager.getFont(UI_DEFAULT_FONT_KEY).getFontName(), FONT_SIZE);
         decoratorSchema.setDefault(VisualItem.FONT, font);
 
         m_vis.addDecorators(NODE_LABEL, NODES, decoratorSchema);
@@ -127,36 +128,12 @@ public class GraphDisplay extends Display {
 
     private void createLayout() {
         ActionList layout = new ActionList(Activity.INFINITY);
-        layout.add(getColors());
+        layout.add(ColorProvider.getColors());
         layout.add(new ForceDirectedLayout(GRAPH, true));
         layout.add(new RepaintAction());
         layout.add(new CenteredLayout(NODE_LABEL));
 
         m_vis.putAction(LAYOUT, layout);
-    }
-
-    private ActionList getColors() {
-        ActionList colors = new ActionList();
-
-        ColorAction nStroke = new ColorAction(NODES, VisualItem.STROKECOLOR);
-        nStroke.setDefaultColor(ColorLib.gray(100));
-        nStroke.add("_hover", ColorLib.gray(50));
-        colors.add(nStroke);
-
-        ColorAction nFill = new ColorAction(NODES, VisualItem.FILLCOLOR);
-        nFill.setDefaultColor(ColorLib.gray(255));
-        nFill.add("_hover", ColorLib.gray(200));
-        colors.add(nFill);
-
-        ColorAction nEdges = new ColorAction(EDGES, VisualItem.STROKECOLOR);
-        nEdges.setDefaultColor(ColorLib.gray(100));
-        colors.add(nEdges);
-
-        ColorAction arrow = new ColorAction(EDGES, VisualItem.FILLCOLOR);
-        nEdges.setDefaultColor(ColorLib.gray(100));
-        colors.add(arrow);
-
-        return colors;
     }
 
     public void startLayout() {
