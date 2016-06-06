@@ -21,7 +21,7 @@ intellij {
         }
     }
 
-    if (System.getenv("BUILD_ENV") == "travis") {
+    if (System.getenv("CI_SERVER") == "yes") {
         downloadSources false
     } else {
         downloadSources true

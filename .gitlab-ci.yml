@@ -1,0 +1,18 @@
+image: java:8
+
+stages:
+  - verify
+  - deploy_nightly
+
+gradle_test:
+  stage: verify
+  script:
+    - ./gradlew check test
+
+gradle_deploy_nightly:
+  stage: deploy_nightly
+  only:
+    - master
+  when: on_success
+  script:
+    - ./gradlew build
