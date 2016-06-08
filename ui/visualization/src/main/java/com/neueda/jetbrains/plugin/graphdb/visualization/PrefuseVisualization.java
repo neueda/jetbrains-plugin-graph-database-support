@@ -5,13 +5,18 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.NodeCallback;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.RelationshipCallback;
+import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
 
 import javax.swing.*;
 
 public class PrefuseVisualization implements VisualizationApi {
 
-    private GraphDisplay display = new GraphDisplay();
+    private GraphDisplay display;
     private boolean layoutRunning = false;
+
+    public PrefuseVisualization(LookAndFeelService lookAndFeelService) {
+        this.display = new GraphDisplay(lookAndFeelService);
+    }
 
     @Override
     public void addNode(GraphNode node) {

@@ -1,9 +1,11 @@
 package com.neueda.jetbrains.plugin.graphdb;
 
+import com.intellij.openapi.components.ServiceManager;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.dumb.DumbDatabase;
 import com.neueda.jetbrains.plugin.graphdb.visualization.PrefuseVisualization;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
+import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
 
 import javax.swing.JFrame;
 
@@ -12,7 +14,8 @@ import static javax.swing.JFrame.EXIT_ON_CLOSE;
 public class TestSimpleGraph {
 
     public static void main(String[] argv) {
-        PrefuseVisualization v = new PrefuseVisualization();
+        LookAndFeelService lookAndFeelService = ServiceManager.getService(LookAndFeelService.class);
+        PrefuseVisualization v = new PrefuseVisualization(lookAndFeelService);
         DumbDatabase db = new DumbDatabase();
 
         GraphNode node1 = db.createNode();

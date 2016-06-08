@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.Balloon;
 import com.intellij.openapi.ui.popup.BalloonBuilder;
@@ -23,19 +24,13 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.ui.console.interactions.ConsoleToolWindowInteractions;
 import com.neueda.jetbrains.plugin.graphdb.visualization.PrefuseVisualization;
 import com.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
+import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
 import org.jetbrains.annotations.NotNull;
 import prefuse.visual.VisualItem;
 
-import javax.swing.Box;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.GridLayout;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Map;
 
@@ -58,6 +53,8 @@ public class ConsoleToolWindow implements ToolWindowFactory {
     private Balloon balloon;
     private JBLabel balloonLabel = new JBLabel();
 
+    private LookAndFeelService lookAndFeelService = ServiceManager.getService(LookAndFeelService.class);
+
     private static final int LABEL_TEXT_WIDTH = 300;
 
     public ConsoleToolWindow() {
@@ -66,7 +63,7 @@ public class ConsoleToolWindow implements ToolWindowFactory {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         // Bootstrap visualisation
-        visualization = new PrefuseVisualization();
+        visualization = new PrefuseVisualization(lookAndFeelService);
 
         // Bootstrap tool window
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
@@ -82,8 +79,6 @@ public class ConsoleToolWindow implements ToolWindowFactory {
                 this,
                 project.getMessageBus(),
                 visualization);
-
-
     }
 
     /**
@@ -175,8 +170,9 @@ public class ConsoleToolWindow implements ToolWindowFactory {
 
     private void balloonBuilder() {
         final BalloonPopupBuilderImpl builder = new BalloonPopupBuilderImpl(null, balloonLabel);
-        final Color bg = UIManager.getColor("Panel.background");
-        final Color borderOriginal = Color.darkGray;
+
+        final Color bg = lookAndFeelService.getBackgroundColor();
+        final Color borderOriginal = lookAndFeelService.getEdgeStrokeColor();
         final Color border = ColorUtil.toAlpha(borderOriginal, 75);
         builder
                 .setShowCallout(false)

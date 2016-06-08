@@ -1,5 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.visualization;
 
+import com.intellij.ui.border.CustomLineBorder;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.visualization.decorators.CenteredLayout;
@@ -8,6 +9,7 @@ import com.neueda.jetbrains.plugin.graphdb.visualization.events.NodeCallback;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.RelationshipCallback;
 import com.neueda.jetbrains.plugin.graphdb.visualization.listeners.NodeListener;
 import com.neueda.jetbrains.plugin.graphdb.visualization.listeners.RelationshipListener;
+import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
 import com.neueda.jetbrains.plugin.graphdb.visualization.settings.ColorProvider;
 import prefuse.Display;
 import prefuse.Visualization;
@@ -41,6 +43,8 @@ import static prefuse.Constants.SHAPE_ELLIPSE;
 
 public class GraphDisplay extends Display {
 
+    private LookAndFeelService lookAndFeelService;
+
     private static final boolean DIRECTED = true;
     private static final int NODE_DIAMETER = 25;
 
@@ -58,8 +62,14 @@ public class GraphDisplay extends Display {
     private Map<String, GraphNode> graphNodeMap = new HashMap<>();
     private Map<String, GraphRelationship> graphRelationshipMap = new HashMap<>();
 
-    public GraphDisplay() {
+    public GraphDisplay(LookAndFeelService lookAndFeelService) {
         super(new Visualization());
+        this.lookAndFeelService = lookAndFeelService;
+        setBackground(lookAndFeelService.getBackgroundColor());
+//        Border internalFrameBorder = WindowsBorders.getInternalFrameBorder();
+//        internalFrameBorder.paintBorder();
+
+        setBorder(new CustomLineBorder(new Insets(0, 1, 0, 1)));
         graph = new Graph(DIRECTED);
         graph.addColumn(ID, String.class);
 
@@ -128,7 +138,7 @@ public class GraphDisplay extends Display {
 
     private void createLayout() {
         ActionList layout = new ActionList(Activity.INFINITY);
-        layout.add(ColorProvider.getColors());
+        layout.add(ColorProvider.getColors(lookAndFeelService));
         layout.add(new ForceDirectedLayout(GRAPH, true));
         layout.add(new RepaintAction());
         layout.add(new CenteredLayout(NODE_LABEL));
