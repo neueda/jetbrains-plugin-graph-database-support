@@ -1,5 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.actions.execute;
 
+import com.intellij.openapi.actionSystem.ActionButtonComponent;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -13,6 +14,7 @@ import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSourcesComponent;
 import com.neueda.jetbrains.plugin.graphdb.ui.util.Notifier;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,12 +34,10 @@ public class ExecuteQueryAction extends AnAction {
 
             if (SUPPORTED_LANGUAGES.contains(languageId)) {
                 e.getPresentation().setEnabled(true);
-                e.getPresentation().setVisible(true);
                 return;
             }
         }
         e.getPresentation().setEnabled(false);
-        e.getPresentation().setVisible(false);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ExecuteQueryAction extends AnAction {
         }
 
         MessageBus messageBus = project.getMessageBus();
-        DataSourcesComponent component = project.getComponent(DataSourcesComponent.class);
+        DataSourcesComponent dataSourcesComponent = project.getComponent(DataSourcesComponent.class);
 
         String content = editor.getDocument().getCharsSequence().toString();
         Caret caret = editor.getCaretModel().getPrimaryCaret();
@@ -63,11 +63,17 @@ public class ExecuteQueryAction extends AnAction {
 
         ListPopup popup = JBPopupFactory.getInstance().createActionGroupPopup(
                 "Choose Data Source",
-                new ChooseDataSourceActionGroup(messageBus, component, executeQueryPayload),
+                new ChooseDataSourceActionGroup(messageBus, dataSourcesComponent, executeQueryPayload),
                 e.getDataContext(),
                 JBPopupFactory.ActionSelectionAid.SPEEDSEARCH,
                 false
         );
-        popup.showInBestPositionFor(editor);
+
+        Component eventComponent = e.getInputEvent().getComponent();
+        if (eventComponent instanceof ActionButtonComponent) {
+            popup.showUnderneathOf(eventComponent);
+        } else {
+            popup.showInBestPositionFor(e.getDataContext());
+        }
     }
 }

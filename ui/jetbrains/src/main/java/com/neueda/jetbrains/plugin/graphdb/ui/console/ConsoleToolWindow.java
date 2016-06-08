@@ -1,5 +1,9 @@
 package com.neueda.jetbrains.plugin.graphdb.ui.console;
 
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.openapi.actionSystem.impl.ActionButton;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.Balloon;
 import com.intellij.openapi.ui.popup.BalloonBuilder;
@@ -12,6 +16,7 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.popup.BalloonPopupBuilderImpl;
 import com.intellij.ui.table.JBTable;
+import com.neueda.jetbrains.plugin.graphdb.GraphConstants;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphEntity;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphRelationship;
@@ -21,9 +26,16 @@ import com.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
 import org.jetbrains.annotations.NotNull;
 import prefuse.visual.VisualItem;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.Map;
 
@@ -38,6 +50,8 @@ public class ConsoleToolWindow implements ToolWindowFactory {
     private JBTable entityDataTable;
     private JLabel entityDataTableLabel;
     private JScrollPane contentScrollPane;
+    private JPanel toolbarPanel;
+    private ActionButton actionButton1;
     private DefaultTableModel entityDataTableModel;
 
     private BalloonBuilder balloonPopupBuilder;
@@ -68,6 +82,8 @@ public class ConsoleToolWindow implements ToolWindowFactory {
                 this,
                 project.getMessageBus(),
                 visualization);
+
+
     }
 
     /**
@@ -85,6 +101,17 @@ public class ConsoleToolWindow implements ToolWindowFactory {
         entityDataTableModel.addColumn("value");
 
         entityDataTable.setModel(entityDataTableModel);
+
+        // ActionGroup
+        final ActionGroup consoleActionGroup = (ActionGroup)
+                ActionManager.getInstance().getAction(GraphConstants.Actions.CONSOLE_ACTIONS);
+
+        ActionToolbar consoleToolbar = ActionManager.getInstance()
+                .createActionToolbar(GraphConstants.ToolWindow.CONSOLE_TOOL_WINDOW, consoleActionGroup, false);
+        final Box toolBarBox = Box.createHorizontalBox();
+        toolBarBox.add(consoleToolbar.getComponent());
+
+        toolbarPanel.add(toolBarBox);
     }
 
     public void showNodeData(GraphNode node, VisualItem item, MouseEvent e) {

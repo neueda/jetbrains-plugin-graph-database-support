@@ -82,11 +82,23 @@
             <action id="GraphDatabaseActionGroup.ExecuteQuery"
                     class="com.neueda.jetbrains.plugin.graphdb.actions.execute.ExecuteQueryAction"
                     text="Execute query"
+                    icon="/general/run.png"
                     description="Execute query">
                 <keyboard-shortcut first-keystroke="control F5"
                                    keymap="$default"/>
             </action>
             <add-to-group group-id="EditorPopupMenu"/>
+        </group>
+
+        <group id="GraphDatabaseConsoleToolWindowActions"
+               text="Graph Database Console Tool Window Actions">
+
+            <action id="GraphDatabaseConsoleToolWindowActions.ExecuteQuery"
+                    class="com.neueda.jetbrains.plugin.graphdb.actions.execute.ExecuteQueryAction"
+                    text="Execute query"
+                    icon="/toolwindows/toolWindowRun.png"
+                    description="Execute query">
+            </action>
         </group>
     </actions>
 </idea-plugin>
