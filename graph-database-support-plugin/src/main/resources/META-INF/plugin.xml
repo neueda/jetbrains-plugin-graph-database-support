@@ -99,6 +99,18 @@
                     icon="/toolwindows/toolWindowRun.png"
                     description="Execute query">
             </action>
+            <action id="GraphDatabaseConsoleToolWindowActions.CleanCanvas"
+                    class="com.neueda.jetbrains.plugin.graphdb.actions.ui.console.CleanCanvasAction"
+                    text="Clean canvas"
+                    icon="/actions/refresh.png"
+                    description="Clean canvas">
+            </action>
+            <action id="GraphDatabaseConsoleToolWindowActions.StopLayout"
+                    class="com.neueda.jetbrains.plugin.graphdb.actions.ui.console.ToggleLayoutAction"
+                    text="Toggle layout"
+                    icon="/graphdb/icons/window/graph_13x13.png"
+                    description="Toggle layout">
+            </action>
         </group>
     </actions>
 </idea-plugin>

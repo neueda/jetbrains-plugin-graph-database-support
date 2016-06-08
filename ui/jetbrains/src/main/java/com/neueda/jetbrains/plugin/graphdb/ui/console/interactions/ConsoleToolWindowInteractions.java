@@ -2,6 +2,8 @@ package com.neueda.jetbrains.plugin.graphdb.ui.console.interactions;
 
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.actions.execute.ExecuteQueryEvent;
+import com.neueda.jetbrains.plugin.graphdb.actions.ui.console.CleanCanvasEvent;
+import com.neueda.jetbrains.plugin.graphdb.actions.ui.console.ToggleLayoutEvent;
 import com.neueda.jetbrains.plugin.graphdb.database.QueryExecutionService;
 import com.neueda.jetbrains.plugin.graphdb.ui.console.ConsoleToolWindow;
 import com.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
@@ -28,6 +30,14 @@ public class ConsoleToolWindowInteractions {
     private void registerMessageBusSubscribers() {
         messageBus.connect()
                 .subscribe(ExecuteQueryEvent.EXECUTE_QUERY_TOPIC, queryExecutionService::executeQuery);
+        messageBus.connect()
+                .subscribe(CleanCanvasEvent.CLEAN_CANVAS_TOPIC, () -> {
+                    visualization.stop();
+                    visualization.clear();
+                    visualization.paint();
+                });
+        messageBus.connect()
+                .subscribe(ToggleLayoutEvent.TOGGLE_LAYOUT_TOPIC, visualization::toggleLayout);
     }
 
     private void registerVisualisationEvents() {

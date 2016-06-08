@@ -11,6 +11,7 @@ import javax.swing.*;
 public class PrefuseVisualization implements VisualizationApi {
 
     private GraphDisplay display = new GraphDisplay();
+    private boolean layoutRunning = false;
 
     @Override
     public void addNode(GraphNode node) {
@@ -30,11 +31,22 @@ public class PrefuseVisualization implements VisualizationApi {
     @Override
     public void paint() {
         display.startLayout();
+        layoutRunning = true;
     }
 
     @Override
     public void stop() {
         display.stopLayout();
+        layoutRunning = false;
+    }
+
+    @Override
+    public void toggleLayout() {
+        if (layoutRunning) {
+            stop();
+        } else {
+            paint();
+        }
     }
 
     @Override
