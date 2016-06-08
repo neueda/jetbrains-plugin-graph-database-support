@@ -46,7 +46,7 @@ public class GraphDisplay extends Display {
     private LookAndFeelService lookAndFeelService;
 
     private static final boolean DIRECTED = true;
-    private static final int NODE_DIAMETER = 25;
+    private static final int NODE_DIAMETER = 35;
 
     private static final String UI_DEFAULT_FONT_KEY = "Label.font";
     private static final String LAYOUT = "layout";
@@ -66,8 +66,6 @@ public class GraphDisplay extends Display {
         super(new Visualization());
         this.lookAndFeelService = lookAndFeelService;
         setBackground(lookAndFeelService.getBackgroundColor());
-//        Border internalFrameBorder = WindowsBorders.getInternalFrameBorder();
-//        internalFrameBorder.paintBorder();
 
         setBorder(new CustomLineBorder(new Insets(0, 1, 0, 1)));
         graph = new Graph(DIRECTED);
