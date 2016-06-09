@@ -33,6 +33,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Map;
+import java.util.StringJoiner;
 
 public class ConsoleToolWindow implements ToolWindowFactory {
 
@@ -110,12 +111,16 @@ public class ConsoleToolWindow implements ToolWindowFactory {
     }
 
     public void showNodeData(GraphNode node, VisualItem item, MouseEvent e) {
-        entityDataTableLabel.setText(node.getId() + ", Node:<TODOLABELS>");
+        StringJoiner stringJoiner = new StringJoiner(":", ":", "");
+        node.getTypes().forEach(stringJoiner::add);
+        entityDataTableLabel.setText(node.getRepresentation());
         showEntityData(node);
     }
 
     public void showRelationshipData(GraphRelationship relationship, VisualItem item, MouseEvent e) {
-        entityDataTableLabel.setText(relationship.getId() + ", Relationship:<TODOTYPE>");
+        StringJoiner stringJoiner = new StringJoiner(":", ":", "");
+        relationship.getTypes().forEach(stringJoiner::add);
+        entityDataTableLabel.setText(relationship.getRepresentation());
         showEntityData(relationship);
     }
 
