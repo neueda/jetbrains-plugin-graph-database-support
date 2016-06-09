@@ -17,10 +17,7 @@ import prefuse.action.ActionList;
 import prefuse.action.RepaintAction;
 import prefuse.action.layout.graph.ForceDirectedLayout;
 import prefuse.activity.Activity;
-import prefuse.controls.DragControl;
-import prefuse.controls.PanControl;
-import prefuse.controls.ZoomControl;
-import prefuse.controls.ZoomToFitControl;
+import prefuse.controls.*;
 import prefuse.data.Edge;
 import prefuse.data.Graph;
 import prefuse.data.Node;
@@ -32,6 +29,10 @@ import prefuse.render.ShapeRenderer;
 import prefuse.util.ColorLib;
 import prefuse.util.FontLib;
 import prefuse.util.PrefuseLib;
+import prefuse.util.force.DragForce;
+import prefuse.util.force.Force;
+import prefuse.util.force.NBodyForce;
+import prefuse.util.force.SpringForce;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 
@@ -91,6 +92,7 @@ public class GraphDisplay extends Display {
         addControlListener(new ZoomControl());
         addControlListener(new ZoomToFitControl());
         addControlListener(new PanControl());
+        addControlListener(new NeighborHighlightControl());
     }
 
     public void clearGraph() {
@@ -144,9 +146,22 @@ public class GraphDisplay extends Display {
     private void createLayout() {
         ActionList layout = new ActionList(Activity.INFINITY);
         layout.add(ColorProvider.getColors(lookAndFeelService));
-        layout.add(new ForceDirectedLayout(GRAPH, ENFORCE_BOUNDS));
+        ForceDirectedLayout forceLayout = new ForceDirectedLayout(GRAPH, ENFORCE_BOUNDS);
+        layout.add(forceLayout);
         layout.add(new RepaintAction());
         layout.add(new CenteredLayout(NODE_LABEL));
+
+        for(Force force: forceLayout.getForceSimulator().getForces()) {
+            if (force instanceof DragForce) {
+                force.setParameter(0, 0.03F); // Drag Coefficient
+            } else if (force instanceof SpringForce) {
+                force.setParameter(0, force.getMinValue(0)); // Spring Coefficient
+                force.setParameter(1, 50);  // Sprint Length
+            } else if (force instanceof NBodyForce) {
+                force.setParameter(0, -1); // Gravitational Constant
+                // Distance
+            }
+        }
 
         m_vis.putAction(LAYOUT, layout);
     }
