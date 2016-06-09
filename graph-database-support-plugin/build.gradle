@@ -13,12 +13,10 @@ intellij {
 
     publish {
         pluginId '0000' // todo: add pluginId
-        if (project.hasProperty('intellijUsername')) {
-            username intellijUsername
-        }
-        if (project.hasProperty('intellijPassword')) {
-            password intellijPassword
-        }
+
+        username System.getenv('IJ_REPO_USERNAME')
+        password System.getenv('IJ_REPO_PASSWORD')
+        channel System.getenv('IJ_REPO_CHANNEL') ?: 'graphdb-nightly'
     }
 
     if (System.getenv("CI_SERVER") == "yes") {
