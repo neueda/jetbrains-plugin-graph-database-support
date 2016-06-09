@@ -8,6 +8,7 @@ import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.Session;
+import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 import org.neo4j.driver.v1.types.Path;
@@ -46,8 +47,8 @@ public class Neo4jBoltDatabase implements GraphDatabaseApi {
         try (Driver driver = GraphDatabase.driver(url, auth);
              Session session = driver.session()) {
 
-            List<Record> records = session.run(query).list();
-
+            StatementResult statementResult = session.run(query);
+            List<Record> records = statementResult.list();
 
             Neo4jBoltBuffer buffer = new Neo4jBoltBuffer();
 
