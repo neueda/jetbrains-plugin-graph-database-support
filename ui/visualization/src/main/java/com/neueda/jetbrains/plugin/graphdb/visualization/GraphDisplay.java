@@ -1,8 +1,8 @@
 package com.neueda.jetbrains.plugin.graphdb.visualization;
 
 import com.intellij.ui.border.CustomLineBorder;
-import com.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
-import com.neueda.jetbrains.plugin.graphdb.database.api.GraphRelationship;
+import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
+import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.visualization.decorators.CenteredLayout;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.NodeCallback;
@@ -115,12 +115,14 @@ public class GraphDisplay extends Display {
     }
 
     public void addRelationship(GraphRelationship graphRelationship) {
-        String start = graphRelationship.getStart().getId();
-        String end = graphRelationship.getEnd().getId();
+        if (graphRelationship.hasStartAndEndNode()) {
+            String start = graphRelationship.getStartNode().getId();
+            String end = graphRelationship.getEndNode().getId();
 
-        Edge edge = graph.addEdge(nodeMap.get(start), nodeMap.get(end));
-        edge.set(ID, graphRelationship.getId());
-        graphRelationshipMap.put(graphRelationship.getId(), graphRelationship);
+            Edge edge = graph.addEdge(nodeMap.get(start), nodeMap.get(end));
+            edge.set(ID, graphRelationship.getId());
+            graphRelationshipMap.put(graphRelationship.getId(), graphRelationship);
+        }
     }
 
     private void setupRenderer() {

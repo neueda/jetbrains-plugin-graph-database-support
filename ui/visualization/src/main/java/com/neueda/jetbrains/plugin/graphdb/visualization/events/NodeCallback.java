@@ -1,6 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.visualization.events;
 
-import com.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
+import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import prefuse.visual.VisualItem;
 
 import java.awt.event.MouseEvent;

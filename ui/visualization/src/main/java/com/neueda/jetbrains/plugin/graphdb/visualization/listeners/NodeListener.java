@@ -1,6 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.visualization.listeners;
 
-import com.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
+import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.NodeCallback;
 import prefuse.controls.ControlAdapter;

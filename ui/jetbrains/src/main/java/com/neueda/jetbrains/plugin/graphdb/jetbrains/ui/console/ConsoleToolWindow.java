@@ -18,9 +18,9 @@ import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.popup.BalloonPopupBuilderImpl;
 import com.intellij.ui.table.JBTable;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.GraphConstants;
-import com.neueda.jetbrains.plugin.graphdb.database.api.GraphEntity;
-import com.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
-import com.neueda.jetbrains.plugin.graphdb.database.api.GraphRelationship;
+import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphEntity;
+import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
+import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.interactions.ConsoleToolWindowInteractions;
 import com.neueda.jetbrains.plugin.graphdb.visualization.PrefuseVisualization;
 import com.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
@@ -124,7 +124,7 @@ public class ConsoleToolWindow implements ToolWindowFactory {
             entityDataTableModel.removeRow(i);
         }
 
-        for (Map.Entry<String, Object> entry : entity.getProperties().entrySet()) {
+        for (Map.Entry<String, Object> entry : entity.getPropertyContainer().getProperties().entrySet()) {
             Object[] data = {entry.getKey(), entry.getValue()};
             entityDataTableModel.addRow(data);
         }
@@ -135,7 +135,7 @@ public class ConsoleToolWindow implements ToolWindowFactory {
             balloon.hide();
 
         balloonPopupBuilder.setTitle(entity.getRepresentation());
-        balloonLabel.setText(getFiveProperties(entity.getProperties()));
+        balloonLabel.setText(getFiveProperties(entity.getPropertyContainer().getProperties()));
 
         balloon = balloonPopupBuilder.createBalloon();
         Container panel = e.getComponent().getParent();

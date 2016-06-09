@@ -4,7 +4,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
-import com.neueda.jetbrains.plugin.graphdb.database.api.GraphQueryResult;
+import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;
 import com.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
 

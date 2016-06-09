@@ -1,7 +1,8 @@
 package com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt;
 
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
-import com.neueda.jetbrains.plugin.graphdb.database.api.GraphQueryResult;
+import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
+import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.query.Neo4jBoltQueryResult;
 import org.neo4j.driver.v1.AuthToken;
 import org.neo4j.driver.v1.AuthTokens;
 import org.neo4j.driver.v1.Driver;
@@ -9,12 +10,7 @@ import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.StatementResult;
-import org.neo4j.driver.v1.Value;
-import org.neo4j.driver.v1.types.Node;
-import org.neo4j.driver.v1.types.Path;
-import org.neo4j.driver.v1.types.Relationship;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,52 +43,18 @@ public class Neo4jBoltDatabase implements GraphDatabaseApi {
         try (Driver driver = GraphDatabase.driver(url, auth);
              Session session = driver.session()) {
 
-            StatementResult statementResult = session.run(query);
-            List<Record> records = statementResult.list();
-
             Neo4jBoltBuffer buffer = new Neo4jBoltBuffer();
 
-            for (Record record : records) {
-                List<Value> values = record.values();
+            StatementResult statementResult = session.run(query);
+            buffer.addColumns(statementResult.keys());
 
-                for (Value value : values) {
-                    extractValue(buffer, value.asObject());
-                }
+            for (Record record : statementResult.list()) {
+                // Add row
+                buffer.addRow(record.asMap());
             }
+            buffer.addResultSummary(statementResult.consume());
 
             return new Neo4jBoltQueryResult(buffer);
-        }
-    }
-
-    private void extractValue(Neo4jBoltBuffer buffer, Object object) {
-        if (object instanceof Node) {
-            Node node = (Node) object;
-            buffer.addNode(node);
-        }
-        if (object instanceof Relationship) {
-            Relationship rel = (Relationship) object;
-            buffer.addRelationship(rel);
-        }
-        if (object instanceof Path) {
-            Path path = (Path) object;
-            for (Node node : path.nodes()) {
-                extractValue(buffer, node);
-            }
-            for (Relationship relationship : path.relationships()) {
-                extractValue(buffer, relationship);
-            }
-        }
-        if (object instanceof List) {
-            List list = (List) object;
-            for (Object listObject : list) {
-                extractValue(buffer, listObject);
-            }
-        }
-        if (object instanceof Map) {
-            Map map = (Map) object;
-            for (Object mapValue : map.values()) {
-                extractValue(buffer, mapValue);
-            }
         }
     }
 }

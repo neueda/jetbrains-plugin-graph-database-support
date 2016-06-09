@@ -1,7 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.visualization;
 
-import com.neueda.jetbrains.plugin.graphdb.database.api.GraphNode;
-import com.neueda.jetbrains.plugin.graphdb.database.api.GraphRelationship;
+import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
+import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.NodeCallback;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.RelationshipCallback;
