@@ -25,4 +25,6 @@ public interface VisualizationApi {
     void addNodeListener(EventType type, NodeCallback action);
 
     void addEdgeListener(EventType type, RelationshipCallback action);
+
+    void resetPan();
 }

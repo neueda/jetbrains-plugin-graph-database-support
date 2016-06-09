@@ -186,4 +186,8 @@ public class ConsoleToolWindow implements ToolWindowFactory {
 
         balloonPopupBuilder = builder;
     }
+
+    public void resetPan(GraphNode n, VisualItem item, MouseEvent e) {
+        visualization.resetPan();
+    }
 }

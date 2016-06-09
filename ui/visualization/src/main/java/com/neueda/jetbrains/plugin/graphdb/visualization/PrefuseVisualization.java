@@ -37,6 +37,7 @@ public class PrefuseVisualization implements VisualizationApi {
     public void paint() {
         display.startLayout();
         layoutRunning = true;
+        resetPan();
     }
 
     @Override
@@ -58,5 +59,10 @@ public class PrefuseVisualization implements VisualizationApi {
     @Override
     public void addEdgeListener(EventType type, RelationshipCallback action) {
         display.addEdgeListener(type, action);
+    }
+
+    @Override
+    public void resetPan() {
+        display.panAbs(display.getDisplayX() + display.getWidth() / 2, display.getDisplayY() + display.getHeight() / 2);
     }
 }

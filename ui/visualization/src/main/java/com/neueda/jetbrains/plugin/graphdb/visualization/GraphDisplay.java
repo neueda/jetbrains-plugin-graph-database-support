@@ -18,6 +18,9 @@ import prefuse.action.RepaintAction;
 import prefuse.action.layout.graph.ForceDirectedLayout;
 import prefuse.activity.Activity;
 import prefuse.controls.DragControl;
+import prefuse.controls.PanControl;
+import prefuse.controls.ZoomControl;
+import prefuse.controls.ZoomToFitControl;
 import prefuse.data.Edge;
 import prefuse.data.Graph;
 import prefuse.data.Node;
@@ -43,8 +46,7 @@ import static prefuse.Constants.SHAPE_ELLIPSE;
 
 public class GraphDisplay extends Display {
 
-    private LookAndFeelService lookAndFeelService;
-
+    private static final boolean ENFORCE_BOUNDS = false;
     private static final boolean DIRECTED = true;
     private static final int NODE_DIAMETER = 35;
 
@@ -55,6 +57,8 @@ public class GraphDisplay extends Display {
     private static final int FONT_COLOR = ColorLib.rgb(15, 15, 45);
     private static final String ID = "id";
     private static final String LABEL_FIELD = "id";
+
+    private LookAndFeelService lookAndFeelService;
 
     private Graph graph;
 
@@ -84,6 +88,9 @@ public class GraphDisplay extends Display {
         createLayout();
         setHighQuality(true);
         addControlListener(new DragControl());
+        addControlListener(new ZoomControl());
+        addControlListener(new ZoomToFitControl());
+        addControlListener(new PanControl());
     }
 
     public void clearGraph() {
@@ -137,7 +144,7 @@ public class GraphDisplay extends Display {
     private void createLayout() {
         ActionList layout = new ActionList(Activity.INFINITY);
         layout.add(ColorProvider.getColors(lookAndFeelService));
-        layout.add(new ForceDirectedLayout(GRAPH, true));
+        layout.add(new ForceDirectedLayout(GRAPH, ENFORCE_BOUNDS));
         layout.add(new RepaintAction());
         layout.add(new CenteredLayout(NODE_LABEL));
 
