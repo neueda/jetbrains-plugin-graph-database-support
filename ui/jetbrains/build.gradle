@@ -7,7 +7,6 @@ intellij {
 dependencies {
     compile project(":platform")
 
-    compile project(':database:dumb')
     compile project(':database:neo4j')
 
     compile project(':ui:visualization')

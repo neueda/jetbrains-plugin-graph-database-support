@@ -22,8 +22,6 @@ public interface VisualizationApi {
 
     void stop();
 
-    void toggleLayout();
-
     void addNodeListener(EventType type, NodeCallback action);
 
     void addEdgeListener(EventType type, RelationshipCallback action);

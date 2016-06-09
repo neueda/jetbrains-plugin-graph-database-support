@@ -3,7 +3,7 @@
     <name>Graph Database support</name>
     <!-- Should be automatically replaced by gradle build -->
     <version>9.9.9</version>
-    <vendor email="dmitry.vrublevsky@neueda.com" url="https://neueda.com">Neueda R&amp;D</vendor>
+    <vendor email="dmitry.vrublevsky@neueda.com" url="https://neueda.lv">Neueda R&amp;D</vendor>
 
     <description><![CDATA[
         Graph Database support.<br>
@@ -29,8 +29,8 @@
     <project-components>
         <!-- Graph Database support - data sources -->
         <component>
-            <interface-class>com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSourcesComponent</interface-class>
-            <implementation-class>com.neueda.jetbrains.plugin.graphdb.component.datasource.DataSourcesComponent</implementation-class>
+            <interface-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent</interface-class>
+            <implementation-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent</implementation-class>
 
             <loadForDefaultProject/>
         </component>
@@ -41,12 +41,12 @@
         <toolWindow id="Graph Database Console"
                     anchor="bottom"
                     secondary="false"
-                    factoryClass="com.neueda.jetbrains.plugin.graphdb.ui.console.ConsoleToolWindow"
+                    factoryClass="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow"
                     icon="/graphdb/icons/window/graph_13x13.png"/>
         <toolWindow id="Graph Database"
                     anchor="right"
                     secondary="false"
-                    factoryClass="com.neueda.jetbrains.plugin.graphdb.ui.datasource.DataSourcesToolWindow"
+                    factoryClass="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesToolWindow"
                     icon="/graphdb/icons/window/graph_13x13.png"/>
 
         <!-- Cypher -->
@@ -67,7 +67,7 @@
         <lang.namesValidator language="Cypher" implementationClass="com.neueda.jetbrains.plugin.cypher.lang.CypherNameValidator"/>
         <spellchecker.support language="Cypher" implementationClass="com.neueda.jetbrains.plugin.cypher.lang.CypherSpellcheckingStrategy"/>
         <applicationService serviceInterface="com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService"
-                            serviceImplementation="com.neueda.jetbrains.plugin.graphdb.services.IdeaLookAndFeelService" >
+                            serviceImplementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.services.IdeaLookAndFeelService" >
 
         </applicationService>
         <!-- Todo:
@@ -83,7 +83,7 @@
                icon="/graphdb-images/tool-windows-icon.png" popup="true">
 
             <action id="GraphDatabaseActionGroup.ExecuteQuery"
-                    class="com.neueda.jetbrains.plugin.graphdb.actions.execute.ExecuteQueryAction"
+                    class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryAction"
                     text="Execute query"
                     icon="/general/run.png"
                     description="Execute query">
@@ -97,22 +97,16 @@
                text="Graph Database Console Tool Window Actions">
 
             <action id="GraphDatabaseConsoleToolWindowActions.ExecuteQuery"
-                    class="com.neueda.jetbrains.plugin.graphdb.actions.execute.ExecuteQueryAction"
+                    class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryAction"
                     text="Execute query"
                     icon="/toolwindows/toolWindowRun.png"
                     description="Execute query">
             </action>
             <action id="GraphDatabaseConsoleToolWindowActions.CleanCanvas"
-                    class="com.neueda.jetbrains.plugin.graphdb.actions.ui.console.CleanCanvasAction"
+                    class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.ui.console.CleanCanvasAction"
                     text="Clean canvas"
                     icon="/actions/refresh.png"
                     description="Clean canvas">
-            </action>
-            <action id="GraphDatabaseConsoleToolWindowActions.StopLayout"
-                    class="com.neueda.jetbrains.plugin.graphdb.actions.ui.console.ToggleLayoutAction"
-                    text="Toggle layout"
-                    icon="/graphdb/icons/window/graph_13x13.png"
-                    description="Toggle layout">
             </action>
         </group>
     </actions>

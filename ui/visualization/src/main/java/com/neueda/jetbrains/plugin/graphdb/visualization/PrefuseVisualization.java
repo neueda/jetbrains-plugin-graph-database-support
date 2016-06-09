@@ -46,15 +46,6 @@ public class PrefuseVisualization implements VisualizationApi {
     }
 
     @Override
-    public void toggleLayout() {
-        if (layoutRunning) {
-            stop();
-        } else {
-            paint();
-        }
-    }
-
-    @Override
     public JComponent getCanvas() {
         return display;
     }

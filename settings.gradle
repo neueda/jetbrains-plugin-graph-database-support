@@ -5,7 +5,6 @@ include 'language:cypher'
 // Database adaptors
 include 'database'
 include 'database:api'
-include 'database:dumb'
 include 'database:neo4j'
 
 // UI
