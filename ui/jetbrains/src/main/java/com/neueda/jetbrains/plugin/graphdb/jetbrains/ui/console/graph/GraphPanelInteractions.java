@@ -1,4 +1,4 @@
-package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.interactions;
+package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.graph;
 
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryEvent;
@@ -8,15 +8,15 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindo
 import com.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 
-public class ConsoleToolWindowInteractions {
+public class GraphPanelInteractions {
 
     private final ConsoleToolWindow window;
     private final MessageBus messageBus;
     private final QueryExecutionService queryExecutionService;
     private final VisualizationApi visualization;
 
-    public ConsoleToolWindowInteractions(ConsoleToolWindow window,
-                                         MessageBus messageBus, VisualizationApi visualization) {
+    public GraphPanelInteractions(ConsoleToolWindow window,
+                                  MessageBus messageBus, VisualizationApi visualization) {
         this.window = window;
         this.messageBus = messageBus;
         this.visualization = visualization;
@@ -38,9 +38,9 @@ public class ConsoleToolWindowInteractions {
     }
 
     private void registerVisualisationEvents() {
-        visualization.addNodeListener(EventType.CLICK, window::showNodeData);
-        visualization.addEdgeListener(EventType.CLICK, window::showRelationshipData);
-        visualization.addNodeListener(EventType.HOVER_START, window::showTooltip);
-        visualization.addEdgeListener(EventType.HOVER_START, window::showTooltip);
+        visualization.addNodeListener(EventType.CLICK, window.getGraphPanel()::showNodeData);
+        visualization.addEdgeListener(EventType.CLICK, window.getGraphPanel()::showRelationshipData);
+        visualization.addNodeListener(EventType.HOVER_START, window.getGraphPanel()::showTooltip);
+        visualization.addEdgeListener(EventType.HOVER_START, window.getGraphPanel()::showTooltip);
     }
 }

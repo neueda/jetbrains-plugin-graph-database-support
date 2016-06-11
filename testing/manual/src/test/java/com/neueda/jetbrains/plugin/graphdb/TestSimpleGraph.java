@@ -25,7 +25,7 @@ public class TestSimpleGraph {
         v.addEdgeListener(EventType.HOVER_START, (id, item, event) -> System.out.println("Edge hovered: " + id));
 
         JFrame frame = new JFrame("Liquid Lama");
-        frame.getContentPane().add(v.getCanvas());
+        frame.getContentPane().add(v.getGraphCanvas());
         frame.pack();
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setVisible(true);
