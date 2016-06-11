@@ -16,6 +16,6 @@ public class CleanCanvasAction extends AnAction {
         }
 
         MessageBus messageBus = project.getMessageBus();
-        messageBus.syncPublisher(CleanCanvasEvent.CLEAN_CANVAS_TOPIC).cleanCavas();
+        messageBus.syncPublisher(CleanCanvasEvent.CLEAN_CANVAS_TOPIC).cleanCanvas();
     }
 }

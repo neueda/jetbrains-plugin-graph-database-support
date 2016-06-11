@@ -1,25 +1,58 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table;
 
+import com.intellij.ui.table.JBTable;
 import com.intellij.util.messages.MessageBus;
+import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
+import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.ShowQueryExecutionResultEvent;
 
 import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TablePanel {
 
-    private final DefaultTableModel resultTableModel;
+    private DefaultTableModel tableModel;
 
     public TablePanel() {
-        resultTableModel = new DefaultTableModel();
+        tableModel = new QueryResultTableModel();
     }
 
     public void initialize(ConsoleToolWindow consoleToolWindow, MessageBus messageBus) {
-        resultTableModel.addColumn("key");
-        resultTableModel.addColumn("value");
+        JBTable table = consoleToolWindow.getTableExecuteResults();
+        table.setModel(tableModel);
 
-        consoleToolWindow.getTableExecuteResults().setModel(resultTableModel);
-        for (int i = 0; i < 1000; i++) {
-            resultTableModel.addRow(new String[]{"test1", "test2"});
-        }
+        messageBus.connect().subscribe(ShowQueryExecutionResultEvent.SHOW_QUERY_EXECUTION_RESULT_TOPIC, new ShowQueryExecutionResultEvent() {
+            @Override
+            public void preShowResult() {
+                tableModel.setColumnCount(0);
+                tableModel.setRowCount(0);
+            }
+
+            @Override
+            public void showResult(GraphQueryResult result) {
+                List<GraphQueryResultColumn> columns = result.getColumns();
+                columns.forEach((column) -> tableModel.addColumn(column.getName()));
+
+                result.getRows().forEach((row) -> {
+                    List<String> data = new ArrayList<>(columns.size());
+
+                    columns.forEach((column) -> {
+                        data.add(row.getValue(column).toString());
+                    });
+
+                    tableModel.addRow(data.toArray());
+                });
+            }
+
+            @Override
+            public void postShowResult() {
+            }
+
+            @Override
+            public void handleError(Exception exception) {
+            }
+        });
     }
 }

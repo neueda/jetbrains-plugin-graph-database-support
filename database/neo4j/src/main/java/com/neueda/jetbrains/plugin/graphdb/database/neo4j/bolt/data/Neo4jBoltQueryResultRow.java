@@ -35,6 +35,8 @@ public class Neo4jBoltQueryResultRow implements GraphQueryResultRow {
         return row.get(column.getName());
     }
 
+
+
     @Override
     public List<GraphNode> getNodes() {
         return nodes;

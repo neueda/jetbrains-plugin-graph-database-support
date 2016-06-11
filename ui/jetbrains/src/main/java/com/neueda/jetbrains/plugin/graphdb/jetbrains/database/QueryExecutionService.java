@@ -1,30 +1,29 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.database;
 
 import com.intellij.openapi.application.ApplicationManager;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
+import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.ShowQueryExecutionResultEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;
-import com.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
 
 import java.util.concurrent.Future;
 
 public class QueryExecutionService {
 
-    private final VisualizationApi visualization;
     private final DatabaseManager databaseManager;
+    private final MessageBus messageBus;
     private Future<?> runningQuery;
 
-    public QueryExecutionService(VisualizationApi visualization) {
-        this.visualization = visualization;
+    public QueryExecutionService(MessageBus messageBus) {
+        this.messageBus = messageBus;
         this.databaseManager = new DatabaseManager();
     }
 
     public void executeQuery(DataSource dataSource, ExecuteQueryPayload payload) {
         checkForRunningQuery();
-        visualization.stop();
-        visualization.clear();
 
         try {
             executeInBackground(dataSource, payload);
@@ -46,6 +45,9 @@ public class QueryExecutionService {
     }
 
     private synchronized void executeInBackground(DataSource dataSource, ExecuteQueryPayload payload) {
+        ShowQueryExecutionResultEvent event = messageBus.syncPublisher(ShowQueryExecutionResultEvent.SHOW_QUERY_EXECUTION_RESULT_TOPIC);
+        event.preShowResult();
+
         runningQuery = ApplicationManager.getApplication().executeOnPooledThread(() -> {
             try {
                 GraphDatabaseApi database =  databaseManager.getDatabaseFor(dataSource);
@@ -57,15 +59,14 @@ public class QueryExecutionService {
                 }
                 GraphQueryResult result = database.execute(payload.getContent());
 
-                result.getNodes().forEach(visualization::addNode);
-                result.getRelationships().forEach(visualization::addRelation);
-
-                visualization.paint();
-                Notifier.info("Query execution", "Query executed successfully!");
+                ApplicationManager.getApplication().invokeLater(() -> {
+                    event.showResult(result);
+                    event.postShowResult();
+                });
             } catch (Exception e) {
-                visualization.stop();
-                visualization.clear();
-                Notifier.error("Query execution", "Error during query execution: " + e.toString());
+                ApplicationManager.getApplication().invokeLater(() -> {
+                    event.handleError(e);
+                });
             }
         });
     }
