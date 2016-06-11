@@ -1,4 +1,4 @@
-package com.neueda.jetbrains.plugin.graphdb.visualization.decorators;
+package com.neueda.jetbrains.plugin.graphdb.visualization.layouts;
 
 import prefuse.action.layout.Layout;
 import prefuse.visual.DecoratorItem;

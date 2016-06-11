@@ -1,4 +1,4 @@
-package com.neueda.jetbrains.plugin.graphdb.visualization;
+package com.neueda.jetbrains.plugin.graphdb.visualization.layouts;
 
 import prefuse.activity.Pacer;
 
@@ -7,10 +7,6 @@ public class AnimationPacer implements Pacer {
     @Override
     public double pace(double f) {
         return paceExp(f);
-//        double v = 1 + Math.log(f);
-//        return v < 0 ? 0 : v;
-//        double v = 1 - Math.exp(f)*5;
-//        return v < 0 ? 0 : v;
     }
 
     public double paceExp(double f) {

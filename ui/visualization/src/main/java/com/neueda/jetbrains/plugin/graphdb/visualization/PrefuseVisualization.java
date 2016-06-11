@@ -12,7 +12,6 @@ import javax.swing.*;
 public class PrefuseVisualization implements VisualizationApi {
 
     private GraphDisplay display;
-    private boolean layoutRunning = false;
 
     public PrefuseVisualization(LookAndFeelService lookAndFeelService) {
         this.display = new GraphDisplay(lookAndFeelService);
@@ -36,14 +35,12 @@ public class PrefuseVisualization implements VisualizationApi {
     @Override
     public void paint() {
         display.startLayout();
-        layoutRunning = true;
         resetPan();
     }
 
     @Override
     public void stop() {
         display.stopLayout();
-        layoutRunning = false;
     }
 
     @Override

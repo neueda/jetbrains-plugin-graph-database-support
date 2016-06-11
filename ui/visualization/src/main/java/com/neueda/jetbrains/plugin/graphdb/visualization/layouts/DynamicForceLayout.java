@@ -1,4 +1,4 @@
-package com.neueda.jetbrains.plugin.graphdb.visualization;
+package com.neueda.jetbrains.plugin.graphdb.visualization.layouts;
 
 import prefuse.action.layout.graph.ForceDirectedLayout;
 import prefuse.util.force.DragForce;
@@ -6,7 +6,7 @@ import prefuse.util.force.Force;
 import prefuse.util.force.NBodyForce;
 import prefuse.util.force.SpringForce;
 
-public class CustomForceLayout extends ForceDirectedLayout {
+public class DynamicForceLayout extends ForceDirectedLayout {
 
     private static final int SPRING_COEFFICIENT = 0;
     private static final int SPRING_LENGTH = 1;
@@ -24,7 +24,7 @@ public class CustomForceLayout extends ForceDirectedLayout {
     private static final int GRAVITY_END = -10;
 
 
-    public CustomForceLayout(String group, boolean enforceBounds) {
+    public DynamicForceLayout(String group, boolean enforceBounds) {
         super(group, enforceBounds);
     }
 

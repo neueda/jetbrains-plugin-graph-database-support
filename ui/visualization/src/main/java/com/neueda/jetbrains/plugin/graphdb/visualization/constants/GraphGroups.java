@@ -1,4 +1,4 @@
-package com.neueda.jetbrains.plugin.graphdb.visualization.settings;
+package com.neueda.jetbrains.plugin.graphdb.visualization.constants;
 
 public class GraphGroups {
 
