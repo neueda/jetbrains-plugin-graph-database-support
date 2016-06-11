@@ -60,6 +60,8 @@ public class GraphDisplay extends Display {
 
     private static final int SIMULATION_DURATION = 1000;
     private static final long SIMULATION_STEP_TIME = Activity.DEFAULT_STEP_TIME - 7L;
+    public static final double EDGE_THICKNESS_COEFFICIENT = 4;
+    public static final double ARROW_THICKNESS_COEFFICIENT = 2;
 
     private LookAndFeelService lookAndFeelService;
 
@@ -131,7 +133,10 @@ public class GraphDisplay extends Display {
         ShapeRenderer nodeRenderer = new ShapeRenderer();
 
         nodeRenderer.setBaseSize(NODE_DIAMETER);
-        DefaultRendererFactory rf = new DefaultRendererFactory(nodeRenderer, new EdgeRenderer(EDGE_TYPE_LINE));
+        EdgeRenderer edgeRenderer = new EdgeRenderer(EDGE_TYPE_LINE);
+        edgeRenderer.setDefaultLineWidth(EDGE_THICKNESS_COEFFICIENT);
+        edgeRenderer.setArrowHeadSize((int)(8 * ARROW_THICKNESS_COEFFICIENT), (int)(12 * ARROW_THICKNESS_COEFFICIENT));
+        DefaultRendererFactory rf = new DefaultRendererFactory(nodeRenderer, edgeRenderer);
         LabelRenderer labelRenderer = new LabelRenderer(LABEL_FIELD);
         labelRenderer.setMaxTextWidth(NODE_DIAMETER);
         rf.add(new InGroupPredicate(NODE_LABEL), labelRenderer);

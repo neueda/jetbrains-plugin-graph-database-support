@@ -21,22 +21,22 @@ public class IdeaLookAndFeelService implements LookAndFeelService {
 
     @Override
     public Color getEdgeStrokeColor() {
-        return UIManager.getColor("controlText");
+        return UIUtil.getBoundsColor().darker();
     }
 
     @Override
     public Color getEdgeFillColor() {
-        return UIManager.getColor("controlText");
+        return UIUtil.getBoundsColor().darker();
     }
 
     @Override
     public Color getNodeStrokeColor() {
-        return UIManager.getColor("controlText");
+        return UIUtil.getBoundsColor().darker();
     }
 
     @Override
     public Color getNodeStrokeHoverColor() {
-        return UIManager.getColor("controlText");
+        return UIUtil.getBoundsColor().darker();
     }
 
     @Override

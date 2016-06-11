@@ -14,12 +14,6 @@ import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.GraphGr
 public class ColorProvider {
 
     public static final String HOVER = "_hover";
-    public static final int NODE_STROKE = ColorLib.gray(100);
-    public static final int NODE_STROKE_HOVER = ColorLib.gray(50);
-    public static final int NODE_FILL = ColorLib.rgb(200, 200, 255);
-    public static final int NODE_FILL_HOVER = ColorLib.rgb(140, 140, 240);
-    public static final int EDGE_STROKE = ColorLib.color(Color.YELLOW);
-    public static final int EDGE_FILL = ColorLib.gray(100);
 
     public static ActionList getColors(LookAndFeelService lookAndFeelService) {
         ActionList colors = new ActionList();
@@ -35,13 +29,20 @@ public class ColorProvider {
         colors.add(nFill);
 
         ColorAction nEdges = new ColorAction(EDGES, VisualItem.STROKECOLOR);
-        nEdges.setDefaultColor(ColorLib.color(lookAndFeelService.getEdgeStrokeColor()));
+        Color edgeStrokeColor = lookAndFeelService.getEdgeStrokeColor();
+        int edgeStroke = ColorLib.color(edgeStrokeColor);
+        nEdges.setDefaultColor(edgeStroke);
         colors.add(nEdges);
 
         ColorAction arrow = new ColorAction(EDGES, VisualItem.FILLCOLOR);
-        nEdges.setDefaultColor(ColorLib.color(lookAndFeelService.getEdgeFillColor()));
+        int edgeFill = ColorLib.color(lookAndFeelService.getEdgeFillColor());
+        arrow.setDefaultColor(edgeFill);
         colors.add(arrow);
 
         return colors;
+    }
+
+    private static void print(Color c) {
+        System.out.println(c.getRed() + ", " + c.getGreen() + ", " +  c.getBlue());
     }
 }
