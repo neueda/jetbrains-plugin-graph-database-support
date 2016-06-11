@@ -15,6 +15,7 @@ import prefuse.Display;
 import prefuse.Visualization;
 import prefuse.action.ActionList;
 import prefuse.action.RepaintAction;
+import prefuse.action.layout.Layout;
 import prefuse.action.layout.graph.ForceDirectedLayout;
 import prefuse.activity.Activity;
 import prefuse.controls.*;
@@ -29,10 +30,6 @@ import prefuse.render.ShapeRenderer;
 import prefuse.util.ColorLib;
 import prefuse.util.FontLib;
 import prefuse.util.PrefuseLib;
-import prefuse.util.force.DragForce;
-import prefuse.util.force.Force;
-import prefuse.util.force.NBodyForce;
-import prefuse.util.force.SpringForce;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 
@@ -49,15 +46,20 @@ public class GraphDisplay extends Display {
 
     private static final boolean ENFORCE_BOUNDS = false;
     private static final boolean DIRECTED = true;
-    private static final int NODE_DIAMETER = 35;
+    private static final boolean RUN_ONCE = true;
 
+    private static final int NODE_DIAMETER = 35;
     private static final String UI_DEFAULT_FONT_KEY = "Label.font";
     private static final String LAYOUT = "layout";
-    private static final int FONT_SIZE = 10;
+    private static final String REPAINT = "repaint";
 
+    private static final int FONT_SIZE = 10;
     private static final int FONT_COLOR = ColorLib.rgb(15, 15, 45);
     private static final String ID = "id";
     private static final String LABEL_FIELD = "id";
+
+    private static final int SIMULATION_DURATION = 1000;
+    private static final long SIMULATION_STEP_TIME = Activity.DEFAULT_STEP_TIME - 7L;
 
     private LookAndFeelService lookAndFeelService;
 
@@ -146,33 +148,35 @@ public class GraphDisplay extends Display {
     }
 
     private void createLayout() {
-        ActionList layout = new ActionList(Activity.INFINITY);
+        ActionList layout = new ActionList(SIMULATION_DURATION, SIMULATION_STEP_TIME);
         layout.add(ColorProvider.getColors(lookAndFeelService));
-        ForceDirectedLayout forceLayout = new ForceDirectedLayout(GRAPH, ENFORCE_BOUNDS);
-        layout.add(forceLayout);
-        layout.add(new RepaintAction());
-        layout.add(new CenteredLayout(NODE_LABEL));
+        layout.add(createForceLayout(layout));
 
-        for(Force force: forceLayout.getForceSimulator().getForces()) {
-            if (force instanceof DragForce) {
-                force.setParameter(0, 0.03F); // Drag Coefficient
-            } else if (force instanceof SpringForce) {
-                force.setParameter(0, force.getMinValue(0)); // Spring Coefficient
-                force.setParameter(1, 50);  // Sprint Length
-            } else if (force instanceof NBodyForce) {
-                force.setParameter(0, -1); // Gravitational Constant
-                // Distance
-            }
-        }
+        layout.setPacingFunction(new AnimationPacer());
+
+        ActionList repaint = new ActionList(Activity.INFINITY);
+        repaint.add(new CenteredLayout(NODE_LABEL));
+        repaint.add(new RepaintAction());
 
         m_vis.putAction(LAYOUT, layout);
+        m_vis.putAction(REPAINT, repaint);
+    }
+
+    private Layout createForceLayout(ActionList layout) {
+        ForceDirectedLayout forceLayout = new CustomForceLayout(GRAPH, ENFORCE_BOUNDS);
+        layout.add(forceLayout);
+        layout.add(new RepaintAction());
+
+        return forceLayout;
     }
 
     public void startLayout() {
         m_vis.run(LAYOUT);
+        m_vis.run(REPAINT);
     }
 
     public void stopLayout() {
         m_vis.cancel(LAYOUT);
+        m_vis.cancel(REPAINT);
     }
 }
