@@ -21,16 +21,17 @@ public class LayoutProvider {
         ActionList actions = new ActionList(SIMULATION_DURATION, SIMULATION_STEP_TIME);
         actions.setPacingFunction(new AnimationPacer());
 
-        actions.add(ColorProvider.colors(lookAndFeelService));
         actions.add(new DynamicForceLayout(GRAPH, ENFORCE_BOUNDS));
+        actions.add(ColorProvider.colors(lookAndFeelService));
         actions.add(new RepaintAction());
 
         return actions;
     }
 
-    public static ActionList repaintLayout() {
+    public static ActionList repaintLayout(LookAndFeelService lookAndFeelService) {
         ActionList repaint = new ActionList(Activity.INFINITY);
         repaint.add(new CenteredLayout(NODE_LABEL));
+        repaint.add(ColorProvider.colors(lookAndFeelService));
         repaint.add(new RepaintAction());
 
         return repaint;

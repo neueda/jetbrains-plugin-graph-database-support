@@ -63,7 +63,7 @@ public class GraphDisplay extends Display {
         m_vis.setRendererFactory(setupRenderer());
 
         m_vis.putAction(LAYOUT, LayoutProvider.forceLayout(lookAndFeelService));
-        m_vis.putAction(REPAINT, LayoutProvider.repaintLayout());
+        m_vis.putAction(REPAINT, LayoutProvider.repaintLayout(lookAndFeelService));
 
         setHighQuality(true);
 
