@@ -4,19 +4,20 @@ import prefuse.render.EdgeRenderer;
 import prefuse.render.LabelRenderer;
 import prefuse.render.ShapeRenderer;
 
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.TITLE;
 import static prefuse.Constants.EDGE_TYPE_LINE;
 
 public class RendererProvider {
 
-    private static final String LABEL_FIELD = "id";
-    private static final int NODE_DIAMETER = 35;
+    private static final int NODE_DIAMETER = 50;
+    private static final int TEXT_OVERLAP = 8;
 
     private static final double EDGE_THICKNESS_COEFFICIENT = 4;
     private static final double ARROW_THICKNESS_COEFFICIENT = 2;
 
     public static LabelRenderer labelRenderer() {
-        LabelRenderer labelRenderer = new LabelRenderer(LABEL_FIELD);
-        labelRenderer.setMaxTextWidth(NODE_DIAMETER);
+        LabelRenderer labelRenderer = new LabelRenderer(TITLE);
+        labelRenderer.setMaxTextWidth(NODE_DIAMETER - TEXT_OVERLAP);
 
         return labelRenderer;
     }

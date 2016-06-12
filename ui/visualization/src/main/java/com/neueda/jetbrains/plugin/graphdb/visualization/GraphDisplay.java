@@ -25,11 +25,13 @@ import prefuse.visual.expression.InGroupPredicate;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
-import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.ID;
-import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.TYPE;
+import static com.google.common.collect.Sets.newHashSet;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.*;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.*;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.RendererProvider.*;
+import static java.util.Collections.unmodifiableSet;
 import static prefuse.Constants.SHAPE_ELLIPSE;
 
 public class GraphDisplay extends Display {
@@ -45,6 +47,8 @@ public class GraphDisplay extends Display {
     private Map<String, GraphNode> graphNodeMap = new HashMap<>();
     private Map<String, GraphRelationship> graphRelationshipMap = new HashMap<>();
 
+    private static final Set<String> TITLE_PROPERTIES = unmodifiableSet(newHashSet("name", "title"));
+
     public GraphDisplay(LookAndFeelService lookAndFeelService) {
         super(new Visualization());
 
@@ -54,6 +58,7 @@ public class GraphDisplay extends Display {
         graph = new Graph(DIRECTED);
         graph.addColumn(ID, String.class);
         graph.addColumn(TYPE, String.class);
+        graph.addColumn(TITLE, String.class);
 
         m_vis.addGraph(GRAPH, graph, null, SchemaProvider.provideNodeSchema(), SchemaProvider.provideEdgeSchema());
         m_vis.setInteractive(EDGES, null, false);
@@ -92,9 +97,29 @@ public class GraphDisplay extends Display {
         node.set(ID, graphNode.getId());
         String type = graphNode.getTypes().size() > 0 ? graphNode.getTypes().get(0) : "";
         node.set(TYPE, type);
+        node.set(TITLE, getDisplayProperty(graphNode));
 
         nodeMap.put(graphNode.getId(), node);
         graphNodeMap.put(graphNode.getId(), graphNode);
+    }
+
+    private String getDisplayProperty(GraphNode node) {
+        String backup = null;
+        for (Map.Entry<String, Object> entry : node.getPropertyContainer().getProperties().entrySet()) {
+            Object value = entry.getValue();
+            if (value instanceof String) {
+                if (TITLE_PROPERTIES.contains(entry.getKey()))
+                    return (String) value;
+
+                backup = (String) value;
+            }
+        }
+
+        if (backup == null)
+            return node.getId();
+        else
+            return backup;
+
     }
 
     public void addRelationship(GraphRelationship graphRelationship) {
