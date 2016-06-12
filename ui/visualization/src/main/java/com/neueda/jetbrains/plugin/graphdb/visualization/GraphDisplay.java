@@ -26,6 +26,8 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.ID;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.TYPE;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.*;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.RendererProvider.*;
 import static prefuse.Constants.SHAPE_ELLIPSE;
@@ -36,8 +38,6 @@ public class GraphDisplay extends Display {
 
     private static final String LAYOUT = "layout";
     private static final String REPAINT = "repaint";
-
-    private static final String ID = "id";
 
     private Graph graph;
 
@@ -53,6 +53,7 @@ public class GraphDisplay extends Display {
 
         graph = new Graph(DIRECTED);
         graph.addColumn(ID, String.class);
+        graph.addColumn(TYPE, String.class);
 
         m_vis.addGraph(GRAPH, graph, null, SchemaProvider.provideNodeSchema(), SchemaProvider.provideEdgeSchema());
         m_vis.setInteractive(EDGES, null, false);
@@ -89,6 +90,9 @@ public class GraphDisplay extends Display {
     public void addNode(GraphNode graphNode) {
         Node node = graph.addNode();
         node.set(ID, graphNode.getId());
+        String type = graphNode.getTypes().size() > 0 ? graphNode.getTypes().get(0) : "";
+        node.set(TYPE, type);
+
         nodeMap.put(graphNode.getId(), node);
         graphNodeMap.put(graphNode.getId(), graphNode);
     }
