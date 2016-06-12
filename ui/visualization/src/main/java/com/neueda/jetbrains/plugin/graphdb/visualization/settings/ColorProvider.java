@@ -15,14 +15,22 @@ import static prefuse.visual.VisualItem.*;
 
 public class ColorProvider {
 
+    /**
+     * Pastel color palette for node coloring
+     */
+    private static final int ROT_1 = ColorLib.rgb(219, 94, 86);
+    private static final int ROT_2 = ColorLib.rgb(219, 194, 86);
+    private static final int ROT_3 = ColorLib.rgb(145, 219, 86);
+    private static final int ROT_4 = ColorLib.rgb(86, 219, 127);
+    private static final int ROT_5 = ColorLib.rgb(86, 211, 219);
+    private static final int ROT_6 = ColorLib.rgb(86, 111, 219);
+    private static final int ROT_7 = ColorLib.rgb(160, 86, 219);
+    private static final int ROT_8 = ColorLib.rgb(219, 86, 178);
+
     private static final int ORANGE = ColorLib.rgb(229, 60, 20);
     private static final int ORANGE_DARK = ColorLib.rgb(180, 40, 8);
     private static final int GREEN = ColorLib.rgb(132, 173, 74);
     private static final int GRAY = ColorLib.rgb(89, 89, 89);
-
-    private static final int GREEN_DARK = ColorLib.rgb(93, 148, 15);
-    private static final int BLUE = ColorLib.rgb(11, 68, 224);
-    private static final int MAGENTA = ColorLib.rgb(157, 18, 224);
 
     private static final int EDGE = GREEN;
     private static final int EDGE_HOVER = ORANGE_DARK;
@@ -48,7 +56,7 @@ public class ColorProvider {
 
     @NotNull
     private static DataColorAction getNodeFill(LookAndFeelService lookAndFeelService) {
-        int[] palette = { GREEN_DARK, BLUE, MAGENTA };
+        int[] palette = { ROT_1, ROT_2, ROT_3, ROT_4, ROT_5, ROT_6, ROT_7, ROT_8 };
         DataColorAction fill = new DataColorAction(NODES, GraphColumns.TYPE, Constants.NOMINAL, FILLCOLOR, palette);
         fill.add(HOVER, NODE_HOVER);
         fill.add(HIGHLIGHT, NODE_HIGHLIGHT);
