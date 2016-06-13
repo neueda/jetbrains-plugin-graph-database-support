@@ -2,7 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table;
 
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.intellij.ui.treeStructure.Tree;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.tree.PropertyTreeCellRenderer;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.renderes.tree.PropertyTreeCellRenderer;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper;
 
 import javax.swing.event.TreeExpansionEvent;

@@ -9,13 +9,13 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.table.JBTable;
+import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.graph.GraphPanel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.TablePanel;
 import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.GridLayout;
 
@@ -26,12 +26,13 @@ public class ConsoleToolWindow implements ToolWindowFactory {
     // Graph
     private JPanel graphToolbarPanel;
     private JPanel graphCanvas;
-    private JLabel graphEntityDataTableLabel;
-    private JBTable graphEntityDataTable;
+    private JBScrollPane entityDetailsScrollPane;
+    private Tree entityDetailsTree;
 
     // Table
     private JBScrollPane tableScrollPane;
     private JBTable tableExecuteResults;
+    private JPanel entityDetailsScrollContent;
 
     private LookAndFeelService lookAndFeelService;
 
@@ -61,6 +62,7 @@ public class ConsoleToolWindow implements ToolWindowFactory {
 
     private void updateLookAndFeel() {
         tableScrollPane.setBorder(IdeBorderFactory.createEmptyBorder());
+        entityDetailsScrollPane.setBorder(IdeBorderFactory.createEmptyBorder());
     }
 
     private void initializeUiComponents(MessageBus messageBus) {
@@ -84,12 +86,8 @@ public class ConsoleToolWindow implements ToolWindowFactory {
         return graphCanvas;
     }
 
-    public JLabel getGraphEntityDataTableLabel() {
-        return graphEntityDataTableLabel;
-    }
-
-    public JBTable getGraphEntityDataTable() {
-        return graphEntityDataTable;
+    public Tree getEntityDetailsTree() {
+        return entityDetailsTree;
     }
 
     public JPanel getGraphToolbarPanel() {

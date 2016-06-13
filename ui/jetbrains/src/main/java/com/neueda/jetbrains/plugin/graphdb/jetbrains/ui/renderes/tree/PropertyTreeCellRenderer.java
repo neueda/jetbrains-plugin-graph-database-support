@@ -1,4 +1,4 @@
-package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.tree;
+package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.renderes.tree;
 
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;

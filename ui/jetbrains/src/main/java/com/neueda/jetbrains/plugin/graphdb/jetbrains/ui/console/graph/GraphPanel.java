@@ -9,26 +9,27 @@ import com.intellij.ui.ColorUtil;
 import com.intellij.ui.awt.RelativePoint;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.popup.BalloonPopupBuilderImpl;
-import com.intellij.ui.table.JBTable;
+import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
+import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphEntity;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.GraphConstants;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.renderes.tree.PropertyTreeCellRenderer;
 import com.neueda.jetbrains.plugin.graphdb.visualization.PrefuseVisualization;
 import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
 import prefuse.visual.VisualItem;
 
 import javax.swing.Box;
-import javax.swing.JLabel;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultTreeModel;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.Map;
-import java.util.StringJoiner;
 
 public class GraphPanel {
 
@@ -36,22 +37,20 @@ public class GraphPanel {
 
     private PrefuseVisualization visualization;
     private LookAndFeelService lookAndFeelService;
-    private JLabel entityDataTableLabel;
-    private JBTable entityDataTable;
     private BalloonBuilder balloonPopupBuilder;
     private Balloon balloon;
     private JBLabel balloonLabel = new JBLabel();
-    private DefaultTableModel entityDataTableModel;
     private GraphPanelInteractions interactions;
+    private Tree entityDetailsTree;
+    private DefaultTreeModel entityDetailsTreeModel;
 
     public GraphPanel() {
-        entityDataTableModel = new DefaultTableModel();
+        entityDetailsTreeModel = new DefaultTreeModel(new PatchedDefaultMutableTreeNode("Select entity..."));
     }
 
     public void initialize(ConsoleToolWindow consoleToolWindow, MessageBus messageBus) {
         this.lookAndFeelService = consoleToolWindow.getLookAndFeelService();
-        this.entityDataTableLabel = consoleToolWindow.getGraphEntityDataTableLabel();
-        this.entityDataTable = consoleToolWindow.getGraphEntityDataTable();
+        this.entityDetailsTree = consoleToolWindow.getEntityDetailsTree();
 
         // Actions
         final ActionGroup consoleActionGroup = (ActionGroup)
@@ -68,9 +67,8 @@ public class GraphPanel {
         consoleToolWindow.getGraphCanvas().add(visualization.getCanvas());
 
         // Entity data table
-        entityDataTableModel.addColumn("key");
-        entityDataTableModel.addColumn("value");
-        entityDataTable.setModel(entityDataTableModel);
+        entityDetailsTree.setCellRenderer(new PropertyTreeCellRenderer());
+        entityDetailsTree.setModel(entityDetailsTreeModel);
 
         // Tooltips
         balloonBuilder();
@@ -83,28 +81,16 @@ public class GraphPanel {
     }
 
     public void showNodeData(GraphNode node, VisualItem item, MouseEvent e) {
-        StringJoiner stringJoiner = new StringJoiner(":", ":", "");
-        node.getTypes().forEach(stringJoiner::add);
-        entityDataTableLabel.setText(node.getRepresentation());
-        showEntityData(node);
+        PatchedDefaultMutableTreeNode root = UiHelper.nodeToTreeNode(node.getRepresentation(), node);
+        entityDetailsTreeModel.setRoot(root);
+        entityDetailsTree.expandRow(3);
     }
 
     public void showRelationshipData(GraphRelationship relationship, VisualItem item, MouseEvent e) {
-        StringJoiner stringJoiner = new StringJoiner(":", ":", "");
-        relationship.getTypes().forEach(stringJoiner::add);
-        entityDataTableLabel.setText(relationship.getRepresentation());
-        showEntityData(relationship);
-    }
-
-    private void showEntityData(GraphEntity entity) {
-        for (int i = entityDataTableModel.getRowCount() - 1; i >= 0; i--) {
-            entityDataTableModel.removeRow(i);
-        }
-
-        for (Map.Entry<String, Object> entry : entity.getPropertyContainer().getProperties().entrySet()) {
-            Object[] data = {entry.getKey(), entry.getValue()};
-            entityDataTableModel.addRow(data);
-        }
+        PatchedDefaultMutableTreeNode root = UiHelper.relationshipToTreeNode(
+                relationship.getRepresentation(), relationship);
+        entityDetailsTreeModel.setRoot(root);
+        entityDetailsTree.expandRow(3);
     }
 
     public void showTooltip(GraphEntity entity, VisualItem item, MouseEvent e) {
