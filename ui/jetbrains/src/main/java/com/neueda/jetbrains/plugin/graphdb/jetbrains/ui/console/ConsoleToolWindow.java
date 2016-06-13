@@ -2,8 +2,10 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.wm.StatusBar;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
+import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.Content;
@@ -12,6 +14,7 @@ import com.intellij.ui.table.JBTable;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.graph.GraphPanel;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.status.ExecutionStatusBarWidget;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.TablePanel;
 import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +41,7 @@ public class ConsoleToolWindow implements ToolWindowFactory {
 
     private TablePanel tablePanel;
     private GraphPanel graphPanel;
+    private ExecutionStatusBarWidget executionStatusBarWidget;
 
     public ConsoleToolWindow() {
         tablePanel = new TablePanel();
@@ -53,6 +57,7 @@ public class ConsoleToolWindow implements ToolWindowFactory {
         toolWindow.getContentManager().addContent(content);
 
         updateLookAndFeel();
+        initializeWidgets(project);
         initializeUiComponents(project.getMessageBus());
     }
 
@@ -68,6 +73,12 @@ public class ConsoleToolWindow implements ToolWindowFactory {
     private void initializeUiComponents(MessageBus messageBus) {
         graphPanel.initialize(this, messageBus);
         tablePanel.initialize(this, messageBus);
+    }
+
+    private void initializeWidgets(Project project) {
+        StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
+        executionStatusBarWidget = new ExecutionStatusBarWidget(project.getMessageBus());
+        statusBar.addWidget(executionStatusBarWidget, "before Position");
     }
 
     public TablePanel getTablePanel() {

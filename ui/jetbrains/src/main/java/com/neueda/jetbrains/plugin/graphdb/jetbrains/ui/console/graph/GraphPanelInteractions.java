@@ -6,7 +6,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQuer
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.ui.console.CleanCanvasEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.QueryExecutionService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.ShowQueryExecutionResultEvent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;
 import com.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
@@ -39,21 +39,21 @@ public class GraphPanelInteractions {
                     visualization.paint();
                 });
         messageBus.connect()
-                .subscribe(ShowQueryExecutionResultEvent.SHOW_QUERY_EXECUTION_RESULT_TOPIC, new ShowQueryExecutionResultEvent() {
+                .subscribe(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC, new QueryExecutionProcessEvent() {
                     @Override
-                    public void preShowResult() {
+                    public void preResultReceived() {
                         visualization.stop();
                         visualization.clear();
                     }
 
                     @Override
-                    public void showResult(GraphQueryResult result) {
+                    public void resultReceived(GraphQueryResult result) {
                         result.getNodes().forEach(visualization::addNode);
                         result.getRelationships().forEach(visualization::addRelation);
                     }
 
                     @Override
-                    public void postShowResult() {
+                    public void postResultReceived() {
                         visualization.paint();
                         Notifier.info("Query execution", "Query executed successfully!");
                     }

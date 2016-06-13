@@ -6,7 +6,7 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.ShowQueryExecutionResultEvent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;
 
 import java.util.concurrent.Future;
@@ -45,8 +45,8 @@ public class QueryExecutionService {
     }
 
     private synchronized void executeInBackground(DataSource dataSource, ExecuteQueryPayload payload) {
-        ShowQueryExecutionResultEvent event = messageBus.syncPublisher(ShowQueryExecutionResultEvent.SHOW_QUERY_EXECUTION_RESULT_TOPIC);
-        event.preShowResult();
+        QueryExecutionProcessEvent event = messageBus.syncPublisher(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC);
+        event.preResultReceived();
 
         runningQuery = ApplicationManager.getApplication().executeOnPooledThread(() -> {
             try {
@@ -60,8 +60,8 @@ public class QueryExecutionService {
                 GraphQueryResult result = database.execute(payload.getContent());
 
                 ApplicationManager.getApplication().invokeLater(() -> {
-                    event.showResult(result);
-                    event.postShowResult();
+                    event.resultReceived(result);
+                    event.postResultReceived();
                 });
             } catch (Exception e) {
                 ApplicationManager.getApplication().invokeLater(() -> {
