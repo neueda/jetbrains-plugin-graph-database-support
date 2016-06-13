@@ -158,7 +158,7 @@ public class GraphPanel {
     }
 
     private String truncate(String text, int length) {
-        return text.length() > length ? text.substring(0, length -1) : text;
+        return text.length() > length ? text.substring(0, length-1) + "..." : text;
     }
 
     private void balloonBuilder() {
