@@ -15,8 +15,10 @@ import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphEntity;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
+import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.GraphConstants;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.renderes.tree.PropertyTreeCellRenderer;
 import com.neueda.jetbrains.plugin.graphdb.visualization.PrefuseVisualization;
@@ -43,9 +45,11 @@ public class GraphPanel {
     private GraphPanelInteractions interactions;
     private Tree entityDetailsTree;
     private DefaultTreeModel entityDetailsTreeModel;
+    private PatchedDefaultMutableTreeNode noEntityRoot;
 
     public GraphPanel() {
-        entityDetailsTreeModel = new DefaultTreeModel(new PatchedDefaultMutableTreeNode("Select entity..."));
+        noEntityRoot = new PatchedDefaultMutableTreeNode("Select entity...");
+        entityDetailsTreeModel = new DefaultTreeModel(noEntityRoot);
     }
 
     public void initialize(ConsoleToolWindow consoleToolWindow, MessageBus messageBus) {
@@ -69,6 +73,24 @@ public class GraphPanel {
         // Entity data table
         entityDetailsTree.setCellRenderer(new PropertyTreeCellRenderer());
         entityDetailsTree.setModel(entityDetailsTreeModel);
+        messageBus.connect().subscribe(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC, new QueryExecutionProcessEvent() {
+            @Override
+            public void preResultReceived() {
+                entityDetailsTreeModel.setRoot(noEntityRoot);
+            }
+
+            @Override
+            public void resultReceived(GraphQueryResult result) {
+            }
+
+            @Override
+            public void postResultReceived() {
+            }
+
+            @Override
+            public void handleError(Exception exception) {
+            }
+        });
 
         // Tooltips
         balloonBuilder();
