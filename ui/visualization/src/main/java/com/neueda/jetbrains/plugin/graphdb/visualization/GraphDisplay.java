@@ -111,13 +111,13 @@ public class GraphDisplay extends Display {
             Object valueObj = entry.getValue();
             if (valueObj instanceof String) {
                 String key = entry.getKey();
-                String value = (String) valueObj;;
+                String value = (String) valueObj;
 
                 for (String titleIndicator : TITLE_INDICATORS) {
                     if (titleIndicator.equals(key))
                         return value;
 
-                    if (titleIndicator.contains(key))
+                    if (key.contains(titleIndicator))
                         fuzzyMatch = Optional.of(value);
                 }
 

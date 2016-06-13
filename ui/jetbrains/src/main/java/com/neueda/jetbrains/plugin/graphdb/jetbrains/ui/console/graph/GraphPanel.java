@@ -151,10 +151,14 @@ public class GraphPanel {
                         .append("<p width=\"" + LABEL_TEXT_WIDTH + "px\"><b>")
                         .append(entry.getKey())
                         .append("</b>: ")
-                        .append(entry.getValue())
+                        .append(truncate(entry.getValue().toString(), 80))
                         .append("</p>"));
 
         return "<html>" + sb.toString() + "</html>";
+    }
+
+    private String truncate(String text, int length) {
+        return text.length() > length ? text.substring(0, length -1) : text;
     }
 
     private void balloonBuilder() {
