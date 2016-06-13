@@ -2,7 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.psi;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.neueda.jetbrains.plugin.cypher.psi.CypherStatement;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherStatementItem;
 
 public final class PsiTraversalUtilities {
 
@@ -19,7 +19,7 @@ public final class PsiTraversalUtilities {
     public static final class Cypher {
         public static PsiElement getCypherStatementAtOffset(PsiFile psiFile, int offset) {
             PsiElement elementAtCaret = psiFile.findElementAt(offset);
-            return PsiTraversalUtilities.getParentOfType(elementAtCaret, CypherStatement.class);
+            return PsiTraversalUtilities.getParentOfType(elementAtCaret, CypherStatementItem.class);
         }
     }
 }
