@@ -24,14 +24,15 @@ import prefuse.visual.expression.InGroupPredicate;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Optional;
 
-import static com.google.common.collect.Sets.newHashSet;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.*;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.*;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.RendererProvider.*;
-import static java.util.Collections.unmodifiableSet;
+import static java.util.Collections.unmodifiableList;
 import static prefuse.Constants.SHAPE_ELLIPSE;
 
 public class GraphDisplay extends Display {
@@ -41,13 +42,13 @@ public class GraphDisplay extends Display {
     private static final String LAYOUT = "layout";
     private static final String REPAINT = "repaint";
 
+    private static final List<String> TITLE_INDICATORS = unmodifiableList(newArrayList("name", "title"));
+
     private Graph graph;
 
     private Map<String, Node> nodeMap = new HashMap<>();
     private Map<String, GraphNode> graphNodeMap = new HashMap<>();
     private Map<String, GraphRelationship> graphRelationshipMap = new HashMap<>();
-
-    private static final Set<String> TITLE_PROPERTIES = unmodifiableSet(newHashSet("name", "title"));
 
     public GraphDisplay(LookAndFeelService lookAndFeelService) {
         super(new Visualization());
@@ -104,22 +105,27 @@ public class GraphDisplay extends Display {
     }
 
     private String getDisplayProperty(GraphNode node) {
-        String backup = null;
+        Optional<String> backup = Optional.empty();
+        Optional<String> fuzzyMatch = Optional.empty();
         for (Map.Entry<String, Object> entry : node.getPropertyContainer().getProperties().entrySet()) {
-            Object value = entry.getValue();
-            if (value instanceof String) {
-                if (TITLE_PROPERTIES.contains(entry.getKey()))
-                    return (String) value;
+            Object valueObj = entry.getValue();
+            if (valueObj instanceof String) {
+                String key = entry.getKey();
+                String value = (String) valueObj;;
 
-                backup = (String) value;
+                for (String titleIndicator : TITLE_INDICATORS) {
+                    if (titleIndicator.equals(key))
+                        return value;
+
+                    if (titleIndicator.contains(key))
+                        fuzzyMatch = Optional.of(value);
+                }
+
+                backup = Optional.of(value);
             }
         }
 
-        if (backup == null)
-            return node.getId();
-        else
-            return backup;
-
+        return fuzzyMatch.orElse(backup.orElse(node.getId()));
     }
 
     public void addRelationship(GraphRelationship graphRelationship) {
