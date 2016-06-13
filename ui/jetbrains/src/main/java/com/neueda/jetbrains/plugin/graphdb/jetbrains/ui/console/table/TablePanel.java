@@ -47,7 +47,7 @@ public class TablePanel {
                     List<Object> data = new ArrayList<>(columns.size());
 
                     columns.forEach((column) -> {
-                        data.add(valueConverter.convert(row.getValue(column)));
+                        data.add(valueConverter.convert(column.getName(), row.getValue(column)));
                     });
 
                     tableModel.addRow(data.toArray());
@@ -56,6 +56,7 @@ public class TablePanel {
 
             @Override
             public void postShowResult() {
+                updateRowHeights();
             }
 
             @Override
@@ -66,7 +67,7 @@ public class TablePanel {
 
     public void updateRowHeights() {
         for (int row = 0; row < table.getRowCount(); row++) {
-            int rowHeight = table.getRowHeight();
+            int rowHeight = 1;
             for (int column = 0; column < table.getColumnCount(); column++) {
                 Component comp = table.prepareRenderer(table.getCellRenderer(row, column), row, column);
                 rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);

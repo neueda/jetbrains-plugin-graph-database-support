@@ -2,53 +2,73 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers;
 
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
+import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphPath;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 
 import java.util.List;
 import java.util.Map;
 
+
 public class UiHelper {
 
-    public static PatchedDefaultMutableTreeNode nodeToTree(GraphNode node) {
-        PatchedDefaultMutableTreeNode treeRoot = new PatchedDefaultMutableTreeNode(node.getRepresentation());
-        addNodeData(treeRoot, node);
-        return treeRoot;
-    }
-
-    public static void addNodeData(PatchedDefaultMutableTreeNode root, GraphNode node) {
-        root.add(objectToTreeNode("id", node.getId()));
-        root.add(listToTreeNode("types", node.getTypes()));
-        root.add(mapToTreeNode("properties", node.getPropertyContainer().getProperties()));
-    }
-
-    public static PatchedDefaultMutableTreeNode relationshipToTree(GraphRelationship relationship) {
-        PatchedDefaultMutableTreeNode treeRoot = new PatchedDefaultMutableTreeNode(relationship.getRepresentation());
-        treeRoot.add(objectToTreeNode("id", relationship.getId()));
-        treeRoot.add(listToTreeNode("types", relationship.getTypes()));
-        treeRoot.add(mapToTreeNode("properties", relationship.getPropertyContainer().getProperties()));
-        treeRoot.add(objectToTreeNode("startNodeId", relationship.getStartNodeId()));
-        if (relationship.getStartNode() != null) {
-            PatchedDefaultMutableTreeNode startTreeNode = new PatchedDefaultMutableTreeNode(new KeyValuePair("start", "node"));
-            addNodeData(startTreeNode, relationship.getStartNode());
-            treeRoot.add(startTreeNode);
-        }
-        treeRoot.add(objectToTreeNode("endNodeId", relationship.getEndNodeId()));
-        if (relationship.getEndNode() != null) {
-            PatchedDefaultMutableTreeNode endTreeNode = new PatchedDefaultMutableTreeNode(new KeyValuePair("end", "node"));
-            addNodeData(endTreeNode, relationship.getEndNode());
-            treeRoot.add(endTreeNode);
-        }
-        return treeRoot;
+    public static boolean canBeTree(Object object) {
+        return object instanceof List
+                || object instanceof Map
+                || object instanceof GraphNode
+                || object instanceof GraphRelationship
+                || object instanceof GraphPath;
     }
 
     public static PatchedDefaultMutableTreeNode keyValueToTreeNode(String key, Object value) {
         if (value instanceof List) {
             return listToTreeNode(key, (List) value);
-        } else if (value instanceof Map) {
-            return mapToTreeNode(key, (Map) value);
-        } else {
-            return objectToTreeNode(key, value);
         }
+        if (value instanceof Map) {
+            return mapToTreeNode(key, (Map) value);
+        }
+        if (value instanceof GraphNode) {
+            return nodeToTreeNode(key, (GraphNode) value);
+        }
+        if (value instanceof GraphRelationship) {
+            return relationshipToTreeNode(key, (GraphRelationship) value);
+        }
+        if (value instanceof GraphPath) {
+            return pathToTreeNode(key, (GraphPath) value);
+        }
+        return objectToTreeNode(key, value);
+    }
+
+    public static PatchedDefaultMutableTreeNode nodeToTreeNode(String key, GraphNode node) {
+        PatchedDefaultMutableTreeNode root = new PatchedDefaultMutableTreeNode(new KeyValuePair(key, "node"));
+        root.add(objectToTreeNode("id", node.getId()));
+        root.add(listToTreeNode("types", node.getTypes()));
+        root.add(mapToTreeNode("properties", node.getPropertyContainer().getProperties()));
+        return root;
+    }
+
+    public static PatchedDefaultMutableTreeNode relationshipToTreeNode(String key, GraphRelationship relationship) {
+        PatchedDefaultMutableTreeNode treeRoot = new PatchedDefaultMutableTreeNode(new KeyValuePair(key, "relationship"));
+        treeRoot.add(objectToTreeNode("id", relationship.getId()));
+        treeRoot.add(listToTreeNode("types", relationship.getTypes()));
+        treeRoot.add(mapToTreeNode("properties", relationship.getPropertyContainer().getProperties()));
+        treeRoot.add(objectToTreeNode("startNodeId", relationship.getStartNodeId()));
+        if (relationship.getStartNode() != null) {
+            treeRoot.add(nodeToTreeNode("startNode", relationship.getStartNode()));
+        }
+        treeRoot.add(objectToTreeNode("endNodeId", relationship.getEndNodeId()));
+        if (relationship.getEndNode() != null) {
+            treeRoot.add(nodeToTreeNode("endNode", relationship.getEndNode()));
+        }
+        return treeRoot;
+    }
+
+    public static PatchedDefaultMutableTreeNode pathToTreeNode(String key, GraphPath path) {
+        PatchedDefaultMutableTreeNode root = new PatchedDefaultMutableTreeNode(new KeyValuePair(key, "path"));
+        List<Object> components = path.getComponents();
+        for (int i = 0; i < components.size(); i++) {
+            root.add(keyValueToTreeNode(String.valueOf(i), components.get(i)));
+        }
+        return root;
     }
 
     private static PatchedDefaultMutableTreeNode objectToTreeNode(String key, Object value) {
@@ -66,6 +86,13 @@ public class UiHelper {
     }
 
     public static PatchedDefaultMutableTreeNode listToTreeNode(String key, List list) {
+        if (list.size() <= 10) {
+            String stringRepresentation = list.toString();
+            if (stringRepresentation.length() <= 80) {
+                return new PatchedDefaultMutableTreeNode(new KeyValuePair(key, stringRepresentation, true));
+            }
+        }
+
         PatchedDefaultMutableTreeNode node = new PatchedDefaultMutableTreeNode(new KeyValuePair(key, "list"));
         for (int i = 0; i < list.size(); i++) {
             node.add(keyValueToTreeNode(String.valueOf(i), list.get(i)));

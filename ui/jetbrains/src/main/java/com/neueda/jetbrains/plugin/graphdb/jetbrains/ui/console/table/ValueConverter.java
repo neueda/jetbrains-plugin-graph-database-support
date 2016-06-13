@@ -2,8 +2,6 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table;
 
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.intellij.ui.treeStructure.Tree;
-import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
-import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.tree.PropertyTreeCellRenderer;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper;
 
@@ -19,14 +17,16 @@ public class ValueConverter {
         this.tablePanel = tablePanel;
     }
 
-    public Object convert(Object object) {
-        if (object instanceof GraphNode) {
-            return createTree(UiHelper.nodeToTree((GraphNode) object));
+    public Object convert(String columnName, Object object) {
+        if (object == null) {
+            return null;
         }
-        if (object instanceof GraphRelationship) {
-            return createTree(UiHelper.relationshipToTree((GraphRelationship) object));
+
+        if (UiHelper.canBeTree(object)) {
+            return createTree(UiHelper.keyValueToTreeNode(columnName, object));
+        } else {
+            return objectToString(object);
         }
-        return objectToString(object);
     }
 
     private Object objectToString(Object object) {
@@ -37,7 +37,6 @@ public class ValueConverter {
         DefaultTreeModel treeModel = new DefaultTreeModel(root, false);
         Tree tree = new Tree();
         tree.setModel(treeModel);
-        tree.collapseRow(0);
         tree.setCellRenderer(new PropertyTreeCellRenderer());
         tree.addTreeExpansionListener(new TreeExpansionListener() {
             @Override
