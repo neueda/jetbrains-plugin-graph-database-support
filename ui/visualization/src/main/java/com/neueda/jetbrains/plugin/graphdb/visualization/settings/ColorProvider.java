@@ -7,7 +7,10 @@ import prefuse.Constants;
 import prefuse.action.ActionList;
 import prefuse.action.assignment.ColorAction;
 import prefuse.action.assignment.DataColorAction;
+import prefuse.action.assignment.StrokeAction;
 import prefuse.util.ColorLib;
+
+import java.awt.*;
 
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.EDGES;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.NODES;
@@ -50,16 +53,24 @@ public class ColorProvider {
         colors.add(getEdgeStroke(lookAndFeelService));
         colors.add(getEdgeFill(lookAndFeelService));
         colors.add(getNodeFill(lookAndFeelService));
+        colors.add(getStrokeThickness());
 
         return colors;
+    }
+
+    private static StrokeAction getStrokeThickness() {
+        StrokeAction stroke = new StrokeAction(NODES, new BasicStroke(1));
+        stroke.add(HIGHLIGHT, new BasicStroke(5));
+        stroke.add(HOVER, new BasicStroke(5));
+
+        return stroke;
     }
 
     @NotNull
     private static DataColorAction getNodeFill(LookAndFeelService lookAndFeelService) {
         int[] palette = { ROT_1, ROT_2, ROT_3, ROT_4, ROT_5, ROT_6, ROT_7, ROT_8 };
         DataColorAction fill = new DataColorAction(NODES, GraphColumns.TYPE, Constants.NOMINAL, FILLCOLOR, palette);
-        fill.add(HOVER, NODE_HOVER);
-        fill.add(HIGHLIGHT, NODE_HIGHLIGHT);
+
         return fill;
     }
 
