@@ -153,4 +153,8 @@ public class GraphPanel {
 
         balloonPopupBuilder = builder;
     }
+
+    public void hideTooltip(GraphEntity entity, VisualItem visualItem, MouseEvent mouseEvent) {
+        balloon.dispose();
+    }
 }

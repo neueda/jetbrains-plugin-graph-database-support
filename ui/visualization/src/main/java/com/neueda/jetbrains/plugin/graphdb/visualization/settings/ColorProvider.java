@@ -39,9 +39,6 @@ public class ColorProvider {
     private static final int EDGE_HOVER = ORANGE_DARK;
     private static final int EDGE_HIGHLIGHT = ORANGE_DARK;
 
-    private static final int NODE_HOVER = ORANGE;
-    private static final int NODE_HIGHLIGHT = ORANGE;
-
     private static final int NODE_STROKE = GRAY;
     private static final int NODE_STROKE_HOVER = ORANGE_DARK;
     private static final int NODE_STROKE_HIGHLIGHT = ORANGE_DARK;

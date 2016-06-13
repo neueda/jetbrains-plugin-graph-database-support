@@ -71,6 +71,8 @@ public class GraphPanelInteractions {
         visualization.addNodeListener(EventType.CLICK, window.getGraphPanel()::showNodeData);
         visualization.addEdgeListener(EventType.CLICK, window.getGraphPanel()::showRelationshipData);
         visualization.addNodeListener(EventType.HOVER_START, window.getGraphPanel()::showTooltip);
+        visualization.addNodeListener(EventType.HOVER_END, window.getGraphPanel()::hideTooltip);
         visualization.addEdgeListener(EventType.HOVER_START, window.getGraphPanel()::showTooltip);
+        visualization.addEdgeListener(EventType.HOVER_END, window.getGraphPanel()::hideTooltip);
     }
 }
