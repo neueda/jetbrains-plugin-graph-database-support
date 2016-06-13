@@ -7,6 +7,7 @@ intellij {
 dependencies {
     compile project(":platform")
 
+    compile project(':language:cypher')
     compile project(':database:neo4j')
 
     compile project(':ui:visualization')

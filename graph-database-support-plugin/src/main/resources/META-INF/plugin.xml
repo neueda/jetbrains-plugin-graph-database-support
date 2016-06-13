@@ -26,6 +26,14 @@
     <depends optional="true">com.intellij.modules.java</depends>
     <depends optional="true" config-file="intellilang-cypher-support.xml">org.intellij.intelliLang</depends>
 
+    <application-components>
+        <!-- Graph Database support - query statement highlighting -->
+        <component>
+            <interface-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.highlighter.QueryHighlighterComponent</interface-class>
+            <implementation-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.highlighter.QueryHighlighterComponentImpl</implementation-class>
+        </component>
+    </application-components>
+
     <project-components>
         <!-- Graph Database support - data sources -->
         <component>
@@ -48,6 +56,8 @@
                     secondary="false"
                     factoryClass="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesToolWindow"
                     icon="/graphdb/icons/window/graph_13x13.png"/>
+        <applicationService serviceInterface="com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService"
+                            serviceImplementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.services.IdeaLookAndFeelService"/>
 
         <!-- Cypher -->
         <fileTypeFactory implementation="com.neueda.jetbrains.plugin.cypher.file.CypherFileTypeFactory"/>
@@ -66,10 +76,6 @@
         <renameInputValidator implementation="com.neueda.jetbrains.plugin.cypher.references.CypherRenameInputValidator"/>
         <lang.namesValidator language="Cypher" implementationClass="com.neueda.jetbrains.plugin.cypher.lang.CypherNameValidator"/>
         <spellchecker.support language="Cypher" implementationClass="com.neueda.jetbrains.plugin.cypher.lang.CypherSpellcheckingStrategy"/>
-        <applicationService serviceInterface="com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService"
-                            serviceImplementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.services.IdeaLookAndFeelService" >
-
-        </applicationService>
         <!-- Todo:
         lang.documentationProvider
         gotoSymbolContributor
