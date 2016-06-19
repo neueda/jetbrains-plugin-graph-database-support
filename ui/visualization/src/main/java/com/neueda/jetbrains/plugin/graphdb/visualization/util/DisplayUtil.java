@@ -11,6 +11,7 @@ import static java.util.Collections.unmodifiableList;
 
 public class DisplayUtil {
 
+    private static final int TITLE_MAX_LENGTH = 80;
     private static final List<String> TITLE_INDICATORS = unmodifiableList(newArrayList("name", "title"));
 
     public static String getDisplayProperty(GraphNode node) {
@@ -23,14 +24,17 @@ public class DisplayUtil {
                 String value = (String) valueObj;
 
                 for (String titleIndicator : TITLE_INDICATORS) {
-                    if (titleIndicator.equals(key))
+                    if (titleIndicator.equals(key) && filterLength(value))
                         return value;
 
-                    if (key.contains(titleIndicator))
-                        fuzzyMatch = Optional.of(value);
+                    if (key.contains(titleIndicator) && !fuzzyMatch.isPresent())
+                        fuzzyMatch = Optional.of(value)
+                                .filter(DisplayUtil::filterLength);
                 }
 
-                backup = Optional.of(value);
+                if (!backup.isPresent())
+                    backup = Optional.of(value)
+                            .filter(DisplayUtil::filterLength);
             }
         }
 
@@ -39,5 +43,9 @@ public class DisplayUtil {
 
     public static String getDisplayType(GraphNode node) {
         return node.getTypes().size() > 0 ? node.getTypes().get(0) : "";
+    }
+
+    private static boolean filterLength(String title) {
+        return title.length() < TITLE_MAX_LENGTH;
     }
 }

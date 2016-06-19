@@ -18,6 +18,9 @@ import static org.mockito.Mockito.when;
 
 public class DisplayUtilTest {
 
+    private static final String LONG_TITLE = "abcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcde"
+            + "abcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcde";
+
     @Mock
     private GraphNode node;
 
@@ -80,6 +83,25 @@ public class DisplayUtilTest {
 
         assertThat(getDisplayProperty(node))
                 .isEqualTo("some value");
+    }
+
+    @Test
+    public void lengthCapFuzzy() {
+        properties.put("name", LONG_TITLE);
+        properties.put("somename", "short title");
+        properties.put("another", "abc");
+
+        assertThat(getDisplayProperty(node))
+                .isEqualTo("short title");
+    }
+
+    @Test
+    public void lengthCapDefault() {
+        properties.put("name", LONG_TITLE);
+        properties.put("another", "short title");
+
+        assertThat(getDisplayProperty(node))
+                .isEqualTo("short title");
     }
 
     @Test
