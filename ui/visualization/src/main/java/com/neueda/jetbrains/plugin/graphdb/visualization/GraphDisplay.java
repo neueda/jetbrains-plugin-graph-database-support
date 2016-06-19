@@ -12,6 +12,7 @@ import com.neueda.jetbrains.plugin.graphdb.visualization.listeners.RelationshipL
 import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
 import com.neueda.jetbrains.plugin.graphdb.visualization.settings.LayoutProvider;
 import com.neueda.jetbrains.plugin.graphdb.visualization.settings.SchemaProvider;
+import com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil;
 import prefuse.Display;
 import prefuse.Visualization;
 import prefuse.controls.DragControl;
@@ -28,15 +29,11 @@ import prefuse.visual.expression.InGroupPredicate;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.*;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.*;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.RendererProvider.*;
-import static java.util.Collections.unmodifiableList;
 import static prefuse.Constants.SHAPE_ELLIPSE;
 
 public class GraphDisplay extends Display {
@@ -45,8 +42,6 @@ public class GraphDisplay extends Display {
 
     private static final String LAYOUT = "layout";
     private static final String REPAINT = "repaint";
-
-    private static final List<String> TITLE_INDICATORS = unmodifiableList(newArrayList("name", "title"));
 
     private Graph graph;
 
@@ -102,34 +97,10 @@ public class GraphDisplay extends Display {
         node.set(ID, graphNode.getId());
         String type = graphNode.getTypes().size() > 0 ? graphNode.getTypes().get(0) : "";
         node.set(TYPE, type);
-        node.set(TITLE, getDisplayProperty(graphNode));
+        node.set(TITLE, DisplayUtil.getDisplayProperty(graphNode));
 
         nodeMap.put(graphNode.getId(), node);
         graphNodeMap.put(graphNode.getId(), graphNode);
-    }
-
-    private String getDisplayProperty(GraphNode node) {
-        Optional<String> backup = Optional.empty();
-        Optional<String> fuzzyMatch = Optional.empty();
-        for (Map.Entry<String, Object> entry : node.getPropertyContainer().getProperties().entrySet()) {
-            Object valueObj = entry.getValue();
-            if (valueObj instanceof String) {
-                String key = entry.getKey();
-                String value = (String) valueObj;
-
-                for (String titleIndicator : TITLE_INDICATORS) {
-                    if (titleIndicator.equals(key))
-                        return value;
-
-                    if (key.contains(titleIndicator))
-                        fuzzyMatch = Optional.of(value);
-                }
-
-                backup = Optional.of(value);
-            }
-        }
-
-        return fuzzyMatch.orElse(backup.orElse(node.getId()));
     }
 
     public void addRelationship(GraphRelationship graphRelationship) {
