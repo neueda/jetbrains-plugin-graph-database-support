@@ -3,6 +3,7 @@ package com.neueda.jetbrains.plugin.graphdb.visualization;
 import com.intellij.ui.border.CustomLineBorder;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
+import com.neueda.jetbrains.plugin.graphdb.visualization.controls.CustomNeighborHighlightControl;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.NodeCallback;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.RelationshipCallback;
@@ -13,7 +14,10 @@ import com.neueda.jetbrains.plugin.graphdb.visualization.settings.LayoutProvider
 import com.neueda.jetbrains.plugin.graphdb.visualization.settings.SchemaProvider;
 import prefuse.Display;
 import prefuse.Visualization;
-import prefuse.controls.*;
+import prefuse.controls.DragControl;
+import prefuse.controls.PanControl;
+import prefuse.controls.ZoomControl;
+import prefuse.controls.ZoomToFitControl;
 import prefuse.data.Edge;
 import prefuse.data.Graph;
 import prefuse.data.Node;
@@ -78,7 +82,7 @@ public class GraphDisplay extends Display {
         addControlListener(new ZoomControl());
         addControlListener(new ZoomToFitControl());
         addControlListener(new PanControl());
-        addControlListener(new NeighborHighlightControl());
+        addControlListener(new CustomNeighborHighlightControl());
     }
 
     public void clearGraph() {

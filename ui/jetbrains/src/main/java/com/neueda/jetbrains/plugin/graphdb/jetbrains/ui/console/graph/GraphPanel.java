@@ -36,6 +36,7 @@ import java.util.Map;
 public class GraphPanel {
 
     private static final int LABEL_TEXT_WIDTH = 300;
+    private static final int PROPERTY_DEPTH = 3;
 
     private PrefuseVisualization visualization;
     private LookAndFeelService lookAndFeelService;
@@ -102,17 +103,21 @@ public class GraphPanel {
                 visualization);
     }
 
+    public void handleClick(GraphNode node, VisualItem item, MouseEvent e) {
+        showNodeData(node, item, e);
+    }
+
     public void showNodeData(GraphNode node, VisualItem item, MouseEvent e) {
         PatchedDefaultMutableTreeNode root = UiHelper.nodeToTreeNode(node.getRepresentation(), node);
         entityDetailsTreeModel.setRoot(root);
-        entityDetailsTree.expandRow(3);
+        entityDetailsTree.expandRow(PROPERTY_DEPTH);
     }
 
     public void showRelationshipData(GraphRelationship relationship, VisualItem item, MouseEvent e) {
         PatchedDefaultMutableTreeNode root = UiHelper.relationshipToTreeNode(
                 relationship.getRepresentation(), relationship);
         entityDetailsTreeModel.setRoot(root);
-        entityDetailsTree.expandRow(3);
+        entityDetailsTree.expandRow(PROPERTY_DEPTH);
     }
 
     public void showTooltip(GraphEntity entity, VisualItem item, MouseEvent e) {
