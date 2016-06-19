@@ -8,8 +8,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil.getDisplayProperty;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -23,15 +25,18 @@ public class DisplayUtilTest {
     private GraphPropertyContainer container;
 
     private Map<String, Object> properties;
+    private List<String> types;
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
 
         properties = new HashMap<>();
+        types = newArrayList();
 
         when(node.getPropertyContainer()).thenReturn(container);
         when(container.getProperties()).thenReturn(properties);
+        when(node.getTypes()).thenReturn(types);
     }
 
     @Test
@@ -76,5 +81,33 @@ public class DisplayUtilTest {
         assertThat(getDisplayProperty(node))
                 .isEqualTo("some value");
     }
+
+    @Test
+    public void defaultType() {
+        assertThat(DisplayUtil.getDisplayType(node))
+                .isEqualTo("");
+
+    }
+
+    @Test
+    public void singleType() {
+        types.add("type");
+
+        assertThat(DisplayUtil.getDisplayType(node))
+                .isEqualTo("type");
+
+    }
+
+    @Test
+    public void firstType() {
+        types.add("first");
+        types.add("second");
+
+        assertThat(DisplayUtil.getDisplayType(node))
+                .isEqualTo("first");
+
+    }
+
+
 
 }

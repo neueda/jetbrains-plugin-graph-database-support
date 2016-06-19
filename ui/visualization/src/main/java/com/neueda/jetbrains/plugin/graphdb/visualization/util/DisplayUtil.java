@@ -36,4 +36,8 @@ public class DisplayUtil {
 
         return fuzzyMatch.orElse(backup.orElse(node.getId()));
     }
+
+    public static String getDisplayType(GraphNode node) {
+        return node.getTypes().size() > 0 ? node.getTypes().get(0) : "";
+    }
 }
