@@ -17,7 +17,7 @@ public class CypherParserDefinitionTest extends ParsingTestCase {
     }
 
     public void testCommonCypherParsing() {
-        doTest(true);
+        doTest(false);
     }
 
     @Override

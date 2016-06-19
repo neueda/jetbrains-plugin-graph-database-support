@@ -1,13 +1,13 @@
 package com.neueda.jetbrains.plugin.graphdb.language.cypher.references.impl;
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveResult;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherReferenceBase;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.CypherUtil;
+import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -32,7 +32,7 @@ public class CypherVariableReference extends CypherReferenceBase {
     public Object[] getVariants() {
         return uniqueVariants(CypherUtil.findAll(myElement.getContainingFile(), CypherTypes.VARIABLE)).stream()
                 .map(cypherIdentifier -> LookupElementBuilder.create(cypherIdentifier)
-                        .withIcon(AllIcons.Nodes.Variable)
+                        .withIcon(GraphIcons.Nodes.VARIABLE)
                         .withTypeText("variable"))
                 .toArray(Object[]::new);
     }

@@ -4,6 +4,7 @@ import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ValueWithIcon;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.JTree;
@@ -24,8 +25,12 @@ public class GraphColoredTreeCellRenderer extends ColoredTreeCellRenderer {
 
         if (userObject instanceof DataSource) {
             DataSource dataSource = (DataSource) userObject;
-            append(dataSource.getName(), SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES, true);
             setIcon(component.getDataSourceIcon(dataSource));
+            append(dataSource.getName(), SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES, true);
+        } else if (userObject instanceof ValueWithIcon) {
+            ValueWithIcon val = (ValueWithIcon) userObject;
+            setIcon(val.getIcon());
+            append(val.getValue());
         } else {
             append(value.toString());
         }

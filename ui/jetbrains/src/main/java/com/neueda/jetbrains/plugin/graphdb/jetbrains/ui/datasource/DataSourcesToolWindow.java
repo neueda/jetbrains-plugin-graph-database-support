@@ -1,6 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource;
 
 import com.intellij.openapi.actionSystem.ActionToolbarPosition;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -11,8 +12,11 @@ import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.intellij.ui.treeStructure.Tree;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.actions.RefreshDataSourcesAction;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceInteractions;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.CypherMetadataRetriever;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.GraphColoredTreeCellRenderer;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.CypherMetadataProviderService;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.BorderFactory;
@@ -34,6 +38,8 @@ public class DataSourcesToolWindow implements ToolWindowFactory {
     private JPanel treePanel;
     private Tree dataSourceTree;
     private ToolbarDecorator decorator;
+    private CypherMetadataProviderService cypherMetadataProviderService;
+    private CypherMetadataRetriever cypherMetadataRetriever;
 
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
@@ -42,9 +48,12 @@ public class DataSourcesToolWindow implements ToolWindowFactory {
         toolWindow.getContentManager().addContent(content);
 
         component = project.getComponent(DataSourcesComponent.class);
+        cypherMetadataProviderService = ServiceManager.getService(project, CypherMetadataProviderService.class);
+        cypherMetadataRetriever = new CypherMetadataRetriever(cypherMetadataProviderService);
         treeRoot = new PatchedDefaultMutableTreeNode("treeRoot");
         treeModel = new DefaultTreeModel(treeRoot, false);
         decorator = ToolbarDecorator.createDecorator(dataSourceTree);
+        decorator.addExtraAction(new RefreshDataSourcesAction(this));
 
         configureDataSourceTree();
         decorateDataSourceTree();
@@ -54,6 +63,8 @@ public class DataSourcesToolWindow implements ToolWindowFactory {
         replaceTreeWithDecorated();
 
         showDataSources();
+
+        refreshDataSourcesMetadata();
     }
 
     public DataSourcesComponent getComponent() {
@@ -97,6 +108,23 @@ public class DataSourcesToolWindow implements ToolWindowFactory {
         component.getDataSources()
                 .forEach((dataSource) -> treeRoot.add(new PatchedDefaultMutableTreeNode(dataSource)));
         treeModel.reload();
+    }
+
+    public void refreshDataSourcesMetadata() {
+        Enumeration children = treeRoot.children();
+        boolean isRefreshed = false;
+        while (children.hasMoreElements()) {
+            PatchedDefaultMutableTreeNode node = (PatchedDefaultMutableTreeNode) children.nextElement();
+            DataSource nodeDataSource = (DataSource) node.getUserObject();
+
+            if (cypherMetadataRetriever.refresh(node, nodeDataSource)) {
+                isRefreshed = true;
+            }
+        }
+
+        if (isRefreshed) {
+            treeModel.reload();
+        }
     }
 
     public void createDataSource(DataSource dataSource) {

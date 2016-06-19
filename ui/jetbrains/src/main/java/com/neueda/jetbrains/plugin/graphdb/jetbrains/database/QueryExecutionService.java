@@ -51,12 +51,6 @@ public class QueryExecutionService {
         runningQuery = ApplicationManager.getApplication().executeOnPooledThread(() -> {
             try {
                 GraphDatabaseApi database =  databaseManager.getDatabaseFor(dataSource);
-                if (database == null) {
-                    Notifier.error(
-                            "Unknown database",
-                            String.format("Database for data source [%s] does not exists", dataSource.dataSourceType));
-                    return;
-                }
                 GraphQueryResult result = database.execute(payload.getContent());
 
                 ApplicationManager.getApplication().invokeLater(() -> {

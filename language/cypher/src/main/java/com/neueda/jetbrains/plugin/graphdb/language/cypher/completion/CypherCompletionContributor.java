@@ -7,6 +7,8 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.Project;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
@@ -66,6 +68,29 @@ public class CypherCompletionContributor extends CompletionContributor {
                     }
                 }
         );
+
+        PsiElementPattern.Capture<PsiElement> metadataPatternCapture = PlatformPatterns
+                .psiElement()
+                .withLanguage(CypherLanguage.INSTANCE);
+        extend(CompletionType.BASIC, metadataPatternCapture,
+                new CompletionProvider<CompletionParameters>() {
+                    public void addCompletions(@NotNull CompletionParameters parameters,
+                                               ProcessingContext context,
+                                               @NotNull CompletionResultSet resultSet) {
+                        Project project = parameters.getEditor().getProject();
+                        if (project == null) {
+                            return;
+                        }
+
+                        CypherMetadataProviderService provider = ServiceManager.getService(project, CypherMetadataProviderService.class);
+                        resultSet.addAllElements(provider.getMetadata(CypherMetadataType.LABELS));
+                        resultSet.addAllElements(provider.getMetadata(CypherMetadataType.RELATIONSHIP_TYPES));
+                        resultSet.addAllElements(provider.getMetadata(CypherMetadataType.PROPERTY_KEYS));
+                        resultSet.addAllElements(provider.getMetadata(CypherMetadataType.PROCEDURES));
+                    }
+                }
+        );
+
     }
 
     @Override
@@ -87,16 +112,5 @@ public class CypherCompletionContributor extends CompletionContributor {
                         .create(keyword)
                         .withTypeText(type)
                         .withIcon(icon)));
-    }
-
-    private void addCompletionResult(CompletionResultSet resultSet,
-                                     String type, Icon icon,
-                                     String... keywords) {
-        for (String keyword : keywords) {
-            resultSet.addElement(LookupElementBuilder
-                    .create(keyword)
-                    .withTypeText(type)
-                    .withIcon(icon));
-        }
     }
 }
