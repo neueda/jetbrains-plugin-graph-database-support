@@ -23,19 +23,16 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.renderes.tree.PropertyTreeCellRenderer;
 import com.neueda.jetbrains.plugin.graphdb.visualization.PrefuseVisualization;
 import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
+import com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil;
 import prefuse.visual.VisualItem;
 
-import javax.swing.Box;
+import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.Map;
 
 public class GraphPanel {
 
-    private static final int LABEL_TEXT_WIDTH = 300;
     private static final int PROPERTY_DEPTH = 3;
 
     private PrefuseVisualization visualization;
@@ -125,7 +122,7 @@ public class GraphPanel {
             balloon.hide();
 
         balloonPopupBuilder.setTitle(entity.getRepresentation());
-        balloonLabel.setText(getFiveProperties(entity.getPropertyContainer().getProperties()));
+        balloonLabel.setText(DisplayUtil.getTooltipText(entity));//getFiveProperties(entity.getPropertyContainer().getProperties()));
 
         balloon = balloonPopupBuilder.createBalloon();
         Container panel = e.getComponent().getParent();
@@ -145,25 +142,6 @@ public class GraphPanel {
 
     public void resetPan(GraphNode n, VisualItem item, MouseEvent e) {
         visualization.resetPan();
-    }
-
-    private String getFiveProperties(Map<String, Object> properties) {
-        StringBuilder sb = new StringBuilder();
-
-        properties.entrySet().stream()
-                .limit(5)
-                .forEach(entry -> sb
-                        .append("<p width=\"" + LABEL_TEXT_WIDTH + "px\"><b>")
-                        .append(entry.getKey())
-                        .append("</b>: ")
-                        .append(truncate(entry.getValue().toString(), 80))
-                        .append("</p>"));
-
-        return "<html>" + sb.toString() + "</html>";
-    }
-
-    private String truncate(String text, int length) {
-        return text.length() > length ? text.substring(0, length-1) + "..." : text;
     }
 
     private void balloonBuilder() {

@@ -95,8 +95,8 @@ public class GraphDisplay extends Display {
     public void addNode(GraphNode graphNode) {
         Node node = graph.addNode();
         node.set(ID, graphNode.getId());
-        node.set(TYPE, DisplayUtil.getDisplayType(graphNode));
-        node.set(TITLE, DisplayUtil.getDisplayProperty(graphNode));
+        node.set(TYPE, DisplayUtil.getType(graphNode));
+        node.set(TITLE, DisplayUtil.getProperty(graphNode));
 
         nodeMap.put(graphNode.getId(), node);
         graphNodeMap.put(graphNode.getId(), graphNode);
