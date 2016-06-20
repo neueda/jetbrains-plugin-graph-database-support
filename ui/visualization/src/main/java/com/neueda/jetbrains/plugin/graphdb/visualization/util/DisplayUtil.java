@@ -59,8 +59,9 @@ public class DisplayUtil {
 
     public static String getTooltipText(GraphEntity entity) {
         Map<String, Object> properties = entity.getPropertyContainer().getProperties();
-        StringBuilder sb = new StringBuilder();
+        String start = "<p width=\"" + LABEL_TEXT_WIDTH + "px\"><b>";
 
+        StringBuilder sb = new StringBuilder(start + "types</b>: " + entity.getTypes() + "</p>");
 
         Stream<Map.Entry<String, Object>> strings = properties.entrySet().stream()
                 .filter(IS_STRING_VALUE)
@@ -71,12 +72,12 @@ public class DisplayUtil {
 
         Stream.concat(strings, other)
                 .limit(MAX_TOOLTIP_PROPERTIES)
-                .forEach(entry -> sb
-                        .append("<p width=\"" + LABEL_TEXT_WIDTH + "px\"><b>")
+                .forEach(entry -> sb.append(start)
                         .append(entry.getKey())
                         .append("</b>: ")
                         .append(truncate(entry.getValue().toString(), MAX_TEXT_LENGTH))
-                        .append("</p>"));
+                        .append("</p>")
+                );
 
         return "<html>" + sb.toString() + "</html>";
     }

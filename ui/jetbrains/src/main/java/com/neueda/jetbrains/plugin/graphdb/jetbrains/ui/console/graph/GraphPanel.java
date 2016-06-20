@@ -122,7 +122,7 @@ public class GraphPanel {
             balloon.hide();
 
         balloonPopupBuilder.setTitle(entity.getRepresentation());
-        balloonLabel.setText(DisplayUtil.getTooltipText(entity));//getFiveProperties(entity.getPropertyContainer().getProperties()));
+        balloonLabel.setText(DisplayUtil.getTooltipText(entity));
 
         balloon = balloonPopupBuilder.createBalloon();
         Container panel = e.getComponent().getParent();

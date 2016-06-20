@@ -22,10 +22,10 @@ public class DisplayUtilTest {
     private static final String LONG_TITLE = "abcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcde"
             + "abcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcdeabcde";
 
-    private static final String FIRST_NAME = "first";
-    private static final String SECOND_NAME = "second";
-    private static final String THIRD_NAME = "third";
-    private static final String FOURTH_NAME = "fourth";
+    private static final String FIRST_KEY = "first key";
+    private static final String SECOND_KEY = "second key";
+    private static final String THIRD_KEY = "third key";
+    private static final String FOURTH_KEY = "fourth key";
     private static final String FIRST_VALUE = "first value";
     private static final String SECOND_VALUE = "second value";
     private static final String THIRD_VALUE = "third value";
@@ -34,6 +34,8 @@ public class DisplayUtilTest {
     private static final String TITLE = "title";
     private static final String CONTAINS_NAME = "somename";
     private static final int THIRD_VALUE_INT = 3;
+    public static final String FIRST_TYPE = "first type";
+    public static final String SECOND_TYPE = "second type";
 
     @Mock
     private GraphNode node;
@@ -59,7 +61,7 @@ public class DisplayUtilTest {
     @Test
     public void exactMatchName() {
         properties.put(NAME, FIRST_VALUE);
-        properties.put(SECOND_NAME, SECOND_VALUE);
+        properties.put(SECOND_KEY, SECOND_VALUE);
 
         assertThat(getProperty(node))
             .isEqualTo(FIRST_VALUE);
@@ -68,7 +70,7 @@ public class DisplayUtilTest {
     @Test
     public void exactMatchTitle() {
         properties.put(TITLE, FIRST_VALUE);
-        properties.put(SECOND_NAME, SECOND_VALUE);
+        properties.put(SECOND_KEY, SECOND_VALUE);
 
         assertThat(getProperty(node))
                 .isEqualTo(FIRST_VALUE);
@@ -76,7 +78,7 @@ public class DisplayUtilTest {
 
     @Test
     public void fuzzyMatchName() {
-        properties.put(FIRST_NAME, FIRST_VALUE);
+        properties.put(FIRST_KEY, FIRST_VALUE);
         properties.put(CONTAINS_NAME, SECOND_VALUE);
 
         assertThat(getProperty(node))
@@ -94,7 +96,7 @@ public class DisplayUtilTest {
 
     @Test
     public void anyString() {
-        properties.put(FIRST_NAME, FIRST_VALUE);
+        properties.put(FIRST_KEY, FIRST_VALUE);
 
         assertThat(getProperty(node))
                 .isEqualTo(FIRST_VALUE);
@@ -104,7 +106,7 @@ public class DisplayUtilTest {
     public void lengthCapFuzzy() {
         properties.put(NAME, LONG_TITLE);
         properties.put(CONTAINS_NAME, SECOND_VALUE);
-        properties.put(THIRD_NAME, THIRD_VALUE);
+        properties.put(THIRD_KEY, THIRD_VALUE);
 
         assertThat(getProperty(node))
                 .isEqualTo(SECOND_VALUE);
@@ -113,7 +115,7 @@ public class DisplayUtilTest {
     @Test
     public void lengthCapDefault() {
         properties.put(NAME, LONG_TITLE);
-        properties.put(SECOND_NAME, SECOND_VALUE);
+        properties.put(SECOND_KEY, SECOND_VALUE);
 
         assertThat(getProperty(node))
                 .isEqualTo(SECOND_VALUE);
@@ -128,54 +130,91 @@ public class DisplayUtilTest {
 
     @Test
     public void singleType() {
-        types.add(FIRST_NAME);
+        types.add(FIRST_KEY);
 
         assertThat(DisplayUtil.getType(node))
-                .isEqualTo(FIRST_NAME);
+                .isEqualTo(FIRST_KEY);
 
     }
 
     @Test
     public void firstType() {
-        types.add(FIRST_NAME);
-        types.add(SECOND_NAME);
+        types.add(FIRST_KEY);
+        types.add(SECOND_KEY);
 
         assertThat(DisplayUtil.getType(node))
-                .isEqualTo(FIRST_NAME);
+                .isEqualTo(FIRST_KEY);
     }
 
     @Test
     public void tooltip() {
-        properties.put(FIRST_NAME, FIRST_VALUE);
+        properties.put(FIRST_KEY, FIRST_VALUE);
 
         assertThat(DisplayUtil.getTooltipText(node))
-                .containsSequence(FIRST_NAME, FIRST_VALUE);
+                .containsSequence(FIRST_KEY, FIRST_VALUE);
     }
 
     @Test
     public void tooltipNoMoreThanThreeProperties() {
-        properties.put(FIRST_NAME, FIRST_VALUE);
-        properties.put(SECOND_NAME, SECOND_VALUE);
-        properties.put(THIRD_NAME, THIRD_VALUE);
-        properties.put(FOURTH_NAME, FOURTH_VALUE);
+        properties.put(FIRST_KEY, FIRST_VALUE);
+        properties.put(SECOND_KEY, SECOND_VALUE);
+        properties.put(THIRD_KEY, THIRD_VALUE);
+        properties.put(FOURTH_KEY, FOURTH_VALUE);
 
         assertThat(DisplayUtil.getTooltipText(node))
-                .containsSequence(FIRST_NAME, FIRST_VALUE,
-                        SECOND_NAME, SECOND_VALUE,
-                        THIRD_NAME, THIRD_VALUE);
+                .containsSequence(FIRST_KEY, FIRST_VALUE,
+                        SECOND_KEY, SECOND_VALUE,
+                        THIRD_KEY, THIRD_VALUE);
     }
 
     @Test
     public void tooltipPrioritizeStrings() {
-        properties.put(FIRST_NAME, FIRST_VALUE);
-        properties.put(SECOND_NAME, SECOND_VALUE);
-        properties.put(THIRD_NAME, THIRD_VALUE_INT);
-        properties.put(FOURTH_NAME, FOURTH_VALUE);
+        properties.put(FIRST_KEY, FIRST_VALUE);
+        properties.put(SECOND_KEY, SECOND_VALUE);
+        properties.put(THIRD_KEY, THIRD_VALUE_INT);
+        properties.put(FOURTH_KEY, FOURTH_VALUE);
 
         assertThat(DisplayUtil.getTooltipText(node))
-                .containsSequence(FIRST_NAME, FIRST_VALUE,
-                        SECOND_NAME, SECOND_VALUE,
-                        FOURTH_NAME, FOURTH_VALUE);
+                .containsSequence(FIRST_KEY, FIRST_VALUE,
+                        SECOND_KEY, SECOND_VALUE,
+                        FOURTH_KEY, FOURTH_VALUE);
     }
+
+    @Test
+    public void tooltipType() {
+        types.add(FIRST_TYPE);
+
+        assertThat(DisplayUtil.getTooltipText(node))
+                .contains(types.toString());
+    }
+
+    @Test
+    public void tooltipTypes() {
+        types.add(FIRST_TYPE);
+        types.add(SECOND_TYPE);
+
+        assertThat(DisplayUtil.getTooltipText(node))
+                .contains(types.toString());
+    }
+
+    @Test
+    public void tooltipTypesAndProperties() {
+        types.add(FIRST_TYPE);
+        types.add(SECOND_TYPE);
+        properties.put(FIRST_KEY, FIRST_VALUE);
+        properties.put(SECOND_KEY, SECOND_VALUE);
+        properties.put(THIRD_KEY, THIRD_VALUE);
+        properties.put(FOURTH_KEY, FOURTH_VALUE);
+
+        assertThat(DisplayUtil.getTooltipText(node))
+                .containsSequence(types.toString(),
+                        FIRST_KEY, FIRST_VALUE,
+                        SECOND_KEY, SECOND_VALUE,
+                        THIRD_KEY, THIRD_VALUE);
+
+        System.out.println(DisplayUtil.getTooltipText(node));
+    }
+
+
 
 }
