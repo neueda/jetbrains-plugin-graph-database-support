@@ -58,6 +58,7 @@
                     icon="/graphdb/icons/window/graph_13x13.png"/>
         <applicationService serviceInterface="com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService"
                             serviceImplementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.services.IdeaLookAndFeelService"/>
+        <actionPromoter implementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryActionPromoter"></actionPromoter>
 
         <!-- Cypher -->
         <fileTypeFactory implementation="com.neueda.jetbrains.plugin.graphdb.language.cypher.file.CypherFileTypeFactory"/>
@@ -88,14 +89,14 @@
         <!-- Graph Database support -->
         <group id="GraphDatabaseActionGroup"
                text="Graph Database" description="Execute graph database queries"
-               icon="/graphdb-images/tool-windows-icon.png" popup="true">
+               icon="/graphdb/icons/window/graph_13x13.png" popup="true">
 
             <action id="GraphDatabaseActionGroup.ExecuteQuery"
                     class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryAction"
                     text="Execute query"
                     icon="/general/run.png"
                     description="Execute query">
-                <keyboard-shortcut first-keystroke="control F5"
+                <keyboard-shortcut first-keystroke="ctrl ENTER"
                                    keymap="$default"/>
             </action>
             <add-to-group group-id="EditorPopupMenu"/>

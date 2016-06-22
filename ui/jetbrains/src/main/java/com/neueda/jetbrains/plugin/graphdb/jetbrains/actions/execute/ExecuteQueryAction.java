@@ -12,21 +12,14 @@ import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.messages.MessageBus;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.languages.GraphLanguages;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.psi.PsiTraversalUtilities;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;
 
 import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ExecuteQueryAction extends AnAction {
-
-    private static final List<String> SUPPORTED_LANGUAGES = new ArrayList<>();
-
-    static {
-        SUPPORTED_LANGUAGES.add("Cypher");
-    }
 
     @Override
     public void update(AnActionEvent e) {
@@ -34,7 +27,7 @@ public class ExecuteQueryAction extends AnAction {
         if (psiFile != null) {
             String languageId = psiFile.getLanguage().getID();
 
-            if (SUPPORTED_LANGUAGES.contains(languageId)) {
+            if (GraphLanguages.SUPPORTED_LANGUAGES.contains(languageId)) {
                 e.getPresentation().setEnabled(true);
                 return;
             }
@@ -66,7 +59,7 @@ public class ExecuteQueryAction extends AnAction {
         if (caret.hasSelection()) {
             content = caret.getSelectedText();
         } else if (psiFile != null) {
-            if (psiFile.getLanguage().getID().equals("Cypher")) {
+            if (psiFile.getLanguage().getID().equals(GraphLanguages.CYPHER)) {
                 String cypherStatement = getCypherStatement(psiFile, caret);
                 if (cypherStatement != null) {
                     content = cypherStatement;
