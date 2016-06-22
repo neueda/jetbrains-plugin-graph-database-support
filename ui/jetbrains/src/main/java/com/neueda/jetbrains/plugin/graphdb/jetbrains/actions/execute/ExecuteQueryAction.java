@@ -12,7 +12,7 @@ import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.messages.MessageBus;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.languages.GraphLanguages;
+import com.neueda.jetbrains.plugin.graphdb.platform.GraphLanguages;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.psi.PsiTraversalUtilities;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;

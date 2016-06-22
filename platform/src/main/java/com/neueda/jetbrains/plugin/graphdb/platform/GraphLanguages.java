@@ -1,4 +1,4 @@
-package com.neueda.jetbrains.plugin.graphdb.jetbrains.languages;
+package com.neueda.jetbrains.plugin.graphdb.platform;
 
 import java.util.ArrayList;
 import java.util.List;

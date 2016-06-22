@@ -5,7 +5,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.psi.PsiFile;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.languages.GraphLanguages;
+import com.neueda.jetbrains.plugin.graphdb.platform.GraphLanguages;
 
 import java.util.ArrayList;
 import java.util.Collections;

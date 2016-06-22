@@ -9,7 +9,7 @@ import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.Colors;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.languages.GraphLanguages;
+import com.neueda.jetbrains.plugin.graphdb.platform.GraphLanguages;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.psi.PsiTraversalUtilities;
 
 import java.awt.Font;
