@@ -57,6 +57,16 @@ public class Neo4jBoltRelationship implements GraphRelationship {
     }
 
     @Override
+    public String getTypesName() {
+        return "type";
+    }
+
+    @Override
+    public boolean isTypesSingle() {
+        return true;
+    }
+
+    @Override
     public GraphPropertyContainer getPropertyContainer() {
         return propertyContainer;
     }

@@ -14,7 +14,7 @@ public class ChooseDataSourceAction extends AnAction {
 
     public ChooseDataSourceAction(DataSource dataSource, DataSourcesComponent component,
                                   MessageBus messageBus, ExecuteQueryPayload executeQueryPayload) {
-        super(dataSource.getName(), null, component.getDataSourceIcon(dataSource));
+        super(dataSource.getName(), null, component.getDataSourceDescription(dataSource).getIcon());
         this.dataSource = dataSource;
         this.messageBus = messageBus;
         this.executeQueryPayload = executeQueryPayload;

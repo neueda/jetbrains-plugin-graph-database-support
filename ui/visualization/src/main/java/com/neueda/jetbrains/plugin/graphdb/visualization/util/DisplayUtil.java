@@ -61,7 +61,8 @@ public class DisplayUtil {
         Map<String, Object> properties = entity.getPropertyContainer().getProperties();
         String start = "<p width=\"" + LABEL_TEXT_WIDTH + "px\"><b>";
 
-        StringBuilder sb = new StringBuilder(start + "types</b>: " + entity.getTypes() + "</p>");
+        String typesRepresentation = entity.isTypesSingle() ? entity.getTypes().get(0) : entity.getTypes().toString();
+        StringBuilder sb = new StringBuilder(start + entity.getTypesName() + "</b>: " + typesRepresentation + "</p>");
 
         Stream<Map.Entry<String, Object>> strings = properties.entrySet().stream()
                 .filter(IS_STRING_VALUE)

@@ -1,0 +1,31 @@
+package com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource;
+
+import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
+
+import javax.swing.Icon;
+
+public interface DataSourceDescription {
+
+    DataSourceType getType();
+
+    String geTypeName();
+
+    Icon getIcon();
+
+    DataSourceDescription NEO4J_BOLT = new DataSourceDescription() {
+        @Override
+        public DataSourceType getType() {
+            return DataSourceType.NEO4J_BOLT;
+        }
+
+        @Override
+        public Icon getIcon() {
+            return GraphIcons.Database.NEO4J;
+        }
+
+        @Override
+        public String geTypeName() {
+            return "Neo4j - Bolt";
+        }
+    };
+}

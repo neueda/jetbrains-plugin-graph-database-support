@@ -1,6 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers;
 
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
+import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphEntity;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphPath;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
@@ -10,6 +11,9 @@ import java.util.Map;
 
 
 public class UiHelper {
+
+    public static final int INLINE_TEXT_LENGTH = 80;
+    public static final int INLINE_LIST_SIZE = 10;
 
     public static boolean canBeTree(Object object) {
         return object instanceof List
@@ -39,18 +43,16 @@ public class UiHelper {
     }
 
     public static PatchedDefaultMutableTreeNode nodeToTreeNode(String key, GraphNode node) {
-        PatchedDefaultMutableTreeNode root = new PatchedDefaultMutableTreeNode(new KeyValuePair(key, "node"));
-        root.add(objectToTreeNode("id", node.getId()));
-        root.add(listToTreeNode("types", node.getTypes()));
-        root.add(mapToTreeNode("properties", node.getPropertyContainer().getProperties()));
-        return root;
+        PatchedDefaultMutableTreeNode treeRoot = new PatchedDefaultMutableTreeNode(new KeyValuePair(key, "node"));
+        addGraphEntityData(treeRoot, node);
+        return treeRoot;
     }
 
     public static PatchedDefaultMutableTreeNode relationshipToTreeNode(String key, GraphRelationship relationship) {
         PatchedDefaultMutableTreeNode treeRoot = new PatchedDefaultMutableTreeNode(new KeyValuePair(key, "relationship"));
-        treeRoot.add(objectToTreeNode("id", relationship.getId()));
-        treeRoot.add(listToTreeNode("types", relationship.getTypes()));
-        treeRoot.add(mapToTreeNode("properties", relationship.getPropertyContainer().getProperties()));
+
+        addGraphEntityData(treeRoot, relationship);
+
         treeRoot.add(objectToTreeNode("startNodeId", relationship.getStartNodeId()));
         if (relationship.getStartNode() != null) {
             treeRoot.add(nodeToTreeNode("startNode", relationship.getStartNode()));
@@ -60,6 +62,16 @@ public class UiHelper {
             treeRoot.add(nodeToTreeNode("endNode", relationship.getEndNode()));
         }
         return treeRoot;
+    }
+
+    public static void addGraphEntityData(PatchedDefaultMutableTreeNode treeRoot, GraphEntity graphEntity) {
+        treeRoot.add(objectToTreeNode("id", graphEntity.getId()));
+        if (graphEntity.isTypesSingle()) {
+            treeRoot.add(objectToTreeNode(graphEntity.getTypesName(), graphEntity.getTypes().get(0)));
+        } else {
+            treeRoot.add(listToTreeNode(graphEntity.getTypesName(), graphEntity.getTypes()));
+        }
+        treeRoot.add(mapToTreeNode("properties", graphEntity.getPropertyContainer().getProperties()));
     }
 
     public static PatchedDefaultMutableTreeNode pathToTreeNode(String key, GraphPath path) {
@@ -74,7 +86,7 @@ public class UiHelper {
     private static PatchedDefaultMutableTreeNode objectToTreeNode(String key, Object value) {
         if (value instanceof String) {
             String string = (String) value;
-            if (string.length() <= 80) {
+            if (string.length() <= INLINE_TEXT_LENGTH) {
                 return new PatchedDefaultMutableTreeNode(new KeyValuePair(key, string, true));
             } else {
                 PatchedDefaultMutableTreeNode parent = new PatchedDefaultMutableTreeNode(new KeyValuePair(key, "text"));
@@ -86,12 +98,13 @@ public class UiHelper {
     }
 
     public static PatchedDefaultMutableTreeNode listToTreeNode(String key, List list) {
-        if (list.size() <= 10) {
+        /* DISABLE list inlining
+        if (list.size() <= INLINE_LIST_SIZE) {
             String stringRepresentation = list.toString();
-            if (stringRepresentation.length() <= 80) {
+            if (stringRepresentation.length() <= INLINE_TEXT_LENGTH) {
                 return new PatchedDefaultMutableTreeNode(new KeyValuePair(key, stringRepresentation, true));
             }
-        }
+        }*/
 
         PatchedDefaultMutableTreeNode node = new PatchedDefaultMutableTreeNode(new KeyValuePair(key, "list"));
         for (int i = 0; i < list.size(); i++) {

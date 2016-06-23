@@ -25,7 +25,7 @@ public class GraphColoredTreeCellRenderer extends ColoredTreeCellRenderer {
 
         if (userObject instanceof DataSource) {
             DataSource dataSource = (DataSource) userObject;
-            setIcon(component.getDataSourceIcon(dataSource));
+            setIcon(component.getDataSourceDescription(dataSource).getIcon());
             append(dataSource.getName(), SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES, true);
         } else if (userObject instanceof ValueWithIcon) {
             ValueWithIcon val = (ValueWithIcon) userObject;

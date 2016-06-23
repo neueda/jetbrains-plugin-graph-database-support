@@ -9,8 +9,8 @@ import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.Colors;
-import com.neueda.jetbrains.plugin.graphdb.platform.GraphLanguages;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.psi.PsiTraversalUtilities;
+import com.neueda.jetbrains.plugin.graphdb.platform.GraphLanguages;
 
 import java.awt.Font;
 
@@ -35,9 +35,15 @@ public class AbstractQueryHighlighterListener {
         if (element == null) {
             return;
         }
-        editor.getMarkupModel().addRangeHighlighter(element.getTextOffset(), element.getTextOffset() + element.getTextLength(),
-                HighlighterLayer.ELEMENT_UNDER_CARET,
-                new TextAttributes(null, null, Colors.DARK_GREEN, EffectType.BOXED, Font.PLAIN),
-                HighlighterTargetArea.EXACT_RANGE);
+        try {
+            editor.getMarkupModel().addRangeHighlighter(element.getTextOffset(), element.getTextOffset() + element.getTextLength(),
+                    HighlighterLayer.ELEMENT_UNDER_CARET,
+                    new TextAttributes(null, null, Colors.DARK_GREEN, EffectType.BOXED, Font.PLAIN),
+                    HighlighterTargetArea.EXACT_RANGE);
+        } catch (Exception e) {
+            // Ignore exceptions here.
+            // Sometimes when we are adding range document already changed it's state
+            // TODO: find out how exactly we should handle such cases
+        }
     }
 }

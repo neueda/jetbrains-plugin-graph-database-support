@@ -10,5 +10,9 @@ public interface GraphEntity {
 
     List<String> getTypes();
 
+    String getTypesName();
+
+    boolean isTypesSingle();
+
     String getRepresentation();
 }

@@ -26,13 +26,18 @@ import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelSer
 import com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil;
 import prefuse.visual.VisualItem;
 
-import javax.swing.*;
+import javax.swing.Box;
 import javax.swing.tree.DefaultTreeModel;
-import java.awt.*;
+import javax.swing.tree.TreePath;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.util.Enumeration;
 
 public class GraphPanel {
 
+    private static final int TYPES_DEPTH = 2;
     private static final int PROPERTY_DEPTH = 3;
 
     private PrefuseVisualization visualization;
@@ -107,14 +112,26 @@ public class GraphPanel {
     public void showNodeData(GraphNode node, VisualItem item, MouseEvent e) {
         PatchedDefaultMutableTreeNode root = UiHelper.nodeToTreeNode(node.getRepresentation(), node);
         entityDetailsTreeModel.setRoot(root);
-        entityDetailsTree.expandRow(PROPERTY_DEPTH);
+
+        Enumeration childs = root.children();
+        while(childs.hasMoreElements()) {
+            PatchedDefaultMutableTreeNode treeNode
+                    = (PatchedDefaultMutableTreeNode) childs.nextElement();
+            entityDetailsTree.expandPath(new TreePath(treeNode.getPath()));
+        }
     }
 
     public void showRelationshipData(GraphRelationship relationship, VisualItem item, MouseEvent e) {
         PatchedDefaultMutableTreeNode root = UiHelper.relationshipToTreeNode(
                 relationship.getRepresentation(), relationship);
         entityDetailsTreeModel.setRoot(root);
-        entityDetailsTree.expandRow(PROPERTY_DEPTH);
+
+        Enumeration childs = root.children();
+        while(childs.hasMoreElements()) {
+            PatchedDefaultMutableTreeNode treeNode
+                    = (PatchedDefaultMutableTreeNode) childs.nextElement();
+            entityDetailsTree.expandPath(new TreePath(treeNode.getPath()));
+        }
     }
 
     public void showTooltip(GraphEntity entity, VisualItem item, MouseEvent e) {

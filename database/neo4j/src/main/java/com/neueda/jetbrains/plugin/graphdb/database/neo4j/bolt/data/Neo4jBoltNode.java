@@ -31,6 +31,16 @@ public class Neo4jBoltNode implements GraphNode {
     }
 
     @Override
+    public String getTypesName() {
+        return "labels";
+    }
+
+    @Override
+    public boolean isTypesSingle() {
+        return false;
+    }
+
+    @Override
     public GraphPropertyContainer getPropertyContainer() {
         return propertyContainer;
     }
