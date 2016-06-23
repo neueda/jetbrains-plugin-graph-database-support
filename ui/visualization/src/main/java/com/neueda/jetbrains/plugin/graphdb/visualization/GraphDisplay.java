@@ -1,6 +1,5 @@
 package com.neueda.jetbrains.plugin.graphdb.visualization;
 
-import com.intellij.ui.border.CustomLineBorder;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.visualization.controls.CustomNeighborHighlightControl;
@@ -27,13 +26,19 @@ import prefuse.render.RendererFactory;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.*;
-import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.*;
-import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.RendererProvider.*;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.ID;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.TITLE;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.TYPE;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.EDGES;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.GRAPH;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.NODES;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.NODE_LABEL;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.RendererProvider.edgeRenderer;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.RendererProvider.labelRenderer;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.RendererProvider.nodeRenderer;
 import static prefuse.Constants.SHAPE_ELLIPSE;
 
 public class GraphDisplay extends Display {
@@ -53,7 +58,6 @@ public class GraphDisplay extends Display {
         super(new Visualization());
 
         setBackground(lookAndFeelService.getBackgroundColor());
-        setBorder(new CustomLineBorder(new Insets(0, 1, 0, 1)));
 
         graph = new Graph(DIRECTED);
         graph.addColumn(ID, String.class);

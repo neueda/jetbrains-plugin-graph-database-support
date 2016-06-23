@@ -1,8 +1,5 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.graph;
 
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.ui.popup.Balloon;
 import com.intellij.openapi.ui.popup.BalloonBuilder;
 import com.intellij.ui.ColorUtil;
@@ -16,7 +13,6 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphEntity;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.GraphConstants;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper;
@@ -26,7 +22,6 @@ import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelSer
 import com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil;
 import prefuse.visual.VisualItem;
 
-import javax.swing.Box;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.Color;
@@ -58,16 +53,6 @@ public class GraphPanel {
     public void initialize(ConsoleToolWindow consoleToolWindow, MessageBus messageBus) {
         this.lookAndFeelService = consoleToolWindow.getLookAndFeelService();
         this.entityDetailsTree = consoleToolWindow.getEntityDetailsTree();
-
-        // Actions
-        final ActionGroup consoleActionGroup = (ActionGroup)
-                ActionManager.getInstance().getAction(GraphConstants.Actions.CONSOLE_ACTIONS);
-
-        ActionToolbar consoleToolbar = ActionManager.getInstance()
-                .createActionToolbar(GraphConstants.ToolWindow.CONSOLE_TOOL_WINDOW, consoleActionGroup, false);
-        final Box toolBarBox = Box.createHorizontalBox();
-        toolBarBox.add(consoleToolbar.getComponent());
-        consoleToolWindow.getGraphToolbarPanel().add(toolBarBox);
 
         // Bootstrap visualisation
         visualization = new PrefuseVisualization(lookAndFeelService);
@@ -157,7 +142,7 @@ public class GraphPanel {
         balloon.show(new RelativePoint(panel, new Point(widthOffset, heightOffset)), Balloon.Position.below);
     }
 
-    public void resetPan(GraphNode n, VisualItem item, MouseEvent e) {
+    public void resetPan() {
         visualization.resetPan();
     }
 
