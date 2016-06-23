@@ -108,7 +108,9 @@
             <children>
               <component id="758aa" class="com.intellij.ui.table.JBTable" binding="tableExecuteResults">
                 <constraints/>
-                <properties/>
+                <properties>
+                  <fillsViewportHeight value="false"/>
+                </properties>
               </component>
             </children>
           </scrollpane>

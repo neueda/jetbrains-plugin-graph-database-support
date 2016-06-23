@@ -9,6 +9,9 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecu
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.editor.CompositeTableCellEditor;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.renderer.CompositeTableCellRenderer;
 
+import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +33,7 @@ public class TablePanel {
         table.setCellSelectionEnabled(false);
         table.setDefaultRenderer(Object.class, new CompositeTableCellRenderer());
         table.setDefaultEditor(Object.class, new CompositeTableCellEditor());
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         messageBus.connect().subscribe(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC, new QueryExecutionProcessEvent() {
             @Override
@@ -56,6 +60,7 @@ public class TablePanel {
 
             @Override
             public void postResultReceived() {
+                updateColumnWidths();
                 updateRowHeights();
             }
 
@@ -63,6 +68,32 @@ public class TablePanel {
             public void handleError(Exception exception) {
             }
         });
+    }
+
+    private void updateColumnWidths() {
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setMaxWidth(250);
+        }
+
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            TableColumn tableColumn = table.getColumnModel().getColumn(column);
+            int preferredWidth = tableColumn.getMinWidth();
+            int maxWidth = tableColumn.getMaxWidth();
+
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+                Component c = table.prepareRenderer(cellRenderer, row, column);
+                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
+
+                //  We've exceeded the maximum width, no need to check other rows
+                if (preferredWidth >= maxWidth) {
+                    preferredWidth = maxWidth;
+                    break;
+                }
+            }
+            tableColumn.setPreferredWidth(preferredWidth);
+        }
     }
 
     public void updateRowHeights() {
