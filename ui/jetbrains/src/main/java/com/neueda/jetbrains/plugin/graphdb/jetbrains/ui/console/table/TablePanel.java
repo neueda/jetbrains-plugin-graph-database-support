@@ -71,14 +71,10 @@ public class TablePanel {
     }
 
     private void updateColumnWidths() {
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            table.getColumnModel().getColumn(i).setMaxWidth(250);
-        }
-
         for (int column = 0; column < table.getColumnCount(); column++) {
             TableColumn tableColumn = table.getColumnModel().getColumn(column);
             int preferredWidth = tableColumn.getMinWidth();
-            int maxWidth = tableColumn.getMaxWidth();
+            int maxWidth = 300;
 
             for (int row = 0; row < table.getRowCount(); row++) {
                 TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
