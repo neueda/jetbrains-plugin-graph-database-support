@@ -4,9 +4,9 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.Neo4jBoltDatabase;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
 
-public class DatabaseManager {
+public class DatabaseManagerServiceImpl implements DatabaseManagerService {
 
-    public DatabaseManager() {
+    public DatabaseManagerServiceImpl() {
     }
 
     public GraphDatabaseApi getDatabaseFor(DataSource dataSource) {

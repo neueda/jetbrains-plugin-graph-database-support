@@ -58,7 +58,9 @@
                     icon="/graphdb/icons/window/graph_13x13.png"/>
         <applicationService serviceInterface="com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService"
                             serviceImplementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.services.IdeaLookAndFeelService"/>
-        <actionPromoter implementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryActionPromoter"></actionPromoter>
+        <applicationService serviceInterface="com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DatabaseManagerService"
+                            serviceImplementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DatabaseManagerServiceImpl"/>
+        <actionPromoter implementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryActionPromoter"/>
 
         <!-- Cypher -->
         <fileTypeFactory implementation="com.neueda.jetbrains.plugin.graphdb.language.cypher.file.CypherFileTypeFactory"/>

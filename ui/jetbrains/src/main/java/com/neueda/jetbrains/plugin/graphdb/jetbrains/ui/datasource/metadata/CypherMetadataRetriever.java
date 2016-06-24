@@ -1,6 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata;
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
@@ -8,7 +9,7 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultCo
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultRow;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DatabaseManager;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DatabaseManagerService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ValueWithIcon;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.CypherMetadataProviderService;
@@ -20,12 +21,12 @@ import java.util.stream.Collectors;
 
 public class CypherMetadataRetriever {
 
-    private final DatabaseManager databaseManager;
+    private final DatabaseManagerService databaseManager;
     private final CypherMetadataProviderService cypherMetadataProviderService;
 
     public CypherMetadataRetriever(CypherMetadataProviderService cypherMetadataProviderService) {
         this.cypherMetadataProviderService = cypherMetadataProviderService;
-        this.databaseManager = new DatabaseManager();
+        this.databaseManager = ServiceManager.getService(DatabaseManagerService.class);
     }
 
     public boolean refresh(PatchedDefaultMutableTreeNode node, DataSource nodeDataSource) {

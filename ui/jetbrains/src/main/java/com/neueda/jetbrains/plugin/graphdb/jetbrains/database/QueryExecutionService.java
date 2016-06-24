@@ -1,6 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.database;
 
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
@@ -13,13 +14,13 @@ import java.util.concurrent.Future;
 
 public class QueryExecutionService {
 
-    private final DatabaseManager databaseManager;
+    private final DatabaseManagerService databaseManager;
     private final MessageBus messageBus;
     private Future<?> runningQuery;
 
     public QueryExecutionService(MessageBus messageBus) {
         this.messageBus = messageBus;
-        this.databaseManager = new DatabaseManager();
+        this.databaseManager = ServiceManager.getService(DatabaseManagerService.class);
     }
 
     public void executeQuery(DataSource dataSource, ExecuteQueryPayload payload) {
@@ -50,7 +51,7 @@ public class QueryExecutionService {
 
         runningQuery = ApplicationManager.getApplication().executeOnPooledThread(() -> {
             try {
-                GraphDatabaseApi database =  databaseManager.getDatabaseFor(dataSource);
+                GraphDatabaseApi database = databaseManager.getDatabaseFor(dataSource);
                 GraphQueryResult result = database.execute(payload.getContent());
 
                 ApplicationManager.getApplication().invokeLater(() -> {

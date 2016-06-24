@@ -85,9 +85,6 @@ public class Neo4jBoltQueryResult implements GraphQueryResult {
             }
         }
 
-        if (summary.hasPlan()) {
-        }
-
         if (summary.hasProfile()) {
             sb.append("Profile:\n");
             profileToString(sb, summary.profile(), 1);
@@ -107,23 +104,21 @@ public class Neo4jBoltQueryResult implements GraphQueryResult {
     }
 
     private void planToString(StringBuilder sb, Plan plan, int depth) {
-        String line = Strings.repeat("-", depth);
-
         for (Plan childPlan : plan.children()) {
             planToString(sb, childPlan, depth + 1);
         }
 
+        String line = Strings.repeat("-", depth);
         sb.append(line)
                 .append(format("> %s {identifiers: %s; arguments: %s}\n", plan.operatorType(), plan.identifiers(), plan.arguments()));
     }
 
     private void profileToString(StringBuilder sb, ProfiledPlan profile, int depth) {
-        String line = Strings.repeat("-", depth);
-
         for (ProfiledPlan childProfile : profile.children()) {
             profileToString(sb, childProfile, depth + 1);
         }
 
+        String line = Strings.repeat("-", depth);
         sb.append(line)
                 .append(format("> %s[records: %s; dbHits: %s] {identifiers: %s; arguments: %s}\n",
                         profile.operatorType(), profile.records(), profile.dbHits(), profile.identifiers(), profile.arguments()));
