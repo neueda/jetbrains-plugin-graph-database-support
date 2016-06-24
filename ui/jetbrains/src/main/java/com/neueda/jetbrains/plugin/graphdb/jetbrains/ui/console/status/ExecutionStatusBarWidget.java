@@ -5,6 +5,7 @@ import com.intellij.openapi.wm.StatusBar;
 import com.intellij.util.messages.MessageBus;
 import com.intellij.util.ui.AsyncProcessIcon;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +29,7 @@ public class ExecutionStatusBarWidget extends JPanel implements CustomStatusBarW
 
         messageBus.connect().subscribe(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC, new QueryExecutionProcessEvent() {
             @Override
-            public void preResultReceived() {
+            public void executionStarted(ExecuteQueryPayload payload) {
                 setVisible(true);
             }
 
@@ -44,6 +45,10 @@ public class ExecutionStatusBarWidget extends JPanel implements CustomStatusBarW
             @Override
             public void handleError(Exception exception) {
                 setVisible(false);
+            }
+
+            @Override
+            public void executionCompleted() {
             }
         });
     }

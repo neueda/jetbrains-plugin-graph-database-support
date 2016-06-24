@@ -1,5 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.query;
 
+import com.google.common.base.Strings;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
@@ -7,15 +8,24 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultCo
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultRow;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.Neo4jBoltBuffer;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltRelationship;
+import org.neo4j.driver.v1.summary.Notification;
+import org.neo4j.driver.v1.summary.Plan;
+import org.neo4j.driver.v1.summary.ProfiledPlan;
+import org.neo4j.driver.v1.summary.ResultSummary;
+import org.neo4j.driver.v1.summary.SummaryCounters;
 
 import java.util.List;
 import java.util.Optional;
 
+import static java.lang.String.format;
+
 public class Neo4jBoltQueryResult implements GraphQueryResult {
 
+    private final long executionTimeMs;
     private final Neo4jBoltBuffer buffer;
 
-    public Neo4jBoltQueryResult(Neo4jBoltBuffer buffer) {
+    public Neo4jBoltQueryResult(long executionTimeMs, Neo4jBoltBuffer buffer) {
+        this.executionTimeMs = executionTimeMs;
         this.buffer = buffer;
 
         List<GraphNode> nodes = buffer.getNodes();
@@ -25,6 +35,98 @@ public class Neo4jBoltQueryResult implements GraphQueryResult {
             boltRel.setStartNode(findNodeById(nodes, boltRel.getStartNodeId()).orElse(null));
             boltRel.setEndNode(findNodeById(nodes, boltRel.getEndNodeId()).orElse(null));
         });
+    }
+
+    @Override
+    public long getExecutionTimeMs() {
+        return executionTimeMs;
+    }
+
+    @Override
+    public String getResultSummary() {
+        ResultSummary summary = buffer.getResultSummary();
+        SummaryCounters counters = summary.counters();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(format("Query type: %s.\n", summary.statementType()));
+        if (counters.containsUpdates()) {
+            if (counters.nodesCreated() > 0) {
+                sb.append(format("Node created: %s\n", counters.nodesCreated()));
+            }
+            if (counters.nodesDeleted() > 0) {
+                sb.append(format("Node deleted: %s\n", counters.nodesDeleted()));
+            }
+            if (counters.labelsAdded() > 0) {
+                sb.append(format("Labels added: %s\n", counters.labelsAdded()));
+            }
+            if (counters.labelsRemoved() > 0) {
+                sb.append(format("Labels removed: %s\n", counters.labelsRemoved()));
+            }
+            if (counters.relationshipsCreated() > 0) {
+                sb.append(format("Relationships created: %s\n", counters.relationshipsCreated()));
+            }
+            if (counters.relationshipsDeleted() > 0) {
+                sb.append(format("Relationships deleted: %s\n", counters.relationshipsDeleted()));
+            }
+            if (counters.propertiesSet() > 0) {
+                sb.append(format("Properties set: %s\n", counters.propertiesSet()));
+            }
+            if (counters.indexesAdded() > 0) {
+                sb.append(format("Indexes added: %s\n", counters.indexesAdded()));
+            }
+            if (counters.indexesRemoved() > 0) {
+                sb.append(format("Indexes removed: %s\n", counters.indexesRemoved()));
+            }
+            if (counters.constraintsAdded() > 0) {
+                sb.append(format("Constrains added: %s\n", counters.constraintsAdded()));
+            }
+            if (counters.constraintsRemoved() > 0) {
+                sb.append(format("Constrains removed: %s\n", counters.constraintsRemoved()));
+            }
+        }
+
+        if (summary.hasPlan()) {
+        }
+
+        if (summary.hasProfile()) {
+            sb.append("Profile:\n");
+            profileToString(sb, summary.profile(), 1);
+        } else if (summary.hasPlan()) {
+            sb.append("Plan:\n");
+            planToString(sb, summary.plan(), 1);
+        }
+
+        if (summary.notifications().size() > 0) {
+            sb.append("Notifications:\n");
+            for (Notification notification : summary.notifications()) {
+                sb.append(format("[%s] %s(%s) - %s", notification.severity(),
+                        notification.title(), notification.code(), notification.description()));
+            }
+        }
+        return sb.toString();
+    }
+
+    private void planToString(StringBuilder sb, Plan plan, int depth) {
+        String line = Strings.repeat("-", depth);
+
+        for (Plan childPlan : plan.children()) {
+            planToString(sb, childPlan, depth + 1);
+        }
+
+        sb.append(line)
+                .append(format("> %s {identifiers: %s; arguments: %s}\n", plan.operatorType(), plan.identifiers(), plan.arguments()));
+    }
+
+    private void profileToString(StringBuilder sb, ProfiledPlan profile, int depth) {
+        String line = Strings.repeat("-", depth);
+
+        for (ProfiledPlan childProfile : profile.children()) {
+            profileToString(sb, childProfile, depth + 1);
+        }
+
+        sb.append(line)
+                .append(format("> %s[records: %s; dbHits: %s] {identifiers: %s; arguments: %s}\n",
+                        profile.operatorType(), profile.records(), profile.dbHits(), profile.identifiers(), profile.arguments()));
     }
 
     @Override

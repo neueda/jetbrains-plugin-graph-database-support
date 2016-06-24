@@ -1,5 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.graph;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.Balloon;
 import com.intellij.openapi.ui.popup.BalloonBuilder;
 import com.intellij.ui.ColorUtil;
@@ -13,6 +14,7 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphEntity;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper;
@@ -50,7 +52,8 @@ public class GraphPanel {
         entityDetailsTreeModel = new DefaultTreeModel(noEntityRoot);
     }
 
-    public void initialize(ConsoleToolWindow consoleToolWindow, MessageBus messageBus) {
+    public void initialize(ConsoleToolWindow consoleToolWindow, Project project) {
+        MessageBus messageBus = project.getMessageBus();
         this.lookAndFeelService = consoleToolWindow.getLookAndFeelService();
         this.entityDetailsTree = consoleToolWindow.getEntityDetailsTree();
 
@@ -63,7 +66,7 @@ public class GraphPanel {
         entityDetailsTree.setModel(entityDetailsTreeModel);
         messageBus.connect().subscribe(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC, new QueryExecutionProcessEvent() {
             @Override
-            public void preResultReceived() {
+            public void executionStarted(ExecuteQueryPayload payload) {
                 entityDetailsTreeModel.setRoot(noEntityRoot);
             }
 
@@ -77,6 +80,10 @@ public class GraphPanel {
 
             @Override
             public void handleError(Exception exception) {
+            }
+
+            @Override
+            public void executionCompleted() {
             }
         });
 

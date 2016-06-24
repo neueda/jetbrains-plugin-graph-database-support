@@ -3,11 +3,11 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.graph;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryEvent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.ui.console.CleanCanvasEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.QueryExecutionService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;
 import com.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 
@@ -41,7 +41,7 @@ public class GraphPanelInteractions {
         messageBus.connect()
                 .subscribe(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC, new QueryExecutionProcessEvent() {
                     @Override
-                    public void preResultReceived() {
+                    public void executionStarted(ExecuteQueryPayload payload) {
                         visualization.stop();
                         visualization.clear();
                     }
@@ -55,14 +55,16 @@ public class GraphPanelInteractions {
                     @Override
                     public void postResultReceived() {
                         visualization.paint();
-                        Notifier.info("Query execution", "Query executed successfully!");
                     }
 
                     @Override
                     public void handleError(Exception exception) {
                         visualization.stop();
                         visualization.clear();
-                        Notifier.error("Query execution", "Error during query execution: " + exception.toString());
+                    }
+
+                    @Override
+                    public void executionCompleted() {
                     }
                 });
     }

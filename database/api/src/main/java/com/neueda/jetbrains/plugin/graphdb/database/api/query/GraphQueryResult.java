@@ -7,6 +7,10 @@ import java.util.List;
 
 public interface GraphQueryResult {
 
+    long getExecutionTimeMs();
+
+    String getResultSummary();
+
     List<GraphQueryResultColumn> getColumns();
 
     List<GraphQueryResultRow> getRows();

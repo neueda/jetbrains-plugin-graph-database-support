@@ -23,9 +23,9 @@ import com.intellij.ui.table.JBTable;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.ui.tabs.impl.JBTabsImpl;
 import com.intellij.ui.treeStructure.Tree;
-import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.GraphConstants;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.graph.GraphPanel;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.log.LogPanel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.status.ExecutionStatusBarWidget;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.TablePanel;
 import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
@@ -62,10 +62,12 @@ public class ConsoleToolWindow implements ToolWindowFactory, Disposable {
 
     private TablePanel tablePanel;
     private GraphPanel graphPanel;
+    private LogPanel logPanel;
 
     public ConsoleToolWindow() {
         tablePanel = new TablePanel();
         graphPanel = new GraphPanel();
+        logPanel = new LogPanel();
         lookAndFeelService = ServiceManager.getService(LookAndFeelService.class);
     }
 
@@ -78,7 +80,7 @@ public class ConsoleToolWindow implements ToolWindowFactory, Disposable {
 
         updateLookAndFeel();
         initializeWidgets(project);
-        initializeUiComponents(project.getMessageBus());
+        initializeUiComponents(project);
 
         // Hide standard tabs
         defaultTabContainer.setVisible(false);
@@ -116,11 +118,14 @@ public class ConsoleToolWindow implements ToolWindowFactory, Disposable {
     private void updateLookAndFeel() {
         tableScrollPane.setBorder(IdeBorderFactory.createEmptyBorder());
         entityDetailsScrollPane.setBorder(IdeBorderFactory.createEmptyBorder());
+        logTab.setBorder(IdeBorderFactory.createEmptyBorder());
+        graphTab.setBorder(IdeBorderFactory.createEmptyBorder());
     }
 
-    private void initializeUiComponents(MessageBus messageBus) {
-        graphPanel.initialize(this, messageBus);
-        tablePanel.initialize(this, messageBus);
+    private void initializeUiComponents(Project project) {
+        graphPanel.initialize(this, project);
+        tablePanel.initialize(this, project);
+        logPanel.initialize(this, project);
     }
 
     private void initializeWidgets(Project project) {
@@ -151,6 +156,10 @@ public class ConsoleToolWindow implements ToolWindowFactory, Disposable {
 
     public JBTable getTableExecuteResults() {
         return tableExecuteResults;
+    }
+
+    public JPanel getLogTab() {
+        return logTab;
     }
 
     @Override

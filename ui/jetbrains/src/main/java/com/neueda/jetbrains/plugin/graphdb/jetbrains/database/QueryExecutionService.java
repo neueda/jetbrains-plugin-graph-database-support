@@ -46,7 +46,7 @@ public class QueryExecutionService {
 
     private synchronized void executeInBackground(DataSource dataSource, ExecuteQueryPayload payload) {
         QueryExecutionProcessEvent event = messageBus.syncPublisher(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC);
-        event.preResultReceived();
+        event.executionStarted(payload);
 
         runningQuery = ApplicationManager.getApplication().executeOnPooledThread(() -> {
             try {
@@ -56,10 +56,12 @@ public class QueryExecutionService {
                 ApplicationManager.getApplication().invokeLater(() -> {
                     event.resultReceived(result);
                     event.postResultReceived();
+                    event.executionCompleted();
                 });
             } catch (Exception e) {
                 ApplicationManager.getApplication().invokeLater(() -> {
                     event.handleError(e);
+                    event.executionCompleted();
                 });
             }
         });

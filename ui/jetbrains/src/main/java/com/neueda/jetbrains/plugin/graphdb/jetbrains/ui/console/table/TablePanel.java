@@ -1,9 +1,11 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultColumn;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.editor.CompositeTableCellEditor;
@@ -26,7 +28,8 @@ public class TablePanel {
         valueConverter = new ValueConverter(this);
     }
 
-    public void initialize(ConsoleToolWindow consoleToolWindow, MessageBus messageBus) {
+    public void initialize(ConsoleToolWindow consoleToolWindow, Project project) {
+        MessageBus messageBus = project.getMessageBus();
         tableModel = new QueryResultTableModel();
         table = consoleToolWindow.getTableExecuteResults();
         table.setModel(tableModel);
@@ -37,7 +40,7 @@ public class TablePanel {
 
         messageBus.connect().subscribe(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC, new QueryExecutionProcessEvent() {
             @Override
-            public void preResultReceived() {
+            public void executionStarted(ExecuteQueryPayload payload) {
                 tableModel.setColumnCount(0);
                 tableModel.setRowCount(0);
             }
@@ -66,6 +69,10 @@ public class TablePanel {
 
             @Override
             public void handleError(Exception exception) {
+            }
+
+            @Override
+            public void executionCompleted() {
             }
         });
     }

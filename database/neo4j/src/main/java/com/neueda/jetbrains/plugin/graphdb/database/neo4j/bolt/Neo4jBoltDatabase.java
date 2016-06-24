@@ -45,6 +45,7 @@ public class Neo4jBoltDatabase implements GraphDatabaseApi {
 
             Neo4jBoltBuffer buffer = new Neo4jBoltBuffer();
 
+            long startTime = System.currentTimeMillis();
             StatementResult statementResult = session.run(query);
             buffer.addColumns(statementResult.keys());
 
@@ -53,8 +54,9 @@ public class Neo4jBoltDatabase implements GraphDatabaseApi {
                 buffer.addRow(record.asMap());
             }
             buffer.addResultSummary(statementResult.consume());
+            long endTime = System.currentTimeMillis();
 
-            return new Neo4jBoltQueryResult(buffer);
+            return new Neo4jBoltQueryResult(endTime - startTime, buffer);
         }
     }
 }
