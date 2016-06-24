@@ -3,6 +3,7 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
+import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultColumn;
@@ -11,7 +12,6 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSo
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DatabaseManagerService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ValueWithIcon;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.CypherMetadataProviderService;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.CypherMetadataType;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
@@ -22,21 +22,28 @@ import java.util.stream.Collectors;
 public class CypherMetadataRetriever {
 
     private final DatabaseManagerService databaseManager;
+    private final MessageBus messageBus;
     private final CypherMetadataProviderService cypherMetadataProviderService;
 
-    public CypherMetadataRetriever(CypherMetadataProviderService cypherMetadataProviderService) {
+    public CypherMetadataRetriever(MessageBus messageBus, CypherMetadataProviderService cypherMetadataProviderService) {
+        this.messageBus = messageBus;
         this.cypherMetadataProviderService = cypherMetadataProviderService;
         this.databaseManager = ServiceManager.getService(DatabaseManagerService.class);
     }
 
     public boolean refresh(PatchedDefaultMutableTreeNode node, DataSource nodeDataSource) {
+        MetadataRetrieveEvent metadataRetrieveEvent = messageBus.syncPublisher(MetadataRetrieveEvent.METADATA_RETRIEVE_EVENT);
+
+        metadataRetrieveEvent.startMetadataRefresh(nodeDataSource);
         if (nodeDataSource.getDataSourceType().equals(DataSourceType.NEO4J_BOLT)) {
-            return refreshNeo4jBoltCypherMetadata(node, nodeDataSource);
+            return refreshNeo4jBoltCypherMetadata(metadataRetrieveEvent, node, nodeDataSource);
+        } else {
+            metadataRetrieveEvent.metadataRefreshFailed(nodeDataSource, new RuntimeException("Metadata are not supported"));
+            return false;
         }
-        return false;
     }
 
-    public boolean refreshNeo4jBoltCypherMetadata(PatchedDefaultMutableTreeNode node, DataSource nodeDataSource) {
+    private boolean refreshNeo4jBoltCypherMetadata(MetadataRetrieveEvent metadataRetrieveEvent, PatchedDefaultMutableTreeNode node, DataSource nodeDataSource) {
         try {
             GraphDatabaseApi db = databaseManager.getDatabaseFor(nodeDataSource);
 
@@ -98,11 +105,10 @@ public class CypherMetadataRetriever {
                             .withTypeText("procedure"))
                             .collect(Collectors.toList()));
 
+            metadataRetrieveEvent.metadataRefreshSucceed(nodeDataSource);
             return true;
         } catch (Exception e) {
-            Notifier.error(
-                    String.format("Datasource[%s] metadata", nodeDataSource.getName()),
-                    String.format("Cannot refresh metadata. Reason: %s", e.getMessage()));
+            metadataRetrieveEvent.metadataRefreshFailed(nodeDataSource, e);
             return false;
         }
     }

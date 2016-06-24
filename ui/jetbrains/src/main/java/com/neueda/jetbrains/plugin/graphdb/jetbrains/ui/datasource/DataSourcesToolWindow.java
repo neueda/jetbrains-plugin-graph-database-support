@@ -49,7 +49,7 @@ public class DataSourcesToolWindow implements ToolWindowFactory {
 
         component = project.getComponent(DataSourcesComponent.class);
         cypherMetadataProviderService = ServiceManager.getService(project, CypherMetadataProviderService.class);
-        cypherMetadataRetriever = new CypherMetadataRetriever(cypherMetadataProviderService);
+        cypherMetadataRetriever = new CypherMetadataRetriever(project.getMessageBus(), cypherMetadataProviderService);
         treeRoot = new PatchedDefaultMutableTreeNode("treeRoot");
         treeModel = new DefaultTreeModel(treeRoot, false);
         decorator = ToolbarDecorator.createDecorator(dataSourceTree);

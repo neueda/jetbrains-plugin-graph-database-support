@@ -7,9 +7,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.MetadataRetrieveEvent;
 
 import java.awt.BorderLayout;
 
@@ -45,15 +46,34 @@ public class LogPanel {
 
             @Override
             public void handleError(Exception exception) {
-                String message = String.format("Error occurred: %s", exception.getMessage());
-                error(message);
-                newLine();
-
-                Notifier.error("Query execution", message);
+                error("Error occurred: ");
+                printException(exception);
             }
 
             @Override
             public void executionCompleted() {
+                newLine();
+            }
+        });
+
+        messageBus.connect().subscribe(MetadataRetrieveEvent.METADATA_RETRIEVE_EVENT, new MetadataRetrieveEvent() {
+            @Override
+            public void startMetadataRefresh(DataSource nodeDataSource) {
+                info(String.format("DataSource[%s] - refreshing metadata...", nodeDataSource.getName()));
+                newLine();
+            }
+
+            @Override
+            public void metadataRefreshSucceed(DataSource nodeDataSource) {
+                info(String.format("DataSource[%s] - metadata refreshed successfully!", nodeDataSource.getName()));
+                newLine();
+                newLine();
+            }
+
+            @Override
+            public void metadataRefreshFailed(DataSource nodeDataSource, Exception exception) {
+                error(String.format("DataSource[%s] - metadata refresh failed. Reason: ", nodeDataSource.getName()));
+                printException(exception);
                 newLine();
             }
         });
@@ -69,6 +89,18 @@ public class LogPanel {
 
     public void error(String message) {
         log.print(message, ConsoleViewContentType.ERROR_OUTPUT);
+    }
+
+    public void printException(Exception exception) {
+        error(exception.getMessage());
+        newLine();
+
+        Throwable cause = exception.getCause();
+        while(cause != null) {
+            error(cause.getMessage());
+            newLine();
+            cause = cause.getCause();
+        }
     }
 
     public void newLine() {
