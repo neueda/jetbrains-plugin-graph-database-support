@@ -31,6 +31,11 @@ public class DataSourcesComponent implements ProjectComponent, PersistentStateCo
         state.dataSources.add(dataSource);
     }
 
+    public void updateDataSource(DataSource oldDataSource, DataSource newDataSource) {
+        int index = state.dataSources.indexOf(oldDataSource);
+        state.dataSources.set(index, newDataSource);
+    }
+
     public void removeDataSources(List<DataSource> dataSourcesForRemoval) {
         state.dataSources.removeAll(dataSourcesForRemoval);
     }

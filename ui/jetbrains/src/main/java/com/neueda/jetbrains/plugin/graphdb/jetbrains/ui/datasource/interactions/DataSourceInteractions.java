@@ -4,11 +4,13 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.ui.ToolbarDecorator;
+import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.intellij.ui.treeStructure.Tree;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesToolWindow;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.neo4j.bolt.Neo4jBoltDataSourceDialog;
 
-import javax.swing.JComponent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.Arrays;
 import java.util.List;
@@ -19,13 +21,17 @@ public class DataSourceInteractions {
     private final DataSourcesToolWindow window;
     private final ToolbarDecorator decorator;
     private final Project project;
+    private final Tree dataSourceTree;
 
     public DataSourceInteractions(Project project, DataSourcesToolWindow window) {
         this.project = project;
         this.window = window;
         this.decorator = window.getDecorator();
+        this.dataSourceTree = window.getDataSourceTree();
 
         initAddAction();
+        initRemoveAction();
+        initEditAction();
     }
 
     private void initAddAction() {
@@ -39,18 +45,55 @@ public class DataSourceInteractions {
             );
             popup.show(anActionButton.getPreferredPopupPoint());
         });
+    }
+
+    private void initRemoveAction() {
         decorator.setRemoveAction(anActionButton -> {
-            JComponent contextComponent = anActionButton.getContextComponent();
-            if (contextComponent instanceof Tree) {
-                Tree tree = (Tree) contextComponent;
-                DefaultMutableTreeNode[] selectedNodes = tree.getSelectedNodes(DefaultMutableTreeNode.class,
-                        (node) -> node.getUserObject() instanceof DataSource);
+            DefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(DefaultMutableTreeNode.class,
+                    (node) -> node.getUserObject() instanceof DataSource);
 
-                List<DataSource> dataSourcesForRemoval = Arrays.stream(selectedNodes)
-                        .map((node) -> (DataSource) node.getUserObject())
-                        .collect(Collectors.toList());
+            List<DataSource> dataSourcesForRemoval = Arrays.stream(selectedNodes)
+                    .map((node) -> (DataSource) node.getUserObject())
+                    .collect(Collectors.toList());
 
+            if (dataSourcesForRemoval.size() > 0) {
                 window.removeDataSources(dataSourcesForRemoval);
+            }
+        });
+        decorator.setRemoveActionUpdater(e -> {
+            DefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(DefaultMutableTreeNode.class,
+                    (node) -> node.getUserObject() instanceof DataSource);
+
+            return selectedNodes.length > 0;
+        });
+    }
+
+    private void initEditAction() {
+        decorator.setEditActionUpdater(e -> {
+            DefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(DefaultMutableTreeNode.class,
+                    (node) -> node.getUserObject() instanceof DataSource);
+
+            return selectedNodes.length == 1;
+        });
+        decorator.setEditAction(anActionButton -> {
+            PatchedDefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(PatchedDefaultMutableTreeNode.class,
+                    (node) -> node.getUserObject() instanceof DataSource);
+
+            if (selectedNodes.length == 1) {
+                PatchedDefaultMutableTreeNode treeNode = selectedNodes[0];
+
+                DataSource dataSourceToEdit = (DataSource) treeNode.getUserObject();
+
+                DataSourceDialog dialog = null;
+                if (dataSourceToEdit.getDataSourceType().equals(DataSourceType.NEO4J_BOLT)) {
+                    dialog = new Neo4jBoltDataSourceDialog(project, window, dataSourceToEdit);
+                }
+
+                if (dialog != null) {
+                    if (dialog.go()) {
+                        window.updateDataSource(treeNode, dataSourceToEdit, dialog.constructDataSource());
+                    }
+                }
             }
         });
     }

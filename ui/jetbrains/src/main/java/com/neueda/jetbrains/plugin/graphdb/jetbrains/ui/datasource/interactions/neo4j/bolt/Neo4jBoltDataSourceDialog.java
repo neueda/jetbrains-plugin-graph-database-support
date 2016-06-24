@@ -38,6 +38,7 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
 
     private final DataSourcesComponent dataSourcesComponent;
     private final DatabaseManagerService databaseManager;
+    private DataSource dataSourceToEdit;
 
     private Data data;
 
@@ -48,6 +49,11 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
     private JBPasswordField passwordField;
     private JBTextField portField;
     private JButton testConnectionButton;
+
+    public Neo4jBoltDataSourceDialog(Project project, DataSourcesToolWindow window, DataSource dataSourceToEdit) {
+        this(project, window);
+        this.dataSourceToEdit = dataSourceToEdit;
+    }
 
     public Neo4jBoltDataSourceDialog(@Nullable Project project, DataSourcesToolWindow window) {
         super(project);
@@ -120,7 +126,11 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
         extractData();
 
         if (dataSourcesComponent.isDataSourceExists(data.dataSourceName)) {
-            return validation(String.format("Data source [%s] already exists", data.dataSourceName), dataSourceNameField);
+            if (dataSourceToEdit != null && dataSourceToEdit.getName().equals(data.dataSourceName)) {
+                // this is normal case. We are just editing existing data source and not changing name
+            } else {
+                return validation(String.format("Data source [%s] already exists", data.dataSourceName), dataSourceNameField);
+            }
         }
 
         return null;
@@ -129,6 +139,19 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
     @Nullable
     @Override
     protected JComponent createCenterPanel() {
+        if (dataSourceToEdit != null) {
+            Map<String, String> conf = dataSourceToEdit.getConfiguration();
+            String host = conf.get(Neo4jBoltConfiguration.HOST);
+            String port = conf.get(Neo4jBoltConfiguration.PORT);
+            String user = conf.get(Neo4jBoltConfiguration.USER);
+            String password = conf.get(Neo4jBoltConfiguration.PASSWORD);
+
+            dataSourceNameField.setText(dataSourceToEdit.getName());
+            hostField.setText(host);
+            portField.setText(port);
+            userField.setText(user);
+            passwordField.setText(password);
+        }
         return content;
     }
 

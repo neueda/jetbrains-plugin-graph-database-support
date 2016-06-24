@@ -61,14 +61,16 @@ public class DataSourcesToolWindow implements ToolWindowFactory {
         interactions = new DataSourceInteractions(project, this);
 
         replaceTreeWithDecorated();
-
         showDataSources();
-
         refreshDataSourcesMetadata();
     }
 
     public DataSourcesComponent getComponent() {
         return component;
+    }
+
+    public Tree getDataSourceTree() {
+        return dataSourceTree;
     }
 
     public PatchedDefaultMutableTreeNode getTreeRoot() {
@@ -114,10 +116,7 @@ public class DataSourcesToolWindow implements ToolWindowFactory {
         Enumeration children = treeRoot.children();
         boolean isRefreshed = false;
         while (children.hasMoreElements()) {
-            PatchedDefaultMutableTreeNode node = (PatchedDefaultMutableTreeNode) children.nextElement();
-            DataSource nodeDataSource = (DataSource) node.getUserObject();
-
-            if (cypherMetadataRetriever.refresh(node, nodeDataSource)) {
+            if (refreshDataSourceMetadata((PatchedDefaultMutableTreeNode) children.nextElement())) {
                 isRefreshed = true;
             }
         }
@@ -127,9 +126,23 @@ public class DataSourcesToolWindow implements ToolWindowFactory {
         }
     }
 
+    public boolean refreshDataSourceMetadata(PatchedDefaultMutableTreeNode treeNode) {
+        DataSource nodeDataSource = (DataSource) treeNode.getUserObject();
+        return cypherMetadataRetriever.refresh(treeNode, nodeDataSource);
+    }
+
     public void createDataSource(DataSource dataSource) {
         component.addDataSource(dataSource);
-        treeRoot.add(new PatchedDefaultMutableTreeNode(dataSource));
+        PatchedDefaultMutableTreeNode treeNode = new PatchedDefaultMutableTreeNode(dataSource);
+        treeRoot.add(treeNode);
+        refreshDataSourceMetadata(treeNode);
+        treeModel.reload();
+    }
+
+    public void updateDataSource(PatchedDefaultMutableTreeNode treeNode, DataSource oldDataSource, DataSource newDataSource) {
+        component.updateDataSource(oldDataSource, newDataSource);
+        treeNode.setUserObject(newDataSource);
+        refreshDataSourceMetadata(treeNode);
         treeModel.reload();
     }
 
