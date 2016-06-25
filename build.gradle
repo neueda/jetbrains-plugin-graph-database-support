@@ -1,7 +1,7 @@
 plugins {
     id 'idea'
     id 'java'
-    id "org.jetbrains.intellij" version "0.1.6"
+    id "org.jetbrains.intellij" version "0.1.9"
     id 'net.researchgate.release' version '2.4.0'
 }
 
@@ -45,4 +45,4 @@ release {
     }
 }
 
-//afterReleaseBuild.dependsOn deployPlugin
+//afterReleaseBuild.dependsOn publishPlugin

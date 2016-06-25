@@ -6,15 +6,52 @@
     <vendor email="dmitry.vrublevsky@neueda.com" url="https://neueda.lv">Neueda R&amp;D</vendor>
 
     <description><![CDATA[
-        Graph Database support.<br>
-        Features: <br>
-        - Cypher query language<br>
+        <p>
+            Integration with Graph Databases.
+        </p>
+
+        <p>
+            <b>Features:</b>
+            <ul>
+                <li>Manage data sources.</li>
+                <li>Write and execute queries.</li>
+                <li>Explore query results in graph or table view.</li>
+            </ul>
+        </p>
+
+        <p>
+            <b>Supported databases:</b>
+            <ul>
+                <li>Neo4j 3.0+ (Bolt)</li>
+            </ul>
+        </p>
+
+        <p>
+            <b>Supported query languages:</b>
+            <ul>
+                <li>Cypher</li>
+                <ul>
+                    <li>Understands queries in `.cyp`, `.cypher` or `.cql` files.</li>
+                    <li>Syntax highlight and error reporting.</li>
+                    <li>Refactoring support for identifiers, labels, relationship types and properties.</li>
+                    <li>
+                        Autocompletion support for identifiers, labels, relationship types, properties and stored procedures.
+                        Information gathered from existing queries and configured data sources.
+                    </li>
+                    <li>Auto-inject Cypher language for:
+                        <a href="https://github.com/neo4j/neo4j">neo4j</a>,
+                        <a href="https://github.com/neo4j/neo4j-ogm">neo4j-ogm</a>,
+                        <a href="https://github.com/spring-projects/spring-data-neo4j">spring-data-neo4j</a>,
+                        <a href="https://github.com/neo4j/neo4j/tree/3.1/community/neo4j-harness">neo4j-harness</a>,
+                        <a href="https://github.com/nigelsmall/py2neo">py2neo</a>.
+                    </li>
+                </ul>
+            </ul>
+        </p>
         ]]></description>
 
     <change-notes><![CDATA[
-        <br>
-        <b>0.1.0</b><br>
-        <br>
+        See <a href="https://github.com/neueda/jetbrains-plugin-graph-database-support/blob/master/CHANGELOG.md">https://github.com/neueda/jetbrains-plugin-graph-database-support</a>
         ]]></change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
