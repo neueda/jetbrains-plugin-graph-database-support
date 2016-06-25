@@ -8,13 +8,6 @@ plugins {
 apply plugin: 'idea'
 
 allprojects {
-    // updating this version would automatically updates plugins version
-    version '0.1.0'
-
-    ext {
-        intellijSdkVersion = "2016.1.3"
-    }
-
     repositories {
         mavenCentral()
         mavenLocal()
