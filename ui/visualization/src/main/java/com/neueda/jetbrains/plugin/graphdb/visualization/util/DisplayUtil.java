@@ -57,6 +57,10 @@ public class DisplayUtil {
         return title.length() < MAX_TITLE_LENGTH;
     }
 
+    public static String getTooltipTitle(GraphEntity entity) {
+        return entity.getId() + ": " + entity.getTypes();
+    }
+
     public static String getTooltipText(GraphEntity entity) {
         Map<String, Object> properties = entity.getPropertyContainer().getProperties();
         String start = "<p width=\"" + LABEL_TEXT_WIDTH + "px\"><b>";

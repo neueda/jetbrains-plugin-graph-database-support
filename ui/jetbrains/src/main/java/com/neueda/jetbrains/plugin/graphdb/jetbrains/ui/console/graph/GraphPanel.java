@@ -21,7 +21,6 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.renderes.tree.PropertyTreeCellRenderer;
 import com.neueda.jetbrains.plugin.graphdb.visualization.PrefuseVisualization;
 import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
-import com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil;
 import prefuse.visual.VisualItem;
 
 import javax.swing.tree.DefaultTreeModel;
@@ -31,6 +30,9 @@ import java.awt.Container;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.Enumeration;
+
+import static com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil.getTooltipText;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil.getTooltipTitle;
 
 public class GraphPanel {
 
@@ -130,8 +132,8 @@ public class GraphPanel {
         if (balloon != null && !balloon.isDisposed())
             balloon.hide();
 
-        balloonPopupBuilder.setTitle(entity.getRepresentation());
-        balloonLabel.setText(DisplayUtil.getTooltipText(entity));
+        balloonPopupBuilder.setTitle(getTooltipTitle(entity));
+        balloonLabel.setText(getTooltipText(entity));
 
         balloon = balloonPopupBuilder.createBalloon();
         Container panel = e.getComponent().getParent();
