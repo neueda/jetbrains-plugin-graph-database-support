@@ -66,7 +66,11 @@ public class DisplayUtil {
         String start = "<p width=\"" + LABEL_TEXT_WIDTH + "px\"><b>";
 
         String typesRepresentation = entity.isTypesSingle() ? entity.getTypes().get(0) : entity.getTypes().toString();
-        StringBuilder sb = new StringBuilder(start + entity.getTypesName() + "</b>: " + typesRepresentation + "</p>");
+        StringBuilder sb = new StringBuilder(start)
+                .append(entity.getTypesName())
+                .append("</b>: ")
+                .append(typesRepresentation)
+                .append("</p>");
 
         Stream<Map.Entry<String, Object>> strings = properties.entrySet().stream()
                 .filter(IS_STRING_VALUE)
@@ -83,6 +87,10 @@ public class DisplayUtil {
                         .append(truncate(entry.getValue().toString(), MAX_TEXT_LENGTH))
                         .append("</p>")
                 );
+
+        if (properties.size() > MAX_TOOLTIP_PROPERTIES) {
+            sb.append("<p>...</p>");
+        }
 
         return "<html>" + sb.toString() + "</html>";
     }

@@ -53,6 +53,7 @@ public class GraphDisplay extends Display {
     private Map<String, Node> nodeMap = new HashMap<>();
     private Map<String, GraphNode> graphNodeMap = new HashMap<>();
     private Map<String, GraphRelationship> graphRelationshipMap = new HashMap<>();
+    private CustomNeighborHighlightControl highlightControl;
 
     public GraphDisplay(LookAndFeelService lookAndFeelService) {
         super(new Visualization());
@@ -81,10 +82,12 @@ public class GraphDisplay extends Display {
         addControlListener(new ZoomControl());
         addControlListener(new ZoomToFitControl());
         addControlListener(new PanControl());
-        addControlListener(new CustomNeighborHighlightControl());
+        highlightControl = new CustomNeighborHighlightControl();
+        addControlListener(highlightControl);
     }
 
     public void clearGraph() {
+        highlightControl.clear();
         graph.clear();
     }
 

@@ -93,4 +93,10 @@ public class CustomNeighborHighlightControl extends NeighborHighlightControl {
         setNeighborHighlight(node, state);
         node.setHighlighted(state);
     }
+
+    public void clear() {
+        selectedNode = null;
+        selectedEdge = null;
+        hovered = null;
+    }
 }
