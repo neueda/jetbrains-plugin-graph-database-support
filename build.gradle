@@ -2,6 +2,7 @@ plugins {
     id 'idea'
     id 'java'
     id "org.jetbrains.intellij" version "0.1.6"
+    id 'net.researchgate.release' version '2.4.0'
 }
 
 apply plugin: 'idea'
@@ -29,3 +30,26 @@ allprojects {
         version intellijSdkVersion
     }
 }
+
+release {
+    failOnCommitNeeded = true
+    failOnPublishNeeded = true
+    failOnSnapshotDependencies = true
+    failOnUnversionedFiles = true
+    failOnUpdateNeeded = true
+    revertOnFail = true
+
+    buildTasks = ['build']
+
+    tagTemplate = '${version}'
+    preCommitText = '[release]'
+    preTagCommitMessage = ' Pre tag commit: '
+    tagCommitMessage = ' Creating tag: '
+    newVersionCommitMessage = ' New version commit: '
+
+    git {
+        requireBranch = 'master'
+    }
+}
+
+//afterReleaseBuild.dependsOn deployPlugin
