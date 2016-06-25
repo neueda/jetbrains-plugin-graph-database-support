@@ -3,19 +3,19 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.actions;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.ui.AnActionButton;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesToolWindow;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView;
 
 public class RefreshDataSourcesAction extends AnActionButton{
 
-    private final DataSourcesToolWindow dataSourcesToolWindow;
+    private final DataSourcesView dataSourcesView;
 
-    public RefreshDataSourcesAction(DataSourcesToolWindow dataSourcesToolWindow) {
+    public RefreshDataSourcesAction(DataSourcesView dataSourcesView) {
         super("Refresh", "Refresh all data sources", AllIcons.Actions.Refresh);
-        this.dataSourcesToolWindow = dataSourcesToolWindow;
+        this.dataSourcesView = dataSourcesView;
     }
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        dataSourcesToolWindow.refreshDataSourcesMetadata();
+        dataSourcesView.refreshDataSourcesMetadata();
     }
 }

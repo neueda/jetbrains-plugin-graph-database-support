@@ -3,28 +3,31 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.log;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.MetadataRetrieveEvent;
 
 import java.awt.BorderLayout;
 
-public class LogPanel {
+public class LogPanel implements Disposable {
 
     private ConsoleView log;
 
-    public void initialize(ConsoleToolWindow consoleToolWindow, Project project) {
+    public void initialize(GraphConsoleView graphConsoleView, Project project) {
         MessageBus messageBus = project.getMessageBus();
 
         log = TextConsoleBuilderFactory.getInstance()
                 .createBuilder(project)
                 .getConsole();
-        consoleToolWindow.getLogTab().add(log.getComponent(), BorderLayout.CENTER);
+        Disposer.register(graphConsoleView, log);
+        graphConsoleView.getLogTab().add(log.getComponent(), BorderLayout.CENTER);
 
         messageBus.connect().subscribe(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC, new QueryExecutionProcessEvent() {
             @Override
@@ -105,5 +108,10 @@ public class LogPanel {
 
     public void newLine() {
         log.print("\n", ConsoleViewContentType.NORMAL_OUTPUT);
+    }
+
+    @Override
+    public void dispose() {
+        log.dispose();
     }
 }

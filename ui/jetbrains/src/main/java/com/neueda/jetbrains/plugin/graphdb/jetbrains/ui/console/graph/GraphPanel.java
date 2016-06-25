@@ -15,7 +15,7 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.renderes.tree.PropertyTreeCellRenderer;
@@ -54,14 +54,14 @@ public class GraphPanel {
         entityDetailsTreeModel = new DefaultTreeModel(noEntityRoot);
     }
 
-    public void initialize(ConsoleToolWindow consoleToolWindow, Project project) {
+    public void initialize(GraphConsoleView graphConsoleView, Project project) {
         MessageBus messageBus = project.getMessageBus();
-        this.lookAndFeelService = consoleToolWindow.getLookAndFeelService();
-        this.entityDetailsTree = consoleToolWindow.getEntityDetailsTree();
+        this.lookAndFeelService = graphConsoleView.getLookAndFeelService();
+        this.entityDetailsTree = graphConsoleView.getEntityDetailsTree();
 
         // Bootstrap visualisation
         visualization = new PrefuseVisualization(lookAndFeelService);
-        consoleToolWindow.getGraphCanvas().add(visualization.getCanvas());
+        graphConsoleView.getGraphCanvas().add(visualization.getCanvas());
 
         // Entity data table
         entityDetailsTree.setCellRenderer(new PropertyTreeCellRenderer());
@@ -94,7 +94,7 @@ public class GraphPanel {
 
         // Interactions
         this.interactions = new GraphPanelInteractions(
-                consoleToolWindow,
+                graphConsoleView,
                 messageBus,
                 visualization);
     }

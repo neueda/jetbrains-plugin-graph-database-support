@@ -9,6 +9,7 @@ import com.intellij.ui.treeStructure.Tree;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesToolWindow;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.neo4j.bolt.Neo4jBoltDataSourceDialog;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -18,16 +19,16 @@ import java.util.stream.Collectors;
 
 public class DataSourceInteractions {
 
-    private final DataSourcesToolWindow window;
+    private final DataSourcesView dataSourcesView;
     private final ToolbarDecorator decorator;
     private final Project project;
     private final Tree dataSourceTree;
 
-    public DataSourceInteractions(Project project, DataSourcesToolWindow window) {
+    public DataSourceInteractions(Project project, DataSourcesView dataSourcesView) {
         this.project = project;
-        this.window = window;
-        this.decorator = window.getDecorator();
-        this.dataSourceTree = window.getDataSourceTree();
+        this.dataSourcesView = dataSourcesView;
+        this.decorator = dataSourcesView.getDecorator();
+        this.dataSourceTree = dataSourcesView.getDataSourceTree();
 
         initAddAction();
         initRemoveAction();
@@ -38,7 +39,7 @@ public class DataSourceInteractions {
         decorator.setAddAction(anActionButton -> {
             ListPopup popup = JBPopupFactory.getInstance().createActionGroupPopup(
                     "New Data Source",
-                    new NewDataSourceActionGroup(project, window),
+                    new NewDataSourceActionGroup(project, dataSourcesView),
                     anActionButton.getDataContext(),
                     JBPopupFactory.ActionSelectionAid.NUMBERING,
                     false
@@ -57,7 +58,7 @@ public class DataSourceInteractions {
                     .collect(Collectors.toList());
 
             if (dataSourcesForRemoval.size() > 0) {
-                window.removeDataSources(dataSourcesForRemoval);
+                dataSourcesView.removeDataSources(dataSourcesForRemoval);
             }
         });
         decorator.setRemoveActionUpdater(e -> {
@@ -86,12 +87,12 @@ public class DataSourceInteractions {
 
                 DataSourceDialog dialog = null;
                 if (dataSourceToEdit.getDataSourceType().equals(DataSourceType.NEO4J_BOLT)) {
-                    dialog = new Neo4jBoltDataSourceDialog(project, window, dataSourceToEdit);
+                    dialog = new Neo4jBoltDataSourceDialog(project, dataSourcesView, dataSourceToEdit);
                 }
 
                 if (dialog != null) {
                     if (dialog.go()) {
-                        window.updateDataSource(treeNode, dataSourceToEdit, dialog.constructDataSource());
+                        dataSourcesView.updateDataSource(treeNode, dataSourceToEdit, dialog.constructDataSource());
                     }
                 }
             }

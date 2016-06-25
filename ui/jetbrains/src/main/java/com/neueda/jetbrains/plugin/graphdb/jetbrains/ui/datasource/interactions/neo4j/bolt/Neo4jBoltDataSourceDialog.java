@@ -17,7 +17,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSo
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DatabaseManagerService;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesToolWindow;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceDialog;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nullable;
@@ -50,17 +50,17 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
     private JBTextField portField;
     private JButton testConnectionButton;
 
-    public Neo4jBoltDataSourceDialog(Project project, DataSourcesToolWindow window, DataSource dataSourceToEdit) {
-        this(project, window);
+    public Neo4jBoltDataSourceDialog(Project project, DataSourcesView dataSourcesView, DataSource dataSourceToEdit) {
+        this(project, dataSourcesView);
         this.dataSourceToEdit = dataSourceToEdit;
     }
 
-    public Neo4jBoltDataSourceDialog(@Nullable Project project, DataSourcesToolWindow window) {
+    public Neo4jBoltDataSourceDialog(@Nullable Project project, DataSourcesView dataSourcesView) {
         super(project);
         init();
 
         databaseManager = ServiceManager.getService(DatabaseManagerService.class);
-        dataSourcesComponent = window.getComponent();
+        dataSourcesComponent = dataSourcesView.getComponent();
 
         testConnectionButton.addActionListener(e -> {
             JPanel popupPanel = new JPanel(new BorderLayout());

@@ -6,7 +6,7 @@ import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.editor.CompositeTableCellEditor;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.renderer.CompositeTableCellRenderer;
@@ -28,10 +28,10 @@ public class TablePanel {
         valueConverter = new ValueConverter(this);
     }
 
-    public void initialize(ConsoleToolWindow consoleToolWindow, Project project) {
+    public void initialize(GraphConsoleView graphConsoleView, Project project) {
         MessageBus messageBus = project.getMessageBus();
         tableModel = new QueryResultTableModel();
-        table = consoleToolWindow.getTableExecuteResults();
+        table = graphConsoleView.getTableExecuteResults();
         table.setModel(tableModel);
         table.setCellSelectionEnabled(false);
         table.setDefaultRenderer(Object.class, new CompositeTableCellRenderer());

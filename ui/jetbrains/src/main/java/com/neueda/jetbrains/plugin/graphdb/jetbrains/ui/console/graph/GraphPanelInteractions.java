@@ -6,21 +6,21 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQuer
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.ui.console.CleanCanvasEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.QueryExecutionService;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 
 public class GraphPanelInteractions {
 
-    private final ConsoleToolWindow window;
+    private final GraphConsoleView graphConsoleView;
     private final MessageBus messageBus;
     private final QueryExecutionService queryExecutionService;
     private final VisualizationApi visualization;
 
-    public GraphPanelInteractions(ConsoleToolWindow window,
+    public GraphPanelInteractions(GraphConsoleView graphConsoleView,
                                   MessageBus messageBus, VisualizationApi visualization) {
-        this.window = window;
+        this.graphConsoleView = graphConsoleView;
         this.messageBus = messageBus;
         this.visualization = visualization;
         this.queryExecutionService = new QueryExecutionService(messageBus);
@@ -70,11 +70,11 @@ public class GraphPanelInteractions {
     }
 
     private void registerVisualisationEvents() {
-        visualization.addNodeListener(EventType.CLICK, window.getGraphPanel()::showNodeData);
-        visualization.addEdgeListener(EventType.CLICK, window.getGraphPanel()::showRelationshipData);
-        visualization.addNodeListener(EventType.HOVER_START, window.getGraphPanel()::showTooltip);
-        visualization.addNodeListener(EventType.HOVER_END, window.getGraphPanel()::hideTooltip);
-        visualization.addEdgeListener(EventType.HOVER_START, window.getGraphPanel()::showTooltip);
-        visualization.addEdgeListener(EventType.HOVER_END, window.getGraphPanel()::hideTooltip);
+        visualization.addNodeListener(EventType.CLICK, graphConsoleView.getGraphPanel()::showNodeData);
+        visualization.addEdgeListener(EventType.CLICK, graphConsoleView.getGraphPanel()::showRelationshipData);
+        visualization.addNodeListener(EventType.HOVER_START, graphConsoleView.getGraphPanel()::showTooltip);
+        visualization.addNodeListener(EventType.HOVER_END, graphConsoleView.getGraphPanel()::hideTooltip);
+        visualization.addEdgeListener(EventType.HOVER_START, graphConsoleView.getGraphPanel()::showTooltip);
+        visualization.addEdgeListener(EventType.HOVER_END, graphConsoleView.getGraphPanel()::hideTooltip);
     }
 }
