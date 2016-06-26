@@ -1,5 +1,4 @@
 dependencies {
     compile project(':database:api')
     compile 'org.neo4j.driver:neo4j-java-driver:1.0.1'
-    compile 'com.google.guava:guava:19.0'
 }

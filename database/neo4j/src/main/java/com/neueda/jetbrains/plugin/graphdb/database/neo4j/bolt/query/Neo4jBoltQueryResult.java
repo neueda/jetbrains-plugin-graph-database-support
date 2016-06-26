@@ -1,6 +1,5 @@
 package com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.query;
 
-import com.google.common.base.Strings;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
@@ -108,7 +107,7 @@ public class Neo4jBoltQueryResult implements GraphQueryResult {
             planToString(sb, childPlan, depth + 1);
         }
 
-        String line = Strings.repeat("-", depth);
+        String line = repeat("-", depth);
         sb.append(line)
                 .append(format("> %s {identifiers: %s; arguments: %s}\n", plan.operatorType(), plan.identifiers(), plan.arguments()));
     }
@@ -118,7 +117,7 @@ public class Neo4jBoltQueryResult implements GraphQueryResult {
             profileToString(sb, childProfile, depth + 1);
         }
 
-        String line = Strings.repeat("-", depth);
+        String line = repeat("-", depth);
         sb.append(line)
                 .append(format("> %s[records: %s; dbHits: %s] {identifiers: %s; arguments: %s}\n",
                         profile.operatorType(), profile.records(), profile.dbHits(), profile.identifiers(), profile.arguments()));
@@ -146,5 +145,13 @@ public class Neo4jBoltQueryResult implements GraphQueryResult {
 
     private Optional<GraphNode> findNodeById(List<GraphNode> nodes, String id) {
         return nodes.stream().filter((node) -> node.getId().equals(id)).findFirst();
+    }
+
+    private String repeat(String part, int count) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < count; i++) {
+            sb.append(part);
+        }
+        return sb.toString();
     }
 }
