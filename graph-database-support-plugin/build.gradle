@@ -12,11 +12,7 @@ intellij {
     sameSinceUntilBuild false
 
     publish {
-        pluginId '0000' // todo: add pluginId
-
-        username System.getenv('IJ_REPO_USERNAME')
-        password System.getenv('IJ_REPO_PASSWORD')
-        channel System.getenv('IJ_REPO_CHANNEL') ?: 'graphdb-nightly'
+        pluginId '8087'
     }
 
     if (System.getenv("CI_SERVER") == "yes") {
