@@ -12,7 +12,8 @@ intellij {
     sameSinceUntilBuild false
 
     publish {
-        pluginId '8087'
+        username intellijUsername
+        password intellijPassword
     }
 
     if (System.getenv("CI_SERVER") == "yes") {

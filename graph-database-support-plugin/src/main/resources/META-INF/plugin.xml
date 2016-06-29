@@ -1,5 +1,5 @@
 <idea-plugin version="2">
-    <id>com.neueda.jetbrains.plugin.graphdb</id>
+    <id>com.neueda4j.intellij.plugin.cypher</id>
     <name>Graph Database support</name>
     <!-- Should be automatically replaced by gradle build -->
     <version>9.9.9</version>
