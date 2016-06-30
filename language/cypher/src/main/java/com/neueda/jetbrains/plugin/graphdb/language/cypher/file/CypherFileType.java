@@ -13,7 +13,7 @@ import javax.swing.Icon;
  *
  * @author dmitry@vrublevsky.me
  */
-public class CypherFileType extends LanguageFileType {
+public final class CypherFileType extends LanguageFileType {
 
     public static final CypherFileType INSTANCE = new CypherFileType();
 

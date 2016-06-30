@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
  * @author dmitry@vrublevsky.me
  */
 public class CypherBraceMatcher implements PairedBraceMatcher {
-    private static BracePair[] PAIRS = {
+    private static BracePair[] pairs = {
             new BracePair(CypherTypes.PARENTHESE_OPEN, CypherTypes.PARENTHESE_CLOSE, true),
             new BracePair(CypherTypes.BRACKET_SQUAREOPEN, CypherTypes.BRACKET_SQUARECLOSE, true),
             // todo: curly braces are a bit buggy?
@@ -23,7 +23,7 @@ public class CypherBraceMatcher implements PairedBraceMatcher {
 
     @Override
     public BracePair[] getPairs() {
-        return PAIRS;
+        return pairs;
     }
 
     @Override

@@ -44,8 +44,9 @@ public class CustomEdgeRenderer extends EdgeRenderer {
             Point2D center = new Point2D.Double(dest.getBounds().getCenterX(), dest.getBounds().getCenterY());
             List<Point2D> intersections = IntersectionUtil.getCircleLineIntersectionPoint(start, end, center, dest.getBounds().getWidth() / 2);
 
-            if (intersections.size() == 0)
+            if (intersections.size() == 0) {
                 throw new ShouldNeverHappenException("Andrew Naydyonock", "edge always intersect a node");
+            }
 
             end = intersections.get(0);
 

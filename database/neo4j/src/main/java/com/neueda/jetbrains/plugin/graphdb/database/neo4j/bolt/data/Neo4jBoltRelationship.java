@@ -88,8 +88,12 @@ public class Neo4jBoltRelationship implements GraphRelationship {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Neo4jBoltRelationship that = (Neo4jBoltRelationship) o;
         return Objects.equals(id, that.id);
     }

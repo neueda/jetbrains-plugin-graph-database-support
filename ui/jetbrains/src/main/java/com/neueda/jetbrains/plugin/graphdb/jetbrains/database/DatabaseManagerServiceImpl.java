@@ -13,7 +13,8 @@ public class DatabaseManagerServiceImpl implements DatabaseManagerService {
         switch (dataSource.getDataSourceType()) {
             case NEO4J_BOLT:
                 return new Neo4jBoltDatabase(dataSource.getConfiguration());
+            default:
+                throw new RuntimeException(String.format("Database for data source [%s] does not exists", dataSource.dataSourceType));
         }
-        throw new RuntimeException(String.format("Database for data source [%s] does not exists", dataSource.dataSourceType));
     }
 }

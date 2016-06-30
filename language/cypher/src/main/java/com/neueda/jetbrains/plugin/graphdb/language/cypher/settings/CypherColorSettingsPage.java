@@ -55,14 +55,14 @@ public class CypherColorSettingsPage implements ColorSettingsPage {
     @NotNull
     @Override
     public String getDemoText() {
-        return "// This is .cyp file\n" +
-                "MATCH (n:NodeLabel {name: \"Dmitry\"})\n" +
-                "MATCH (n)-[:LIKES]->(cypherLanguage:Language)\n" +
-                "WHERE /* block comment */ n.property =\"string value\"\n" +
-                "SET n.calculatedProperty = 2 + 2 \n" +
-                "SET n.functionProperty = toInt(\"1\")\n" +
-                "SET n.arrayProperty = [1, 2, 3, 4]\n" +
-                "RETURN *;\n";
+        return "// This is .cyp file\n"
+                + "MATCH (n:NodeLabel {name: \"Dmitry\"})\n"
+                + "MATCH (n)-[:LIKES]->(cypherLanguage:Language)\n"
+                + "WHERE /* block comment */ n.property =\"string value\"\n"
+                + "SET n.calculatedProperty = 2 + 2 \n"
+                + "SET n.functionProperty = toInt(\"1\")\n"
+                + "SET n.arrayProperty = [1, 2, 3, 4]\n"
+                + "RETURN *;\n";
     }
 
     @Nullable

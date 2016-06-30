@@ -8,7 +8,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import java.awt.Component;
 
-public class CompositeTableCellRenderer implements TableCellRenderer{
+public class CompositeTableCellRenderer implements TableCellRenderer {
 
     private final TreeModelTableCellRenderer treeModelTableCellRenderer;
     private final DefaultTableCellRenderer defaultTableCellRenderer;

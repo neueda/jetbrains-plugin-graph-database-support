@@ -211,10 +211,5 @@ public class DisplayUtilTest {
                         FIRST_KEY, FIRST_VALUE,
                         SECOND_KEY, SECOND_VALUE,
                         THIRD_KEY, THIRD_VALUE);
-
-        System.out.println(DisplayUtil.getTooltipText(node));
     }
-
-
-
 }

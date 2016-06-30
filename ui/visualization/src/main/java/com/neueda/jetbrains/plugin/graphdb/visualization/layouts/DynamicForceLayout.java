@@ -30,7 +30,7 @@ public class DynamicForceLayout extends ForceDirectedLayout {
 
     @Override
     public void run(double frac) {
-        for(Force force: getForceSimulator().getForces()) {
+        for (Force force : getForceSimulator().getForces()) {
             if (force instanceof DragForce) {
                 float dragMax = force.getMinValue(DRAG_COEFFICIENT);
                 float dragMin = force.getMaxValue(DRAG_COEFFICIENT);
@@ -55,8 +55,6 @@ public class DynamicForceLayout extends ForceDirectedLayout {
     }
 
     private float part(double min, double max, double part) {
-        return (float)(min + (max - min) * part);
+        return (float) (min + (max - min) * part);
     }
-
-
 }

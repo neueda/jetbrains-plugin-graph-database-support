@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+        "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+    <suppress files="[\\/]gen[\\/]" checks="[a-zA-Z0-9]*"/>
+    <suppress files="_CypherLexer.java" checks="[a-zA-Z0-9]*"/>
+    <suppress files="DataSource.java" checks="VisibilityModifier"/>
+    <suppress files="DataSourcesComponentState.java" checks="VisibilityModifier"/>
+</suppressions>

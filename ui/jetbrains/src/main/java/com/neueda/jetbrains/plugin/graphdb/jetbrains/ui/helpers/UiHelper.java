@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class UiHelper {
+public final class UiHelper {
 
     public static final int INLINE_TEXT_LENGTH = 80;
     public static final int INLINE_LIST_SIZE = 10;

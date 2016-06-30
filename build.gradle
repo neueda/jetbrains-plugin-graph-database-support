@@ -7,6 +7,9 @@ plugins {
 
 apply plugin: 'idea'
 
+def configDir = new File(buildscript.sourceFile.parentFile, 'config')
+ext.checkstyleConfigDir = "$configDir/checkstyle"
+
 allprojects {
     repositories {
         mavenCentral()
@@ -15,12 +18,19 @@ allprojects {
     }
 
     apply plugin: 'java'
+    apply plugin: 'checkstyle'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
     intellij {
         version intellijSdkVersion
+    }
+
+    checkstyle {
+        toolVersion = "7.0"
+        configFile = new File(checkstyleConfigDir, "checkstyle.xml")
+        configProperties.checkstyleConfigDir = checkstyleConfigDir
     }
 }
 

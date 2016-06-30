@@ -35,6 +35,8 @@ import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Validation.v
 
 public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
 
+    public static final int THICKNESS = 10;
+    public static final int HEIGHT = 150;
     private final DataSourcesComponent dataSourcesComponent;
     private final DatabaseManagerService databaseManager;
     private DataSource dataSourceToEdit;
@@ -63,7 +65,7 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
 
         testConnectionButton.addActionListener(e -> {
             JPanel popupPanel = new JPanel(new BorderLayout());
-            popupPanel.setBorder(IdeBorderFactory.createEmptyBorder(10));
+            popupPanel.setBorder(IdeBorderFactory.createEmptyBorder(THICKNESS));
 
             ValidationInfo validationInfo = doValidate();
             if (validationInfo != null) {
@@ -95,7 +97,7 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
                     }
 
                     JBScrollPane scrollPane = new JBScrollPane(exceptionCauses);
-                    scrollPane.setPreferredSize(new Dimension(-1, 150));
+                    scrollPane.setPreferredSize(new Dimension(-1, HEIGHT));
                     popupPanel.add(connectionFailed, BorderLayout.CENTER);
                     popupPanel.add(scrollPane, BorderLayout.SOUTH);
                 }
@@ -125,9 +127,7 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
         extractData();
 
         if (dataSourcesComponent.isDataSourceExists(data.dataSourceName)) {
-            if (dataSourceToEdit != null && dataSourceToEdit.getName().equals(data.dataSourceName)) {
-                // this is normal case. We are just editing existing data source and not changing name
-            } else {
+            if (!(dataSourceToEdit != null && dataSourceToEdit.getName().equals(data.dataSourceName))) {
                 return validation(String.format("Data source [%s] already exists", data.dataSourceName), dataSourceNameField);
             }
         }
@@ -176,11 +176,11 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
         data.password = String.valueOf(passwordField.getPassword()); // TODO: use password API
     }
 
-    public static final class Data {
-        public String dataSourceName;
-        public String host;
-        public String port;
-        public String user;
-        public String password;
+    private static final class Data {
+        private String dataSourceName;
+        private String host;
+        private String port;
+        private String user;
+        private String password;
     }
 }

@@ -6,7 +6,7 @@ import com.neueda.jetbrains.plugin.graphdb.platform.GraphLanguages;
 /**
  * @author dmitry@vrublesvky.me
  */
-public class CypherLanguage extends Language {
+public final class CypherLanguage extends Language {
 
     public static final CypherLanguage INSTANCE = new CypherLanguage();
 

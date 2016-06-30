@@ -33,7 +33,7 @@ public class RendererProvider {
     public static EdgeRenderer edgeRenderer() {
         EdgeRenderer edgeRenderer = new CustomEdgeRenderer(EDGE_TYPE_LINE);
         edgeRenderer.setDefaultLineWidth(EDGE_THICKNESS_COEFFICIENT);
-        edgeRenderer.setArrowHeadSize((int)(8 * ARROW_THICKNESS_COEFFICIENT), (int)(12 * ARROW_THICKNESS_COEFFICIENT));
+        edgeRenderer.setArrowHeadSize((int) (8 * ARROW_THICKNESS_COEFFICIENT), (int) (12 * ARROW_THICKNESS_COEFFICIENT));
 
         return edgeRenderer;
     }

@@ -7,18 +7,16 @@ import prefuse.visual.VisualItem;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
-public class CenteredLayout extends Layout
-{
+public class CenteredLayout extends Layout {
     public CenteredLayout(String group) {
         super(group);
     }
 
     @Override
-    public void run(double frac)
-    {
+    public void run(double frac) {
         Iterator iter = m_vis.items(m_group);
-        while ( iter.hasNext() ) {
-            DecoratorItem decorator = (DecoratorItem)iter.next();
+        while (iter.hasNext()) {
+            DecoratorItem decorator = (DecoratorItem) iter.next();
             VisualItem decoratedItem = decorator.getDecoratedItem();
             Rectangle2D bounds = decoratedItem.getBounds();
 

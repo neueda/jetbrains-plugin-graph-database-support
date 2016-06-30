@@ -47,8 +47,12 @@ public class Neo4jBoltNode implements GraphNode {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Neo4jBoltNode that = (Neo4jBoltNode) o;
         return Objects.equals(id, that.id);
     }

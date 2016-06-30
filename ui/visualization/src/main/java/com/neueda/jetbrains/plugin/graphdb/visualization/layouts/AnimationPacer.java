@@ -10,8 +10,7 @@ public class AnimationPacer implements Pacer {
     }
 
     public double paceExp(double f) {
-        double v = 1 + Math.exp(f)*1.3;
+        double v = 1 + Math.exp(f) * 1.3;
         return v == 2 ? 0 : v > 3 ? 1 : -(2 - v);
     }
-
 }

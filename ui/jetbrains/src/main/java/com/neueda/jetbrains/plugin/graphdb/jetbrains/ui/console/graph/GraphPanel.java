@@ -108,7 +108,7 @@ public class GraphPanel {
         entityDetailsTreeModel.setRoot(root);
 
         Enumeration childs = root.children();
-        while(childs.hasMoreElements()) {
+        while (childs.hasMoreElements()) {
             PatchedDefaultMutableTreeNode treeNode
                     = (PatchedDefaultMutableTreeNode) childs.nextElement();
             entityDetailsTree.expandPath(new TreePath(treeNode.getPath()));
@@ -121,7 +121,7 @@ public class GraphPanel {
         entityDetailsTreeModel.setRoot(root);
 
         Enumeration childs = root.children();
-        while(childs.hasMoreElements()) {
+        while (childs.hasMoreElements()) {
             PatchedDefaultMutableTreeNode treeNode
                     = (PatchedDefaultMutableTreeNode) childs.nextElement();
             entityDetailsTree.expandPath(new TreePath(treeNode.getPath()));
@@ -129,8 +129,9 @@ public class GraphPanel {
     }
 
     public void showTooltip(GraphEntity entity, VisualItem item, MouseEvent e) {
-        if (balloon != null && !balloon.isDisposed())
+        if (balloon != null && !balloon.isDisposed()) {
             balloon.hide();
+        }
 
         balloonPopupBuilder.setTitle(getTooltipTitle(entity));
         balloonLabel.setText(getTooltipText(entity));
@@ -138,8 +139,8 @@ public class GraphPanel {
         balloon = balloonPopupBuilder.createBalloon();
         Container panel = e.getComponent().getParent();
 
-        final int MAGIC_NUMBER = 15;
-        int heightOffset = balloon.getPreferredSize().height / 2 + MAGIC_NUMBER;
+        final int magicNumber = 15;
+        int heightOffset = balloon.getPreferredSize().height / 2 + magicNumber;
 
         int widthOffset;
         if (e.getX() > panel.getWidth() / 2) {

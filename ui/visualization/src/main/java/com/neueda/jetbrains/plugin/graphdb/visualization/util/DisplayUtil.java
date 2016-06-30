@@ -32,17 +32,20 @@ public class DisplayUtil {
                 String value = (String) valueObj;
 
                 for (String titleIndicator : TITLE_INDICATORS) {
-                    if (titleIndicator.equals(key) && filterLength(value))
+                    if (titleIndicator.equals(key) && filterLength(value)) {
                         return value;
+                    }
 
-                    if (key.contains(titleIndicator) && !fuzzyMatch.isPresent())
+                    if (key.contains(titleIndicator) && !fuzzyMatch.isPresent()) {
                         fuzzyMatch = Optional.of(value)
                                 .filter(DisplayUtil::filterLength);
+                    }
                 }
 
-                if (!backup.isPresent())
+                if (!backup.isPresent()) {
                     backup = Optional.of(value)
                             .filter(DisplayUtil::filterLength);
+                }
             }
         }
 

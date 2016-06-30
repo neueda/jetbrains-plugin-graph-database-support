@@ -20,6 +20,7 @@ import java.util.List;
 
 public class TablePanel {
 
+    public static final int MAX_WIDTH = 300;
     private final ValueConverter valueConverter;
     private QueryResultTableModel tableModel;
     private JBTable table;
@@ -81,7 +82,7 @@ public class TablePanel {
         for (int column = 0; column < table.getColumnCount(); column++) {
             TableColumn tableColumn = table.getColumnModel().getColumn(column);
             int preferredWidth = tableColumn.getMinWidth();
-            int maxWidth = 300;
+            int maxWidth = MAX_WIDTH;
 
             for (int row = 0; row < table.getRowCount(); row++) {
                 TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
@@ -90,8 +91,8 @@ public class TablePanel {
                 preferredWidth = Math.max(preferredWidth, width);
 
                 //  We've exceeded the maximum width, no need to check other rows
-                if (preferredWidth >= maxWidth) {
-                    preferredWidth = maxWidth;
+                if (preferredWidth >= MAX_WIDTH) {
+                    preferredWidth = MAX_WIDTH;
                     break;
                 }
             }

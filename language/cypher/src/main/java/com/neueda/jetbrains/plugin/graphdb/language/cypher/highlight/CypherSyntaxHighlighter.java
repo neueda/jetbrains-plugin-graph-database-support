@@ -121,8 +121,7 @@ public class CypherSyntaxHighlighter extends SyntaxHighlighterBase {
                 || tokenType.equals(CypherTypes.OP_POW)
                 || tokenType.equals(CypherTypes.OP_QUESTIONSIGN)
                 || tokenType.equals(CypherTypes.OP_RANGE)
-                || tokenType.equals(CypherTypes.OP_REGEXMATCH)
-                ;
+                || tokenType.equals(CypherTypes.OP_REGEXMATCH);
     }
 
     @NotNull

@@ -18,7 +18,9 @@ public class CustomNeighborHighlightControl extends NeighborHighlightControl {
         if (item instanceof NodeItem) {
             NodeItem node = (NodeItem) item;
 
-            if (selectedNode == node) return;
+            if (selectedNode == node) {
+                return;
+            }
 
             unselectNode();
             selectNode(node);
@@ -88,7 +90,9 @@ public class CustomNeighborHighlightControl extends NeighborHighlightControl {
     }
 
     private void highlightNodeAndNeighbors(NodeItem node, boolean state) {
-        if (node == null) return;
+        if (node == null) {
+            return;
+        }
 
         setNeighborHighlight(node, state);
         node.setHighlighted(state);

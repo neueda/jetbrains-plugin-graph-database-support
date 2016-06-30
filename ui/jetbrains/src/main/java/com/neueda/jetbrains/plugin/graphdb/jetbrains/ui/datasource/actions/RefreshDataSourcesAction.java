@@ -5,7 +5,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.ui.AnActionButton;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView;
 
-public class RefreshDataSourcesAction extends AnActionButton{
+public class RefreshDataSourcesAction extends AnActionButton {
 
     private final DataSourcesView dataSourcesView;
 

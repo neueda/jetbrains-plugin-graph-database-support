@@ -63,7 +63,9 @@ public abstract class CypherReferenceBase extends PsiReferenceBase<PsiElement> i
                         String watName = name + "IntellijIdeaRulezzz";
 
                         // WAT check for "IntellijIdeaRulezzz" postfix
-                        if (this.name.equals(name) || this.name.equals(watName)) return;
+                        if (this.name.equals(name) || this.name.equals(watName)) {
+                            return;
+                        }
 
                         if (!variants.containsKey(name)) {
                             variants.put(name, element);

@@ -99,7 +99,7 @@ public class LogPanel implements Disposable {
         newLine();
 
         Throwable cause = exception.getCause();
-        while(cause != null) {
+        while (cause != null) {
             error(cause.getMessage());
             newLine();
             cause = cause.getCause();

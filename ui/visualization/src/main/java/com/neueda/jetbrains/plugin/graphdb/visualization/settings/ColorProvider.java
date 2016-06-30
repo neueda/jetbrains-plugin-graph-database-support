@@ -8,18 +8,21 @@ import prefuse.action.assignment.DataColorAction;
 import prefuse.action.assignment.StrokeAction;
 import prefuse.util.ColorLib;
 
-import java.awt.*;
+import java.awt.BasicStroke;
 
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.TYPE;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.EDGES;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.NODES;
 import static prefuse.Constants.NOMINAL;
-import static prefuse.visual.VisualItem.*;
+import static prefuse.visual.VisualItem.FILLCOLOR;
+import static prefuse.visual.VisualItem.HIGHLIGHT;
+import static prefuse.visual.VisualItem.HOVER;
+import static prefuse.visual.VisualItem.STROKECOLOR;
 
 public class ColorProvider {
 
     /**
-     * Pastel color palette for node coloring
+     * Pastel color PALETTE for node coloring
      */
     private static final int ROT_1 = ColorLib.rgb(219, 94, 86);
     private static final int ROT_2 = ColorLib.rgb(219, 194, 86);
@@ -43,7 +46,7 @@ public class ColorProvider {
     private static final int NODE_STROKE_HOVER = ORANGE_DARK;
     private static final int NODE_STROKE_HIGHLIGHT = ORANGE_DARK;
 
-    private static final int[] palette = { ROT_1, ROT_2, ROT_3, ROT_4, ROT_5, ROT_6, ROT_7, ROT_8 };
+    private static final int[] PALETTE = {ROT_1, ROT_2, ROT_3, ROT_4, ROT_5, ROT_6, ROT_7, ROT_8};
 
     public static ActionList colors(LookAndFeelService lookAndFeelService) {
         ActionList colors = new ActionList();
@@ -67,7 +70,7 @@ public class ColorProvider {
 
     @NotNull
     private static DataColorAction getNodeFill(LookAndFeelService lookAndFeelService) {
-        DataColorAction fill = new DataColorAction(NODES, TYPE, NOMINAL, FILLCOLOR, palette);
+        DataColorAction fill = new DataColorAction(NODES, TYPE, NOMINAL, FILLCOLOR, PALETTE);
 
         return fill;
     }
@@ -92,7 +95,7 @@ public class ColorProvider {
 
     @NotNull
     private static ColorAction getNodeStroke(LookAndFeelService lookAndFeelService) {
-        ColorAction nStroke = new DataColorAction(NODES, TYPE, NOMINAL, STROKECOLOR, palette);
+        ColorAction nStroke = new DataColorAction(NODES, TYPE, NOMINAL, STROKECOLOR, PALETTE);
         nStroke.add(HIGHLIGHT, NODE_STROKE_HIGHLIGHT);
         nStroke.add(HOVER, NODE_STROKE_HOVER);
         return nStroke;

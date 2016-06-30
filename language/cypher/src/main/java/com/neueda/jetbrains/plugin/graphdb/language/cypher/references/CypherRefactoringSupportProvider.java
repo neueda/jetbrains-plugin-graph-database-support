@@ -21,7 +21,6 @@ public class CypherRefactoringSupportProvider extends RefactoringSupportProvider
         return element instanceof CypherVariable
                 || element instanceof CypherLabelName
                 || element instanceof CypherRelTypeName
-                || element instanceof CypherPropertyKeyName
-                ;
+                || element instanceof CypherPropertyKeyName;
     }
 }
