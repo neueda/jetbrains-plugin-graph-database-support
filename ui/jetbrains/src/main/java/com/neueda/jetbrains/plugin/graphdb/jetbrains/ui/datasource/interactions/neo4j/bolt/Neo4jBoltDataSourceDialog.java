@@ -9,7 +9,6 @@ import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.JBPasswordField;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.JBTextField;
-import com.jgoodies.common.base.Strings;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.Neo4jBoltConfiguration;
@@ -113,10 +112,10 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
     @Nullable
     @Override
     protected ValidationInfo doValidate() {
-        if (Strings.isBlank(dataSourceNameField.getText())) {
+        if (StringUtils.isBlank(dataSourceNameField.getText())) {
             return validation("Data source name must not be empty", dataSourceNameField);
         }
-        if (Strings.isBlank(hostField.getText())) {
+        if (StringUtils.isBlank(hostField.getText())) {
             return validation("Host must not be empty", hostField);
         }
         if (!StringUtils.isNumeric(portField.getText())) {
