@@ -55,10 +55,10 @@ public class GraphDisplay extends Display {
     private Map<String, GraphRelationship> graphRelationshipMap = new HashMap<>();
     private CustomNeighborHighlightControl highlightControl;
 
-    public GraphDisplay(LookAndFeelService lookAndFeelService) {
+    public GraphDisplay(LookAndFeelService lookAndFeel) {
         super(new Visualization());
 
-        setBackground(lookAndFeelService.getBackgroundColor());
+        setBackground(lookAndFeel.getBackgroundColor());
 
         graph = new Graph(DIRECTED);
         graph.addColumn(ID, String.class);
@@ -73,8 +73,8 @@ public class GraphDisplay extends Display {
 
         m_vis.setRendererFactory(setupRenderer());
 
-        m_vis.putAction(LAYOUT, LayoutProvider.forceLayout(lookAndFeelService));
-        m_vis.putAction(REPAINT, LayoutProvider.repaintLayout(lookAndFeelService));
+        m_vis.putAction(LAYOUT, LayoutProvider.forceLayout(m_vis, this, lookAndFeel));
+        m_vis.putAction(REPAINT, LayoutProvider.repaintLayout(lookAndFeel));
 
         setHighQuality(true);
 

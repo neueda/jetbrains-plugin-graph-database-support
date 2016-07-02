@@ -25,7 +25,7 @@ public class DynamicForceLayout extends ForceDirectedLayout {
 
 
     public DynamicForceLayout(String group, boolean enforceBounds) {
-        super(group, enforceBounds);
+        super(group, enforceBounds, true);
     }
 
     @Override
