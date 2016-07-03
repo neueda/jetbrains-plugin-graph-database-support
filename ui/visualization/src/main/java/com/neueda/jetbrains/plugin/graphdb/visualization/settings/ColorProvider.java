@@ -8,16 +8,14 @@ import prefuse.action.assignment.DataColorAction;
 import prefuse.action.assignment.StrokeAction;
 import prefuse.util.ColorLib;
 
-import java.awt.BasicStroke;
+import java.awt.*;
 
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.TYPE;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.EDGES;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.NODES;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.VisualizationParameters.EDGE_THICKNESS;
 import static prefuse.Constants.NOMINAL;
-import static prefuse.visual.VisualItem.FILLCOLOR;
-import static prefuse.visual.VisualItem.HIGHLIGHT;
-import static prefuse.visual.VisualItem.HOVER;
-import static prefuse.visual.VisualItem.STROKECOLOR;
+import static prefuse.visual.VisualItem.*;
 
 public class ColorProvider {
 
@@ -47,6 +45,7 @@ public class ColorProvider {
     private static final int NODE_STROKE_HIGHLIGHT = ORANGE_DARK;
 
     private static final int[] PALETTE = {ROT_1, ROT_2, ROT_3, ROT_4, ROT_5, ROT_6, ROT_7, ROT_8};
+    private static final int STROKE_THICKNESS = 7;
 
     public static ActionList colors(LookAndFeelService lookAndFeelService) {
         ActionList colors = new ActionList();
@@ -55,15 +54,24 @@ public class ColorProvider {
         colors.add(getEdgeStroke(lookAndFeelService));
         colors.add(getEdgeFill(lookAndFeelService));
         colors.add(getNodeFill(lookAndFeelService));
-        colors.add(getStrokeThickness());
+        colors.add(getNodeStrokeThickness());
+        colors.add(getEdgeStrokeThickness());
 
         return colors;
     }
 
-    private static StrokeAction getStrokeThickness() {
-        StrokeAction stroke = new StrokeAction(NODES, new BasicStroke(5));
-        stroke.add(HIGHLIGHT, new BasicStroke(5));
-        stroke.add(HOVER, new BasicStroke(5));
+    private static StrokeAction getNodeStrokeThickness() {
+        StrokeAction stroke = new StrokeAction(NODES, new BasicStroke(EDGE_THICKNESS));
+        stroke.add(HIGHLIGHT, new BasicStroke(EDGE_THICKNESS));
+        stroke.add(HOVER, new BasicStroke(EDGE_THICKNESS));
+
+        return stroke;
+    }
+
+    private static StrokeAction getEdgeStrokeThickness() {
+        StrokeAction stroke = new StrokeAction(EDGES, new BasicStroke(EDGE_THICKNESS));
+        stroke.add(HIGHLIGHT, new BasicStroke(EDGE_THICKNESS));
+        stroke.add(HOVER, new BasicStroke(EDGE_THICKNESS));
 
         return stroke;
     }

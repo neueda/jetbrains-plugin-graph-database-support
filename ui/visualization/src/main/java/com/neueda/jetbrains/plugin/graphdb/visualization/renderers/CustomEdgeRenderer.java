@@ -1,6 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.visualization.renderers;
 
 import com.neueda.jetbrains.plugin.graphdb.platform.ShouldNeverHappenException;
+import com.neueda.jetbrains.plugin.graphdb.visualization.constants.VisualizationParameters;
 import com.neueda.jetbrains.plugin.graphdb.visualization.util.IntersectionUtil;
 import prefuse.Constants;
 import prefuse.render.EdgeRenderer;
@@ -88,5 +89,19 @@ public class CustomEdgeRenderer extends EdgeRenderer {
 
         // return the edge shape
         return shape;
+    }
+
+    @Override
+    public boolean locatePoint(Point2D p, VisualItem item) {
+        Shape s = getShape(item);
+        if ( s == null ) {
+            return false;
+        } else {
+            double width = item.getSize() * VisualizationParameters.EDGE_THICKNESS;
+            double halfWidth = width/2.0;
+            return s.intersects(p.getX()-halfWidth,
+                    p.getY()-halfWidth,
+                    width,width);
+        }
     }
 }
