@@ -7,7 +7,9 @@
 
     <description><![CDATA[
         <p>
-            Integration with Graph Databases.
+            <a href="https://neueda.lv/projects/jetbrains-plugin-graph-database-support">
+                Integration with Graph Databases.
+            </a>
         </p>
 
         <p>
@@ -51,7 +53,7 @@
         ]]></description>
 
     <change-notes><![CDATA[
-        See <a href="https://github.com/neueda/jetbrains-plugin-graph-database-support/blob/master/CHANGELOG.md">https://github.com/neueda/jetbrains-plugin-graph-database-support</a>
+        See <a href="https://github.com/neueda/jetbrains-plugin-graph-database-support/releases">https://github.com/neueda/jetbrains-plugin-graph-database-support/releases</a>
         ]]></change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
