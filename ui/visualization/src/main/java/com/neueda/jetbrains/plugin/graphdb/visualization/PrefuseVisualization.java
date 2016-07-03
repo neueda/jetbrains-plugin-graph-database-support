@@ -35,7 +35,6 @@ public class PrefuseVisualization implements VisualizationApi {
     @Override
     public void paint() {
         display.startLayout();
-        resetPan();
     }
 
     @Override
@@ -60,6 +59,6 @@ public class PrefuseVisualization implements VisualizationApi {
 
     @Override
     public void resetPan() {
-        display.panAbs(display.getDisplayX() + display.getWidth() / 2, display.getDisplayY() + display.getHeight() / 2);
+        display.zoomAndPanToFit();
     }
 }

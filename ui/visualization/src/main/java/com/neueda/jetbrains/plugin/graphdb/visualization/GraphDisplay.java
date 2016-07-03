@@ -12,6 +12,7 @@ import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelSer
 import com.neueda.jetbrains.plugin.graphdb.visualization.settings.LayoutProvider;
 import com.neueda.jetbrains.plugin.graphdb.visualization.settings.SchemaProvider;
 import com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil;
+import com.neueda.jetbrains.plugin.graphdb.visualization.util.PrefuseUtil;
 import prefuse.Display;
 import prefuse.Visualization;
 import prefuse.controls.DragControl;
@@ -23,22 +24,17 @@ import prefuse.data.Graph;
 import prefuse.data.Node;
 import prefuse.render.DefaultRendererFactory;
 import prefuse.render.RendererFactory;
+import prefuse.util.display.DisplayLib;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.ID;
-import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.TITLE;
-import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.TYPE;
-import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.EDGES;
-import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.GRAPH;
-import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.NODES;
-import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.NODE_LABEL;
-import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.RendererProvider.edgeRenderer;
-import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.RendererProvider.labelRenderer;
-import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.RendererProvider.nodeRenderer;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.*;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.*;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.RendererProvider.*;
 import static prefuse.Constants.SHAPE_ELLIPSE;
 
 public class GraphDisplay extends Display {
@@ -47,6 +43,9 @@ public class GraphDisplay extends Display {
 
     private static final String LAYOUT = "layout";
     private static final String REPAINT = "repaint";
+
+    private static final long DURATION = 0;
+    private static final int MARGIN = 50;
 
     private Graph graph;
 
@@ -135,5 +134,9 @@ public class GraphDisplay extends Display {
     public void stopLayout() {
         m_vis.cancel(LAYOUT);
         m_vis.cancel(REPAINT);
+    }
+
+    public void zoomAndPanToFit() {
+        PrefuseUtil.zoomAndPanToFit(m_vis, this);
     }
 }
