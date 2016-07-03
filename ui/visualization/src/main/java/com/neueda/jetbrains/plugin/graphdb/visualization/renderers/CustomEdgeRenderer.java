@@ -1,7 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.visualization.renderers;
 
 import com.neueda.jetbrains.plugin.graphdb.platform.ShouldNeverHappenException;
-import com.neueda.jetbrains.plugin.graphdb.visualization.constants.VisualizationParameters;
 import com.neueda.jetbrains.plugin.graphdb.visualization.util.IntersectionUtil;
 import prefuse.Constants;
 import prefuse.render.EdgeRenderer;
@@ -12,6 +11,8 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.util.List;
+
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.VisualizationParameters.EDGE_THICKNESS;
 
 public class CustomEdgeRenderer extends EdgeRenderer {
 
@@ -94,14 +95,13 @@ public class CustomEdgeRenderer extends EdgeRenderer {
     @Override
     public boolean locatePoint(Point2D p, VisualItem item) {
         Shape s = getShape(item);
-        if ( s == null ) {
+        if (s == null) {
             return false;
         } else {
-            double width = item.getSize() * VisualizationParameters.EDGE_THICKNESS;
-            double halfWidth = width/2.0;
-            return s.intersects(p.getX()-halfWidth,
-                    p.getY()-halfWidth,
-                    width,width);
+            double width = item.getSize() * EDGE_THICKNESS;
+            double halfWidth = width / 2.0;
+            return s.intersects(p.getX() - halfWidth, p.getY() - halfWidth, width, width)
+                    || m_curArrow.contains(p.getX(), p.getY());
         }
     }
 }
