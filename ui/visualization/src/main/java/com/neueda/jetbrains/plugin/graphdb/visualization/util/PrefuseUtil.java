@@ -13,7 +13,9 @@ public class PrefuseUtil {
     public static void zoomAndPanToFit(Visualization visualization, Display display) {
         Rectangle2D bounds = visualization.getBounds(Visualization.ALL_ITEMS);
 
-        if (bounds.getWidth() == 0 && bounds.getHeight() == 0) return;
+        if (bounds.getWidth() == 0 && bounds.getHeight() == 0) {
+            return;
+        }
 
         DisplayLib.fitViewToBounds(display, bounds, DURATION);
     }
