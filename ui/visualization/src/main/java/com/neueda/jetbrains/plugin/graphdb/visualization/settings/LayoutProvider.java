@@ -3,7 +3,7 @@ package com.neueda.jetbrains.plugin.graphdb.visualization.settings;
 import com.neueda.jetbrains.plugin.graphdb.visualization.GraphDisplay;
 import com.neueda.jetbrains.plugin.graphdb.visualization.layouts.CenteredLayout;
 import com.neueda.jetbrains.plugin.graphdb.visualization.layouts.DynamicForceLayout;
-import com.neueda.jetbrains.plugin.graphdb.visualization.layouts.RepainAndRepositionAction;
+import com.neueda.jetbrains.plugin.graphdb.visualization.layouts.RepaintAndRepositionAction;
 import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
 import prefuse.Visualization;
 import prefuse.action.ActionList;
@@ -22,7 +22,7 @@ public class LayoutProvider {
 
         actions.add(new DynamicForceLayout(GRAPH, ENFORCE_BOUNDS));
         actions.add(ColorProvider.colors(lookAndFeel));
-        actions.add(new RepainAndRepositionAction(viz, display));
+        actions.add(new RepaintAndRepositionAction(viz, display));
 
         return actions;
     }

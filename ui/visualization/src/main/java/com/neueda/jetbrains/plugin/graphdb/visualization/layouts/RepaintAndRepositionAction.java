@@ -5,14 +5,14 @@ import com.neueda.jetbrains.plugin.graphdb.visualization.util.PrefuseUtil;
 import prefuse.Visualization;
 import prefuse.action.RepaintAction;
 
-public class RepainAndRepositionAction extends RepaintAction {
+public class RepaintAndRepositionAction extends RepaintAction {
 
     private static final long DURATION = 0;
 
     private Visualization visualization;
     private GraphDisplay display;
 
-    public RepainAndRepositionAction(Visualization visualization, GraphDisplay display) {
+    public RepaintAndRepositionAction(Visualization visualization, GraphDisplay display) {
         super(visualization);
         this.visualization = visualization;
         this.display = display;
@@ -20,8 +20,7 @@ public class RepainAndRepositionAction extends RepaintAction {
 
     @Override
     public void run(double frac) {
-        super.run(frac);
-
         PrefuseUtil.zoomAndPanToFit(visualization, display);
+        super.run(frac);
     }
 }
