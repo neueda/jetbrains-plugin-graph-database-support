@@ -12,10 +12,10 @@ import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.messages.MessageBus;
-import com.neueda.jetbrains.plugin.graphdb.platform.GraphLanguages;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.psi.PsiTraversalUtilities;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;
+import com.neueda.jetbrains.plugin.graphdb.platform.GraphLanguages;
 
 import java.awt.Component;
 
@@ -23,16 +23,13 @@ public class ExecuteQueryAction extends AnAction {
 
     @Override
     public void update(AnActionEvent e) {
-        PsiFile psiFile = e.getData(CommonDataKeys.PSI_FILE);
-        if (psiFile != null) {
-            String languageId = psiFile.getLanguage().getID();
+        Editor editor = e.getData(CommonDataKeys.EDITOR_EVEN_IF_INACTIVE);
 
-            if (GraphLanguages.SUPPORTED_LANGUAGES.contains(languageId)) {
-                e.getPresentation().setEnabled(true);
-                return;
-            }
+        if (editor != null) {
+            e.getPresentation().setEnabled(true);
+        } else {
+            e.getPresentation().setEnabled(false);
         }
-        e.getPresentation().setEnabled(false);
     }
 
     @Override
