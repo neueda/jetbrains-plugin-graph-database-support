@@ -1,8 +1,12 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions;
 
+import com.intellij.ide.scratch.ScratchFileService;
+import com.intellij.openapi.fileEditor.FileEditor;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.intellij.ui.treeStructure.Tree;
@@ -10,8 +14,12 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSo
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.neo4j.bolt.Neo4jBoltDataSourceDialog;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +40,7 @@ public class DataSourceInteractions {
         initAddAction();
         initRemoveAction();
         initEditAction();
+        initQuickEditorAction();
     }
 
     private void initAddAction() {
@@ -96,5 +105,32 @@ public class DataSourceInteractions {
                 }
             }
         });
+    }
+
+    private void initQuickEditorAction() {
+        MouseAdapter mouseAdapter = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int clickCount = e.getClickCount();
+                if (clickCount == 2) {
+                    try {
+                        VirtualFile file = ScratchFileService.getInstance().findFile(
+                                GraphDbConsoleRootType.getInstance(),
+                                "test-editor.cyp",
+                                ScratchFileService.Option.create_if_missing
+                        );
+
+                        FileEditorManager.getInstance(project).openFile(file, true);
+
+                        FileEditor[] fileEditors = FileEditorManager.getInstance(project).openFile(file, true);
+//                        FileEditorManager.getInstance(project).openEditor(new OpenFileDescriptor(project, file), true);
+//                        FileEditorManager.getInstance(project).
+                    } catch (IOException exception) {
+                        Notifier.error("Open editor error", exception.getMessage());
+                    }
+                }
+            }
+        };
+        dataSourceTree.addMouseListener(mouseAdapter);
     }
 }

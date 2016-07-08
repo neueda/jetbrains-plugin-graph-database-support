@@ -23,6 +23,12 @@ public class AbstractQueryHighlighterListener {
         if (psiFile.getLanguage().getID().equals(GraphLanguages.CYPHER)) {
             highlightStatementInCypherFile(editor, psiFile);
         }
+        // int offset = editor.getCaretModel().getOffset();
+        // PsiElement parent = psiFile.findElementAt(offset);
+        // PsiElement inside = InjectedLanguageUtil.findInside(parent, psiFile, offset, PsiDocumentManager.getInstance(editor.getProject()));
+        // PsiTraversalUtilities.getParentOfType(inside, CypherStatementItem.class);
+        // Editor e = InjectedLanguageUtil.getInjectedEditorForInjectedFile(editor, editor.getCaretModel().getPrimaryCaret(), null);
+        // PsiFile pf = PsiDocumentManager.getInstance(e.getProject()).getPsiFile(e.getDocument());
     }
 
     private void highlightStatementInCypherFile(Editor editor, PsiFile psiFile) {

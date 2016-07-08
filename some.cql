@@ -1,0 +1,1 @@
+MATCH (n) WITH n LIMIT 50 MATCH (n)-[r]-(m) RETURN *
