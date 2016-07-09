@@ -7,8 +7,6 @@ import prefuse.action.RepaintAction;
 
 public class RepaintAndRepositionAction extends RepaintAction {
 
-    private static final long DURATION = 0;
-
     private Visualization visualization;
     private GraphDisplay display;
 

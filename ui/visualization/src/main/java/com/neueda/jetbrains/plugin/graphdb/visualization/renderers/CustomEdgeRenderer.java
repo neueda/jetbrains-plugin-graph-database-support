@@ -9,6 +9,7 @@ import prefuse.visual.VisualItem;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.List;
 
@@ -71,21 +72,36 @@ public class CustomEdgeRenderer extends EdgeRenderer {
         double n1y = m_tmpPoints[0].getY();
         double n2x = m_tmpPoints[1].getX();
         double n2y = m_tmpPoints[1].getY();
-        switch (type) {
-            case Constants.EDGE_TYPE_LINE:
-                m_line.setLine(n1x, n1y, n2x, n2y);
-                shape = m_line;
-                break;
-            case Constants.EDGE_TYPE_CURVE:
-                getCurveControlPoints(edge, m_ctrlPoints, n1x, n1y, n2x, n2y);
-                m_cubic.setCurve(n1x, n1y,
-                        m_ctrlPoints[0].getX(), m_ctrlPoints[0].getY(),
-                        m_ctrlPoints[1].getX(), m_ctrlPoints[1].getY(),
-                        n2x, n2y);
-                shape = m_cubic;
-                break;
-            default:
-                throw new IllegalStateException("Unknown edge type");
+        if (item1 == item2) {
+            final double radius = 20;
+
+            Path2D.Double path = new Path2D.Double();
+            path.moveTo(n1x + 0, n1y + radius);
+            path.curveTo(n1x + 0, n1y + radius * 2.5,
+                    n1x + radius, n1y + radius * 3,
+                    n1x + radius * 2, n1y + radius * 2);
+            path.curveTo(n1x + radius * 3, n1y + radius,
+                    n1x + radius * 2.5, n1y + 0,
+                    n1x + radius, n1y + 0);
+
+            shape = path;
+        } else {
+            switch (type) {
+                case Constants.EDGE_TYPE_LINE:
+                    m_line.setLine(n1x, n1y, n2x, n2y);
+                    shape = m_line;
+                    break;
+                case Constants.EDGE_TYPE_CURVE:
+                    getCurveControlPoints(edge, m_ctrlPoints, n1x, n1y, n2x, n2y);
+                    m_cubic.setCurve(n1x, n1y,
+                            m_ctrlPoints[0].getX(), m_ctrlPoints[0].getY(),
+                            m_ctrlPoints[1].getX(), m_ctrlPoints[1].getY(),
+                            n2x, n2y);
+                    shape = m_cubic;
+                    break;
+                default:
+                    throw new IllegalStateException("Unknown edge type");
+            }
         }
 
         // return the edge shape

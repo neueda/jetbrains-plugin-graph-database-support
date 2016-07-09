@@ -6,6 +6,7 @@ import com.neueda.jetbrains.plugin.graphdb.visualization.controls.CustomNeighbor
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.NodeCallback;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.RelationshipCallback;
+import com.neueda.jetbrains.plugin.graphdb.visualization.layouts.CustomItemSorter;
 import com.neueda.jetbrains.plugin.graphdb.visualization.listeners.NodeListener;
 import com.neueda.jetbrains.plugin.graphdb.visualization.listeners.RelationshipListener;
 import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
@@ -17,7 +18,7 @@ import prefuse.Display;
 import prefuse.Visualization;
 import prefuse.controls.DragControl;
 import prefuse.controls.PanControl;
-import prefuse.controls.ZoomControl;
+import prefuse.controls.WheelZoomControl;
 import prefuse.controls.ZoomToFitControl;
 import prefuse.data.Edge;
 import prefuse.data.Graph;
@@ -33,7 +34,7 @@ import java.util.Map;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.*;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.*;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.RendererProvider.*;
-import static prefuse.Constants.*;
+import static prefuse.Constants.SHAPE_ELLIPSE;
 
 public class GraphDisplay extends Display {
 
@@ -67,16 +68,19 @@ public class GraphDisplay extends Display {
         m_vis.setValue(NODES, null, VisualItem.SHAPE, SHAPE_ELLIPSE);
 
         m_vis.addDecorators(NODE_LABEL, NODES, SchemaProvider.provideFontSchema());
+//        m_vis.addDecorators(EDGE_LABEL, EDGES, SchemaProvider.provideFontSchemaWithBackground());
 
         m_vis.setRendererFactory(setupRenderer());
 
         m_vis.putAction(LAYOUT, LayoutProvider.forceLayout(m_vis, this, lookAndFeel));
         m_vis.putAction(REPAINT, LayoutProvider.repaintLayout(lookAndFeel));
 
+        setItemSorter(new CustomItemSorter());
+
         setHighQuality(true);
 
         addControlListener(new DragControl());
-        addControlListener(new ZoomControl());
+        addControlListener(new WheelZoomControl());
         addControlListener(new ZoomToFitControl());
         addControlListener(new PanControl());
         highlightControl = new CustomNeighborHighlightControl();
@@ -113,6 +117,7 @@ public class GraphDisplay extends Display {
 
             Edge edge = graph.addEdge(nodeMap.get(start), nodeMap.get(end));
             edge.set(ID, graphRelationship.getId());
+            edge.set(TITLE, graphRelationship.getId());
             graphRelationshipMap.put(graphRelationship.getId(), graphRelationship);
         }
     }
@@ -120,6 +125,7 @@ public class GraphDisplay extends Display {
     private RendererFactory setupRenderer() {
         DefaultRendererFactory rendererFactory = new DefaultRendererFactory(nodeRenderer(), edgeRenderer());
         rendererFactory.add(new InGroupPredicate(NODE_LABEL), labelRenderer());
+        rendererFactory.add(new InGroupPredicate(EDGE_LABEL), edgeLabelRenderer());
 
         return rendererFactory;
     }

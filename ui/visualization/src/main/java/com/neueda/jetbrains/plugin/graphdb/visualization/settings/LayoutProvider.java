@@ -10,6 +10,7 @@ import prefuse.action.ActionList;
 import prefuse.action.RepaintAction;
 import prefuse.activity.Activity;
 
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.EDGE_LABEL;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.GRAPH;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.NODE_LABEL;
 
@@ -30,6 +31,7 @@ public class LayoutProvider {
     public static ActionList repaintLayout(LookAndFeelService lookAndFeelService) {
         ActionList repaint = new ActionList(Activity.INFINITY);
         repaint.add(new CenteredLayout(NODE_LABEL));
+        repaint.add(new CenteredLayout(EDGE_LABEL));
         repaint.add(ColorProvider.colors(lookAndFeelService));
         repaint.add(new RepaintAction());
 

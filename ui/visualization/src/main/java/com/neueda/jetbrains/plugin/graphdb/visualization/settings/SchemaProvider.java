@@ -27,6 +27,13 @@ public class SchemaProvider {
         return fontSchema;
     }
 
+    public static Schema provideFontSchemaWithBackground() {
+        Schema schema = provideFontSchema();
+        schema.setDefault(VisualItem.FILLCOLOR, ColorLib.rgb(240, 230, 80));
+
+        return schema;
+    }
+
     public static Schema provideNodeSchema() {
         Schema nodeSchema = PrefuseLib.getVisualItemSchema();
         nodeSchema.setDefault(VisualItem.SHAPE, SHAPE_ELLIPSE);
