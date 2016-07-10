@@ -10,12 +10,13 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.intellij.ui.treeStructure.Tree;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.actions.RefreshDataSourcesAction;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceInteractions;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.CypherMetadataRetriever;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.GraphColoredTreeCellRenderer;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.FileUtil;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.CypherMetadataProviderService;
 
 import javax.swing.BorderFactory;
@@ -23,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.GridLayout;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -102,6 +104,7 @@ public class DataSourcesView implements Disposable {
         dataSourceTree.setCellRenderer(new GraphColoredTreeCellRenderer(component));
         dataSourceTree.setModel(treeModel);
         dataSourceTree.setRootVisible(false);
+        dataSourceTree.setToggleClickCount(0);
     }
 
     private void decorateDataSourceTree() {
@@ -115,7 +118,7 @@ public class DataSourcesView implements Disposable {
     }
 
     private void showDataSources() {
-        component.getDataSources()
+        component.getDataSourceContainer().getDataSources()
                 .forEach((dataSource) -> treeRoot.add(new PatchedDefaultMutableTreeNode(dataSource)));
         treeModel.reload();
     }
@@ -135,35 +138,42 @@ public class DataSourcesView implements Disposable {
     }
 
     public boolean refreshDataSourceMetadata(PatchedDefaultMutableTreeNode treeNode) {
-        DataSource nodeDataSource = (DataSource) treeNode.getUserObject();
+        DataSourceApi nodeDataSource = (DataSourceApi) treeNode.getUserObject();
         return cypherMetadataRetriever.refresh(treeNode, nodeDataSource);
     }
 
-    public void createDataSource(DataSource dataSource) {
-        component.addDataSource(dataSource);
+    public void createDataSource(DataSourceApi dataSource) {
+        component.getDataSourceContainer().addDataSource(dataSource);
         PatchedDefaultMutableTreeNode treeNode = new PatchedDefaultMutableTreeNode(dataSource);
         treeRoot.add(treeNode);
         refreshDataSourceMetadata(treeNode);
         treeModel.reload();
     }
 
-    public void updateDataSource(PatchedDefaultMutableTreeNode treeNode, DataSource oldDataSource, DataSource newDataSource) {
-        component.updateDataSource(oldDataSource, newDataSource);
+    public void updateDataSource(PatchedDefaultMutableTreeNode treeNode, DataSourceApi oldDataSource, DataSourceApi newDataSource) {
+        component.getDataSourceContainer().updateDataSource(oldDataSource, newDataSource);
         treeNode.setUserObject(newDataSource);
         refreshDataSourceMetadata(treeNode);
         treeModel.reload();
     }
 
-    public void removeDataSources(List<DataSource> dataSourcesForRemoval) {
-        component.removeDataSources(dataSourcesForRemoval);
+    public void removeDataSources(Project project, List<DataSourceApi> dataSourcesForRemoval) {
+        component.getDataSourceContainer().removeDataSources(dataSourcesForRemoval);
 
         dataSourcesForRemoval.stream()
-                .map(DataSource::getName)
+                .peek((dataSourceApi -> {
+                    try {
+                        FileUtil.closeFile(project, FileUtil.getDataSourceFile(project, dataSourceApi));
+                    } catch (IOException e) {
+                        // do nothing
+                    }
+                }))
+                .map(DataSourceApi::getName)
                 .map(name -> {
                     Enumeration enumeration = treeRoot.children();
                     while (enumeration.hasMoreElements()) {
                         DefaultMutableTreeNode element = (DefaultMutableTreeNode) enumeration.nextElement();
-                        DataSource dataSource = (DataSource) element.getUserObject();
+                        DataSourceApi dataSource = (DataSourceApi) element.getUserObject();
                         if (dataSource.getName().equals(name)) {
                             return element;
                         }

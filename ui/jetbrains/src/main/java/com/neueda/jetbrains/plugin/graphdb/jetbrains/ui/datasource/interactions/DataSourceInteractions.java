@@ -1,19 +1,16 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions;
 
-import com.intellij.ide.scratch.ScratchFileService;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.intellij.ui.treeStructure.Tree;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.neo4j.bolt.Neo4jBoltDataSourceDialog;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.FileUtil;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -59,19 +56,19 @@ public class DataSourceInteractions {
     private void initRemoveAction() {
         decorator.setRemoveAction(anActionButton -> {
             DefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(DefaultMutableTreeNode.class,
-                    (node) -> node.getUserObject() instanceof DataSource);
+                    (node) -> node.getUserObject() instanceof DataSourceApi);
 
-            List<DataSource> dataSourcesForRemoval = Arrays.stream(selectedNodes)
-                    .map((node) -> (DataSource) node.getUserObject())
+            List<DataSourceApi> dataSourcesForRemoval = Arrays.stream(selectedNodes)
+                    .map((node) -> (DataSourceApi) node.getUserObject())
                     .collect(Collectors.toList());
 
             if (dataSourcesForRemoval.size() > 0) {
-                dataSourcesView.removeDataSources(dataSourcesForRemoval);
+                dataSourcesView.removeDataSources(project, dataSourcesForRemoval);
             }
         });
         decorator.setRemoveActionUpdater(e -> {
             DefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(DefaultMutableTreeNode.class,
-                    (node) -> node.getUserObject() instanceof DataSource);
+                    (node) -> node.getUserObject() instanceof DataSourceApi);
 
             return selectedNodes.length > 0;
         });
@@ -80,18 +77,18 @@ public class DataSourceInteractions {
     private void initEditAction() {
         decorator.setEditActionUpdater(e -> {
             DefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(DefaultMutableTreeNode.class,
-                    (node) -> node.getUserObject() instanceof DataSource);
+                    (node) -> node.getUserObject() instanceof DataSourceApi);
 
             return selectedNodes.length == 1;
         });
         decorator.setEditAction(anActionButton -> {
             PatchedDefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(PatchedDefaultMutableTreeNode.class,
-                    (node) -> node.getUserObject() instanceof DataSource);
+                    (node) -> node.getUserObject() instanceof DataSourceApi);
 
             if (selectedNodes.length == 1) {
                 PatchedDefaultMutableTreeNode treeNode = selectedNodes[0];
 
-                DataSource dataSourceToEdit = (DataSource) treeNode.getUserObject();
+                DataSourceApi dataSourceToEdit = (DataSourceApi) treeNode.getUserObject();
 
                 DataSourceDialog dialog = null;
                 if (dataSourceToEdit.getDataSourceType().equals(DataSourceType.NEO4J_BOLT)) {
@@ -113,18 +110,17 @@ public class DataSourceInteractions {
             public void mouseClicked(MouseEvent e) {
                 int clickCount = e.getClickCount();
                 if (clickCount == 2) {
+                    DefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(DefaultMutableTreeNode.class,
+                            (node) -> node.getUserObject() instanceof DataSourceApi);
+
+                    if (selectedNodes.length != 1) {
+                        return;
+                    }
+
+                    DataSourceApi dataSource = (DataSourceApi) selectedNodes[0].getUserObject();
+
                     try {
-                        VirtualFile file = ScratchFileService.getInstance().findFile(
-                                GraphDbConsoleRootType.getInstance(),
-                                "test-editor.cyp",
-                                ScratchFileService.Option.create_if_missing
-                        );
-
-                        FileEditorManager.getInstance(project).openFile(file, true);
-
-                        FileEditor[] fileEditors = FileEditorManager.getInstance(project).openFile(file, true);
-//                        FileEditorManager.getInstance(project).openEditor(new OpenFileDescriptor(project, file), true);
-//                        FileEditorManager.getInstance(project).
+                        FileUtil.openFile(project, FileUtil.getDataSourceFile(project, dataSource));
                     } catch (IOException exception) {
                         Notifier.error("Open editor error", exception.getMessage());
                     }

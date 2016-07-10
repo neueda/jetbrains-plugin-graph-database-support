@@ -2,7 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class DataSourceDialog extends DialogWrapper {
@@ -11,7 +11,7 @@ public abstract class DataSourceDialog extends DialogWrapper {
         super(project);
     }
 
-    public abstract DataSource constructDataSource();
+    public abstract DataSourceApi constructDataSource();
 
     public boolean go() {
         init();

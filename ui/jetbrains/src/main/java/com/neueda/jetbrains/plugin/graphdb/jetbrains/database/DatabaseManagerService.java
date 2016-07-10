@@ -1,9 +1,9 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.database;
 
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 
 public interface DatabaseManagerService {
 
-    GraphDatabaseApi getDatabaseFor(DataSource dataSource);
+    GraphDatabaseApi getDatabaseFor(DataSourceApi dataSource);
 }

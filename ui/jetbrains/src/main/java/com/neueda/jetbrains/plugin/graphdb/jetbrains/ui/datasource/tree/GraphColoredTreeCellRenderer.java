@@ -2,8 +2,8 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree;
 
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ValueWithIcon;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,9 +23,9 @@ public class GraphColoredTreeCellRenderer extends ColoredTreeCellRenderer {
                                       boolean leaf, int row, boolean hasFocus) {
         Object userObject = ((DefaultMutableTreeNode) value).getUserObject();
 
-        if (userObject instanceof DataSource) {
-            DataSource dataSource = (DataSource) userObject;
-            setIcon(component.getDataSourceDescription(dataSource).getIcon());
+        if (userObject instanceof DataSourceApi) {
+            DataSourceApi dataSource = (DataSourceApi) userObject;
+            setIcon(dataSource.getDescription().getIcon());
             append(dataSource.getName(), SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES, true);
         } else if (userObject instanceof ValueWithIcon) {
             ValueWithIcon val = (ValueWithIcon) userObject;

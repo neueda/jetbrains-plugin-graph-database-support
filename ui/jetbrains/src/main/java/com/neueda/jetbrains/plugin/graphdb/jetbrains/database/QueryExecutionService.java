@@ -6,7 +6,7 @@ import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;
 
@@ -23,7 +23,7 @@ public class QueryExecutionService {
         this.databaseManager = ServiceManager.getService(DatabaseManagerService.class);
     }
 
-    public void executeQuery(DataSource dataSource, ExecuteQueryPayload payload) {
+    public void executeQuery(DataSourceApi dataSource, ExecuteQueryPayload payload) {
         checkForRunningQuery();
 
         try {
@@ -45,7 +45,7 @@ public class QueryExecutionService {
         }
     }
 
-    private synchronized void executeInBackground(DataSource dataSource, ExecuteQueryPayload payload) {
+    private synchronized void executeInBackground(DataSourceApi dataSource, ExecuteQueryPayload payload) {
         QueryExecutionProcessEvent event = messageBus.syncPublisher(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC);
         event.executionStarted(payload);
 

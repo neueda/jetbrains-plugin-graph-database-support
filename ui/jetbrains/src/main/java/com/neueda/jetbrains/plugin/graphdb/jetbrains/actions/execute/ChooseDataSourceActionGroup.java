@@ -25,7 +25,7 @@ public class ChooseDataSourceActionGroup extends ActionGroup {
     @NotNull
     @Override
     public AnAction[] getChildren(@Nullable AnActionEvent e) {
-        return component.getDataSources().stream()
+        return component.getDataSourceContainer().getDataSources().stream()
                 .map((dataSource) -> new ChooseDataSourceAction(dataSource, component, messageBus, executeQueryPayload))
                 .toArray(AnAction[]::new);
     }

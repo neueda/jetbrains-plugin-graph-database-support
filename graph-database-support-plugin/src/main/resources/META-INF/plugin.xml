@@ -104,7 +104,7 @@
                         serviceImplementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView"/>
         <projectService serviceInterface="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView"
                         serviceImplementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView"/>
-        <scratch.rootType implementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.GraphDbConsoleRootType"/>
+        <scratch.rootType implementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.GraphDbEditorsConsoleRootType"/>
 
         <!-- Cypher -->
         <fileTypeFactory implementation="com.neueda.jetbrains.plugin.graphdb.language.cypher.file.CypherFileTypeFactory"/>

@@ -12,9 +12,9 @@ import com.intellij.ui.components.JBTextField;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.Neo4jBoltConfiguration;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DatabaseManagerService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceDialog;
@@ -39,7 +39,7 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
     public static final int HEIGHT = 150;
     private final DataSourcesComponent dataSourcesComponent;
     private final DatabaseManagerService databaseManager;
-    private DataSource dataSourceToEdit;
+    private DataSourceApi dataSourceToEdit;
 
     private Data data;
 
@@ -51,7 +51,7 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
     private JBTextField portField;
     private JButton testConnectionButton;
 
-    public Neo4jBoltDataSourceDialog(Project project, DataSourcesView dataSourcesView, DataSource dataSourceToEdit) {
+    public Neo4jBoltDataSourceDialog(Project project, DataSourcesView dataSourcesView, DataSourceApi dataSourceToEdit) {
         this(project, dataSourcesView);
         this.dataSourceToEdit = dataSourceToEdit;
     }
@@ -73,7 +73,7 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
                 popupPanel.add(connectionFailed, BorderLayout.CENTER);
             } else {
                 try {
-                    DataSource dataSource = constructDataSource();
+                    DataSourceApi dataSource = constructDataSource();
                     GraphDatabaseApi db = databaseManager.getDatabaseFor(dataSource);
                     GraphQueryResult result = db.execute("RETURN 'ok'");
 
@@ -126,7 +126,7 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
 
         extractData();
 
-        if (dataSourcesComponent.isDataSourceExists(data.dataSourceName)) {
+        if (dataSourcesComponent.getDataSourceContainer().isDataSourceExists(data.dataSourceName)) {
             if (!(dataSourceToEdit != null && dataSourceToEdit.getName().equals(data.dataSourceName))) {
                 return validation(String.format("Data source [%s] already exists", data.dataSourceName), dataSourceNameField);
             }
@@ -155,7 +155,7 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
     }
 
     @Override
-    public DataSource constructDataSource() {
+    public DataSourceApi constructDataSource() {
         extractData();
 
         Map<String, String> configuration = new HashMap<>();
@@ -164,7 +164,12 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
         configuration.put(Neo4jBoltConfiguration.USER, data.user);
         configuration.put(Neo4jBoltConfiguration.PASSWORD, data.password);
 
-        return new DataSource(DataSourceType.NEO4J_BOLT, data.dataSourceName, configuration);
+        return dataSourcesComponent.getDataSourceContainer().createDataSource(
+                dataSourceToEdit,
+                DataSourceType.NEO4J_BOLT,
+                data.dataSourceName,
+                configuration
+        );
     }
 
     private void extractData() {

@@ -9,7 +9,7 @@ import com.intellij.openapi.util.Disposer;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.MetadataRetrieveEvent;
@@ -61,20 +61,20 @@ public class LogPanel implements Disposable {
 
         messageBus.connect().subscribe(MetadataRetrieveEvent.METADATA_RETRIEVE_EVENT, new MetadataRetrieveEvent() {
             @Override
-            public void startMetadataRefresh(DataSource nodeDataSource) {
+            public void startMetadataRefresh(DataSourceApi nodeDataSource) {
                 info(String.format("DataSource[%s] - refreshing metadata...", nodeDataSource.getName()));
                 newLine();
             }
 
             @Override
-            public void metadataRefreshSucceed(DataSource nodeDataSource) {
+            public void metadataRefreshSucceed(DataSourceApi nodeDataSource) {
                 info(String.format("DataSource[%s] - metadata refreshed successfully!", nodeDataSource.getName()));
                 newLine();
                 newLine();
             }
 
             @Override
-            public void metadataRefreshFailed(DataSource nodeDataSource, Exception exception) {
+            public void metadataRefreshFailed(DataSourceApi nodeDataSource, Exception exception) {
                 error(String.format("DataSource[%s] - metadata refresh failed. Reason: ", nodeDataSource.getName()));
                 printException(exception);
                 newLine();

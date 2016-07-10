@@ -8,5 +8,8 @@
     <suppress files="[\\/]gen[\\/]" checks="[a-zA-Z0-9]*"/>
     <suppress files="_CypherLexer.java" checks="[a-zA-Z0-9]*"/>
     <suppress files="DataSource.java" checks="VisibilityModifier"/>
+    <suppress files="DataSource.java" checks="VisibilityModifier"/>
+    <suppress files="DataSourceV\d+.java" checks="VisibilityModifier"/>
     <suppress files="DataSourcesComponentState.java" checks="VisibilityModifier"/>
+    <suppress files="DataSourceContainerV\d+.java" checks="VisibilityModifier"/>
 </suppressions>

@@ -11,5 +11,8 @@ dependencies {
     compile project(':database:neo4j')
 
     compile project(':ui:visualization')
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.assertj:assertj-core:3.4.1'
 }
 

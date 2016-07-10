@@ -8,8 +8,8 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultRow;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSource;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DatabaseManagerService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ValueWithIcon;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.CypherMetadataProviderService;
@@ -31,7 +31,7 @@ public class CypherMetadataRetriever {
         this.databaseManager = ServiceManager.getService(DatabaseManagerService.class);
     }
 
-    public boolean refresh(PatchedDefaultMutableTreeNode node, DataSource nodeDataSource) {
+    public boolean refresh(PatchedDefaultMutableTreeNode node, DataSourceApi nodeDataSource) {
         MetadataRetrieveEvent metadataRetrieveEvent = messageBus.syncPublisher(MetadataRetrieveEvent.METADATA_RETRIEVE_EVENT);
 
         metadataRetrieveEvent.startMetadataRefresh(nodeDataSource);
@@ -43,7 +43,8 @@ public class CypherMetadataRetriever {
         }
     }
 
-    private boolean refreshNeo4jBoltCypherMetadata(MetadataRetrieveEvent metadataRetrieveEvent, PatchedDefaultMutableTreeNode node, DataSource nodeDataSource) {
+    private boolean refreshNeo4jBoltCypherMetadata(MetadataRetrieveEvent metadataRetrieveEvent, PatchedDefaultMutableTreeNode node,
+                                                   DataSourceApi nodeDataSource) {
         try {
             GraphDatabaseApi db = databaseManager.getDatabaseFor(nodeDataSource);
 
