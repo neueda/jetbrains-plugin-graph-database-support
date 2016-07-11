@@ -14,6 +14,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.GraphConstants;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analytics;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.psi.PsiTraversalUtilities;
@@ -22,6 +23,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphLanguages;
 
 import java.awt.Component;
+import java.awt.event.KeyEvent;
 
 public class ExecuteQueryAction extends AnAction {
 
@@ -38,6 +40,8 @@ public class ExecuteQueryAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
+        Analytics.event("query", e.getInputEvent() instanceof KeyEvent ? "executeWithShortcut" : "executeWithMouse");
+
         Project project = getEventProject(e);
         Editor editor = e.getData(CommonDataKeys.EDITOR_EVEN_IF_INACTIVE);
         PsiFile psiFile = e.getData(CommonDataKeys.PSI_FILE);

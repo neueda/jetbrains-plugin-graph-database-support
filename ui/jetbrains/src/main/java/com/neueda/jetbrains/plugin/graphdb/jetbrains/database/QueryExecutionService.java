@@ -6,6 +6,7 @@ import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analytics;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;
@@ -30,6 +31,8 @@ public class QueryExecutionService {
             executeInBackground(dataSource, payload);
         } catch (Exception e) {
             Notifier.error("Query execution", "Error during execution: " + e.toString());
+        } finally {
+            Analytics.event(dataSource, "executeQuery");
         }
     }
 

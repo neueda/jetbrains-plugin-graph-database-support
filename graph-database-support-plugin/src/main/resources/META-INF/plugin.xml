@@ -14,46 +14,47 @@
 
         <p>
             <b>Features:</b>
-            <ul>
-                <li>Manage data sources.</li>
-                <li>Write and execute queries.</li>
-                <li>Explore query results in graph or table view.</li>
-            </ul>
+        <ul>
+            <li>Manage data sources.</li>
+            <li>Write and execute queries.</li>
+            <li>Explore query results in graph or table view.</li>
+        </ul>
         </p>
 
         <p>
             <b>Supported databases:</b>
-            <ul>
-                <li>Neo4j 3.0+ (Bolt)</li>
-            </ul>
+        <ul>
+            <li>Neo4j 3.0+ (Bolt)</li>
+        </ul>
         </p>
 
         <p>
             <b>Supported query languages:</b>
+        <ul>
+            <li>Cypher</li>
             <ul>
-                <li>Cypher</li>
-                <ul>
-                    <li>Understands queries in `.cyp`, `.cypher` or `.cql` files.</li>
-                    <li>Syntax highlight and error reporting.</li>
-                    <li>Refactoring support for identifiers, labels, relationship types and properties.</li>
-                    <li>
-                        Autocompletion support for identifiers, labels, relationship types, properties and stored procedures.
-                        Information gathered from existing queries and configured data sources.
-                    </li>
-                    <li>Auto-inject Cypher language for:
-                        <a href="https://github.com/neo4j/neo4j">neo4j</a>,
-                        <a href="https://github.com/neo4j/neo4j-ogm">neo4j-ogm</a>,
-                        <a href="https://github.com/spring-projects/spring-data-neo4j">spring-data-neo4j</a>,
-                        <a href="https://github.com/neo4j/neo4j/tree/3.1/community/neo4j-harness">neo4j-harness</a>,
-                        <a href="https://github.com/nigelsmall/py2neo">py2neo</a>.
-                    </li>
-                </ul>
+                <li>Understands queries in `.cyp`, `.cypher` or `.cql` files.</li>
+                <li>Syntax highlight and error reporting.</li>
+                <li>Refactoring support for identifiers, labels, relationship types and properties.</li>
+                <li>
+                    Autocompletion support for identifiers, labels, relationship types, properties and stored procedures.
+                    Information gathered from existing queries and configured data sources.
+                </li>
+                <li>Auto-inject Cypher language for:
+                    <a href="https://github.com/neo4j/neo4j">neo4j</a>,
+                    <a href="https://github.com/neo4j/neo4j-ogm">neo4j-ogm</a>,
+                    <a href="https://github.com/spring-projects/spring-data-neo4j">spring-data-neo4j</a>,
+                    <a href="https://github.com/neo4j/neo4j/tree/3.1/community/neo4j-harness">neo4j-harness</a>,
+                    <a href="https://github.com/nigelsmall/py2neo">py2neo</a>.
+                </li>
             </ul>
+        </ul>
         </p>
         ]]></description>
 
     <change-notes><![CDATA[
-        See <a href="https://github.com/neueda/jetbrains-plugin-graph-database-support/releases">https://github.com/neueda/jetbrains-plugin-graph-database-support/releases</a>
+        See
+        <a href="https://github.com/neueda/jetbrains-plugin-graph-database-support/releases">https://github.com/neueda/jetbrains-plugin-graph-database-support/releases</a>
         ]]></change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
@@ -66,6 +67,11 @@
     <depends optional="true" config-file="intellilang-cypher-support.xml">org.intellij.intelliLang</depends>
 
     <application-components>
+        <!-- Google analytics component -->
+        <component>
+            <interface-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.AnalyticsApplicationComponent</interface-class>
+            <implementation-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.GoogleAnalyticsApplicationComponent</implementation-class>
+        </component>
         <!-- Graph Database support - query statement highlighting -->
         <component>
             <interface-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.highlighter.QueryHighlighterComponent</interface-class>
@@ -105,6 +111,8 @@
         <projectService serviceInterface="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView"
                         serviceImplementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView"/>
         <scratch.rootType implementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.GraphDbEditorsConsoleRootType"/>
+        <applicationConfigurable groupId="tools"
+                                 instance="com.neueda.jetbrains.plugin.graphdb.jetbrains.configuration.GraphDatabaseSupportConfiguration"/>
 
         <!-- Cypher -->
         <fileTypeFactory implementation="com.neueda.jetbrains.plugin.graphdb.language.cypher.file.CypherFileTypeFactory"/>

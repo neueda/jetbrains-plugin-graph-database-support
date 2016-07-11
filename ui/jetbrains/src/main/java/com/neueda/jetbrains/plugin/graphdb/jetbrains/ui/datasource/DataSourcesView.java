@@ -10,6 +10,7 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.intellij.ui.treeStructure.Tree;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analytics;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.actions.RefreshDataSourcesAction;
@@ -139,10 +140,12 @@ public class DataSourcesView implements Disposable {
 
     public boolean refreshDataSourceMetadata(PatchedDefaultMutableTreeNode treeNode) {
         DataSourceApi nodeDataSource = (DataSourceApi) treeNode.getUserObject();
+        Analytics.event(nodeDataSource, "refreshMetadata");
         return cypherMetadataRetriever.refresh(treeNode, nodeDataSource);
     }
 
     public void createDataSource(DataSourceApi dataSource) {
+        Analytics.event(dataSource, "create");
         component.getDataSourceContainer().addDataSource(dataSource);
         PatchedDefaultMutableTreeNode treeNode = new PatchedDefaultMutableTreeNode(dataSource);
         treeRoot.add(treeNode);
@@ -151,6 +154,7 @@ public class DataSourcesView implements Disposable {
     }
 
     public void updateDataSource(PatchedDefaultMutableTreeNode treeNode, DataSourceApi oldDataSource, DataSourceApi newDataSource) {
+        Analytics.event(newDataSource, "update");
         component.getDataSourceContainer().updateDataSource(oldDataSource, newDataSource);
         treeNode.setUserObject(newDataSource);
         refreshDataSourceMetadata(treeNode);
@@ -162,6 +166,7 @@ public class DataSourcesView implements Disposable {
 
         dataSourcesForRemoval.stream()
                 .peek((dataSourceApi -> {
+                    Analytics.event(dataSourceApi, "remove");
                     try {
                         FileUtil.closeFile(project, FileUtil.getDataSourceFile(project, dataSourceApi));
                     } catch (IOException e) {

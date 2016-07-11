@@ -23,6 +23,7 @@ import com.intellij.ui.tabs.TabInfo;
 import com.intellij.ui.tabs.impl.JBTabsImpl;
 import com.intellij.ui.treeStructure.Tree;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.GraphConstants;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analytics;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.graph.GraphPanel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.log.LogPanel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.status.ExecutionStatusBarWidget;
@@ -95,6 +96,7 @@ public class GraphConsoleView implements Disposable {
             consoleTabs.addTab(new TabInfo(tableScrollPane)
                     .setText("Table"));
             consoleTabs.setSelectionChangeHandler((info, requestFocus, doChangeSelection) -> {
+                Analytics.event("console", "openTab[" + info.getText() + "]");
                 ActionCallback callback = doChangeSelection.run();
                 graphPanel.resetPan();
                 return callback;

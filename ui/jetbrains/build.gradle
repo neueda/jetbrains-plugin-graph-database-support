@@ -12,6 +12,11 @@ dependencies {
 
     compile project(':ui:visualization')
 
+    compile("com.brsanthu:google-analytics-java:$versionGoogleAnalytics") {
+        exclude group: "org.slf4j", module: "slf4j-api"
+        exclude group: "org.slf4j", module: "jcl-over-slf4j"
+    }
+
     testCompile "junit:junit:$versionJunit"
     testCompile "org.assertj:assertj-core:$versionAssertj"
 }
