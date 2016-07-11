@@ -25,6 +25,8 @@ intellij {
     } else {
         downloadSources true
     }
+
+    systemProperty 'graphDatabaseSupportDevelopment', 'true'
 }
 
 processResources {
