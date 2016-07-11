@@ -12,6 +12,8 @@ public interface DataSourceDescription {
 
     Icon getIcon();
 
+    String getDefaultFileExtension();
+
     DataSourceDescription NEO4J_BOLT = new DataSourceDescription() {
         @Override
         public DataSourceType getType() {
@@ -21,6 +23,11 @@ public interface DataSourceDescription {
         @Override
         public Icon getIcon() {
             return GraphIcons.Database.NEO4J;
+        }
+
+        @Override
+        public String getDefaultFileExtension() {
+            return "cypher";
         }
 
         @Override

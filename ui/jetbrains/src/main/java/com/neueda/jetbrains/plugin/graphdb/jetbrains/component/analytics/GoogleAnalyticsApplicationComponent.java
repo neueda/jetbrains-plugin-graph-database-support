@@ -65,21 +65,30 @@ public class GoogleAnalyticsApplicationComponent implements AnalyticsApplication
 
     @Override
     public void enableAnalytics(boolean state) {
+        forceEvent("analytics", state ? "enableAnalytics" : "disableAnalytics");
         PropertiesComponent.getInstance().setValue(ANALYTICS_ENABLED_KEY, String.valueOf(state));
     }
 
     public String getClientId() {
-        if(!PropertiesComponent.getInstance().isValueSet(ANALYTICS_CLIENT_ID_KEY)) {
+        if (!PropertiesComponent.getInstance().isValueSet(ANALYTICS_CLIENT_ID_KEY)) {
             PropertiesComponent.getInstance().setValue(ANALYTICS_CLIENT_ID_KEY, UUID.randomUUID().toString());
         }
 
         return PropertiesComponent.getInstance().getValue(ANALYTICS_CLIENT_ID_KEY);
     }
 
+    @Override
     public void event(String component, String action) {
         EventHit request = new EventHit(component, action);
         enrich(request);
         post(request);
+    }
+
+    @Override
+    public void forceEvent(String component, String action) {
+        EventHit request = new EventHit(component, action);
+        enrich(request);
+        forcePost(request);
     }
 
     private void sessionStart() {
@@ -112,5 +121,9 @@ public class GoogleAnalyticsApplicationComponent implements AnalyticsApplication
         if (isAnalyticEnabled()) {
             ga.postAsync(request);
         }
+    }
+
+    private void forcePost(GoogleAnalyticsRequest request) {
+        ga.postAsync(request);
     }
 }

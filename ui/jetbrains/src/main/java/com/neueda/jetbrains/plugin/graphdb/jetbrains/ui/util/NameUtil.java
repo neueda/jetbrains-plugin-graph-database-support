@@ -6,7 +6,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.
 public final class NameUtil {
 
     public static String createDataSourceFileName(DataSourceApi dataSource) {
-        return GraphConstants.BOUND_DATA_SOURCE_PREFIX + dataSource.getUUID() + ".txt";
+        return GraphConstants.BOUND_DATA_SOURCE_PREFIX + dataSource.getUUID() + "." + dataSource.getDescription().getDefaultFileExtension();
     }
 
     public static String extractDataSourceUUID(String fileName) {

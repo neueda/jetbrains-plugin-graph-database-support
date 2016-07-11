@@ -14,4 +14,6 @@ public interface AnalyticsApplicationComponent extends ApplicationComponent {
     void enableAnalytics(boolean state);
 
     void event(String component, String action);
+
+    void forceEvent(String component, String action);
 }
