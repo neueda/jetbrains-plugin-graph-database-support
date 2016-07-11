@@ -7,11 +7,10 @@ import prefuse.render.LabelRenderer;
 import prefuse.render.ShapeRenderer;
 
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.TITLE;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.VisualizationParameters.NODE_DIAMETER;
 import static prefuse.Constants.EDGE_TYPE_LINE;
 
 public class RendererProvider {
-
-    private static final int NODE_DIAMETER = 50;
 
     private static final int TEXT_OVERLAP = 12;
 
@@ -39,7 +38,7 @@ public class RendererProvider {
     public static EdgeRenderer edgeRenderer() {
         EdgeRenderer edgeRenderer = new CustomEdgeRenderer(EDGE_TYPE_LINE);
         edgeRenderer.setDefaultLineWidth(VisualizationParameters.EDGE_THICKNESS);
-        edgeRenderer.setArrowHeadSize((int) (10), (int) (15));
+        edgeRenderer.setArrowHeadSize(10, 15);
 
         return edgeRenderer;
     }

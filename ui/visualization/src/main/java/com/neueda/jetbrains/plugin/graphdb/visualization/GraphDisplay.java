@@ -43,9 +43,6 @@ public class GraphDisplay extends Display {
     private static final String LAYOUT = "layout";
     private static final String REPAINT = "repaint";
 
-    private static final long DURATION = 0;
-    private static final int MARGIN = 50;
-
     private Graph graph;
 
     private Map<String, Node> nodeMap = new HashMap<>();

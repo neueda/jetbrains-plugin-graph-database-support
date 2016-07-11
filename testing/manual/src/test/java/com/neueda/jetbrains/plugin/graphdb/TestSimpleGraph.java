@@ -1,23 +1,33 @@
 package com.neueda.jetbrains.plugin.graphdb;
 
+import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
+import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.Neo4jBoltConfiguration;
+import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.Neo4jBoltDatabase;
+import com.neueda.jetbrains.plugin.graphdb.visualization.PrefuseVisualization;
+import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
+
+import javax.swing.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import static javax.swing.JFrame.EXIT_ON_CLOSE;
+
 public class TestSimpleGraph {
 
     public static void main(String[] argv) {
-        /*LookAndFeelService lookAndFeelService = ServiceManager.getService(LookAndFeelService.class);
-        PrefuseVisualization v = new PrefuseVisualization(lookAndFeelService);
-        DumbDatabase db = new DumbDatabase();
+        PrefuseVisualization v = new PrefuseVisualization(new DefaultLookAndFeelService());
 
-        GraphNode node1 = db.createNode();
-        GraphNode node2 = db.createNode();
-        GraphNode node3 = db.createNode();
+        Map<String, String> config = new HashMap<String, String>();
+        config.put(Neo4jBoltConfiguration.HOST, "localhost");
+//        config.put(Neo4jBoltConfiguration.PASSWORD)
+//        config.put(Neo4jBoltConfiguration.PORT)
+//        config.put(Neo4jBoltConfiguration.USER)
+        Neo4jBoltDatabase db = new Neo4jBoltDatabase(config);
 
-        v.addNode(node1);
-        v.addNode(node2);
-        v.addNode(node3);
-
-        v.addRelation(db.createRelationship(node1, node2));
-        v.addRelation(db.createRelationship(node1, node3));
-        v.addRelation(db.createRelationship(node2, node3));
+        GraphQueryResult execute = db.execute("MATCH (n:TEST)-[r]-(n) RETURN * LIMIT 1;");
+//        GraphQueryResult execute = db.execute("MATCH (n)-[r]-(m) RETURN * LIMIT 10;");
+        execute.getNodes().forEach(v::addNode);
+        execute.getRelationships().forEach(v::addRelation);
 
         v.addNodeListener(EventType.CLICK, (id, item, event) -> System.out.println("Node clicked: " + id));
         v.addNodeListener(EventType.HOVER_START, (id, item, event) -> System.out.println("Node hovered: " + id));
@@ -25,12 +35,12 @@ public class TestSimpleGraph {
         v.addEdgeListener(EventType.HOVER_START, (id, item, event) -> System.out.println("Edge hovered: " + id));
 
         JFrame frame = new JFrame("Liquid Lama");
-        frame.getContentPane().add(v.getGraphCanvas());
+        frame.getContentPane().add(v.getCanvas());
         frame.pack();
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-        v.paint();*/
+        v.paint();
     }
 
 }

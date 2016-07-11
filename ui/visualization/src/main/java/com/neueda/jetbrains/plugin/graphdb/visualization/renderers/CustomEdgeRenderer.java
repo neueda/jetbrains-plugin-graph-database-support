@@ -2,6 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.visualization.renderers;
 
 import com.neueda.jetbrains.plugin.graphdb.platform.ShouldNeverHappenException;
 import com.neueda.jetbrains.plugin.graphdb.visualization.util.IntersectionUtil;
+import com.neueda.jetbrains.plugin.graphdb.visualization.util.RenderingUtil;
 import prefuse.Constants;
 import prefuse.render.EdgeRenderer;
 import prefuse.visual.EdgeItem;
@@ -9,13 +10,15 @@ import prefuse.visual.VisualItem;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.List;
 
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.VisualizationParameters.EDGE_THICKNESS;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.VisualizationParameters.NODE_DIAMETER;
 
 public class CustomEdgeRenderer extends EdgeRenderer {
+
+    private static final double RADIUS = (NODE_DIAMETER + EDGE_THICKNESS) / 2;
 
     public CustomEdgeRenderer(int edgeTypeLine) {
         super(edgeTypeLine);
@@ -27,23 +30,20 @@ public class CustomEdgeRenderer extends EdgeRenderer {
         VisualItem item1 = edge.getSourceItem();
         VisualItem item2 = edge.getTargetItem();
 
-        int type = m_edgeType;
-
         getAlignedPoint(m_tmpPoints[0], item1.getBounds(), m_xAlign1, m_yAlign1);
         getAlignedPoint(m_tmpPoints[1], item2.getBounds(), m_xAlign2, m_yAlign2);
         m_curWidth = (float) (m_width * getLineWidth(item));
 
-        // create the arrow head, if needed
-        EdgeItem e = (EdgeItem) item;
-        if (e.isDirected() && m_edgeArrow != Constants.EDGE_ARROW_NONE) {
-            // get starting and ending edge endpoints
-            boolean forward = (m_edgeArrow == Constants.EDGE_ARROW_FORWARD);
-            Point2D start = null, end = null;
-            start = m_tmpPoints[forward ? 0 : 1];
-            end = m_tmpPoints[forward ? 1 : 0];
+        // TODO decide on the angle here for loop arrow
+        double angle = 0.261799 * 3;
 
-            // compute the intersection with the target bounding box
-            VisualItem dest = forward ? e.getTargetItem() : e.getSourceItem();
+        boolean isLoopNode = item1 == item2;
+        if (!isLoopNode && edge.isDirected() && m_edgeArrow != Constants.EDGE_ARROW_NONE) {
+            boolean forward = (m_edgeArrow == Constants.EDGE_ARROW_FORWARD);
+            Point2D start = m_tmpPoints[forward ? 0 : 1];
+            Point2D end = m_tmpPoints[forward ? 1 : 0];
+
+            VisualItem dest = forward ? edge.getTargetItem() : edge.getSourceItem();
             Point2D center = new Point2D.Double(dest.getBounds().getCenterX(), dest.getBounds().getCenterY());
             List<Point2D> intersections = IntersectionUtil.getCircleLineIntersectionPoint(start, end, center, dest.getBounds().getWidth() / 2);
 
@@ -53,58 +53,35 @@ public class CustomEdgeRenderer extends EdgeRenderer {
 
             end = intersections.get(0);
 
-            // create the arrow head shape
             AffineTransform at = getArrowTrans(start, end, m_curWidth);
             m_curArrow = at.createTransformedShape(m_arrowHead);
 
-            // update the endpoints for the edge shape
-            // need to bias this by arrow head size
             Point2D lineEnd = m_tmpPoints[forward ? 1 : 0];
             lineEnd.setLocation(0, -m_arrowHeight);
             at.transform(lineEnd, lineEnd);
+        } else if (isLoopNode && edge.isDirected() && m_edgeArrow != Constants.EDGE_ARROW_NONE) {
+            double x = m_tmpPoints[0].getX();
+            double y = m_tmpPoints[0].getY();
+
+            Point.Double[] arrowPoints = RenderingUtil.arrow(angle, RADIUS, x, y, m_arrowHeight + 8);
+            AffineTransform at = getArrowTrans(arrowPoints[0], arrowPoints[1], m_curWidth);
+            m_curArrow = at.createTransformedShape(m_arrowHead);
         } else {
             m_curArrow = null;
         }
 
-        // create the edge shape
-        Shape shape = null;
+        Shape shape;
         double n1x = m_tmpPoints[0].getX();
         double n1y = m_tmpPoints[0].getY();
         double n2x = m_tmpPoints[1].getX();
         double n2y = m_tmpPoints[1].getY();
-        if (item1 == item2) {
-            final double radius = 20;
-
-            Path2D.Double path = new Path2D.Double();
-            path.moveTo(n1x + 0, n1y + radius);
-            path.curveTo(n1x + 0, n1y + radius * 2.5,
-                    n1x + radius, n1y + radius * 3,
-                    n1x + radius * 2, n1y + radius * 2);
-            path.curveTo(n1x + radius * 3, n1y + radius,
-                    n1x + radius * 2.5, n1y + 0,
-                    n1x + radius, n1y + 0);
-
-            shape = path;
+        if (isLoopNode) {
+            shape = RenderingUtil.loopArrow(angle, RADIUS, n1x, n1y, m_arrowHeight);
         } else {
-            switch (type) {
-                case Constants.EDGE_TYPE_LINE:
-                    m_line.setLine(n1x, n1y, n2x, n2y);
-                    shape = m_line;
-                    break;
-                case Constants.EDGE_TYPE_CURVE:
-                    getCurveControlPoints(edge, m_ctrlPoints, n1x, n1y, n2x, n2y);
-                    m_cubic.setCurve(n1x, n1y,
-                            m_ctrlPoints[0].getX(), m_ctrlPoints[0].getY(),
-                            m_ctrlPoints[1].getX(), m_ctrlPoints[1].getY(),
-                            n2x, n2y);
-                    shape = m_cubic;
-                    break;
-                default:
-                    throw new IllegalStateException("Unknown edge type");
-            }
+            m_line.setLine(n1x, n1y, n2x, n2y);
+            shape = m_line;
         }
 
-        // return the edge shape
         return shape;
     }
 
@@ -117,7 +94,7 @@ public class CustomEdgeRenderer extends EdgeRenderer {
             double width = item.getSize() * EDGE_THICKNESS;
             double halfWidth = width / 2.0;
             return s.intersects(p.getX() - halfWidth, p.getY() - halfWidth, width, width)
-                    || m_curArrow.contains(p.getX(), p.getY());
+                    || (m_curArrow != null && m_curArrow.contains(p.getX(), p.getY()));
         }
     }
 }
