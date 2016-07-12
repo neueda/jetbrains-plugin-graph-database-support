@@ -8,6 +8,10 @@ public final class Analytics {
         AnalyticsApplicationComponent.getInstance().event(component, action);
     }
 
+    public static void forceEvent(String component, String action) {
+        AnalyticsApplicationComponent.getInstance().forceEvent(component, action);
+    }
+
     public static void event(DataSourceApi dataSourceApi, String action) {
         event("dataSource[" + dataSourceApi.getDataSourceType() + "]", action);
     }

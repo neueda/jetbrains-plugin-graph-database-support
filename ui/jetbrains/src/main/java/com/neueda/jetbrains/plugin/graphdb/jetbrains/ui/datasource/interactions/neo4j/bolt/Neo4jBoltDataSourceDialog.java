@@ -31,7 +31,7 @@ import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Validation.validation;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Validation.validation;
 
 public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
 

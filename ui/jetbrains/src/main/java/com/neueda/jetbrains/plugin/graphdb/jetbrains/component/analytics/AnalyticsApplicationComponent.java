@@ -9,10 +9,6 @@ public interface AnalyticsApplicationComponent extends ApplicationComponent {
         return ApplicationManager.getApplication().getComponent(AnalyticsApplicationComponent.class);
     }
 
-    boolean isAnalyticEnabled();
-
-    void enableAnalytics(boolean state);
-
     void event(String component, String action);
 
     void forceEvent(String component, String action);

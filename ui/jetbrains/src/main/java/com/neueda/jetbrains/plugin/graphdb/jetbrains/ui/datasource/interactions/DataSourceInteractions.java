@@ -11,8 +11,8 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSo
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.neo4j.bolt.Neo4jBoltDataSourceDialog;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.FileUtil;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.FileUtil;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Notifier;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.event.MouseAdapter;

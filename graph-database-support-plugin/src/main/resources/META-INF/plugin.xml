@@ -67,6 +67,16 @@
     <depends optional="true" config-file="intellilang-cypher-support.xml">org.intellij.intelliLang</depends>
 
     <application-components>
+        <!-- Settings -->
+        <component>
+            <interface-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.settings.SettingsComponent</interface-class>
+            <implementation-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.settings.SettingsComponentImpl</implementation-class>
+        </component>
+        <!-- Update notification -->
+        <component>
+            <interface-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.updater.GraphDatabaseUpdaterComponent</interface-class>
+            <implementation-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.updater.GraphDatabaseUpdaterComponentImpl</implementation-class>
+        </component>
         <!-- Google analytics component -->
         <component>
             <interface-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.AnalyticsApplicationComponent</interface-class>

@@ -17,7 +17,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.actions.Refre
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceInteractions;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.CypherMetadataRetriever;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.GraphColoredTreeCellRenderer;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.FileUtil;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.FileUtil;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.CypherMetadataProviderService;
 
 import javax.swing.BorderFactory;

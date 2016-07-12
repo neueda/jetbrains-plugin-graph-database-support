@@ -18,8 +18,8 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analyti
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.psi.PsiTraversalUtilities;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.NameUtil;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util.Notifier;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.NameUtil;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Notifier;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphLanguages;
 
 import java.awt.Component;

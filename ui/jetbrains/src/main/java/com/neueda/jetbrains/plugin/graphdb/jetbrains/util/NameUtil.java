@@ -1,4 +1,4 @@
-package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.util;
+package com.neueda.jetbrains.plugin.graphdb.jetbrains.util;
 
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.GraphConstants;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
