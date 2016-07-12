@@ -6,7 +6,7 @@ import com.brsanthu.googleanalytics.GoogleAnalyticsRequest;
 import com.intellij.openapi.application.ApplicationAdapter;
 import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.openapi.application.ApplicationManager;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.GraphConstants;
+import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.listener.AnalyticsListener;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.settings.SettingsComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.PluginUtil;

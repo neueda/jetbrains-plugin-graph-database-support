@@ -1,6 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.util;
 
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.GraphConstants;
+import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 
 public final class NameUtil {

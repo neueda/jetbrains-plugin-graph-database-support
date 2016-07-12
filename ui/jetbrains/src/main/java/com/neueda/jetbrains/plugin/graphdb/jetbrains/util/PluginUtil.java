@@ -3,7 +3,7 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.util;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.extensions.PluginId;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.GraphConstants;
+import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants;
 
 public class PluginUtil {
 

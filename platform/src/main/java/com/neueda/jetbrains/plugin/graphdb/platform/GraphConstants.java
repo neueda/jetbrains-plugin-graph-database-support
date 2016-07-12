@@ -1,4 +1,4 @@
-package com.neueda.jetbrains.plugin.graphdb.jetbrains;
+package com.neueda.jetbrains.plugin.graphdb.platform;
 
 public final class GraphConstants {
 
