@@ -19,17 +19,17 @@ import static prefuse.visual.VisualItem.*;
 
 public class ColorProvider {
 
-    /**
+    /*
      * Pastel color PALETTE for node coloring
      */
-    private static final int ROT_1 = ColorLib.rgb(219, 94, 86);
-    private static final int ROT_2 = ColorLib.rgb(219, 194, 86);
-    private static final int ROT_3 = ColorLib.rgb(145, 219, 86);
-    private static final int ROT_4 = ColorLib.rgb(86, 219, 127);
-    private static final int ROT_5 = ColorLib.rgb(86, 211, 219);
-    private static final int ROT_6 = ColorLib.rgb(86, 111, 219);
-    private static final int ROT_7 = ColorLib.rgb(160, 86, 219);
-    private static final int ROT_8 = ColorLib.rgb(219, 86, 178);
+    private static final int ROT_1 = ColorLib.rgb(86, 219, 127);
+    private static final int ROT_2 = ColorLib.rgb(86, 211, 219);
+    private static final int ROT_3 = ColorLib.rgb(86, 111, 219);
+    private static final int ROT_4 = ColorLib.rgb(145, 219, 86);
+    private static final int ROT_5 = ColorLib.rgb(160, 86, 219);
+    private static final int ROT_6 = ColorLib.rgb(219, 86, 178);
+    private static final int ROT_7 = ColorLib.rgb(219, 94, 86);
+    private static final int ROT_8 = ColorLib.rgb(219, 194, 86);
 
     private static final int ORANGE = ColorLib.rgb(229, 60, 20);
     private static final int ORANGE_DARK = ColorLib.rgb(180, 40, 8);
