@@ -20,3 +20,5 @@ include 'testing:manual'
 include 'graph-database-support-plugin'
 include 'platform'
 
+// Documentation
+include 'docs'

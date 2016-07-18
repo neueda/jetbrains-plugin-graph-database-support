@@ -11,9 +11,19 @@ def configDir = new File(buildscript.sourceFile.parentFile, 'config')
 ext.checkstyleConfigDir = "$configDir/checkstyle"
 
 allprojects {
+
+    buildscript {
+        repositories {
+            mavenCentral()
+            mavenLocal()
+            jcenter()
+        }
+    }
+
     repositories {
         mavenCentral()
         mavenLocal()
+        jcenter()
         maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
     }
 

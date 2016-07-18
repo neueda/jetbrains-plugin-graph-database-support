@@ -47,6 +47,7 @@ Temporary Items
 # User-specific stuff:
 .idea
 *.ipr
+*.iml
 
 ## File-based project format:
 *.iws
