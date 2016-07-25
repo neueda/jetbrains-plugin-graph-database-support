@@ -4,7 +4,7 @@ import com.brsanthu.googleanalytics.GoogleAnalytics;
 
 import java.util.concurrent.TimeUnit;
 
-public class CustomGoogleAnalytics extends GoogleAnalytics{
+public class CustomGoogleAnalytics extends GoogleAnalytics {
 
     public CustomGoogleAnalytics(String trackingId) {
         super(trackingId);

@@ -3,10 +3,11 @@ package com.neueda.jetbrains.plugin.graphdb;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.Neo4jBoltConfiguration;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.Neo4jBoltDatabase;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.services.IdeaLookAndFeelService;
 import com.neueda.jetbrains.plugin.graphdb.visualization.PrefuseVisualization;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 
-import javax.swing.*;
+import javax.swing.JFrame;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ import static javax.swing.JFrame.EXIT_ON_CLOSE;
 public class TestSimpleGraph {
 
     public static void main(String[] argv) {
-        PrefuseVisualization v = new PrefuseVisualization(new DefaultLookAndFeelService());
+        PrefuseVisualization v = new PrefuseVisualization(new IdeaLookAndFeelService());
 
         Map<String, String> config = new HashMap<String, String>();
         config.put(Neo4jBoltConfiguration.HOST, "localhost");
