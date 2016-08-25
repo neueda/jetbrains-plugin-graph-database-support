@@ -26,8 +26,8 @@ public class NewDataSourceActionGroup extends ActionGroup {
         NewDataSourceAction neo4jBoltDataSource = new NewDataSourceAction(
                 dataSourcesView, new Neo4jBoltDataSourceDialog(project, dataSourcesView),
                 "Neo4j - Bolt", "Create Neo4j 3.0+ Bolt data source", GraphIcons.Database.NEO4J);
-        NotImplementedDataSourceAction orientDbDataSource = new NotImplementedDataSourceAction(
-                "OrientDB (in development)", "OrientDB data source", GraphIcons.Database.ORIENTDB);
-        return new AnAction[]{neo4jBoltDataSource, orientDbDataSource};
+        //NotImplementedDataSourceAction orientDbDataSource = new NotImplementedDataSourceAction(
+        //        "OrientDB (in development)", "OrientDB data source", GraphIcons.Database.ORIENTDB);
+        return new AnAction[]{neo4jBoltDataSource};
     }
 }
