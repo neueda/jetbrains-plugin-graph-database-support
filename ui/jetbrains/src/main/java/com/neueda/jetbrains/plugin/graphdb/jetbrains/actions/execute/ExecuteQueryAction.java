@@ -10,8 +10,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.messages.MessageBus;
@@ -19,6 +17,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analyti
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.psi.PsiTraversalUtilities;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.NameUtil;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Notifier;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants;
@@ -81,49 +80,32 @@ public class ExecuteQueryAction extends AnAction {
         }
 
         ExecuteQueryPayload executeQueryPayload = new ExecuteQueryPayload(content);
-        ensureToolWindowIsOpen(project, () -> {
-            if (virtualFile != null) {
-                String fileName = virtualFile.getName();
-                if (fileName.startsWith(GraphConstants.BOUND_DATA_SOURCE_PREFIX)) {
-                    DataSourceApi boundDataSource = dataSourcesComponent.getDataSourceContainer()
-                            .findDataSource(NameUtil.extractDataSourceUUID(fileName));
-                    executeQuery(messageBus, boundDataSource, executeQueryPayload);
-                    return;
-                }
+        ConsoleToolWindow.ensureOpen(project);
+
+        if (virtualFile != null) {
+            String fileName = virtualFile.getName();
+            if (fileName.startsWith(GraphConstants.BOUND_DATA_SOURCE_PREFIX)) {
+                DataSourceApi boundDataSource = dataSourcesComponent.getDataSourceContainer()
+                        .findDataSource(NameUtil.extractDataSourceUUID(fileName));
+                executeQuery(messageBus, boundDataSource, executeQueryPayload);
+                return;
             }
-
-            ListPopup popup = JBPopupFactory.getInstance().createActionGroupPopup(
-                    "Choose Data Source",
-                    new ChooseDataSourceActionGroup(messageBus, dataSourcesComponent, executeQueryPayload),
-                    e.getDataContext(),
-                    JBPopupFactory.ActionSelectionAid.SPEEDSEARCH,
-                    false
-            );
-
-            Component eventComponent = e.getInputEvent().getComponent();
-            if (eventComponent instanceof ActionButtonComponent) {
-                popup.showUnderneathOf(eventComponent);
-            } else {
-                popup.showInBestPositionFor(e.getDataContext());
-            }
-        });
-    }
-
-    private void ensureToolWindowIsOpen(Project project, Runnable onActiveAction) {
-        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
-
-        ToolWindow toolWindow = toolWindowManager.getToolWindow(GraphConstants.ToolWindow.CONSOLE_TOOL_WINDOW);
-
-        if (!toolWindow.isActive()) {
-            toolWindow.activate(onActiveAction, false);
-            return;
-        }
-        if (!toolWindow.isVisible()) {
-            toolWindow.show(onActiveAction);
-            return;
         }
 
-        onActiveAction.run();
+        ListPopup popup = JBPopupFactory.getInstance().createActionGroupPopup(
+                "Choose Data Source",
+                new ChooseDataSourceActionGroup(messageBus, dataSourcesComponent, executeQueryPayload),
+                e.getDataContext(),
+                JBPopupFactory.ActionSelectionAid.SPEEDSEARCH,
+                false
+        );
+
+        Component eventComponent = e.getInputEvent().getComponent();
+        if (eventComponent instanceof ActionButtonComponent) {
+            popup.showUnderneathOf(eventComponent);
+        } else {
+            popup.showInBestPositionFor(e.getDataContext());
+        }
     }
 
     public void executeQuery(MessageBus messageBus, DataSourceApi dataSource, ExecuteQueryPayload payload) {

@@ -10,6 +10,7 @@ public final class GraphIcons {
     public static final class Database {
         public static final Icon UNKNOWN = getIcon("/graphdb/icons/database/unknown_16x16.png");
         public static final Icon NEO4J = getIcon("/graphdb/icons/database/neo4j_16x16.png");
+        public static final Icon ORIENTDB = getIcon("/graphdb/icons/database/orientdb_16x16.png");
     }
 
     public static final class Language {

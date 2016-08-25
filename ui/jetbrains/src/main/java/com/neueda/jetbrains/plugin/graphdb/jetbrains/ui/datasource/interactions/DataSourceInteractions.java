@@ -48,7 +48,7 @@ public class DataSourceInteractions {
                     new NewDataSourceActionGroup(project, dataSourcesView),
                     anActionButton.getDataContext(),
                     JBPopupFactory.ActionSelectionAid.NUMBERING,
-                    false
+                    true
             );
             popup.show(anActionButton.getPreferredPopupPoint());
         });

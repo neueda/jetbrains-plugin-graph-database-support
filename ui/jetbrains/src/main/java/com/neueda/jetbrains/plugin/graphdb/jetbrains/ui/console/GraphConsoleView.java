@@ -22,12 +22,12 @@ import com.intellij.ui.table.JBTable;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.ui.tabs.impl.JBTabsImpl;
 import com.intellij.ui.treeStructure.Tree;
-import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analytics;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.graph.GraphPanel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.log.LogPanel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.status.ExecutionStatusBarWidget;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.TablePanel;
+import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants;
 import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
 
 import javax.swing.JPanel;
