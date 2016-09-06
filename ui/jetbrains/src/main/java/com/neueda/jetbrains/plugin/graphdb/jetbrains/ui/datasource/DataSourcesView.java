@@ -2,6 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource;
 
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.ActionToolbarPosition;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
@@ -167,11 +168,13 @@ public class DataSourcesView implements Disposable {
         dataSourcesForRemoval.stream()
                 .peek((dataSourceApi -> {
                     Analytics.event(dataSourceApi, "remove");
-                    try {
-                        FileUtil.closeFile(project, FileUtil.getDataSourceFile(project, dataSourceApi));
-                    } catch (IOException e) {
-                        // do nothing
-                    }
+                    ApplicationManager.getApplication().runWriteAction(() -> {
+                        try {
+                            FileUtil.getDataSourceFile(project, dataSourceApi).delete(project);
+                        } catch (IOException e) {
+                            // do nothing
+                        }
+                    });
                 }))
                 .map(DataSourceApi::getName)
                 .map(name -> {
