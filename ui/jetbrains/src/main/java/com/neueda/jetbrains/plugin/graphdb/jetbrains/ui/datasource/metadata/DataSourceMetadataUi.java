@@ -1,8 +1,8 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata;
 
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourcesComponentMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourceMetadata;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ValueWithIcon;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
@@ -11,9 +11,9 @@ import java.util.Optional;
 
 public class DataSourceMetadataUi {
 
-    private final DataSourcesComponent dataSourcesComponent;
+    private final DataSourcesComponentMetadata dataSourcesComponent;
 
-    public DataSourceMetadataUi(DataSourcesComponent dataSourcesComponent) {
+    public DataSourceMetadataUi(DataSourcesComponentMetadata dataSourcesComponent) {
         this.dataSourcesComponent = dataSourcesComponent;
     }
 

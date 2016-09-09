@@ -13,6 +13,7 @@ import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.intellij.ui.treeStructure.Tree;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analytics;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourcesComponentMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.actions.RefreshDataSourcesAction;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceInteractions;
@@ -35,6 +36,7 @@ public class DataSourcesView implements Disposable {
     private boolean initialized;
 
     private DataSourcesComponent component;
+    private DataSourcesComponentMetadata componentMetadata;
     private DataSourceInteractions interactions;
     private PatchedDefaultMutableTreeNode treeRoot;
     private DefaultTreeModel treeModel;
@@ -57,8 +59,9 @@ public class DataSourcesView implements Disposable {
             toolWindow.getContentManager().addContent(content);
 
             component = project.getComponent(DataSourcesComponent.class);
+            componentMetadata = project.getComponent(DataSourcesComponentMetadata.class);
             cypherMetadataProviderService = ServiceManager.getService(project, CypherMetadataProviderService.class);
-            dataSourceMetadataUi = new DataSourceMetadataUi(component);
+            dataSourceMetadataUi = new DataSourceMetadataUi(componentMetadata);
             treeRoot = new PatchedDefaultMutableTreeNode("treeRoot");
             treeModel = new DefaultTreeModel(treeRoot, false);
             decorator = ToolbarDecorator.createDecorator(dataSourceTree);
