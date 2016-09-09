@@ -87,6 +87,10 @@
             <interface-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.highlighter.QueryHighlighterComponent</interface-class>
             <implementation-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.highlighter.QueryHighlighterComponentImpl</implementation-class>
         </component>
+        <component>
+            <interface-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.bootstrap.GraphDatabasePluginBootstrap</interface-class>
+            <implementation-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.bootstrap.GraphDatabasePluginBootstrapImpl</implementation-class>
+        </component>
     </application-components>
 
     <project-components>

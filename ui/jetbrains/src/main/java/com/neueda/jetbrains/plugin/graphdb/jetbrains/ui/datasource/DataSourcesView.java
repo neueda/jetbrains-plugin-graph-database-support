@@ -16,7 +16,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSo
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.actions.RefreshDataSourcesAction;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceInteractions;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.CypherMetadataRetriever;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.DataSourceMetadataUi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.GraphColoredTreeCellRenderer;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.FileUtil;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.CypherMetadataProviderService;
@@ -44,7 +44,7 @@ public class DataSourcesView implements Disposable {
     private Tree dataSourceTree;
     private ToolbarDecorator decorator;
     private CypherMetadataProviderService cypherMetadataProviderService;
-    private CypherMetadataRetriever cypherMetadataRetriever;
+    private DataSourceMetadataUi dataSourceMetadataUi;
 
     public DataSourcesView() {
         initialized = false;
@@ -58,7 +58,7 @@ public class DataSourcesView implements Disposable {
 
             component = project.getComponent(DataSourcesComponent.class);
             cypherMetadataProviderService = ServiceManager.getService(project, CypherMetadataProviderService.class);
-            cypherMetadataRetriever = new CypherMetadataRetriever(project.getMessageBus(), cypherMetadataProviderService);
+            dataSourceMetadataUi = new DataSourceMetadataUi(component);
             treeRoot = new PatchedDefaultMutableTreeNode("treeRoot");
             treeModel = new DefaultTreeModel(treeRoot, false);
             decorator = ToolbarDecorator.createDecorator(dataSourceTree);
@@ -142,7 +142,7 @@ public class DataSourcesView implements Disposable {
     public boolean refreshDataSourceMetadata(PatchedDefaultMutableTreeNode treeNode) {
         DataSourceApi nodeDataSource = (DataSourceApi) treeNode.getUserObject();
         Analytics.event(nodeDataSource, "refreshMetadata");
-        return cypherMetadataRetriever.refresh(treeNode, nodeDataSource);
+        return dataSourceMetadataUi.updateDataSourceMetadataUi(treeNode, nodeDataSource);
     }
 
     public void createDataSource(DataSourceApi dataSource) {
