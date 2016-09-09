@@ -1,6 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata;
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.messages.MessageBus;
@@ -13,26 +14,24 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.Meta
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.CypherMetadataProviderService;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.CypherMetadataType;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class DataSourcesComponentMetadata {
+public class DataSourcesComponentMetadata implements ProjectComponent {
 
     private DataSourcesComponent component;
     private CypherMetadataProviderService cypherMetadataProviderService;
     private DatabaseManagerService databaseManager;
     private MessageBus messageBus;
 
-    public void bootstrap(Project project) {
-        // Bootstrap component
-        databaseManager = ServiceManager.getService(DatabaseManagerService.class);
-        cypherMetadataProviderService = ServiceManager.getService(project, CypherMetadataProviderService.class);
-        messageBus = project.getMessageBus();
-        component = project.getComponent(DataSourcesComponent.class);
-
-        component.getDataSourceContainer().getDataSources().forEach(this::getMetadata);
+    public DataSourcesComponentMetadata(Project project, DataSourcesComponent component) {
+        this.component = component;
+        this.messageBus = project.getMessageBus();
+        this.databaseManager = ServiceManager.getService(DatabaseManagerService.class);
+        this.cypherMetadataProviderService = ServiceManager.getService(project, CypherMetadataProviderService.class);
     }
 
     public Optional<DataSourceMetadata> getMetadata(DataSourceApi dataSource) {
@@ -112,4 +111,26 @@ public class DataSourcesComponentMetadata {
                         .collect(Collectors.toList()));
     }
 
+    @Override
+    public void initComponent() {
+        component.getDataSourceContainer().getDataSources().forEach(this::getMetadata);
+    }
+
+    @Override
+    public void projectOpened() {
+    }
+
+    @Override
+    public void projectClosed() {
+    }
+
+    @Override
+    public void disposeComponent() {
+    }
+
+    @NotNull
+    @Override
+    public String getComponentName() {
+        return "GraphDatabaseSupport.DataSourcesMetadata";
+    }
 }

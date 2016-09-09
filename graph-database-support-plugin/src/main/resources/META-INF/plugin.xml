@@ -87,10 +87,6 @@
             <interface-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.highlighter.QueryHighlighterComponent</interface-class>
             <implementation-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.highlighter.QueryHighlighterComponentImpl</implementation-class>
         </component>
-        <component>
-            <interface-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.bootstrap.GraphDatabasePluginBootstrap</interface-class>
-            <implementation-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.bootstrap.GraphDatabasePluginBootstrapImpl</implementation-class>
-        </component>
     </application-components>
 
     <project-components>
@@ -100,6 +96,7 @@
             <implementation-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent</implementation-class>
             <loadForDefaultProject/>
         </component>
+        <!-- Graph Database support - data sources metadata -->
         <component>
             <interface-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourcesComponentMetadata</interface-class>
             <implementation-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourcesComponentMetadata</implementation-class>
