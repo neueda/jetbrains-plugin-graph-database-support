@@ -5,5 +5,5 @@ import java.util.Map;
 
 public interface DataSourceMetadata {
 
-    List<Map<String,String>> getMetadata(String metadataKey);
+    List<Map<String, String>> getMetadata(String metadataKey);
 }
