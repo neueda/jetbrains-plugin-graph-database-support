@@ -369,7 +369,7 @@ public interface CypherTypes {
         return new CypherLiteralIdsImpl(node);
       }
       else if (type == LOAD_CSV) {
-        return new CypherLoadCsvImpl(node);
+        return new CypherLoadCSVImpl(node);
       }
       else if (type == LOAD_CSV_QUERY) {
         return new CypherLoadCSVQueryImpl(node);

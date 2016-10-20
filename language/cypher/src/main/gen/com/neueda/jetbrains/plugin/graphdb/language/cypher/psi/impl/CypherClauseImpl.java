@@ -52,8 +52,8 @@ public class CypherClauseImpl extends ASTWrapperPsiElement implements CypherClau
 
   @Override
   @Nullable
-  public CypherLoadCsv getLoadCsv() {
-    return findChildByClass(CypherLoadCsv.class);
+  public CypherLoadCSV getLoadCSV() {
+    return findChildByClass(CypherLoadCSV.class);
   }
 
   @Override

@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CypherLoadCsv extends PsiElement {
+public interface CypherLoadCSV extends PsiElement {
 
   @NotNull
   CypherExpression getExpression();

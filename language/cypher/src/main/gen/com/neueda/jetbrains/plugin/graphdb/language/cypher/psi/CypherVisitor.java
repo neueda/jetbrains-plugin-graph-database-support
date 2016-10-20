@@ -172,7 +172,7 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitLoadCsv(@NotNull CypherLoadCsv o) {
+  public void visitLoadCSV(@NotNull CypherLoadCSV o) {
     visitPsiElement(o);
   }
 

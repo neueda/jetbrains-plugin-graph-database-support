@@ -17,13 +17,14 @@ public class CypherParserDefinitionTest extends ParsingTestCase {
     }
 
     public void testCommonCypherParsing() {
-        doTest(false);
+        doTest(true);
     }
 
     @Override
     protected String getTestDataPath() {
         return new File(Resources.getResource("parsingTestData/.root").getFile())
-                .getAbsoluteFile().getParent();
+                .getAbsoluteFile()
+                .getParent();
     }
 
     @Override

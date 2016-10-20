@@ -11,14 +11,14 @@ import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherType
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
-public class CypherLoadCsvImpl extends ASTWrapperPsiElement implements CypherLoadCsv {
+public class CypherLoadCSVImpl extends ASTWrapperPsiElement implements CypherLoadCSV {
 
-  public CypherLoadCsvImpl(ASTNode node) {
+  public CypherLoadCSVImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CypherVisitor visitor) {
-    visitor.visitLoadCsv(this);
+    visitor.visitLoadCSV(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

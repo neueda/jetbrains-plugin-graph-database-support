@@ -5,6 +5,7 @@ dependencies {
     compile project(':ui:jetbrains')
 }
 
+
 intellij {
     version intellijSdkVersion
     pluginName 'GraphDatabaseSupport'
@@ -26,6 +27,8 @@ intellij {
         downloadSources true
     }
 
+    def homePath = System.properties['user.home']
+    sandboxDirectory "${homePath}/.intellij/graphdb"
     systemProperty 'graphDatabaseSupportDevelopment', 'true'
 }
 

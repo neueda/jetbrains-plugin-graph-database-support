@@ -20,7 +20,7 @@ public interface CypherClause extends PsiElement {
   CypherForeach getForeach();
 
   @Nullable
-  CypherLoadCsv getLoadCsv();
+  CypherLoadCSV getLoadCSV();
 
   @Nullable
   CypherMatch getMatch();

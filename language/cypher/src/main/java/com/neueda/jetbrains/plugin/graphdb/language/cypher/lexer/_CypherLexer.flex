@@ -1,4 +1,5 @@
 package com.neueda.jetbrains.plugin.graphdb.language.cypher.lexer;
+
 import com.intellij.lexer.*;
 import com.intellij.psi.tree.IElementType;
 import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes.*;
@@ -18,9 +19,8 @@ import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherType
 %type IElementType
 %unicode
 
-EOL="\r"|"\n"|"\r\n"
-LINE_WS=[\ \t\f]
-WHITE_SPACE=({LINE_WS}|{EOL})+
+EOL=\R
+WHITE_SPACE=\s
 
 K_MATCH=(M|m)(A|a)(T|t)(C|c)(H|h)
 K_RETURN=(R|r)(E|e)(T|t)(U|u)(R|r)(N|n)
@@ -99,14 +99,13 @@ K_EXPLAIN=(E|e)(X|x)(P|p)(L|l)(A|a)(I|i)(N|n)
 K_CYPHER=(C|c)(Y|y)(P|p)(H|h)(E|e)(R|r)
 K_CALL=(C|c)(A|a)(L|l)(L|l)
 K_YIELD=(Y|y)(I|i)(E|e)(L|l)(D|d)
-L_SPACE=([\ \t\f]|\r|\n|\r\n)+
 L_IDENTIFIER=[a-zA-Z_$][a-zA-Z_$0-9]*
 L_IDENTIFIER_TEXT=\`[^`]+\`
 L_DECIMAL=[+-]?(([1-9][0-9]+)|([0-9]))\.[0-9]+
 L_INTEGER=[+-]?(([1-9][0-9]+)|([0-9]))
 L_STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 LINECOMMENT="//".*
-BLOCKCOMMENT="/"\*([^]|\n)*\*"/"
+BLOCKCOMMENT="/"\*(.|\n)*\*"/"
 
 %%
 <YYINITIAL> {
@@ -219,7 +218,6 @@ BLOCKCOMMENT="/"\*([^]|\n)*\*"/"
   {K_CYPHER}                { return K_CYPHER; }
   {K_CALL}                  { return K_CALL; }
   {K_YIELD}                 { return K_YIELD; }
-  {L_SPACE}                 { return L_SPACE; }
   {L_IDENTIFIER}            { return L_IDENTIFIER; }
   {L_IDENTIFIER_TEXT}       { return L_IDENTIFIER_TEXT; }
   {L_DECIMAL}               { return L_DECIMAL; }
@@ -228,5 +226,6 @@ BLOCKCOMMENT="/"\*([^]|\n)*\*"/"
   {LINECOMMENT}             { return LINECOMMENT; }
   {BLOCKCOMMENT}            { return BLOCKCOMMENT; }
 
-  [^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }
 }
+
+[^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }

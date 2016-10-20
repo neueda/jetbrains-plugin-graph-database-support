@@ -241,6 +241,7 @@ AND []
 AND [expr]
 AND [expr, expr]
 AND filter(var IN expr)
+AND filter(var IN expr WHERE expr)
 AND extract(var IN expr)
 AND extract(var IN expr | expr)
 AND reduce(var = expr, var IN expr | expr)

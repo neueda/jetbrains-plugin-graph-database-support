@@ -11,6 +11,6 @@ public interface CypherLoadCSVQuery extends PsiElement {
   List<CypherClause> getClauseList();
 
   @NotNull
-  CypherLoadCsv getLoadCsv();
+  CypherLoadCSV getLoadCSV();
 
 }

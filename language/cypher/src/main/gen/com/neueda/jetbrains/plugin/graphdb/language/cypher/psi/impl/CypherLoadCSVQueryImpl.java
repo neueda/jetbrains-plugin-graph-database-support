@@ -34,8 +34,8 @@ public class CypherLoadCSVQueryImpl extends ASTWrapperPsiElement implements Cyph
 
   @Override
   @NotNull
-  public CypherLoadCsv getLoadCsv() {
-    return findNotNullChildByClass(CypherLoadCsv.class);
+  public CypherLoadCSV getLoadCSV() {
+    return findNotNullChildByClass(CypherLoadCSV.class);
   }
 
 }

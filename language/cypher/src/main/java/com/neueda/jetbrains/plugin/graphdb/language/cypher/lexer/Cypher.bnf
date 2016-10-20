@@ -99,7 +99,6 @@
     K_YIELD="regexp:(Y|y)(I|i)(E|e)(L|l)(D|d)"
 
     // literals
-    l_space="regexp:([\ \t\f]|\r|\n|\r\n)+"
     l_identifier="regexp:[a-zA-Z_$][a-zA-Z_$0-9]*"
     l_identifier_text="regexp:\`[^`]+\`"
     l_decimal="regexp:[+-]?(([1-9]\d+)|([0-9]))\.\d+"
@@ -398,7 +397,7 @@ private Expression1 ::= NumberLiteral
 
 PropertyLookup ::= "." PropertyKeyName
 ListComprehension ::= "[" FilterExpression ("|"  Expression)? "]"
-FilterExpression ::= IdInColl (K_WHERE)?
+FilterExpression ::= IdInColl (K_WHERE Expression)?
 IdInColl ::= Variable K_IN Expression
 parenthesizedExpression ::= "(" Expression ")" {pin=1}
 FunctionInvocation ::= (FunctionName "(" "*" ")")
