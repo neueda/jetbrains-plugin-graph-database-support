@@ -7,7 +7,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DatabaseManagerService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.MetadataRetrieveEvent;
@@ -22,13 +21,11 @@ import java.util.stream.Collectors;
 
 public class DataSourcesComponentMetadata implements ProjectComponent {
 
-    private DataSourcesComponent component;
     private CypherMetadataProviderService cypherMetadataProviderService;
     private DatabaseManagerService databaseManager;
     private MessageBus messageBus;
 
-    public DataSourcesComponentMetadata(Project project, DataSourcesComponent component) {
-        this.component = component;
+    public DataSourcesComponentMetadata(Project project) {
         this.messageBus = project.getMessageBus();
         this.databaseManager = ServiceManager.getService(DatabaseManagerService.class);
         this.cypherMetadataProviderService = ServiceManager.getService(project, CypherMetadataProviderService.class);
@@ -113,7 +110,6 @@ public class DataSourcesComponentMetadata implements ProjectComponent {
 
     @Override
     public void initComponent() {
-        component.getDataSourceContainer().getDataSources().forEach(this::getMetadata);
     }
 
     @Override

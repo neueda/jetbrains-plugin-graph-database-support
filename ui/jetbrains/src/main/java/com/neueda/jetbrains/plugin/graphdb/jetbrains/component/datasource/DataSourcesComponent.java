@@ -4,6 +4,7 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourcesComponentMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceContainer;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourcesComponentState;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +14,12 @@ import org.jetbrains.annotations.Nullable;
         storages = {@Storage("GraphDatabaseSupport_DataSourcesState.xml")})
 public class DataSourcesComponent implements ProjectComponent, PersistentStateComponent<DataSourcesComponentState> {
 
+    private final DataSourcesComponentMetadata componentMetadata;
     private DataSourcesComponentState state;
+
+    public DataSourcesComponent(DataSourcesComponentMetadata componentMetadata) {
+        this.componentMetadata = componentMetadata;
+    }
 
     public DataSourceContainer getDataSourceContainer() {
         state.migrate();
@@ -26,6 +32,7 @@ public class DataSourcesComponent implements ProjectComponent, PersistentStateCo
     @Override
     public void loadState(DataSourcesComponentState state) {
         this.state = state;
+        refreshAllMetadata();
     }
 
     /**
@@ -42,6 +49,14 @@ public class DataSourcesComponent implements ProjectComponent, PersistentStateCo
      */
     @Override
     public void initComponent() {
+        if (state == null) {
+            state = new DataSourcesComponentState();
+            refreshAllMetadata();
+        }
+    }
+
+    public void refreshAllMetadata() {
+        getDataSourceContainer().getDataSources().forEach(componentMetadata::getMetadata);
     }
 
     /**
@@ -49,9 +64,6 @@ public class DataSourcesComponent implements ProjectComponent, PersistentStateCo
      */
     @Override
     public void projectOpened() {
-        if (state == null) {
-            state = new DataSourcesComponentState();
-        }
     }
 
     /**
