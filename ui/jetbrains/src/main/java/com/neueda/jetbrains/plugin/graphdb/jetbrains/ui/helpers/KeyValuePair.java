@@ -27,4 +27,9 @@ public class KeyValuePair {
     public boolean isValueData() {
         return isValueData;
     }
+
+    @Override
+    public String toString() {
+        return key + ": " + value.toString();
+    }
 }
