@@ -13,7 +13,6 @@ Plugin is developed and supported by [Neueda R&D](http://neueda.lv/).
 ## Installation
 
 Plugin is [available for download](https://plugins.jetbrains.com/plugin/8087) from Jetbrains repository.
-Information about licensing terms can be found [here](https://neueda.lv/projects/jetbrains-plugin-graph-database-support/).
 
 1. Go to `Preferences` -> `Plugins` -> `Browser repositories...`
 2. Search for `Graph Database support`.
