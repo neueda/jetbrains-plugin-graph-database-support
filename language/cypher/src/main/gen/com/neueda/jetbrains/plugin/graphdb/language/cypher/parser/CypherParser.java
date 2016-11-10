@@ -170,6 +170,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == MERGE_ACTION) {
       r = MergeAction(b, 0);
     }
+    else if (t == NAMESPACE) {
+      r = Namespace(b, 0);
+    }
     else if (t == NODE_LABEL) {
       r = NodeLabel(b, 0);
     }
@@ -1851,25 +1854,26 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (FunctionName "(" "*" ")")
-  //                      | (FunctionName "(" K_DISTINCT? Expression? ("," Expression)* ")")
+  // (Namespace FunctionName "(" "*" ")")
+  //                      | (Namespace FunctionName "(" K_DISTINCT? Expression? ("," Expression)* ")")
   public static boolean FunctionInvocation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionInvocation")) return false;
-    if (!nextTokenIs(b, L_IDENTIFIER)) return false;
+    if (!nextTokenIs(b, "<function invocation>", L_IDENTIFIER, L_IDENTIFIER_TEXT)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, FUNCTION_INVOCATION, "<function invocation>");
     r = FunctionInvocation_0(b, l + 1);
     if (!r) r = FunctionInvocation_1(b, l + 1);
-    exit_section_(b, m, FUNCTION_INVOCATION, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // FunctionName "(" "*" ")"
+  // Namespace FunctionName "(" "*" ")"
   private static boolean FunctionInvocation_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionInvocation_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = FunctionName(b, l + 1);
+    r = Namespace(b, l + 1);
+    r = r && FunctionName(b, l + 1);
     r = r && consumeToken(b, PARENTHESE_OPEN);
     r = r && consumeToken(b, OP_MUL);
     r = r && consumeToken(b, PARENTHESE_CLOSE);
@@ -1877,50 +1881,51 @@ public class CypherParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // FunctionName "(" K_DISTINCT? Expression? ("," Expression)* ")"
+  // Namespace FunctionName "(" K_DISTINCT? Expression? ("," Expression)* ")"
   private static boolean FunctionInvocation_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionInvocation_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = FunctionName(b, l + 1);
+    r = Namespace(b, l + 1);
+    r = r && FunctionName(b, l + 1);
     r = r && consumeToken(b, PARENTHESE_OPEN);
-    r = r && FunctionInvocation_1_2(b, l + 1);
     r = r && FunctionInvocation_1_3(b, l + 1);
     r = r && FunctionInvocation_1_4(b, l + 1);
+    r = r && FunctionInvocation_1_5(b, l + 1);
     r = r && consumeToken(b, PARENTHESE_CLOSE);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // K_DISTINCT?
-  private static boolean FunctionInvocation_1_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionInvocation_1_2")) return false;
+  private static boolean FunctionInvocation_1_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionInvocation_1_3")) return false;
     consumeToken(b, K_DISTINCT);
     return true;
   }
 
   // Expression?
-  private static boolean FunctionInvocation_1_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionInvocation_1_3")) return false;
+  private static boolean FunctionInvocation_1_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionInvocation_1_4")) return false;
     Expression(b, l + 1);
     return true;
   }
 
   // ("," Expression)*
-  private static boolean FunctionInvocation_1_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionInvocation_1_4")) return false;
+  private static boolean FunctionInvocation_1_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionInvocation_1_5")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!FunctionInvocation_1_4_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "FunctionInvocation_1_4", c)) break;
+      if (!FunctionInvocation_1_5_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "FunctionInvocation_1_5", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
   // "," Expression
-  private static boolean FunctionInvocation_1_4_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionInvocation_1_4_0")) return false;
+  private static boolean FunctionInvocation_1_5_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionInvocation_1_5_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, OP_COMMA);
@@ -2511,6 +2516,32 @@ public class CypherParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeTokens(b, 0, K_ON, K_CREATE);
     r = r && SetClause(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // (SymbolicNameString ".")*
+  public static boolean Namespace(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Namespace")) return false;
+    Marker m = enter_section_(b, l, _NONE_, NAMESPACE, "<namespace>");
+    int c = current_position_(b);
+    while (true) {
+      if (!Namespace_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Namespace", c)) break;
+      c = current_position_(b);
+    }
+    exit_section_(b, l, m, true, false, null);
+    return true;
+  }
+
+  // SymbolicNameString "."
+  private static boolean Namespace_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Namespace_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = SymbolicNameString(b, l + 1);
+    r = r && consumeToken(b, OP_DOT);
     exit_section_(b, m, null, r);
     return r;
   }

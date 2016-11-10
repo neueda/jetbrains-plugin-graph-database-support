@@ -57,6 +57,7 @@ public interface CypherTypes {
   IElementType MAYBE_VARIABLE_LENGTH = new CypherElementType("MAYBE_VARIABLE_LENGTH");
   IElementType MERGE = new CypherElementType("MERGE");
   IElementType MERGE_ACTION = new CypherElementType("MERGE_ACTION");
+  IElementType NAMESPACE = new CypherElementType("NAMESPACE");
   IElementType NODE_LABEL = new CypherElementType("NODE_LABEL");
   IElementType NODE_LABELS = new CypherElementType("NODE_LABELS");
   IElementType NODE_LOOKUP = new CypherElementType("NODE_LOOKUP");
@@ -389,6 +390,9 @@ public interface CypherTypes {
       }
       else if (type == MERGE_ACTION) {
         return new CypherMergeActionImpl(node);
+      }
+      else if (type == NAMESPACE) {
+        return new CypherNamespaceImpl(node);
       }
       else if (type == NODE_LABEL) {
         return new CypherNodeLabelImpl(node);

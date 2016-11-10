@@ -11,14 +11,14 @@ import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherType
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
-public class CypherFunctionInvocationImpl extends ASTWrapperPsiElement implements CypherFunctionInvocation {
+public class CypherNamespaceImpl extends ASTWrapperPsiElement implements CypherNamespace {
 
-  public CypherFunctionInvocationImpl(ASTNode node) {
+  public CypherNamespaceImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CypherVisitor visitor) {
-    visitor.visitFunctionInvocation(this);
+    visitor.visitNamespace(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -28,26 +28,8 @@ public class CypherFunctionInvocationImpl extends ASTWrapperPsiElement implement
 
   @Override
   @NotNull
-  public List<CypherExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherExpression.class);
-  }
-
-  @Override
-  @NotNull
-  public CypherFunctionName getFunctionName() {
-    return findNotNullChildByClass(CypherFunctionName.class);
-  }
-
-  @Override
-  @NotNull
-  public CypherNamespace getNamespace() {
-    return findNotNullChildByClass(CypherNamespace.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getKDistinct() {
-    return findChildByType(K_DISTINCT);
+  public List<CypherSymbolicNameString> getSymbolicNameStringList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherSymbolicNameString.class);
   }
 
 }

@@ -13,6 +13,9 @@ public interface CypherFunctionInvocation extends PsiElement {
   @NotNull
   CypherFunctionName getFunctionName();
 
+  @NotNull
+  CypherNamespace getNamespace();
+
   @Nullable
   PsiElement getKDistinct();
 

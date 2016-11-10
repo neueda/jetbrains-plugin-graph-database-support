@@ -204,6 +204,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitNamespace(@NotNull CypherNamespace o) {
+    visitPsiElement(o);
+  }
+
   public void visitNodeLabel(@NotNull CypherNodeLabel o) {
     visitPsiElement(o);
   }

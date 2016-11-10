@@ -395,8 +395,8 @@ ListComprehension ::= "[" FilterExpression ("|"  Expression)? "]"
 FilterExpression ::= IdInColl (K_WHERE Expression)?
 IdInColl ::= Variable K_IN Expression
 parenthesizedExpression ::= "(" Expression ")" {pin=1}
-FunctionInvocation ::= (FunctionName "(" "*" ")")
-                     | (FunctionName "(" K_DISTINCT? Expression? ("," Expression)* ")")
+FunctionInvocation ::= (Namespace FunctionName "(" "*" ")")
+                     | (Namespace FunctionName "(" K_DISTINCT? Expression? ("," Expression)* ")")
 CaseExpression ::= ((K_CASE CaseAlternatives+) | (K_CASE Expression CaseAlternatives+))
                    (K_ELSE Expression)?
                    K_END
@@ -444,6 +444,7 @@ DoubleLiteral ::= l_decimal // todo: make real double here
 /*************************
  * Base
  */
+Namespace ::= (SymbolicNameString ".")*
 SymbolicNameString ::=  UnescapedSymbolicNameString | EscapedSymbolicNameString
 EscapedSymbolicNameString ::= l_identifier_text
 UnescapedSymbolicNameString ::= l_identifier
