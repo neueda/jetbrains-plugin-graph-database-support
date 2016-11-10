@@ -58,12 +58,14 @@ public interface CypherTypes {
   IElementType MERGE = new CypherElementType("MERGE");
   IElementType MERGE_ACTION = new CypherElementType("MERGE_ACTION");
   IElementType NAMESPACE = new CypherElementType("NAMESPACE");
+  IElementType NEW_PARAMETER = new CypherElementType("NEW_PARAMETER");
   IElementType NODE_LABEL = new CypherElementType("NODE_LABEL");
   IElementType NODE_LABELS = new CypherElementType("NODE_LABELS");
   IElementType NODE_LOOKUP = new CypherElementType("NODE_LOOKUP");
   IElementType NODE_PATTERN = new CypherElementType("NODE_PATTERN");
   IElementType NODE_PROPERTY_EXISTENCE_CONSTRAINT_SYNTAX = new CypherElementType("NODE_PROPERTY_EXISTENCE_CONSTRAINT_SYNTAX");
   IElementType NUMBER_LITERAL = new CypherElementType("NUMBER_LITERAL");
+  IElementType OLD_PARAMETER = new CypherElementType("OLD_PARAMETER");
   IElementType ORDER = new CypherElementType("ORDER");
   IElementType PARAMETER = new CypherElementType("PARAMETER");
   IElementType PARENTHESIZED_EXPRESSION = new CypherElementType("PARENTHESIZED_EXPRESSION");
@@ -133,6 +135,7 @@ public interface CypherTypes {
   IElementType BRACKET_CURLYOPEN = new CypherTokenType("{");
   IElementType BRACKET_SQUARECLOSE = new CypherTokenType("]");
   IElementType BRACKET_SQUAREOPEN = new CypherTokenType("[");
+  IElementType DOLLAR = new CypherTokenType("$");
   IElementType K_ALL = new CypherTokenType("K_ALL");
   IElementType K_ALLSHORTESTPATHS = new CypherTokenType("K_ALLSHORTESTPATHS");
   IElementType K_AND = new CypherTokenType("K_AND");
@@ -394,6 +397,9 @@ public interface CypherTypes {
       else if (type == NAMESPACE) {
         return new CypherNamespaceImpl(node);
       }
+      else if (type == NEW_PARAMETER) {
+        return new CypherNewParameterImpl(node);
+      }
       else if (type == NODE_LABEL) {
         return new CypherNodeLabelImpl(node);
       }
@@ -411,6 +417,9 @@ public interface CypherTypes {
       }
       else if (type == NUMBER_LITERAL) {
         return new CypherNumberLiteralImpl(node);
+      }
+      else if (type == OLD_PARAMETER) {
+        return new CypherOldParameterImpl(node);
       }
       else if (type == ORDER) {
         return new CypherOrderImpl(node);

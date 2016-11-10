@@ -173,6 +173,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == NAMESPACE) {
       r = Namespace(b, 0);
     }
+    else if (t == NEW_PARAMETER) {
+      r = NewParameter(b, 0);
+    }
     else if (t == NODE_LABEL) {
       r = NodeLabel(b, 0);
     }
@@ -190,6 +193,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     }
     else if (t == NUMBER_LITERAL) {
       r = NumberLiteral(b, 0);
+    }
+    else if (t == OLD_PARAMETER) {
+      r = OldParameter(b, 0);
     }
     else if (t == ORDER) {
       r = Order(b, 0);
@@ -2547,6 +2553,30 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // "$" (SymbolicNameString | UnsignedDecimalInteger)
+  public static boolean NewParameter(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NewParameter")) return false;
+    if (!nextTokenIs(b, DOLLAR)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, DOLLAR);
+    r = r && NewParameter_1(b, l + 1);
+    exit_section_(b, m, NEW_PARAMETER, r);
+    return r;
+  }
+
+  // SymbolicNameString | UnsignedDecimalInteger
+  private static boolean NewParameter_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NewParameter_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = SymbolicNameString(b, l + 1);
+    if (!r) r = UnsignedDecimalInteger(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // ":" LabelName
   public static boolean NodeLabel(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NodeLabel")) return false;
@@ -2674,6 +2704,31 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // "{" (SymbolicNameString | UnsignedDecimalInteger) "}"
+  public static boolean OldParameter(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "OldParameter")) return false;
+    if (!nextTokenIs(b, BRACKET_CURLYOPEN)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, BRACKET_CURLYOPEN);
+    r = r && OldParameter_1(b, l + 1);
+    r = r && consumeToken(b, BRACKET_CURLYCLOSE);
+    exit_section_(b, m, OLD_PARAMETER, r);
+    return r;
+  }
+
+  // SymbolicNameString | UnsignedDecimalInteger
+  private static boolean OldParameter_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "OldParameter_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = SymbolicNameString(b, l + 1);
+    if (!r) r = UnsignedDecimalInteger(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // K_ORDER K_BY SortItem ("," SortItem)*
   public static boolean Order(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Order")) return false;
@@ -2711,27 +2766,15 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "{" (SymbolicNameString | UnsignedDecimalInteger) "}"
+  // NewParameter | OldParameter
   public static boolean Parameter(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Parameter")) return false;
-    if (!nextTokenIs(b, BRACKET_CURLYOPEN)) return false;
+    if (!nextTokenIs(b, "<parameter>", DOLLAR, BRACKET_CURLYOPEN)) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, BRACKET_CURLYOPEN);
-    r = r && Parameter_1(b, l + 1);
-    r = r && consumeToken(b, BRACKET_CURLYCLOSE);
-    exit_section_(b, m, PARAMETER, r);
-    return r;
-  }
-
-  // SymbolicNameString | UnsignedDecimalInteger
-  private static boolean Parameter_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Parameter_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = SymbolicNameString(b, l + 1);
-    if (!r) r = UnsignedDecimalInteger(b, l + 1);
-    exit_section_(b, m, null, r);
+    Marker m = enter_section_(b, l, _NONE_, PARAMETER, "<parameter>");
+    r = NewParameter(b, l + 1);
+    if (!r) r = OldParameter(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -3137,12 +3180,12 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // MapLiteral | Parameter
   public static boolean Properties(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Properties")) return false;
-    if (!nextTokenIs(b, BRACKET_CURLYOPEN)) return false;
+    if (!nextTokenIs(b, "<properties>", DOLLAR, BRACKET_CURLYOPEN)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, PROPERTIES, "<properties>");
     r = MapLiteral(b, l + 1);
     if (!r) r = Parameter(b, l + 1);
-    exit_section_(b, m, PROPERTIES, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 

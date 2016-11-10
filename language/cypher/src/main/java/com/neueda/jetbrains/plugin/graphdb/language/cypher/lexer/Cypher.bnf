@@ -98,7 +98,7 @@
     K_YIELD="regexp:(Y|y)(I|i)(E|e)(L|l)(D|d)"
 
     // literals
-    l_identifier="regexp:[a-zA-Z_$][a-zA-Z_$0-9]*"
+    l_identifier="regexp:[a-zA-Z_][a-zA-Z_$0-9]*"
     l_identifier_text="regexp:\`[^`]+\`"
     l_decimal="regexp:[+-]?(([1-9]\d+)|([0-9]))\.\d+"
     l_integer="regexp:[+-]?(([1-9]\d+)|([0-9]))"
@@ -112,6 +112,7 @@
     bracket_CurlyClose="}"
     bracket_SquareOpen="["
     bracket_SquareClose="]"
+    dollar="$"
     op_colon=":"
     op_dot="."
     op_equal="="
@@ -413,7 +414,9 @@ Variable ::= SymbolicNameString {
 }
 FunctionName ::= l_identifier
 ProcedureName ::= SymbolicNameString
-Parameter ::= "{" (SymbolicNameString | UnsignedDecimalInteger) "}"
+Parameter ::= NewParameter | OldParameter
+OldParameter ::= "{" (SymbolicNameString | UnsignedDecimalInteger) "}"
+NewParameter ::= "$" (SymbolicNameString | UnsignedDecimalInteger)
 NodeLabel ::= ":" LabelName
 StringLiteral ::= l_string
 LabelName ::= SymbolicNameString {

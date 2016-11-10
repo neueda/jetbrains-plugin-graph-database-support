@@ -32,7 +32,6 @@ AND var.prop
 AND var:Label
 AND 1
 AND "2"
-AND {param}
 AND true
 AND false
 AND null

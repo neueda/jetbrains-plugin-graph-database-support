@@ -15,4 +15,8 @@ public class ExpressionsParsingTest extends BaseParsingTest {
     public void testUserFunction() {
         doTest(true);
     }
+
+    public void testParameters() {
+        doTest(true);
+    }
 }

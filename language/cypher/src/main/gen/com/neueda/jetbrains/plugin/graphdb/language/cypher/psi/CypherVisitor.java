@@ -208,6 +208,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitNewParameter(@NotNull CypherNewParameter o) {
+    visitPsiElement(o);
+  }
+
   public void visitNodeLabel(@NotNull CypherNodeLabel o) {
     visitPsiElement(o);
   }
@@ -229,6 +233,10 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitNumberLiteral(@NotNull CypherNumberLiteral o) {
+    visitPsiElement(o);
+  }
+
+  public void visitOldParameter(@NotNull CypherOldParameter o) {
     visitPsiElement(o);
   }
 

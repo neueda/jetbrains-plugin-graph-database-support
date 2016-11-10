@@ -5,12 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CypherParameter extends PsiElement {
+public interface CypherOldParameter extends PsiElement {
 
   @Nullable
-  CypherNewParameter getNewParameter();
+  CypherSymbolicNameString getSymbolicNameString();
 
   @Nullable
-  CypherOldParameter getOldParameter();
+  CypherUnsignedDecimalInteger getUnsignedDecimalInteger();
 
 }
