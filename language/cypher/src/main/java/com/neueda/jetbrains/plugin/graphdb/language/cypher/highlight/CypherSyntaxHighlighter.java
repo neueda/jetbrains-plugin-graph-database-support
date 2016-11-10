@@ -14,31 +14,30 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Syntax highlight.
- * https://github.com/go-lang-plugin-org/go-lang-idea-plugin/blob/master/src/com/goide/highlighting/GoHighlightingAnnotator.java
  *
  * @author dmitry@vrublevsky.me
  */
 public class CypherSyntaxHighlighter extends SyntaxHighlighterBase {
 
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
-    private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.BAD_CHARACTER};
+    private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{CypherSyntaxColors.BAD_CHARACTER};
 
-    private static final TextAttributesKey[] LINE_COMMENT_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.LINE_COMMENT};
-    private static final TextAttributesKey[] BLOCK_COMMENT_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.BLOCK_COMMENT};
+    private static final TextAttributesKey[] LINE_COMMENT_KEYS = new TextAttributesKey[]{CypherSyntaxColors.LINE_COMMENT};
+    private static final TextAttributesKey[] BLOCK_COMMENT_KEYS = new TextAttributesKey[]{CypherSyntaxColors.BLOCK_COMMENT};
 
-    private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.KEYWORD};
-    private static final TextAttributesKey[] IDENTIFIER_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.IDENTIFIER};
+    private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{CypherSyntaxColors.KEYWORD};
+    private static final TextAttributesKey[] IDENTIFIER_KEYS = new TextAttributesKey[]{CypherSyntaxColors.VARIABLE};
 
-    private static final TextAttributesKey[] NUMBER_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.NUMBER};
-    private static final TextAttributesKey[] STRING_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.STRING};
+    private static final TextAttributesKey[] NUMBER_KEYS = new TextAttributesKey[]{CypherSyntaxColors.NUMBER};
+    private static final TextAttributesKey[] STRING_KEYS = new TextAttributesKey[]{CypherSyntaxColors.STRING};
 
-    private static final TextAttributesKey[] OPERATION_SIGN_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.OPERATION_SIGN};
-    private static final TextAttributesKey[] SEMICOLON_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.SEMICOLON};
-    private static final TextAttributesKey[] PARENTHESES_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.PARENTHESES};
-    private static final TextAttributesKey[] CURLY_BRACES_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.CURLY_BRACES};
-    private static final TextAttributesKey[] SQUARE_BRACES_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.SQUARE_BRACES};
-    private static final TextAttributesKey[] COMMA_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.COMMA};
-    private static final TextAttributesKey[] DOT_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.DOT};
+    private static final TextAttributesKey[] OPERATION_SIGN_KEYS = new TextAttributesKey[]{CypherSyntaxColors.OPERATION_SIGN};
+    private static final TextAttributesKey[] SEMICOLON_KEYS = new TextAttributesKey[]{CypherSyntaxColors.SEMICOLON};
+    private static final TextAttributesKey[] PARENTHESES_KEYS = new TextAttributesKey[]{CypherSyntaxColors.PARENTHESES};
+    private static final TextAttributesKey[] CURLY_BRACES_KEYS = new TextAttributesKey[]{CypherSyntaxColors.CURLY_BRACES};
+    private static final TextAttributesKey[] SQUARE_BRACES_KEYS = new TextAttributesKey[]{CypherSyntaxColors.SQUARE_BRACES};
+    private static final TextAttributesKey[] COMMA_KEYS = new TextAttributesKey[]{CypherSyntaxColors.COMMA};
+    private static final TextAttributesKey[] DOT_KEYS = new TextAttributesKey[]{CypherSyntaxColors.DOT};
 
     @NotNull
     @Override

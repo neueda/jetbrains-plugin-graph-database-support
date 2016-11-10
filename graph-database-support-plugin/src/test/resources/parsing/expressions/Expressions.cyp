@@ -46,18 +46,6 @@ AND [var in expr | expr ]
 AND []
 AND [expr]
 AND [expr, expr]
-AND filter(var IN expr)
-AND filter(var IN expr WHERE expr)
-AND extract(var IN expr)
-AND extract(var IN expr | expr)
-AND reduce(var = expr, var IN expr | expr)
-AND all(var IN expr)
-AND any(var IN expr)
-AND none(var IN expr)
-AND single(var in expr)
-AND exists(expr)
-AND shortestpath((n))
-AND allshortestpaths((n))
 AND (n)-[]-()
 AND (expr)
 AND func()

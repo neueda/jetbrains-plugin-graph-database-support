@@ -23,4 +23,8 @@ public class ExpressionsParsingTest extends BaseParsingTest {
     public void testKeywordInIdentifier() {
         doTest(true);
     }
+
+    public void testSpecialFunctions() {
+        doTest(true);
+    }
 }

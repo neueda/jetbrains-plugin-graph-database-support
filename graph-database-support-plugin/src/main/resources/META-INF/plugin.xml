@@ -135,6 +135,7 @@
                 language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.CypherParserDefinition"/>
         <lang.syntaxHighlighterFactory
                 language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.highlight.CypherSyntaxHighlighterFactory"/>
+        <annotator language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.highlight.CypherSyntaxHighlighterAnnotator"/>
         <lang.commenter language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.commenter.CypherCommenter"/>
 
         <colorSettingsPage implementation="com.neueda.jetbrains.plugin.graphdb.language.cypher.settings.CypherColorSettingsPage"/>

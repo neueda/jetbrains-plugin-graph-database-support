@@ -7,7 +7,7 @@ import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherIcons;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.highlight.CypherSyntaxHighlighter;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.highlight.CypherTextAttributeKey;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.highlight.CypherSyntaxColors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,23 +21,26 @@ import java.util.Map;
  */
 public class CypherColorSettingsPage implements ColorSettingsPage {
     private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[]{
-            new AttributesDescriptor("Line comment", CypherTextAttributeKey.LINE_COMMENT),
-            new AttributesDescriptor("Block comment", CypherTextAttributeKey.BLOCK_COMMENT),
+            new AttributesDescriptor("Line comment", CypherSyntaxColors.LINE_COMMENT),
+            new AttributesDescriptor("Block comment", CypherSyntaxColors.BLOCK_COMMENT),
 
-            new AttributesDescriptor("Keyword", CypherTextAttributeKey.KEYWORD),
-            new AttributesDescriptor("Identifier", CypherTextAttributeKey.IDENTIFIER),
-            //new AttributesDescriptor("Function", CypherTextAttributeKey.FUNCTION_NAME),
+            new AttributesDescriptor("Keyword", CypherSyntaxColors.KEYWORD),
+            new AttributesDescriptor("Variable", CypherSyntaxColors.VARIABLE),
+            new AttributesDescriptor("Parameter", CypherSyntaxColors.PARAMETER),
+            new AttributesDescriptor("Function", CypherSyntaxColors.FUNCTION),
+            new AttributesDescriptor("Label", CypherSyntaxColors.LABEL),
+            new AttributesDescriptor("Relationship type", CypherSyntaxColors.RELATIONSHIP_TYPE),
 
-            new AttributesDescriptor("Semicolon", CypherTextAttributeKey.SEMICOLON),
-            new AttributesDescriptor("Operation sign", CypherTextAttributeKey.OPERATION_SIGN),
-            new AttributesDescriptor("Parentheses", CypherTextAttributeKey.PARENTHESES),
-            new AttributesDescriptor("Curly braces", CypherTextAttributeKey.CURLY_BRACES),
-            new AttributesDescriptor("Square braces", CypherTextAttributeKey.SQUARE_BRACES),
-            new AttributesDescriptor("Comma", CypherTextAttributeKey.COMMA),
-            new AttributesDescriptor("Dot", CypherTextAttributeKey.DOT),
+            new AttributesDescriptor("Semicolon", CypherSyntaxColors.SEMICOLON),
+            new AttributesDescriptor("Operation sign", CypherSyntaxColors.OPERATION_SIGN),
+            new AttributesDescriptor("Parentheses", CypherSyntaxColors.PARENTHESES),
+            new AttributesDescriptor("Curly braces", CypherSyntaxColors.CURLY_BRACES),
+            new AttributesDescriptor("Square braces", CypherSyntaxColors.SQUARE_BRACES),
+            new AttributesDescriptor("Comma", CypherSyntaxColors.COMMA),
+            new AttributesDescriptor("Dot", CypherSyntaxColors.DOT),
 
-            new AttributesDescriptor("String", CypherTextAttributeKey.STRING),
-            new AttributesDescriptor("Number", CypherTextAttributeKey.NUMBER),
+            new AttributesDescriptor("String", CypherSyntaxColors.STRING),
+            new AttributesDescriptor("Number", CypherSyntaxColors.NUMBER),
     };
 
     @Nullable
@@ -62,6 +65,7 @@ public class CypherColorSettingsPage implements ColorSettingsPage {
                 + "SET n.calculatedProperty = 2 + 2 \n"
                 + "SET n.functionProperty = toInt(\"1\")\n"
                 + "SET n.arrayProperty = [1, 2, 3, 4]\n"
+                + "CALL dbms.procedures()\n"
                 + "RETURN *;\n";
     }
 
