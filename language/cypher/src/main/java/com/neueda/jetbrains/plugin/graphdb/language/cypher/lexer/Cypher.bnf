@@ -3,16 +3,15 @@
 
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
-  psiClassPrefix="Cypher"
-  psiImplClassSuffix="Impl"
-  psiPackage="com.neueda.jetbrains.plugin.graphdb.language.cypher.psi"
-  psiImplPackage="com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.impl"
-
   elementTypeHolderClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes"
   elementTypeClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherElementType"
   tokenTypeClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTokenType"
 
   psiImplUtilClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherPsiImplUtil"
+  psiClassPrefix="Cypher"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.neueda.jetbrains.plugin.graphdb.language.cypher.psi"
+  psiImplPackage="com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.impl"
 
   tokens=[
     // keywords
@@ -135,10 +134,6 @@
     op_modulo="%"
     op_pow="^"
     op_regexMatch="=~"
-
-    // comments
-    lineComment="regexp://.*"
-    blockComment="regexp:/\*(.|\n)*\*/"
   ]
 }
 
@@ -173,7 +168,7 @@ private statement_recover::= !(';'
 /*************************
  * Statement
  */
-Statement ::= (K_BEGIN) | (K_COMMIT) | (QueryOptions (Command | Query))
+Statement ::= (K_BEGIN) | (K_COMMIT) | (QueryOptions? (Command | Query))
 
 /*************************
  * Statement options

@@ -2,6 +2,8 @@ package com.neueda.jetbrains.plugin.graphdb.language.cypher.lexer;
 
 import com.intellij.lexer.*;
 import com.intellij.psi.tree.IElementType;
+import static com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.CypherParserDefinition.LINE_COMMENT;
+import static com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.CypherParserDefinition.BLOCK_COMMENT;
 import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes.*;
 
 %%
@@ -104,12 +106,16 @@ L_IDENTIFIER_TEXT=\`[^`]+\`
 L_DECIMAL=[+-]?(([1-9][0-9]+)|([0-9]))\.[0-9]+
 L_INTEGER=[+-]?(([1-9][0-9]+)|([0-9]))
 L_STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
-LINECOMMENT="//".*
-BLOCKCOMMENT="/"\*(.|\n)*\*"/"
+
+LINE_COMMENT = "//" [^\r\n]*
+BLOCK_COMMENT = "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
 
 %%
 <YYINITIAL> {
   {WHITE_SPACE}             { return com.intellij.psi.TokenType.WHITE_SPACE; }
+
+  {LINE_COMMENT}            { return LINE_COMMENT; }
+  {BLOCK_COMMENT}           { return BLOCK_COMMENT; }
 
   ";"                       { return SEMICOLON; }
   "("                       { return PARENTHESE_OPEN; }
@@ -223,9 +229,6 @@ BLOCKCOMMENT="/"\*(.|\n)*\*"/"
   {L_DECIMAL}               { return L_DECIMAL; }
   {L_INTEGER}               { return L_INTEGER; }
   {L_STRING}                { return L_STRING; }
-  {LINECOMMENT}             { return LINECOMMENT; }
-  {BLOCKCOMMENT}            { return BLOCKCOMMENT; }
-
 }
 
 [^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }

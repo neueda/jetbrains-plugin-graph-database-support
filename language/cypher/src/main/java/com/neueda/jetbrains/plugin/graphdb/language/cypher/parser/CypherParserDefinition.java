@@ -10,12 +10,12 @@ import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.TokenType;
-import com.intellij.psi.tree.IFileElementType;
-import com.intellij.psi.tree.TokenSet;
+import com.intellij.psi.tree.*;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherLanguage;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.file.CypherFile;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.lexer.CypherLexerAdapter;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,8 +24,11 @@ import org.jetbrains.annotations.NotNull;
  * @author dmitry@vrublesvky.me
  */
 public class CypherParserDefinition implements ParserDefinition {
+    public static final IElementType LINE_COMMENT = new CypherTokenType("LINE_COMMENT");
+    public static final IElementType BLOCK_COMMENT = new CypherTokenType("BLOCK_COMMENT");
+
     public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
-    public static final TokenSet COMMENTS = TokenSet.create(CypherTypes.LINECOMMENT, CypherTypes.BLOCKCOMMENT);
+    public static final TokenSet COMMENTS = TokenSet.create(LINE_COMMENT, BLOCK_COMMENT);
     public static final TokenSet STRINGS = TokenSet.create(CypherTypes.L_STRING);
 
     public static final IFileElementType FILE =

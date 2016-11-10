@@ -7,6 +7,7 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.icons.AllIcons;
+import com.intellij.lang.ParserDefinition;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.patterns.PlatformPatterns;
@@ -15,6 +16,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherLanguage;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.lang.CypherRegexp;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.CypherParserDefinition;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherStringLiteral;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
 import org.jetbrains.annotations.NotNull;
@@ -34,8 +36,8 @@ public class CypherCompletionContributor extends CompletionContributor {
         PsiElementPattern.Capture<PsiElement> keywordPatternCapture = PlatformPatterns
                 .psiElement()
                 .withLanguage(CypherLanguage.INSTANCE)
-                .andNot(PlatformPatterns.psiElement(CypherTypes.LINECOMMENT))
-                .andNot(PlatformPatterns.psiElement(CypherTypes.BLOCKCOMMENT));
+                .andNot(PlatformPatterns.psiElement(CypherParserDefinition.LINE_COMMENT))
+                .andNot(PlatformPatterns.psiElement(CypherParserDefinition.BLOCK_COMMENT));
         extend(CompletionType.BASIC, keywordPatternCapture,
                 new CompletionProvider<CompletionParameters>() {
                     public void addCompletions(@NotNull CompletionParameters parameters,

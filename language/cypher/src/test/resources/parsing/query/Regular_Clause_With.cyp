@@ -1,0 +1,13 @@
+WITH *;
+WITH DISTINCT *;
+WITH *, expr as var, expr;
+WITH * ORDER BY var;
+WITH * ORDER BY var, var;
+WITH * ORDER BY var ASC;
+WITH * ORDER BY var ASCENDING;
+WITH * ORDER BY var DESC;
+WITH * ORDER BY var DESCENDING;
+WITH * SKIP expr;
+WITH * LIMIT expr;
+WITH * ORDER BY var SKIP expr LIMIT expr;
+WITH * WHERE n = 1;

@@ -6,6 +6,7 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.lexer.CypherLexerAdapter;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.CypherParserDefinition;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTokenType;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Syntax highlight.
+ * https://github.com/go-lang-plugin-org/go-lang-idea-plugin/blob/master/src/com/goide/highlighting/GoHighlightingAnnotator.java
  *
  * @author dmitry@vrublevsky.me
  */
@@ -26,7 +28,6 @@ public class CypherSyntaxHighlighter extends SyntaxHighlighterBase {
 
     private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.KEYWORD};
     private static final TextAttributesKey[] IDENTIFIER_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.IDENTIFIER};
-    private static final TextAttributesKey[] FUNCTION_NAME_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.FUNCTION_NAME};
 
     private static final TextAttributesKey[] NUMBER_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.NUMBER};
     private static final TextAttributesKey[] STRING_KEYS = new TextAttributesKey[]{CypherTextAttributeKey.STRING};
@@ -42,10 +43,10 @@ public class CypherSyntaxHighlighter extends SyntaxHighlighterBase {
     @NotNull
     @Override
     public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
-        if (tokenType.equals(CypherTypes.LINECOMMENT)) {
+        if (tokenType.equals(CypherParserDefinition.LINE_COMMENT)) {
             return LINE_COMMENT_KEYS;
         }
-        if (tokenType.equals(CypherTypes.BLOCKCOMMENT)) {
+        if (tokenType.equals(CypherParserDefinition.BLOCK_COMMENT)) {
             return BLOCK_COMMENT_KEYS;
         }
         if (isKeywordTokenType(tokenType)) {
@@ -54,10 +55,6 @@ public class CypherSyntaxHighlighter extends SyntaxHighlighterBase {
         if (tokenType.equals(CypherTypes.L_IDENTIFIER) || tokenType.equals(CypherTypes.L_IDENTIFIER_TEXT)) {
             return IDENTIFIER_KEYS;
         }
-        // disabled: functions are replaced with identifiers
-//        if (tokenType.equals(CypherTypes.L_FUNCTION)) {
-//            return FUNCTION_NAME_KEYS;
-//        }
         if (tokenType.equals(CypherTypes.L_DECIMAL) || tokenType.equals(CypherTypes.L_INTEGER)) {
             return NUMBER_KEYS;
         }

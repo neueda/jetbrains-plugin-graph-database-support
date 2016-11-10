@@ -4197,7 +4197,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (K_BEGIN) | (K_COMMIT) | (QueryOptions (Command | Query))
+  // (K_BEGIN) | (K_COMMIT) | (QueryOptions? (Command | Query))
   public static boolean Statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Statement")) return false;
     boolean r;
@@ -4209,15 +4209,22 @@ public class CypherParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // QueryOptions (Command | Query)
+  // QueryOptions? (Command | Query)
   private static boolean Statement_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Statement_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = QueryOptions(b, l + 1);
+    r = Statement_2_0(b, l + 1);
     r = r && Statement_2_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // QueryOptions?
+  private static boolean Statement_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Statement_2_0")) return false;
+    QueryOptions(b, l + 1);
+    return true;
   }
 
   // Command | Query

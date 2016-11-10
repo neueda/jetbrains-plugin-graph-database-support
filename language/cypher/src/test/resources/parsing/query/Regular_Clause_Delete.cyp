@@ -1,0 +1,4 @@
+DELETE n;
+DETACH DELETE n;
+DELETE n, m;
+DETACH DELETE n, m;

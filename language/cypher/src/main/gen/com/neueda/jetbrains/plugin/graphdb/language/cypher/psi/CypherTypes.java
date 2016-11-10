@@ -128,7 +128,6 @@ public interface CypherTypes {
   IElementType WHERE = new CypherElementType("WHERE");
   IElementType WITH = new CypherElementType("WITH");
 
-  IElementType BLOCKCOMMENT = new CypherTokenType("blockComment");
   IElementType BRACKET_CURLYCLOSE = new CypherTokenType("}");
   IElementType BRACKET_CURLYOPEN = new CypherTokenType("{");
   IElementType BRACKET_SQUARECLOSE = new CypherTokenType("]");
@@ -210,7 +209,6 @@ public interface CypherTypes {
   IElementType K_WITH = new CypherTokenType("K_WITH");
   IElementType K_XOR = new CypherTokenType("K_XOR");
   IElementType K_YIELD = new CypherTokenType("K_YIELD");
-  IElementType LINECOMMENT = new CypherTokenType("lineComment");
   IElementType L_DECIMAL = new CypherTokenType("l_decimal");
   IElementType L_IDENTIFIER = new CypherTokenType("l_identifier");
   IElementType L_IDENTIFIER_TEXT = new CypherTokenType("l_identifier_text");
