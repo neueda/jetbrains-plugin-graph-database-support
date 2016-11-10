@@ -1,0 +1,1 @@
+MATCH (match) RETURN match;

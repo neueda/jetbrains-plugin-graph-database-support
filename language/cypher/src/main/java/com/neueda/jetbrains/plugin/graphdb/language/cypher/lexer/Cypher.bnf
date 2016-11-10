@@ -33,7 +33,6 @@
     K_ASSERT="regexp:(A|a)(S|s)(S|s)(E|e)(R|r)(T|t)"
     K_IS="regexp:(I|i)(S|s)"
     K_UNIQUE="regexp:(U|u)(N|n)(I|i)(Q|q)(U|u)(E|e)"
-    K_ASSERT="regexp:(A|a)(S|s)(S|s)(E|e)(R|r)(T|t)"
     K_EXISTS="regexp:(E|e)(X|x)(I|i)(S|s)(T|t)(S|s)"
     K_INDEX="regexp:(I|i)(N|n)(D|d)(E|e)(X|x)"
     K_DROP="regexp:(D|d)(R|r)(O|o)(P|p)"
@@ -42,7 +41,6 @@
     K_NODE="regexp:(N|n)(O|o)(D|d)(E|e)"
     K_RELATIONSHIP="regexp:(R|r)(E|e)(L|l)(A|a)(T|t)(I|i)(O|o)(N|n)(S|s)(H|h)(I|i)(P|p)"
     K_REL="regexp:(R|r)(E|e)(L|l)"
-    K_MATCH="regexp:(M|m)(A|a)(T|t)(C|c)(H|h)"
     K_OPTIONAL="regexp:(O|o)(P|p)(T|t)(I|i)(O|o)(N|n)(A|a)(L|l)"
     K_USING="regexp:(U|u)(S|s)(I|i)(N|n)(G|g)"
     K_JOIN="regexp:(J|j)(O|o)(I|i)(N|n)"
@@ -81,12 +79,10 @@
     K_FILTER="regexp:(F|f)(I|i)(L|l)(T|t)(E|e)(R|r)"
     K_EXTRACT="regexp:(E|e)(X|x)(T|t)(R|r)(A|a)(C|c)(T|t)"
     K_REDUCE="regexp:(R|r)(E|e)(D|d)(U|u)(C|c)(E|e)"
-    K_ALL="regexp:(A|a)(L|l)(L|l)"
     K_ANY="regexp:(A|a)(N|n)(Y|y)"
     K_NONE="regexp:(N|n)(O|o)(N|n)(E|e)"
     K_SINGLE="regexp:(S|s)(I|i)(N|n)(G|g)(L|l)(E|e)"
     K_CASE="regexp:(C|c)(A|a)(S|s)(E|e)"
-    K_DISTINCT="regexp:(D|d)(I|i)(S|s)(T|t)(I|i)(N|n)(C|c)(T|t)"
     K_ELSE="regexp:(E|e)(L|l)(S|s)(E|e)"
     K_END="regexp:(E|e)(N|n)(D|d)"
     K_WHEN="regexp:(W|w)(H|h)(E|e)(N|n)"
@@ -448,7 +444,85 @@ DoubleLiteral ::= l_decimal // todo: make real double here
  * Base
  */
 Namespace ::= (SymbolicNameString ".")*
-SymbolicNameString ::=  UnescapedSymbolicNameString | EscapedSymbolicNameString
+SymbolicNameString ::=  UnescapedSymbolicNameString
+    | EscapedSymbolicNameString
+    | K_MATCH
+    | K_RETURN
+    | K_DISTINCT
+    | K_UNION
+    | K_ALL
+    | K_LOAD
+    | K_CSV
+    | K_WITH
+    | K_HEADERS
+    | K_FROM
+    | K_AS
+    | K_FIELDTERMINATOR
+    | K_CREATE
+    | K_CONSTRAINT
+    | K_ON
+    | K_ASSERT
+    | K_IS
+    | K_UNIQUE
+    | K_EXISTS
+    | K_INDEX
+    | K_DROP
+    | K_START
+    | K_WHERE
+    | K_NODE
+    | K_RELATIONSHIP
+    | K_REL
+    | K_OPTIONAL
+    | K_USING
+    | K_JOIN
+    | K_SCAN
+    | K_SHORTESTPATH
+    | K_ALLSHORTESTPATHS
+    | K_UNWIND
+    | K_MERGE
+    | K_SET
+    | K_DELETE
+    | K_DETACH
+    | K_REMOVE
+    | K_FOREACH
+    | K_IN
+    | K_ORDER
+    | K_BY
+    | K_DESCENDING
+    | K_DESC
+    | K_ASCENDING
+    | K_ASC
+    | K_SKIP
+    | K_LIMIT
+    | K_PERIODIC
+    | K_BEGIN
+    | K_COMMIT
+    | K_XOR
+    | K_OR
+    | K_AND
+    | K_NOT
+    | K_STARTS
+    | K_ENDS
+    | K_CONTAINS
+    | K_NULL
+    | K_TRUE
+    | K_FALSE
+    | K_FILTER
+    | K_EXTRACT
+    | K_REDUCE
+    | K_ANY
+    | K_NONE
+    | K_SINGLE
+    | K_CASE
+    | K_ELSE
+    | K_END
+    | K_WHEN
+    | K_THEN
+    | K_PROFILE
+    | K_EXPLAIN
+    | K_CYPHER
+    | K_CALL
+    | K_YIELD
 EscapedSymbolicNameString ::= l_identifier_text
 UnescapedSymbolicNameString ::= l_identifier
 UnsignedDecimalInteger ::= l_integer

@@ -19,4 +19,8 @@ public class ExpressionsParsingTest extends BaseParsingTest {
     public void testParameters() {
         doTest(true);
     }
+
+    public void testKeywordInIdentifier() {
+        doTest(true);
+    }
 }
