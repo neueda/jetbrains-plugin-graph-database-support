@@ -12,10 +12,11 @@ include 'ui'
 include 'ui:visualization'
 include 'ui:jetbrains'
 
-// Testing
-include 'testing'
-include 'testing:manual'
-
 // Plugin
 include 'graph-database-support-plugin'
 include 'platform'
+
+// Testing
+include 'testing'
+include 'testing:manual'
+include 'testing:cypher-tests'
