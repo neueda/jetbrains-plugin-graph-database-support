@@ -1,0 +1,3 @@
+MATCH ()-[:RENAMED_TYPE]-()
+MATCH ()-[:RENAMED_TYPE]-()
+RETURN *;

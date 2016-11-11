@@ -15,7 +15,7 @@ public abstract class BaseRenameTest extends LightCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {
-        return Resources.getResource("rename/").getFile() + "/" + dataPath;
+        return Resources.getResource("rename").getFile() + "/" + dataPath;
     }
 
     protected void verify(String newName) {
