@@ -1,11 +1,10 @@
 package com.neueda.jetbrains.plugin.graphdb.language.cypher.util;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.google.common.io.Resources;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
+import org.jetbrains.annotations.NotNull;
 
-public class BaseCodeInsightTest extends LightCodeInsightFixtureTestCase {
+public abstract class BaseCodeInsightTest extends LightCodeInsightFixtureTestCase {
 
     private String namespace;
     private final String dataPath;
