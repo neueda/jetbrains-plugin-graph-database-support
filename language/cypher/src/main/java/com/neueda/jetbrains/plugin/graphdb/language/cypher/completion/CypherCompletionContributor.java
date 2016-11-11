@@ -1,5 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.language.cypher.completion;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.*;
@@ -105,7 +106,7 @@ public class CypherCompletionContributor extends CompletionContributor {
 
     private void addCompletionResult(CompletionResultSet resultSet,
                                      String type, Icon icon,
-                                     List<String> keywords) {
+                                     Collection<String> keywords) {
         keywords.forEach((keyword) -> resultSet.addElement(
                    LookupElementBuilder
                               .create(keyword)

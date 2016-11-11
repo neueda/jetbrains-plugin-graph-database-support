@@ -6,4 +6,6 @@ intellij {
 
 dependencies {
     compile project(':graph-database-support-plugin')
+
+    testCompile "org.assertj:assertj-core:$versionAssertj"
 }

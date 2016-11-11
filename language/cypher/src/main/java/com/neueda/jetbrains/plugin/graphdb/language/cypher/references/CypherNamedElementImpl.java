@@ -17,6 +17,4 @@ public abstract class CypherNamedElementImpl
     public CypherNamedElementImpl(@NotNull ASTNode node) {
         super(node);
     }
-
-
 }

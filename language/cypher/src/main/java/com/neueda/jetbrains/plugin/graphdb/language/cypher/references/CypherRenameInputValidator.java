@@ -27,7 +27,6 @@ public class CypherRenameInputValidator implements RenameInputValidator {
             // Cypher file can have any name.
             return true;
         }
-        return !CypherRegexp.ALL_KEYWORDS.contains(newName.toLowerCase())
-                && newName.matches(CypherRegexp.SYMBOLIC_NAME_REGEXP);
+        return newName.matches(CypherRegexp.SYMBOLIC_NAME_REGEXP);
     }
 }

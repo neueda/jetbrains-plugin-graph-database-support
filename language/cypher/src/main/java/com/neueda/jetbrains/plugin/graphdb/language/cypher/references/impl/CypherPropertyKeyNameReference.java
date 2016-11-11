@@ -10,9 +10,9 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.CypherUtil;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
 import org.jetbrains.annotations.NotNull;
 
-public class CypherProperyKeyNameReference extends CypherReferenceBase {
+public class CypherPropertyKeyNameReference extends CypherReferenceBase {
 
-    public CypherProperyKeyNameReference(@NotNull PsiElement element, TextRange textRange) {
+    public CypherPropertyKeyNameReference(@NotNull PsiElement element, TextRange textRange) {
         super(element, textRange);
     }
 

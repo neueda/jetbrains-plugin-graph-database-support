@@ -14,7 +14,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherPropertyKey
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherRelTypeName;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherVariable;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.impl.CypherLabelNameReference;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.impl.CypherProperyKeyNameReference;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.impl.CypherPropertyKeyNameReference;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.impl.CypherRelTypeNameReference;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.impl.CypherVariableReference;
 import org.jetbrains.annotations.NotNull;
@@ -54,7 +54,7 @@ public class CypherReferenceContributor extends PsiReferenceContributor {
                 PlatformPatterns.psiElement().withLanguage(CypherLanguage.INSTANCE),
                 CypherReferenceContributionPriority.PROPERTY_KEY_NAME,
                 (element, context) ->
-                        element instanceof CypherPropertyKeyName ? single(new CypherProperyKeyNameReference(element, rangeFrom(element))) : null);
+                        element instanceof CypherPropertyKeyName ? single(new CypherPropertyKeyNameReference(element, rangeFrom(element))) : null);
     }
 
     private void register(PsiReferenceRegistrar registrar,

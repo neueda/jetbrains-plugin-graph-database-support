@@ -8,7 +8,7 @@ public class CypherNameValidator implements NamesValidator {
 
     @Override
     public boolean isKeyword(@NotNull String name, Project project) {
-        return CypherRegexp.ALL_KEYWORDS.contains(name.toLowerCase());
+        return CypherRegexp.KEYWORDS.contains(name.toLowerCase());
     }
 
     @Override
