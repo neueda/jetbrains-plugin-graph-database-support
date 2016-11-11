@@ -1,8 +1,8 @@
-package com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.util;
+package com.neueda.jetbrains.plugin.graphdb.language.cypher.util;
 
 import com.google.common.io.Resources;
 import com.intellij.testFramework.ParsingTestCase;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.CypherParserDefinition;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherParserDefinition;
 
 /**
  * Base for all parsing test cases.

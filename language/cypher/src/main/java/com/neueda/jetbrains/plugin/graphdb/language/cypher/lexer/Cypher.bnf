@@ -1,5 +1,5 @@
 {
-  parserClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.CypherParser"
+  parserClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherParser"
 
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 

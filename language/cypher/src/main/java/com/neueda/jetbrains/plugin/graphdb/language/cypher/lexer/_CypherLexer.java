@@ -4,8 +4,8 @@ package com.neueda.jetbrains.plugin.graphdb.language.cypher.lexer;
 
 import com.intellij.lexer.*;
 import com.intellij.psi.tree.IElementType;
-import static com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.CypherParserDefinition.LINE_COMMENT;
-import static com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.CypherParserDefinition.BLOCK_COMMENT;
+import static com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherParserDefinition.LINE_COMMENT;
+import static com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherParserDefinition.BLOCK_COMMENT;
 import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes.*;
 
 

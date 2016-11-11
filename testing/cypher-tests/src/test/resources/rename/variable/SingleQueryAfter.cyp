@@ -1,0 +1,2 @@
+MATCH (renamed)
+RETURN (renamed);

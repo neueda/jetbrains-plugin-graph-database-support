@@ -1,5 +1,5 @@
 // This is a generated file. Not intended for manual editing.
-package com.neueda.jetbrains.plugin.graphdb.language.cypher.parser;
+package com.neueda.jetbrains.plugin.graphdb.language.cypher;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;

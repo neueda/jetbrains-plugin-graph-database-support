@@ -6,7 +6,7 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.lexer.CypherLexerAdapter;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.CypherParserDefinition;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherParserDefinition;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTokenType;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
 import org.jetbrains.annotations.NotNull;

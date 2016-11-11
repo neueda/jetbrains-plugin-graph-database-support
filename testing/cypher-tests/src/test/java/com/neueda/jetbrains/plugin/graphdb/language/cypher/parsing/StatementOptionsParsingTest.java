@@ -1,6 +1,6 @@
-package com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.parsing;
+package com.neueda.jetbrains.plugin.graphdb.language.cypher.parsing;
 
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.util.BaseParsingTest;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.BaseParsingTest;
 
 public class StatementOptionsParsingTest extends BaseParsingTest {
 

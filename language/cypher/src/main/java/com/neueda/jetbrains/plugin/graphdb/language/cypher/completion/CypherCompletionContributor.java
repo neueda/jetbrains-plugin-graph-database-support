@@ -17,7 +17,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherLanguage;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.lang.CypherRegexp;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.CypherParserDefinition;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherParserDefinition;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherStringLiteral;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
 

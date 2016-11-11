@@ -1,6 +1,6 @@
-package com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.parsing.clause;
+package com.neueda.jetbrains.plugin.graphdb.language.cypher.parsing.clause;
 
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.util.BaseParsingTest;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.BaseParsingTest;
 
 public class QueryClauseParsingTest extends BaseParsingTest {
 

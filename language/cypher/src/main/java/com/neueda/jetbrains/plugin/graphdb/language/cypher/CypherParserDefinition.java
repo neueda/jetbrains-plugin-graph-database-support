@@ -1,4 +1,4 @@
-package com.neueda.jetbrains.plugin.graphdb.language.cypher.parser;
+package com.neueda.jetbrains.plugin.graphdb.language.cypher;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
@@ -11,7 +11,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.*;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherLanguage;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.file.CypherFile;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.lexer.CypherLexerAdapter;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
