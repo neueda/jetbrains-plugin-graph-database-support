@@ -1,6 +1,5 @@
 package com.neueda.jetbrains.plugin.graphdb.language.cypher.completion;
 
-import com.intellij.codeInsight.completion.CompletionType;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherBuiltInFunctions;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.BaseCompletionTest;
 
@@ -14,11 +13,23 @@ public class BuiltInFunctionsCompletionTest extends BaseCompletionTest {
         super("builtin_functions");
     }
 
-    public void testBuiltIn() throws Exception {
-        myFixture.configureByFiles("BuiltIn.cyp");
-        myFixture.complete(CompletionType.BASIC);
+    public void testBuiltInFunctionsPresentInLookup() throws Exception {
+        myFixture.configureByText("test.cyp", "MATCH (n) RETURN <caret>");
+        myFixture.completeBasic();
         List<String> strings = myFixture.getLookupElementStrings();
         assertThat(strings)
                 .containsAll(CypherBuiltInFunctions.FUNCTION_NAMES);
+    }
+
+    public void testCompletionCaretInsideParentheses() throws Exception {
+        myFixture.configureByText("test.cyp", "RETURN toStrin<caret>");
+        myFixture.completeBasic();
+        myFixture.checkResult("RETURN toString(<caret>)");
+    }
+
+    public void testCompletionCaretAfterParentheses() throws Exception {
+        myFixture.configureByText("test.cyp", "RETURN rand<caret>");
+        myFixture.completeBasic();
+        myFixture.checkResult("RETURN rand()<caret>");
     }
 }

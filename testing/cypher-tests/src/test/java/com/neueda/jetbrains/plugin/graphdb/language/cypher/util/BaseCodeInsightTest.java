@@ -4,10 +4,14 @@ import com.google.common.io.Resources;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class BaseCodeInsightTest extends LightCodeInsightFixtureTestCase {
+abstract class BaseCodeInsightTest extends LightCodeInsightFixtureTestCase {
 
     private String namespace;
     private final String dataPath;
+
+    public BaseCodeInsightTest() {
+        this("default", "default");
+    }
 
     public BaseCodeInsightTest(String namespace, String dataPath) {
         this.namespace = namespace;

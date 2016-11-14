@@ -1,5 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements;
 
+import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.text.StringUtil;
@@ -9,10 +10,12 @@ public class CypherProcedureElement implements CypherElement {
 
     private final String procedureName;
     private final String procedureSignature;
+    private final boolean hasParameters;
 
     public CypherProcedureElement(String procedureName, String procedureSignature) {
         this.procedureName = procedureName;
         this.procedureSignature = StringUtil.trimStart(procedureSignature, procedureName);
+        this.hasParameters = !this.procedureSignature.startsWith("()");
     }
 
     @Override
@@ -22,6 +25,7 @@ public class CypherProcedureElement implements CypherElement {
                 .bold()
                 .withIcon(GraphIcons.Nodes.STORED_PROCEDURE)
                 .withTailText(procedureSignature)
-                .withTypeText("procedure");
+                .withTypeText("procedure")
+                .withInsertHandler(ParenthesesInsertHandler.getInstance(hasParameters));
     }
 }

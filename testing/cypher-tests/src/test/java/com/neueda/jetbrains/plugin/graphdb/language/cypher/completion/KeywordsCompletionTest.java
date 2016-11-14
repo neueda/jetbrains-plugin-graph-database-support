@@ -15,7 +15,7 @@ public class KeywordsCompletionTest extends BaseCompletionTest {
     }
 
     public void testBuiltIn() throws Exception {
-        myFixture.configureByFiles("Keywords.cyp");
+        myFixture.configureByText("test.cyp", "<caret>");
         myFixture.complete(CompletionType.BASIC);
         List<String> strings = myFixture.getLookupElementStrings();
         assertThat(strings)
