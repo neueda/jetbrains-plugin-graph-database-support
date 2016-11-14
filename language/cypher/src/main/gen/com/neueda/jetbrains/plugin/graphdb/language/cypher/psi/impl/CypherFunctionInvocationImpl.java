@@ -34,14 +34,8 @@ public class CypherFunctionInvocationImpl extends ASTWrapperPsiElement implement
 
   @Override
   @NotNull
-  public CypherFunctionName getFunctionName() {
-    return findNotNullChildByClass(CypherFunctionName.class);
-  }
-
-  @Override
-  @NotNull
-  public CypherNamespace getNamespace() {
-    return findNotNullChildByClass(CypherNamespace.class);
+  public CypherFunctionInvocationBody getFunctionInvocationBody() {
+    return findNotNullChildByClass(CypherFunctionInvocationBody.class);
   }
 
   @Override

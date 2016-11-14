@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CypherProcedureNamespace extends PsiElement {
+public interface CypherFunctionInvocationBody extends PsiElement {
 
   @NotNull
-  List<CypherSymbolicNameString> getSymbolicNameStringList();
+  CypherFunctionName getFunctionName();
+
+  @NotNull
+  CypherNamespace getNamespace();
 
 }

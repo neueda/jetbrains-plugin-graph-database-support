@@ -38,6 +38,7 @@ public interface CypherTypes {
   IElementType FILTER_EXPRESSION = new CypherElementType("FILTER_EXPRESSION");
   IElementType FOREACH = new CypherElementType("FOREACH");
   IElementType FUNCTION_INVOCATION = new CypherElementType("FUNCTION_INVOCATION");
+  IElementType FUNCTION_INVOCATION_BODY = new CypherElementType("FUNCTION_INVOCATION_BODY");
   IElementType FUNCTION_NAME = new CypherElementType("FUNCTION_NAME");
   IElementType HINT = new CypherElementType("HINT");
   IElementType IDENTIFIED_INDEX_LOOKUP = new CypherElementType("IDENTIFIED_INDEX_LOOKUP");
@@ -75,8 +76,8 @@ public interface CypherTypes {
   IElementType PATTERN_PART = new CypherElementType("PATTERN_PART");
   IElementType PERIODIC_COMMIT_HINT = new CypherElementType("PERIODIC_COMMIT_HINT");
   IElementType PROCEDURE_ARGUMENTS = new CypherElementType("PROCEDURE_ARGUMENTS");
+  IElementType PROCEDURE_INVOCATION_BODY = new CypherElementType("PROCEDURE_INVOCATION_BODY");
   IElementType PROCEDURE_NAME = new CypherElementType("PROCEDURE_NAME");
-  IElementType PROCEDURE_NAMESPACE = new CypherElementType("PROCEDURE_NAMESPACE");
   IElementType PROCEDURE_OUTPUT = new CypherElementType("PROCEDURE_OUTPUT");
   IElementType PROCEDURE_RESULT = new CypherElementType("PROCEDURE_RESULT");
   IElementType PROCEDURE_RESULTS = new CypherElementType("PROCEDURE_RESULTS");
@@ -337,6 +338,9 @@ public interface CypherTypes {
       else if (type == FUNCTION_INVOCATION) {
         return new CypherFunctionInvocationImpl(node);
       }
+      else if (type == FUNCTION_INVOCATION_BODY) {
+        return new CypherFunctionInvocationBodyImpl(node);
+      }
       else if (type == FUNCTION_NAME) {
         return new CypherFunctionNameImpl(node);
       }
@@ -448,11 +452,11 @@ public interface CypherTypes {
       else if (type == PROCEDURE_ARGUMENTS) {
         return new CypherProcedureArgumentsImpl(node);
       }
+      else if (type == PROCEDURE_INVOCATION_BODY) {
+        return new CypherProcedureInvocationBodyImpl(node);
+      }
       else if (type == PROCEDURE_NAME) {
         return new CypherProcedureNameImpl(node);
-      }
-      else if (type == PROCEDURE_NAMESPACE) {
-        return new CypherProcedureNamespaceImpl(node);
       }
       else if (type == PROCEDURE_OUTPUT) {
         return new CypherProcedureOutputImpl(node);

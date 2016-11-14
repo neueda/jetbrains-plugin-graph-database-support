@@ -11,10 +11,7 @@ public interface CypherCall extends PsiElement {
   CypherProcedureArguments getProcedureArguments();
 
   @NotNull
-  CypherProcedureName getProcedureName();
-
-  @NotNull
-  CypherProcedureNamespace getProcedureNamespace();
+  CypherProcedureInvocationBody getProcedureInvocationBody();
 
   @Nullable
   CypherProcedureResults getProcedureResults();

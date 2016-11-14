@@ -11,14 +11,14 @@ import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherType
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
-public class CypherCallImpl extends ASTWrapperPsiElement implements CypherCall {
+public class CypherProcedureInvocationBodyImpl extends ASTWrapperPsiElement implements CypherProcedureInvocationBody {
 
-  public CypherCallImpl(ASTNode node) {
+  public CypherProcedureInvocationBodyImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CypherVisitor visitor) {
-    visitor.visitCall(this);
+    visitor.visitProcedureInvocationBody(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -28,26 +28,14 @@ public class CypherCallImpl extends ASTWrapperPsiElement implements CypherCall {
 
   @Override
   @NotNull
-  public CypherProcedureArguments getProcedureArguments() {
-    return findNotNullChildByClass(CypherProcedureArguments.class);
+  public CypherNamespace getNamespace() {
+    return findNotNullChildByClass(CypherNamespace.class);
   }
 
   @Override
   @NotNull
-  public CypherProcedureInvocationBody getProcedureInvocationBody() {
-    return findNotNullChildByClass(CypherProcedureInvocationBody.class);
-  }
-
-  @Override
-  @Nullable
-  public CypherProcedureResults getProcedureResults() {
-    return findChildByClass(CypherProcedureResults.class);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getKCall() {
-    return findNotNullChildByType(K_CALL);
+  public CypherProcedureName getProcedureName() {
+    return findNotNullChildByClass(CypherProcedureName.class);
   }
 
 }

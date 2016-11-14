@@ -128,6 +128,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitFunctionInvocationBody(@NotNull CypherFunctionInvocationBody o) {
+    visitPsiElement(o);
+  }
+
   public void visitFunctionName(@NotNull CypherFunctionName o) {
     visitPsiElement(o);
   }
@@ -272,11 +276,11 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitProcedureName(@NotNull CypherProcedureName o) {
+  public void visitProcedureInvocationBody(@NotNull CypherProcedureInvocationBody o) {
     visitPsiElement(o);
   }
 
-  public void visitProcedureNamespace(@NotNull CypherProcedureNamespace o) {
+  public void visitProcedureName(@NotNull CypherProcedureName o) {
     visitPsiElement(o);
   }
 

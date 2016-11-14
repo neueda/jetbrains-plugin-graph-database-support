@@ -7,9 +7,10 @@ import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherFunctionName;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherFunctionInvocationBody;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherLabelName;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherParameter;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherProcedureInvocationBody;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherRelTypeName;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherShortestPathPattern;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
@@ -23,7 +24,7 @@ public class CypherSyntaxHighlighterAnnotator implements Annotator {
 
     private static final List<IElementType> SPECIAL_FUNCTIONS = new ArrayList<>();
 
-    {
+    static {
         SPECIAL_FUNCTIONS.add(CypherTypes.K_SHORTESTPATH);
         SPECIAL_FUNCTIONS.add(CypherTypes.K_ALLSHORTESTPATHS);
         SPECIAL_FUNCTIONS.add(CypherTypes.K_FILTER);
@@ -40,7 +41,7 @@ public class CypherSyntaxHighlighterAnnotator implements Annotator {
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
         if (element instanceof CypherVariable) {
             setHighlighting(element, holder, CypherSyntaxColors.VARIABLE);
-        } else if (element instanceof CypherFunctionName) {
+        } else if (element instanceof CypherFunctionInvocationBody || element instanceof CypherProcedureInvocationBody) {
             setHighlighting(element, holder, CypherSyntaxColors.FUNCTION);
         } else if (element instanceof CypherLabelName) {
             setHighlighting(element, holder, CypherSyntaxColors.LABEL);

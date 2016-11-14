@@ -291,8 +291,8 @@ Skip ::= K_SKIP Expression
 Limit ::= K_LIMIT Expression
 
 //-- Call
-Call ::= K_CALL ProcedureNamespace ProcedureName ProcedureArguments ProcedureResults?
-ProcedureNamespace ::= (SymbolicNameString ".")*
+Call ::= K_CALL ProcedureInvocationBody ProcedureArguments ProcedureResults?
+ProcedureInvocationBody ::= Namespace ProcedureName
 ProcedureArguments ::= "(" Expression? ("," Expression)* ")"
 ProcedureResults ::= K_YIELD ProcedureResult ("," ProcedureResult)*
 ProcedureResult ::= AliasedProcedureResult | SimpleProcedureResult
@@ -392,8 +392,9 @@ ListComprehension ::= "[" FilterExpression ("|"  Expression)? "]"
 FilterExpression ::= IdInColl (K_WHERE Expression)?
 IdInColl ::= Variable K_IN Expression
 parenthesizedExpression ::= "(" Expression ")" {pin=1}
-FunctionInvocation ::= (Namespace FunctionName "(" "*" ")")
-                     | (Namespace FunctionName "(" K_DISTINCT? Expression? ("," Expression)* ")")
+FunctionInvocation ::= (FunctionInvocationBody "(" "*" ")")
+                     | (FunctionInvocationBody "(" K_DISTINCT? Expression? ("," Expression)* ")")
+FunctionInvocationBody ::= Namespace FunctionName
 CaseExpression ::= ((K_CASE CaseAlternatives+) | (K_CASE Expression CaseAlternatives+))
                    (K_ELSE Expression)?
                    K_END

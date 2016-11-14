@@ -5,15 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CypherFunctionInvocation extends PsiElement {
+public interface CypherProcedureInvocationBody extends PsiElement {
 
   @NotNull
-  List<CypherExpression> getExpressionList();
+  CypherNamespace getNamespace();
 
   @NotNull
-  CypherFunctionInvocationBody getFunctionInvocationBody();
-
-  @Nullable
-  PsiElement getKDistinct();
+  CypherProcedureName getProcedureName();
 
 }

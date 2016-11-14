@@ -113,6 +113,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == FUNCTION_INVOCATION) {
       r = FunctionInvocation(b, 0);
     }
+    else if (t == FUNCTION_INVOCATION_BODY) {
+      r = FunctionInvocationBody(b, 0);
+    }
     else if (t == FUNCTION_NAME) {
       r = FunctionName(b, 0);
     }
@@ -221,11 +224,11 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == PROCEDURE_ARGUMENTS) {
       r = ProcedureArguments(b, 0);
     }
+    else if (t == PROCEDURE_INVOCATION_BODY) {
+      r = ProcedureInvocationBody(b, 0);
+    }
     else if (t == PROCEDURE_NAME) {
       r = ProcedureName(b, 0);
-    }
-    else if (t == PROCEDURE_NAMESPACE) {
-      r = ProcedureNamespace(b, 0);
     }
     else if (t == PROCEDURE_OUTPUT) {
       r = ProcedureOutput(b, 0);
@@ -451,24 +454,23 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // K_CALL ProcedureNamespace ProcedureName ProcedureArguments ProcedureResults?
+  // K_CALL ProcedureInvocationBody ProcedureArguments ProcedureResults?
   public static boolean Call(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Call")) return false;
     if (!nextTokenIs(b, K_CALL)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, K_CALL);
-    r = r && ProcedureNamespace(b, l + 1);
-    r = r && ProcedureName(b, l + 1);
+    r = r && ProcedureInvocationBody(b, l + 1);
     r = r && ProcedureArguments(b, l + 1);
-    r = r && Call_4(b, l + 1);
+    r = r && Call_3(b, l + 1);
     exit_section_(b, m, CALL, r);
     return r;
   }
 
   // ProcedureResults?
-  private static boolean Call_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Call_4")) return false;
+  private static boolean Call_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Call_3")) return false;
     ProcedureResults(b, l + 1);
     return true;
   }
@@ -1857,8 +1859,8 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (Namespace FunctionName "(" "*" ")")
-  //                      | (Namespace FunctionName "(" K_DISTINCT? Expression? ("," Expression)* ")")
+  // (FunctionInvocationBody "(" "*" ")")
+  //                      | (FunctionInvocationBody "(" K_DISTINCT? Expression? ("," Expression)* ")")
   public static boolean FunctionInvocation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionInvocation")) return false;
     boolean r;
@@ -1869,13 +1871,12 @@ public class CypherParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // Namespace FunctionName "(" "*" ")"
+  // FunctionInvocationBody "(" "*" ")"
   private static boolean FunctionInvocation_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionInvocation_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Namespace(b, l + 1);
-    r = r && FunctionName(b, l + 1);
+    r = FunctionInvocationBody(b, l + 1);
     r = r && consumeToken(b, PARENTHESE_OPEN);
     r = r && consumeToken(b, OP_MUL);
     r = r && consumeToken(b, PARENTHESE_CLOSE);
@@ -1883,56 +1884,67 @@ public class CypherParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // Namespace FunctionName "(" K_DISTINCT? Expression? ("," Expression)* ")"
+  // FunctionInvocationBody "(" K_DISTINCT? Expression? ("," Expression)* ")"
   private static boolean FunctionInvocation_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionInvocation_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Namespace(b, l + 1);
-    r = r && FunctionName(b, l + 1);
+    r = FunctionInvocationBody(b, l + 1);
     r = r && consumeToken(b, PARENTHESE_OPEN);
+    r = r && FunctionInvocation_1_2(b, l + 1);
     r = r && FunctionInvocation_1_3(b, l + 1);
     r = r && FunctionInvocation_1_4(b, l + 1);
-    r = r && FunctionInvocation_1_5(b, l + 1);
     r = r && consumeToken(b, PARENTHESE_CLOSE);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // K_DISTINCT?
-  private static boolean FunctionInvocation_1_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionInvocation_1_3")) return false;
+  private static boolean FunctionInvocation_1_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionInvocation_1_2")) return false;
     consumeToken(b, K_DISTINCT);
     return true;
   }
 
   // Expression?
-  private static boolean FunctionInvocation_1_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionInvocation_1_4")) return false;
+  private static boolean FunctionInvocation_1_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionInvocation_1_3")) return false;
     Expression(b, l + 1);
     return true;
   }
 
   // ("," Expression)*
-  private static boolean FunctionInvocation_1_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionInvocation_1_5")) return false;
+  private static boolean FunctionInvocation_1_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionInvocation_1_4")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!FunctionInvocation_1_5_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "FunctionInvocation_1_5", c)) break;
+      if (!FunctionInvocation_1_4_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "FunctionInvocation_1_4", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
   // "," Expression
-  private static boolean FunctionInvocation_1_5_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionInvocation_1_5_0")) return false;
+  private static boolean FunctionInvocation_1_4_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionInvocation_1_4_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, OP_COMMA);
     r = r && Expression(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // Namespace FunctionName
+  public static boolean FunctionInvocationBody(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionInvocationBody")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, FUNCTION_INVOCATION_BODY, "<function invocation body>");
+    r = Namespace(b, l + 1);
+    r = r && FunctionName(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -3059,6 +3071,18 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // Namespace ProcedureName
+  public static boolean ProcedureInvocationBody(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ProcedureInvocationBody")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, PROCEDURE_INVOCATION_BODY, "<procedure invocation body>");
+    r = Namespace(b, l + 1);
+    r = r && ProcedureName(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
   // SymbolicNameString
   public static boolean ProcedureName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ProcedureName")) return false;
@@ -3066,32 +3090,6 @@ public class CypherParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, PROCEDURE_NAME, "<procedure name>");
     r = SymbolicNameString(b, l + 1);
     exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // (SymbolicNameString ".")*
-  public static boolean ProcedureNamespace(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ProcedureNamespace")) return false;
-    Marker m = enter_section_(b, l, _NONE_, PROCEDURE_NAMESPACE, "<procedure namespace>");
-    int c = current_position_(b);
-    while (true) {
-      if (!ProcedureNamespace_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "ProcedureNamespace", c)) break;
-      c = current_position_(b);
-    }
-    exit_section_(b, l, m, true, false, null);
-    return true;
-  }
-
-  // SymbolicNameString "."
-  private static boolean ProcedureNamespace_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ProcedureNamespace_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = SymbolicNameString(b, l + 1);
-    r = r && consumeToken(b, OP_DOT);
-    exit_section_(b, m, null, r);
     return r;
   }
 
