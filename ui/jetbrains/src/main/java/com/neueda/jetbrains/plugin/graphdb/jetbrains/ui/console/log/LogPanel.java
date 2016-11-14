@@ -95,7 +95,11 @@ public class LogPanel implements Disposable {
     }
 
     public void printException(Exception exception) {
-        error(exception.getMessage());
+        if (exception.getMessage() != null) {
+            error(exception.getMessage());
+        } else {
+            error(exception.toString());
+        }
         newLine();
 
         Throwable cause = exception.getCause();

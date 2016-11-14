@@ -7,7 +7,7 @@ import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherLanguage;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.CypherMetadataType;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherElement;
 import org.jetbrains.annotations.NotNull;
 
 public final class RelationshipTypeCompletionProvider extends BaseCompletionProvider {
@@ -20,7 +20,9 @@ public final class RelationshipTypeCompletionProvider extends BaseCompletionProv
                                   ProcessingContext context,
                                   @NotNull CompletionResultSet result) {
         withCypherMetadataProvider(parameters, (metadataProvider -> {
-            result.addAllElements(metadataProvider.getMetadata(CypherMetadataType.RELATIONSHIP_TYPES));
+            metadataProvider.getRelationshipTypes().stream()
+                    .map(CypherElement::getLookupElement)
+                    .forEach(result::addElement);
         }));
     }
 }

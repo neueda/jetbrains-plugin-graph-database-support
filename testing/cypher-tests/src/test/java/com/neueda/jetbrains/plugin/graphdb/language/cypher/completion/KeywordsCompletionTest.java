@@ -1,7 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.language.cypher.completion;
 
 import com.intellij.codeInsight.completion.CompletionType;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.lang.CypherAtoms;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherKeywords;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.BaseCompletionTest;
 
 import java.util.List;
@@ -18,6 +18,7 @@ public class KeywordsCompletionTest extends BaseCompletionTest {
         myFixture.configureByFiles("Keywords.cyp");
         myFixture.complete(CompletionType.BASIC);
         List<String> strings = myFixture.getLookupElementStrings();
-        assertThat(strings).containsAll(CypherAtoms.KEYWORDS);
+        assertThat(strings)
+                .containsAll(CypherKeywords.KEYWORDS);
     }
 }

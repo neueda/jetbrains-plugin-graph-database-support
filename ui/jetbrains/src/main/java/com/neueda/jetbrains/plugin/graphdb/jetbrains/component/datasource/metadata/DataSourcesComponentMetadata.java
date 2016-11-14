@@ -1,6 +1,5 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata;
 
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
@@ -10,14 +9,11 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DatabaseManagerService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.MetadataRetrieveEvent;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.CypherMetadataProviderService;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.CypherMetadataType;
-import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataContainer;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class DataSourcesComponentMetadata implements ProjectComponent {
 
@@ -72,40 +68,20 @@ public class DataSourcesComponentMetadata implements ProjectComponent {
 
     private void updateNeo4jBoltMetadata(DataSourceApi dataSource, DataSourceMetadata metadata) {
         // Refresh cypher metadata provider
-        List<String> labels = metadata.getMetadata("labels").stream()
-                .map((row) -> row.get("label"))
-                .collect(Collectors.toList());
-        List<String> relationshipTypes = metadata.getMetadata("relationships").stream()
-                .map((row) -> row.get("relationshipType"))
-                .collect(Collectors.toList());
-        List<String> propertyKeys = metadata.getMetadata("propertyKeys").stream()
-                .map((row) -> row.get("propertyKey"))
-                .collect(Collectors.toList());
-        List<String> storedProcedures = metadata.getMetadata("procedures").stream()
-                .map((row) -> row.get("name"))
-                .collect(Collectors.toList());
+        cypherMetadataProviderService.wipeContainer(dataSource.getName());
+        CypherMetadataContainer container = cypherMetadataProviderService.getContainer(dataSource.getName());
 
-        cypherMetadataProviderService.removeMetadata(dataSource.getName());
-        cypherMetadataProviderService.registerMetadata(dataSource.getName(), CypherMetadataType.LABELS,
-                labels.stream().map(label -> LookupElementBuilder.create(label)
-                        .withIcon(GraphIcons.Nodes.LABEL)
-                        .withTypeText("label"))
-                        .collect(Collectors.toList()));
-        cypherMetadataProviderService.registerMetadata(dataSource.getName(), CypherMetadataType.RELATIONSHIP_TYPES,
-                relationshipTypes.stream().map(relType -> LookupElementBuilder.create(relType)
-                        .withIcon(GraphIcons.Nodes.RELATIONSHIP_TYPE)
-                        .withTypeText("relationship type"))
-                        .collect(Collectors.toList()));
-        cypherMetadataProviderService.registerMetadata(dataSource.getName(), CypherMetadataType.PROPERTY_KEYS,
-                propertyKeys.stream().map(propertyKey -> LookupElementBuilder.create(propertyKey)
-                        .withIcon(GraphIcons.Nodes.PROPERTY_KEY)
-                        .withTypeText("property"))
-                        .collect(Collectors.toList()));
-        cypherMetadataProviderService.registerMetadata(dataSource.getName(), CypherMetadataType.PROCEDURES,
-                storedProcedures.stream().map(procedure -> LookupElementBuilder.create(procedure)
-                        .withIcon(GraphIcons.Nodes.STORED_PROCEDURE)
-                        .withTypeText("procedure"))
-                        .collect(Collectors.toList()));
+        metadata.getMetadata("labels").stream()
+                .map((row) -> row.get("label"))
+                .forEach(container::addLabel);
+        metadata.getMetadata("relationships").stream()
+                .map((row) -> row.get("relationshipType"))
+                .forEach(container::addRelationshipType);
+        metadata.getMetadata("propertyKeys").stream()
+                .map((row) -> row.get("propertyKey"))
+                .forEach(container::addPropertyKey);
+        metadata.getMetadata("procedures")
+                .forEach(row -> container.addProcedure(row.get("name"), row.get("signature")));
     }
 
     @Override

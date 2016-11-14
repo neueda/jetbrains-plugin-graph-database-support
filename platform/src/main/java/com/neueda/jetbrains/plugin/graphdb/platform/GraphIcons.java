@@ -28,6 +28,7 @@ public final class GraphIcons {
         public static final Icon PROPERTY_KEY = AllIcons.Nodes.Property;
         public static final Icon STORED_PROCEDURE = AllIcons.Nodes.Function;
         public static final Icon VARIABLE = AllIcons.Nodes.Variable;
+        public static final Icon FUNCTION = AllIcons.Nodes.Function;
     }
 
     private GraphIcons() {

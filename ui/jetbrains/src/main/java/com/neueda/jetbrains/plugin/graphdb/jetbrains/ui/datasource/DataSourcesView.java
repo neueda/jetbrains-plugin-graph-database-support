@@ -20,7 +20,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.DataSourceMetadataUi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.GraphColoredTreeCellRenderer;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.FileUtil;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.CypherMetadataProviderService;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;

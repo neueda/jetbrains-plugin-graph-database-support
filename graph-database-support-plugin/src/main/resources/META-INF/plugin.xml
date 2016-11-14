@@ -147,8 +147,8 @@
         <renameInputValidator implementation="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherRenameInputValidator"/>
         <lang.namesValidator language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.lang.CypherNameValidator"/>
         <spellchecker.support language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.lang.CypherSpellcheckingStrategy"/>
-        <projectService serviceInterface="com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.CypherMetadataProviderService"
-                        serviceImplementation="com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.CypherMetadataProviderServiceImpl"/>
+        <projectService serviceInterface="com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService"
+                        serviceImplementation="com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderServiceImpl"/>
         <!-- Todo:
         lang.documentationProvider
         gotoSymbolContributor

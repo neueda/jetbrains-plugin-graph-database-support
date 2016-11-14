@@ -4,7 +4,7 @@ import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.CypherMetadataProviderService;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService;
 
 public abstract class BaseCompletionProvider extends CompletionProvider<CompletionParameters> {
 
