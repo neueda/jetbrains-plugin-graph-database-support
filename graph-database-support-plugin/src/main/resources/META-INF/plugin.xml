@@ -149,10 +149,7 @@
         <spellchecker.support language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.lang.CypherSpellcheckingStrategy"/>
         <projectService serviceInterface="com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService"
                         serviceImplementation="com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderServiceImpl"/>
-        <!-- Todo:
-        lang.documentationProvider
-        gotoSymbolContributor
-        -->
+        <lang.documentationProvider language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.documentation.CypherDocumentationProvider"/>
     </extensions>
 
     <actions>

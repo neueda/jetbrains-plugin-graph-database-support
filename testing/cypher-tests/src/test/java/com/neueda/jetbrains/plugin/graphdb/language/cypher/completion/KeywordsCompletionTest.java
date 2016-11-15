@@ -10,11 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class KeywordsCompletionTest extends BaseCompletionTest {
 
-    public KeywordsCompletionTest() {
-        super("keywords");
-    }
-
-    public void testBuiltIn() throws Exception {
+    public void testKeywords() throws Exception {
         myFixture.configureByText("test.cyp", "<caret>");
         myFixture.complete(CompletionType.BASIC);
         List<String> strings = myFixture.getLookupElementStrings();

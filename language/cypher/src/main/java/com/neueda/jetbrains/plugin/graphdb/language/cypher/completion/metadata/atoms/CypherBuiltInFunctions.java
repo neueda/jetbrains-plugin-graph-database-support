@@ -124,6 +124,7 @@ public final class CypherBuiltInFunctions {
 
     public static final List<String> FUNCTION_NAMES = FUNCTIONS.stream()
             .map(CypherBuiltInFunctionElement::getFunctionName)
+            .distinct()
             .collect(Collectors.toList());
 
     private static CypherBuiltInFunctionElement element(String functionName,

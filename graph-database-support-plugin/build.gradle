@@ -34,4 +34,5 @@ intellij {
 
 processResources {
     from 'platform/src/main/resources'
+    from 'language/cypher/src/main/resources'
 }

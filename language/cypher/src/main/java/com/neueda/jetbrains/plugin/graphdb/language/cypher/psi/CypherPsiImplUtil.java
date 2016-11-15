@@ -61,6 +61,14 @@ public class CypherPsiImplUtil {
         return element;
     }
 
+    public static String getFullName(CypherFunctionInvocation element) {
+        return element.getFunctionInvocationBody().getText();
+    }
+
+    public static String getFullName(CypherProcedureInvocation element) {
+        return element.getProcedureInvocationBody().getText();
+    }
+
     /**
      * Safely replaces symbolic name node with new node.
      * It's possible that nothing happens if newElement is invalid. No error thrown in such case.

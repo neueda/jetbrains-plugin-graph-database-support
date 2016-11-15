@@ -8,10 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface CypherCall extends PsiElement {
 
   @NotNull
-  CypherProcedureArguments getProcedureArguments();
-
-  @NotNull
-  CypherProcedureInvocationBody getProcedureInvocationBody();
+  CypherProcedureInvocation getProcedureInvocation();
 
   @Nullable
   CypherProcedureResults getProcedureResults();

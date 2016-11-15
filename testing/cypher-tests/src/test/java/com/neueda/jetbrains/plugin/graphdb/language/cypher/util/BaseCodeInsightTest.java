@@ -9,10 +9,6 @@ abstract class BaseCodeInsightTest extends LightCodeInsightFixtureTestCase {
     private String namespace;
     private final String dataPath;
 
-    public BaseCodeInsightTest() {
-        this("default", "default");
-    }
-
     public BaseCodeInsightTest(String namespace, String dataPath) {
         this.namespace = namespace;
         this.dataPath = dataPath;

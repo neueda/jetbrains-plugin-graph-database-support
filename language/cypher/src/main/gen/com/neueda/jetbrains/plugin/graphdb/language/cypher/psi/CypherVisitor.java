@@ -276,6 +276,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitProcedureInvocation(@NotNull CypherProcedureInvocation o) {
+    visitPsiElement(o);
+  }
+
   public void visitProcedureInvocationBody(@NotNull CypherProcedureInvocationBody o) {
     visitPsiElement(o);
   }

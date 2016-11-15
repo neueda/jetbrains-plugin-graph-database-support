@@ -9,10 +9,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class BuiltInFunctionsCompletionTest extends BaseCompletionTest {
 
-    public BuiltInFunctionsCompletionTest() {
-        super("builtin_functions");
-    }
-
     public void testBuiltInFunctionsPresentInLookup() throws Exception {
         myFixture.configureByText("test.cyp", "MATCH (n) RETURN <caret>");
         myFixture.completeBasic();

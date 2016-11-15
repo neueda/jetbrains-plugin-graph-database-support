@@ -28,14 +28,8 @@ public class CypherCallImpl extends ASTWrapperPsiElement implements CypherCall {
 
   @Override
   @NotNull
-  public CypherProcedureArguments getProcedureArguments() {
-    return findNotNullChildByClass(CypherProcedureArguments.class);
-  }
-
-  @Override
-  @NotNull
-  public CypherProcedureInvocationBody getProcedureInvocationBody() {
-    return findNotNullChildByClass(CypherProcedureInvocationBody.class);
+  public CypherProcedureInvocation getProcedureInvocation() {
+    return findNotNullChildByClass(CypherProcedureInvocation.class);
   }
 
   @Override

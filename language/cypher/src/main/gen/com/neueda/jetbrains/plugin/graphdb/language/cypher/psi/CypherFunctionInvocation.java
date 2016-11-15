@@ -16,4 +16,6 @@ public interface CypherFunctionInvocation extends PsiElement {
   @Nullable
   PsiElement getKDistinct();
 
+  String getFullName();
+
 }

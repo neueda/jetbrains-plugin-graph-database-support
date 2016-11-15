@@ -6,6 +6,7 @@ import com.intellij.psi.tree.IElementType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -14,6 +15,17 @@ import java.util.stream.Collectors;
  * @author dmitry@vrublevsky.me
  */
 public class TraverseUtil {
+
+    public static Optional<PsiElement> findParent(PsiElement node, List<IElementType> searchTypes) {
+        if (node == null) {
+            return Optional.empty();
+        }
+        if (searchTypes.contains(node.getNode().getElementType())) {
+            return Optional.of(node);
+        }
+
+        return findParent(node.getParent(), searchTypes);
+    }
 
     public static ASTNode findFirstDeepChildByType(ASTNode root, IElementType type) {
         if (root.getElementType().equals(type)) {

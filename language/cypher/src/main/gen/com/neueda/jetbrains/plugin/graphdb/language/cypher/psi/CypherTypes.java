@@ -76,6 +76,7 @@ public interface CypherTypes {
   IElementType PATTERN_PART = new CypherElementType("PATTERN_PART");
   IElementType PERIODIC_COMMIT_HINT = new CypherElementType("PERIODIC_COMMIT_HINT");
   IElementType PROCEDURE_ARGUMENTS = new CypherElementType("PROCEDURE_ARGUMENTS");
+  IElementType PROCEDURE_INVOCATION = new CypherElementType("PROCEDURE_INVOCATION");
   IElementType PROCEDURE_INVOCATION_BODY = new CypherElementType("PROCEDURE_INVOCATION_BODY");
   IElementType PROCEDURE_NAME = new CypherElementType("PROCEDURE_NAME");
   IElementType PROCEDURE_OUTPUT = new CypherElementType("PROCEDURE_OUTPUT");
@@ -451,6 +452,9 @@ public interface CypherTypes {
       }
       else if (type == PROCEDURE_ARGUMENTS) {
         return new CypherProcedureArgumentsImpl(node);
+      }
+      else if (type == PROCEDURE_INVOCATION) {
+        return new CypherProcedureInvocationImpl(node);
       }
       else if (type == PROCEDURE_INVOCATION_BODY) {
         return new CypherProcedureInvocationBodyImpl(node);

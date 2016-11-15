@@ -44,4 +44,8 @@ public class CypherFunctionInvocationImpl extends ASTWrapperPsiElement implement
     return findChildByType(K_DISTINCT);
   }
 
+  public String getFullName() {
+    return CypherPsiImplUtil.getFullName(this);
+  }
+
 }

@@ -224,6 +224,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == PROCEDURE_ARGUMENTS) {
       r = ProcedureArguments(b, 0);
     }
+    else if (t == PROCEDURE_INVOCATION) {
+      r = ProcedureInvocation(b, 0);
+    }
     else if (t == PROCEDURE_INVOCATION_BODY) {
       r = ProcedureInvocationBody(b, 0);
     }
@@ -454,23 +457,22 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // K_CALL ProcedureInvocationBody ProcedureArguments ProcedureResults?
+  // K_CALL ProcedureInvocation ProcedureResults?
   public static boolean Call(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Call")) return false;
     if (!nextTokenIs(b, K_CALL)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, K_CALL);
-    r = r && ProcedureInvocationBody(b, l + 1);
-    r = r && ProcedureArguments(b, l + 1);
-    r = r && Call_3(b, l + 1);
+    r = r && ProcedureInvocation(b, l + 1);
+    r = r && Call_2(b, l + 1);
     exit_section_(b, m, CALL, r);
     return r;
   }
 
   // ProcedureResults?
-  private static boolean Call_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Call_3")) return false;
+  private static boolean Call_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Call_2")) return false;
     ProcedureResults(b, l + 1);
     return true;
   }
@@ -3067,6 +3069,18 @@ public class CypherParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, OP_COMMA);
     r = r && Expression(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ProcedureInvocationBody ProcedureArguments
+  public static boolean ProcedureInvocation(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ProcedureInvocation")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, PROCEDURE_INVOCATION, "<procedure invocation>");
+    r = ProcedureInvocationBody(b, l + 1);
+    r = r && ProcedureArguments(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
