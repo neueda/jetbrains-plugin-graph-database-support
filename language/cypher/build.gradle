@@ -15,5 +15,7 @@ sourceSets {
 
 dependencies {
     compile project(":platform")
+
+    testCompile "org.assertj:assertj-core:$versionAssertj"
 }
 
