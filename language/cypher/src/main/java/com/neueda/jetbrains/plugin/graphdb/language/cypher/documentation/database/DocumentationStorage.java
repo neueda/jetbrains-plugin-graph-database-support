@@ -18,13 +18,14 @@ public class DocumentationStorage {
     private Map<String, String> cache;
 
     public DocumentationStorage(String documentationDir, List<String> names) {
-        this.documentationDir = "cypher/documentation/" + documentationDir;
+        this.documentationDir = documentationDir;
         this.names = names;
+
     }
 
     public Optional<String> lookup(String name) {
         initialize();
-        return Optional.of(cache.get(name));
+        return Optional.ofNullable(cache.get(name));
     }
 
     private synchronized void initialize() {
@@ -36,7 +37,7 @@ public class DocumentationStorage {
         for (String name : names) {
             String filePath = documentationDir + "/" + name + ".html";
             try {
-                URL documentationFile = Resources.getResource(filePath);
+                URL documentationFile = DocumentationStorage.class.getResource(filePath);
                 String documentation = Resources.toString(documentationFile, Charsets.UTF_8);
 
                 cache.put(name, documentation);

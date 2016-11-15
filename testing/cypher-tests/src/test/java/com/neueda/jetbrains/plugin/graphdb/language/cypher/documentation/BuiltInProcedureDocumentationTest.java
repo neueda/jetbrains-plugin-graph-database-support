@@ -27,4 +27,9 @@ public class BuiltInProcedureDocumentationTest extends BaseDocumentationTest {
         configure("CALL dbms.procedures(<caret>);");
         verify(expectedDocumentation);
     }
+
+    public void testNoDocumentation() throws Exception {
+        configure("CALL namespace.nonexist<caret>ing();");
+        verify(null);
+    }
 }

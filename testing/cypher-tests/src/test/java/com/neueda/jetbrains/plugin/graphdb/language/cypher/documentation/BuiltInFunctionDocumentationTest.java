@@ -22,4 +22,9 @@ public class BuiltInFunctionDocumentationTest extends BaseDocumentationTest {
         configure("RETURN toString(4<caret>2);");
         verify(expectedDocumentation);
     }
+
+    public void testNoDocumentation() {
+        configure("RETURN nonexistingf<caret>unction();");
+        verify(null);
+    }
 }
