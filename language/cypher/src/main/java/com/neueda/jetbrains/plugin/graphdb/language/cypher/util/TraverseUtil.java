@@ -20,7 +20,7 @@ public class TraverseUtil {
         if (node == null) {
             return Optional.empty();
         }
-        if (searchTypes.contains(node.getNode().getElementType())) {
+        if (node.getNode() != null && searchTypes.contains(node.getNode().getElementType())) {
             return Optional.of(node);
         }
 

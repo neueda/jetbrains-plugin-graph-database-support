@@ -28,8 +28,26 @@ public class CypherPropertyExpressionImpl extends ASTWrapperPsiElement implement
 
   @Override
   @Nullable
+  public CypherAllFunctionInvocation getAllFunctionInvocation() {
+    return findChildByClass(CypherAllFunctionInvocation.class);
+  }
+
+  @Override
+  @Nullable
+  public CypherAnyFunctionInvocation getAnyFunctionInvocation() {
+    return findChildByClass(CypherAnyFunctionInvocation.class);
+  }
+
+  @Override
+  @Nullable
   public CypherCaseExpression getCaseExpression() {
     return findChildByClass(CypherCaseExpression.class);
+  }
+
+  @Override
+  @Nullable
+  public CypherExistsFunctionInvocation getExistsFunctionInvocation() {
+    return findChildByClass(CypherExistsFunctionInvocation.class);
   }
 
   @Override
@@ -40,20 +58,20 @@ public class CypherPropertyExpressionImpl extends ASTWrapperPsiElement implement
 
   @Override
   @Nullable
-  public CypherFilterExpression getFilterExpression() {
-    return findChildByClass(CypherFilterExpression.class);
+  public CypherExtractFunctionInvocation getExtractFunctionInvocation() {
+    return findChildByClass(CypherExtractFunctionInvocation.class);
+  }
+
+  @Override
+  @Nullable
+  public CypherFilterFunctionInvocation getFilterFunctionInvocation() {
+    return findChildByClass(CypherFilterFunctionInvocation.class);
   }
 
   @Override
   @Nullable
   public CypherFunctionInvocation getFunctionInvocation() {
     return findChildByClass(CypherFunctionInvocation.class);
-  }
-
-  @Override
-  @Nullable
-  public CypherIdInColl getIdInColl() {
-    return findChildByClass(CypherIdInColl.class);
   }
 
   @Override
@@ -66,6 +84,12 @@ public class CypherPropertyExpressionImpl extends ASTWrapperPsiElement implement
   @Nullable
   public CypherMapLiteral getMapLiteral() {
     return findChildByClass(CypherMapLiteral.class);
+  }
+
+  @Override
+  @Nullable
+  public CypherNoneFunctionInvocation getNoneFunctionInvocation() {
+    return findChildByClass(CypherNoneFunctionInvocation.class);
   }
 
   @Override
@@ -88,6 +112,12 @@ public class CypherPropertyExpressionImpl extends ASTWrapperPsiElement implement
 
   @Override
   @Nullable
+  public CypherReduceFunctionInvocation getReduceFunctionInvocation() {
+    return findChildByClass(CypherReduceFunctionInvocation.class);
+  }
+
+  @Override
+  @Nullable
   public CypherRelationshipsPattern getRelationshipsPattern() {
     return findChildByClass(CypherRelationshipsPattern.class);
   }
@@ -96,6 +126,12 @@ public class CypherPropertyExpressionImpl extends ASTWrapperPsiElement implement
   @Nullable
   public CypherShortestPathPattern getShortestPathPattern() {
     return findChildByClass(CypherShortestPathPattern.class);
+  }
+
+  @Override
+  @Nullable
+  public CypherSingleFunctionInvocation getSingleFunctionInvocation() {
+    return findChildByClass(CypherSingleFunctionInvocation.class);
   }
 
   @Override
@@ -118,62 +154,14 @@ public class CypherPropertyExpressionImpl extends ASTWrapperPsiElement implement
 
   @Override
   @Nullable
-  public PsiElement getKAll() {
-    return findChildByType(K_ALL);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getKAny() {
-    return findChildByType(K_ANY);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getKExists() {
-    return findChildByType(K_EXISTS);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getKExtract() {
-    return findChildByType(K_EXTRACT);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getKFalse() {
     return findChildByType(K_FALSE);
   }
 
   @Override
   @Nullable
-  public PsiElement getKFilter() {
-    return findChildByType(K_FILTER);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getKNone() {
-    return findChildByType(K_NONE);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getKNull() {
     return findChildByType(K_NULL);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getKReduce() {
-    return findChildByType(K_REDUCE);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getKSingle() {
-    return findChildByType(K_SINGLE);
   }
 
   @Override

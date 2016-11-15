@@ -318,8 +318,10 @@ Where ::= K_WHERE Expression
 Pattern ::= PatternPart ("," PatternPart)*
 PatternPart ::= (Variable "=" AnonymousPatternPart) | AnonymousPatternPart
 AnonymousPatternPart ::= ShortestPathPattern | PatternElement
-ShortestPathPattern ::= (K_SHORTESTPATH "(" PatternElement ")")
-                      | (K_ALLSHORTESTPATHS "(" PatternElement ")")
+ShortestPathPattern ::= ShortestPathFunctionInvocation
+                      | AllShortestPathsFunctionInvocation
+ShortestPathFunctionInvocation ::= (K_SHORTESTPATH "(" PatternElement ")")
+AllShortestPathsFunctionInvocation ::= (K_ALLSHORTESTPATHS "(" PatternElement ")")
 PatternElement ::= (NodePattern PatternElementChain*) | ("(" PatternElement ")")
 PatternElementChain ::= RelationshipPattern NodePattern {pin=1}
 
@@ -376,14 +378,14 @@ private Expression1 ::= NumberLiteral
               | MapLiteral
               | ListComprehension
               | ("[" Expression? ("," Expression)* "]")
-              | (K_FILTER "(" FilterExpression ")")
-              | (K_EXTRACT "(" FilterExpression ("|" Expression)? ")")
-              | (K_REDUCE "(" Variable "=" Expression "," IdInColl "|" Expression ")")
-              | (K_ALL "(" FilterExpression ")")
-              | (K_ANY "(" FilterExpression ")")
-              | (K_NONE "(" FilterExpression ")")
-              | (K_SINGLE "(" FilterExpression ")")
-              | (K_EXISTS "(" Expression ")")
+              | FilterFunctionInvocation
+              | ExtractFunctionInvocation
+              | ReduceFunctionInvocation
+              | AllFunctionInvocation
+              | AnyFunctionInvocation
+              | NoneFunctionInvocation
+              | SingleFunctionInvocation
+              | ExistsFunctionInvocation
               | ShortestPathPattern
               | RelationshipsPattern
               | parenthesizedExpression
@@ -405,6 +407,15 @@ CaseExpression ::= ((K_CASE CaseAlternatives+) | (K_CASE Expression CaseAlternat
                    K_END
 CaseAlternatives ::= K_WHEN Expression K_THEN Expression
 PropertyExpression ::= Expression1 (PropertyLookup)+
+
+FilterFunctionInvocation ::= K_FILTER "(" FilterExpression ")"
+ExtractFunctionInvocation ::= K_EXTRACT "(" FilterExpression ("|" Expression)? ")"
+ReduceFunctionInvocation ::= K_REDUCE "(" Variable "=" Expression "," IdInColl "|" Expression ")"
+AllFunctionInvocation ::= K_ALL "(" FilterExpression ")"
+AnyFunctionInvocation ::= K_ANY "(" FilterExpression ")"
+NoneFunctionInvocation ::= K_NONE "(" FilterExpression ")"
+SingleFunctionInvocation ::= K_SINGLE "(" FilterExpression ")"
+ExistsFunctionInvocation ::= K_EXISTS "(" Expression ")"
 
 /*************************
  * Literals

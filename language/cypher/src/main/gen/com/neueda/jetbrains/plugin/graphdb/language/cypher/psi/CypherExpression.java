@@ -8,19 +8,28 @@ import com.intellij.psi.PsiElement;
 public interface CypherExpression extends PsiElement {
 
   @NotNull
+  List<CypherAllFunctionInvocation> getAllFunctionInvocationList();
+
+  @NotNull
+  List<CypherAnyFunctionInvocation> getAnyFunctionInvocationList();
+
+  @NotNull
   List<CypherCaseExpression> getCaseExpressionList();
+
+  @NotNull
+  List<CypherExistsFunctionInvocation> getExistsFunctionInvocationList();
 
   @NotNull
   List<CypherExpression> getExpressionList();
 
   @NotNull
-  List<CypherFilterExpression> getFilterExpressionList();
+  List<CypherExtractFunctionInvocation> getExtractFunctionInvocationList();
+
+  @NotNull
+  List<CypherFilterFunctionInvocation> getFilterFunctionInvocationList();
 
   @NotNull
   List<CypherFunctionInvocation> getFunctionInvocationList();
-
-  @NotNull
-  List<CypherIdInColl> getIdInCollList();
 
   @NotNull
   List<CypherListComprehension> getListComprehensionList();
@@ -32,6 +41,9 @@ public interface CypherExpression extends PsiElement {
   List<CypherNodeLabels> getNodeLabelsList();
 
   @NotNull
+  List<CypherNoneFunctionInvocation> getNoneFunctionInvocationList();
+
+  @NotNull
   List<CypherNumberLiteral> getNumberLiteralList();
 
   @NotNull
@@ -41,10 +53,16 @@ public interface CypherExpression extends PsiElement {
   List<CypherPropertyLookup> getPropertyLookupList();
 
   @NotNull
+  List<CypherReduceFunctionInvocation> getReduceFunctionInvocationList();
+
+  @NotNull
   List<CypherRelationshipsPattern> getRelationshipsPatternList();
 
   @NotNull
   List<CypherShortestPathPattern> getShortestPathPatternList();
+
+  @NotNull
+  List<CypherSingleFunctionInvocation> getSingleFunctionInvocationList();
 
   @NotNull
   List<CypherStringLiteral> getStringLiteralList();

@@ -26,11 +26,20 @@ public class CypherParser implements PsiParser, LightPsiParser {
     if (t == ALIASED_PROCEDURE_RESULT) {
       r = AliasedProcedureResult(b, 0);
     }
+    else if (t == ALL_FUNCTION_INVOCATION) {
+      r = AllFunctionInvocation(b, 0);
+    }
+    else if (t == ALL_SHORTEST_PATHS_FUNCTION_INVOCATION) {
+      r = AllShortestPathsFunctionInvocation(b, 0);
+    }
     else if (t == ANONYMOUS_PATTERN_PART) {
       r = AnonymousPatternPart(b, 0);
     }
     else if (t == ANY_CYPHER_OPTION) {
       r = AnyCypherOption(b, 0);
+    }
+    else if (t == ANY_FUNCTION_INVOCATION) {
+      r = AnyFunctionInvocation(b, 0);
     }
     else if (t == BULK_IMPORT_QUERY) {
       r = BulkImportQuery(b, 0);
@@ -98,14 +107,23 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == ESCAPED_SYMBOLIC_NAME_STRING) {
       r = EscapedSymbolicNameString(b, 0);
     }
+    else if (t == EXISTS_FUNCTION_INVOCATION) {
+      r = ExistsFunctionInvocation(b, 0);
+    }
     else if (t == EXPLAIN) {
       r = Explain(b, 0);
     }
     else if (t == EXPRESSION) {
       r = Expression(b, 0);
     }
+    else if (t == EXTRACT_FUNCTION_INVOCATION) {
+      r = ExtractFunctionInvocation(b, 0);
+    }
     else if (t == FILTER_EXPRESSION) {
       r = FilterExpression(b, 0);
+    }
+    else if (t == FILTER_FUNCTION_INVOCATION) {
+      r = FilterFunctionInvocation(b, 0);
     }
     else if (t == FOREACH) {
       r = Foreach(b, 0);
@@ -194,6 +212,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == NODE_PROPERTY_EXISTENCE_CONSTRAINT_SYNTAX) {
       r = NodePropertyExistenceConstraintSyntax(b, 0);
     }
+    else if (t == NONE_FUNCTION_INVOCATION) {
+      r = NoneFunctionInvocation(b, 0);
+    }
     else if (t == NUMBER_LITERAL) {
       r = NumberLiteral(b, 0);
     }
@@ -266,6 +287,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == RANGE_LITERAL) {
       r = RangeLiteral(b, 0);
     }
+    else if (t == REDUCE_FUNCTION_INVOCATION) {
+      r = ReduceFunctionInvocation(b, 0);
+    }
     else if (t == REGULAR_QUERY) {
       r = RegularQuery(b, 0);
     }
@@ -323,6 +347,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == SET_ITEM) {
       r = SetItem(b, 0);
     }
+    else if (t == SHORTEST_PATH_FUNCTION_INVOCATION) {
+      r = ShortestPathFunctionInvocation(b, 0);
+    }
     else if (t == SHORTEST_PATH_PATTERN) {
       r = ShortestPathPattern(b, 0);
     }
@@ -334,6 +361,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     }
     else if (t == SIMPLE_PROCEDURE_RESULT) {
       r = SimpleProcedureResult(b, 0);
+    }
+    else if (t == SINGLE_FUNCTION_INVOCATION) {
+      r = SingleFunctionInvocation(b, 0);
     }
     else if (t == SINGLE_QUERY) {
       r = SingleQuery(b, 0);
@@ -419,6 +449,36 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // K_ALL "(" FilterExpression ")"
+  public static boolean AllFunctionInvocation(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AllFunctionInvocation")) return false;
+    if (!nextTokenIs(b, K_ALL)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_ALL);
+    r = r && consumeToken(b, PARENTHESE_OPEN);
+    r = r && FilterExpression(b, l + 1);
+    r = r && consumeToken(b, PARENTHESE_CLOSE);
+    exit_section_(b, m, ALL_FUNCTION_INVOCATION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // K_ALLSHORTESTPATHS "(" PatternElement ")"
+  public static boolean AllShortestPathsFunctionInvocation(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AllShortestPathsFunctionInvocation")) return false;
+    if (!nextTokenIs(b, K_ALLSHORTESTPATHS)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_ALLSHORTESTPATHS);
+    r = r && consumeToken(b, PARENTHESE_OPEN);
+    r = r && PatternElement(b, l + 1);
+    r = r && consumeToken(b, PARENTHESE_CLOSE);
+    exit_section_(b, m, ALL_SHORTEST_PATHS_FUNCTION_INVOCATION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // ShortestPathPattern | PatternElement
   public static boolean AnonymousPatternPart(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AnonymousPatternPart")) return false;
@@ -440,6 +500,21 @@ public class CypherParser implements PsiParser, LightPsiParser {
     if (!r) r = Explain(b, l + 1);
     if (!r) r = Profile(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // K_ANY "(" FilterExpression ")"
+  public static boolean AnyFunctionInvocation(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AnyFunctionInvocation")) return false;
+    if (!nextTokenIs(b, K_ANY)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_ANY);
+    r = r && consumeToken(b, PARENTHESE_OPEN);
+    r = r && FilterExpression(b, l + 1);
+    r = r && consumeToken(b, PARENTHESE_CLOSE);
+    exit_section_(b, m, ANY_FUNCTION_INVOCATION, r);
     return r;
   }
 
@@ -978,6 +1053,21 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // K_EXISTS "(" Expression ")"
+  public static boolean ExistsFunctionInvocation(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExistsFunctionInvocation")) return false;
+    if (!nextTokenIs(b, K_EXISTS)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_EXISTS);
+    r = r && consumeToken(b, PARENTHESE_OPEN);
+    r = r && Expression(b, l + 1);
+    r = r && consumeToken(b, PARENTHESE_CLOSE);
+    exit_section_(b, m, EXISTS_FUNCTION_INVOCATION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // K_EXPLAIN
   public static boolean Explain(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Explain")) return false;
@@ -1011,14 +1101,14 @@ public class CypherParser implements PsiParser, LightPsiParser {
   //               | MapLiteral
   //               | ListComprehension
   //               | ("[" Expression? ("," Expression)* "]")
-  //               | (K_FILTER "(" FilterExpression ")")
-  //               | (K_EXTRACT "(" FilterExpression ("|" Expression)? ")")
-  //               | (K_REDUCE "(" Variable "=" Expression "," IdInColl "|" Expression ")")
-  //               | (K_ALL "(" FilterExpression ")")
-  //               | (K_ANY "(" FilterExpression ")")
-  //               | (K_NONE "(" FilterExpression ")")
-  //               | (K_SINGLE "(" FilterExpression ")")
-  //               | (K_EXISTS "(" Expression ")")
+  //               | FilterFunctionInvocation
+  //               | ExtractFunctionInvocation
+  //               | ReduceFunctionInvocation
+  //               | AllFunctionInvocation
+  //               | AnyFunctionInvocation
+  //               | NoneFunctionInvocation
+  //               | SingleFunctionInvocation
+  //               | ExistsFunctionInvocation
   //               | ShortestPathPattern
   //               | RelationshipsPattern
   //               | parenthesizedExpression
@@ -1038,14 +1128,14 @@ public class CypherParser implements PsiParser, LightPsiParser {
     if (!r) r = MapLiteral(b, l + 1);
     if (!r) r = ListComprehension(b, l + 1);
     if (!r) r = Expression1_9(b, l + 1);
-    if (!r) r = Expression1_10(b, l + 1);
-    if (!r) r = Expression1_11(b, l + 1);
-    if (!r) r = Expression1_12(b, l + 1);
-    if (!r) r = Expression1_13(b, l + 1);
-    if (!r) r = Expression1_14(b, l + 1);
-    if (!r) r = Expression1_15(b, l + 1);
-    if (!r) r = Expression1_16(b, l + 1);
-    if (!r) r = Expression1_17(b, l + 1);
+    if (!r) r = FilterFunctionInvocation(b, l + 1);
+    if (!r) r = ExtractFunctionInvocation(b, l + 1);
+    if (!r) r = ReduceFunctionInvocation(b, l + 1);
+    if (!r) r = AllFunctionInvocation(b, l + 1);
+    if (!r) r = AnyFunctionInvocation(b, l + 1);
+    if (!r) r = NoneFunctionInvocation(b, l + 1);
+    if (!r) r = SingleFunctionInvocation(b, l + 1);
+    if (!r) r = ExistsFunctionInvocation(b, l + 1);
     if (!r) r = ShortestPathPattern(b, l + 1);
     if (!r) r = RelationshipsPattern(b, l + 1);
     if (!r) r = parenthesizedExpression(b, l + 1);
@@ -1094,135 +1184,6 @@ public class CypherParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, OP_COMMA);
     r = r && Expression(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // K_FILTER "(" FilterExpression ")"
-  private static boolean Expression1_10(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_10")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, K_FILTER);
-    r = r && consumeToken(b, PARENTHESE_OPEN);
-    r = r && FilterExpression(b, l + 1);
-    r = r && consumeToken(b, PARENTHESE_CLOSE);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // K_EXTRACT "(" FilterExpression ("|" Expression)? ")"
-  private static boolean Expression1_11(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_11")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, K_EXTRACT);
-    r = r && consumeToken(b, PARENTHESE_OPEN);
-    r = r && FilterExpression(b, l + 1);
-    r = r && Expression1_11_3(b, l + 1);
-    r = r && consumeToken(b, PARENTHESE_CLOSE);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // ("|" Expression)?
-  private static boolean Expression1_11_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_11_3")) return false;
-    Expression1_11_3_0(b, l + 1);
-    return true;
-  }
-
-  // "|" Expression
-  private static boolean Expression1_11_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_11_3_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, OP_PIPE);
-    r = r && Expression(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // K_REDUCE "(" Variable "=" Expression "," IdInColl "|" Expression ")"
-  private static boolean Expression1_12(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_12")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, K_REDUCE);
-    r = r && consumeToken(b, PARENTHESE_OPEN);
-    r = r && Variable(b, l + 1);
-    r = r && consumeToken(b, OP_EQUAL);
-    r = r && Expression(b, l + 1);
-    r = r && consumeToken(b, OP_COMMA);
-    r = r && IdInColl(b, l + 1);
-    r = r && consumeToken(b, OP_PIPE);
-    r = r && Expression(b, l + 1);
-    r = r && consumeToken(b, PARENTHESE_CLOSE);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // K_ALL "(" FilterExpression ")"
-  private static boolean Expression1_13(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_13")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, K_ALL);
-    r = r && consumeToken(b, PARENTHESE_OPEN);
-    r = r && FilterExpression(b, l + 1);
-    r = r && consumeToken(b, PARENTHESE_CLOSE);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // K_ANY "(" FilterExpression ")"
-  private static boolean Expression1_14(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_14")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, K_ANY);
-    r = r && consumeToken(b, PARENTHESE_OPEN);
-    r = r && FilterExpression(b, l + 1);
-    r = r && consumeToken(b, PARENTHESE_CLOSE);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // K_NONE "(" FilterExpression ")"
-  private static boolean Expression1_15(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_15")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, K_NONE);
-    r = r && consumeToken(b, PARENTHESE_OPEN);
-    r = r && FilterExpression(b, l + 1);
-    r = r && consumeToken(b, PARENTHESE_CLOSE);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // K_SINGLE "(" FilterExpression ")"
-  private static boolean Expression1_16(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_16")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, K_SINGLE);
-    r = r && consumeToken(b, PARENTHESE_OPEN);
-    r = r && FilterExpression(b, l + 1);
-    r = r && consumeToken(b, PARENTHESE_CLOSE);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // K_EXISTS "(" Expression ")"
-  private static boolean Expression1_17(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_17")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, K_EXISTS);
-    r = r && consumeToken(b, PARENTHESE_OPEN);
-    r = r && Expression(b, l + 1);
-    r = r && consumeToken(b, PARENTHESE_CLOSE);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -1796,6 +1757,40 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // K_EXTRACT "(" FilterExpression ("|" Expression)? ")"
+  public static boolean ExtractFunctionInvocation(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExtractFunctionInvocation")) return false;
+    if (!nextTokenIs(b, K_EXTRACT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_EXTRACT);
+    r = r && consumeToken(b, PARENTHESE_OPEN);
+    r = r && FilterExpression(b, l + 1);
+    r = r && ExtractFunctionInvocation_3(b, l + 1);
+    r = r && consumeToken(b, PARENTHESE_CLOSE);
+    exit_section_(b, m, EXTRACT_FUNCTION_INVOCATION, r);
+    return r;
+  }
+
+  // ("|" Expression)?
+  private static boolean ExtractFunctionInvocation_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExtractFunctionInvocation_3")) return false;
+    ExtractFunctionInvocation_3_0(b, l + 1);
+    return true;
+  }
+
+  // "|" Expression
+  private static boolean ExtractFunctionInvocation_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExtractFunctionInvocation_3_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, OP_PIPE);
+    r = r && Expression(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // IdInColl (K_WHERE Expression)?
   public static boolean FilterExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FilterExpression")) return false;
@@ -1822,6 +1817,21 @@ public class CypherParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, K_WHERE);
     r = r && Expression(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // K_FILTER "(" FilterExpression ")"
+  public static boolean FilterFunctionInvocation(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FilterFunctionInvocation")) return false;
+    if (!nextTokenIs(b, K_FILTER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_FILTER);
+    r = r && consumeToken(b, PARENTHESE_OPEN);
+    r = r && FilterExpression(b, l + 1);
+    r = r && consumeToken(b, PARENTHESE_CLOSE);
+    exit_section_(b, m, FILTER_FUNCTION_INVOCATION, r);
     return r;
   }
 
@@ -2699,6 +2709,21 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // K_NONE "(" FilterExpression ")"
+  public static boolean NoneFunctionInvocation(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NoneFunctionInvocation")) return false;
+    if (!nextTokenIs(b, K_NONE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_NONE);
+    r = r && consumeToken(b, PARENTHESE_OPEN);
+    r = r && FilterExpression(b, l + 1);
+    r = r && consumeToken(b, PARENTHESE_CLOSE);
+    exit_section_(b, m, NONE_FUNCTION_INVOCATION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // DoubleLiteral | SignedIntegerLiteral
   public static boolean NumberLiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NumberLiteral")) return false;
@@ -3327,6 +3352,27 @@ public class CypherParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = UnsignedIntegerLiteral(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // K_REDUCE "(" Variable "=" Expression "," IdInColl "|" Expression ")"
+  public static boolean ReduceFunctionInvocation(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ReduceFunctionInvocation")) return false;
+    if (!nextTokenIs(b, K_REDUCE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_REDUCE);
+    r = r && consumeToken(b, PARENTHESE_OPEN);
+    r = r && Variable(b, l + 1);
+    r = r && consumeToken(b, OP_EQUAL);
+    r = r && Expression(b, l + 1);
+    r = r && consumeToken(b, OP_COMMA);
+    r = r && IdInColl(b, l + 1);
+    r = r && consumeToken(b, OP_PIPE);
+    r = r && Expression(b, l + 1);
+    r = r && consumeToken(b, PARENTHESE_CLOSE);
+    exit_section_(b, m, REDUCE_FUNCTION_INVOCATION, r);
     return r;
   }
 
@@ -4026,42 +4072,31 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (K_SHORTESTPATH "(" PatternElement ")")
-  //                       | (K_ALLSHORTESTPATHS "(" PatternElement ")")
-  public static boolean ShortestPathPattern(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ShortestPathPattern")) return false;
-    if (!nextTokenIs(b, "<shortest path pattern>", K_ALLSHORTESTPATHS, K_SHORTESTPATH)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, SHORTEST_PATH_PATTERN, "<shortest path pattern>");
-    r = ShortestPathPattern_0(b, l + 1);
-    if (!r) r = ShortestPathPattern_1(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
   // K_SHORTESTPATH "(" PatternElement ")"
-  private static boolean ShortestPathPattern_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ShortestPathPattern_0")) return false;
+  public static boolean ShortestPathFunctionInvocation(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShortestPathFunctionInvocation")) return false;
+    if (!nextTokenIs(b, K_SHORTESTPATH)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, K_SHORTESTPATH);
     r = r && consumeToken(b, PARENTHESE_OPEN);
     r = r && PatternElement(b, l + 1);
     r = r && consumeToken(b, PARENTHESE_CLOSE);
-    exit_section_(b, m, null, r);
+    exit_section_(b, m, SHORTEST_PATH_FUNCTION_INVOCATION, r);
     return r;
   }
 
-  // K_ALLSHORTESTPATHS "(" PatternElement ")"
-  private static boolean ShortestPathPattern_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ShortestPathPattern_1")) return false;
+  /* ********************************************************** */
+  // ShortestPathFunctionInvocation
+  //                       | AllShortestPathsFunctionInvocation
+  public static boolean ShortestPathPattern(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ShortestPathPattern")) return false;
+    if (!nextTokenIs(b, "<shortest path pattern>", K_ALLSHORTESTPATHS, K_SHORTESTPATH)) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, K_ALLSHORTESTPATHS);
-    r = r && consumeToken(b, PARENTHESE_OPEN);
-    r = r && PatternElement(b, l + 1);
-    r = r && consumeToken(b, PARENTHESE_CLOSE);
-    exit_section_(b, m, null, r);
+    Marker m = enter_section_(b, l, _NONE_, SHORTEST_PATH_PATTERN, "<shortest path pattern>");
+    r = ShortestPathFunctionInvocation(b, l + 1);
+    if (!r) r = AllShortestPathsFunctionInvocation(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -4097,6 +4132,21 @@ public class CypherParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, SIMPLE_PROCEDURE_RESULT, "<simple procedure result>");
     r = Variable(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // K_SINGLE "(" FilterExpression ")"
+  public static boolean SingleFunctionInvocation(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SingleFunctionInvocation")) return false;
+    if (!nextTokenIs(b, K_SINGLE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_SINGLE);
+    r = r && consumeToken(b, PARENTHESE_OPEN);
+    r = r && FilterExpression(b, l + 1);
+    r = r && consumeToken(b, PARENTHESE_CLOSE);
+    exit_section_(b, m, SINGLE_FUNCTION_INVOCATION, r);
     return r;
   }
 

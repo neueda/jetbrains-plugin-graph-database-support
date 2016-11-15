@@ -8,25 +8,37 @@ import com.intellij.psi.PsiElement;
 public interface CypherPropertyExpression extends PsiElement {
 
   @Nullable
+  CypherAllFunctionInvocation getAllFunctionInvocation();
+
+  @Nullable
+  CypherAnyFunctionInvocation getAnyFunctionInvocation();
+
+  @Nullable
   CypherCaseExpression getCaseExpression();
+
+  @Nullable
+  CypherExistsFunctionInvocation getExistsFunctionInvocation();
 
   @NotNull
   List<CypherExpression> getExpressionList();
 
   @Nullable
-  CypherFilterExpression getFilterExpression();
+  CypherExtractFunctionInvocation getExtractFunctionInvocation();
+
+  @Nullable
+  CypherFilterFunctionInvocation getFilterFunctionInvocation();
 
   @Nullable
   CypherFunctionInvocation getFunctionInvocation();
-
-  @Nullable
-  CypherIdInColl getIdInColl();
 
   @Nullable
   CypherListComprehension getListComprehension();
 
   @Nullable
   CypherMapLiteral getMapLiteral();
+
+  @Nullable
+  CypherNoneFunctionInvocation getNoneFunctionInvocation();
 
   @Nullable
   CypherNumberLiteral getNumberLiteral();
@@ -38,10 +50,16 @@ public interface CypherPropertyExpression extends PsiElement {
   List<CypherPropertyLookup> getPropertyLookupList();
 
   @Nullable
+  CypherReduceFunctionInvocation getReduceFunctionInvocation();
+
+  @Nullable
   CypherRelationshipsPattern getRelationshipsPattern();
 
   @Nullable
   CypherShortestPathPattern getShortestPathPattern();
+
+  @Nullable
+  CypherSingleFunctionInvocation getSingleFunctionInvocation();
 
   @Nullable
   CypherStringLiteral getStringLiteral();
@@ -53,34 +71,10 @@ public interface CypherPropertyExpression extends PsiElement {
   CypherParenthesizedExpression getParenthesizedExpression();
 
   @Nullable
-  PsiElement getKAll();
-
-  @Nullable
-  PsiElement getKAny();
-
-  @Nullable
-  PsiElement getKExists();
-
-  @Nullable
-  PsiElement getKExtract();
-
-  @Nullable
   PsiElement getKFalse();
 
   @Nullable
-  PsiElement getKFilter();
-
-  @Nullable
-  PsiElement getKNone();
-
-  @Nullable
   PsiElement getKNull();
-
-  @Nullable
-  PsiElement getKReduce();
-
-  @Nullable
-  PsiElement getKSingle();
 
   @Nullable
   PsiElement getKTrue();

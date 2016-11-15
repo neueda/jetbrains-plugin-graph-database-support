@@ -28,8 +28,26 @@ public class CypherExpressionImpl extends ASTWrapperPsiElement implements Cypher
 
   @Override
   @NotNull
+  public List<CypherAllFunctionInvocation> getAllFunctionInvocationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherAllFunctionInvocation.class);
+  }
+
+  @Override
+  @NotNull
+  public List<CypherAnyFunctionInvocation> getAnyFunctionInvocationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherAnyFunctionInvocation.class);
+  }
+
+  @Override
+  @NotNull
   public List<CypherCaseExpression> getCaseExpressionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherCaseExpression.class);
+  }
+
+  @Override
+  @NotNull
+  public List<CypherExistsFunctionInvocation> getExistsFunctionInvocationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherExistsFunctionInvocation.class);
   }
 
   @Override
@@ -40,20 +58,20 @@ public class CypherExpressionImpl extends ASTWrapperPsiElement implements Cypher
 
   @Override
   @NotNull
-  public List<CypherFilterExpression> getFilterExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherFilterExpression.class);
+  public List<CypherExtractFunctionInvocation> getExtractFunctionInvocationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherExtractFunctionInvocation.class);
+  }
+
+  @Override
+  @NotNull
+  public List<CypherFilterFunctionInvocation> getFilterFunctionInvocationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherFilterFunctionInvocation.class);
   }
 
   @Override
   @NotNull
   public List<CypherFunctionInvocation> getFunctionInvocationList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherFunctionInvocation.class);
-  }
-
-  @Override
-  @NotNull
-  public List<CypherIdInColl> getIdInCollList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherIdInColl.class);
   }
 
   @Override
@@ -76,6 +94,12 @@ public class CypherExpressionImpl extends ASTWrapperPsiElement implements Cypher
 
   @Override
   @NotNull
+  public List<CypherNoneFunctionInvocation> getNoneFunctionInvocationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherNoneFunctionInvocation.class);
+  }
+
+  @Override
+  @NotNull
   public List<CypherNumberLiteral> getNumberLiteralList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherNumberLiteral.class);
   }
@@ -94,6 +118,12 @@ public class CypherExpressionImpl extends ASTWrapperPsiElement implements Cypher
 
   @Override
   @NotNull
+  public List<CypherReduceFunctionInvocation> getReduceFunctionInvocationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherReduceFunctionInvocation.class);
+  }
+
+  @Override
+  @NotNull
   public List<CypherRelationshipsPattern> getRelationshipsPatternList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherRelationshipsPattern.class);
   }
@@ -102,6 +132,12 @@ public class CypherExpressionImpl extends ASTWrapperPsiElement implements Cypher
   @NotNull
   public List<CypherShortestPathPattern> getShortestPathPatternList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherShortestPathPattern.class);
+  }
+
+  @Override
+  @NotNull
+  public List<CypherSingleFunctionInvocation> getSingleFunctionInvocationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherSingleFunctionInvocation.class);
   }
 
   @Override

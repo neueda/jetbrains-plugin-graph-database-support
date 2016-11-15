@@ -9,8 +9,11 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.impl.*;
 public interface CypherTypes {
 
   IElementType ALIASED_PROCEDURE_RESULT = new CypherElementType("ALIASED_PROCEDURE_RESULT");
+  IElementType ALL_FUNCTION_INVOCATION = new CypherElementType("ALL_FUNCTION_INVOCATION");
+  IElementType ALL_SHORTEST_PATHS_FUNCTION_INVOCATION = new CypherElementType("ALL_SHORTEST_PATHS_FUNCTION_INVOCATION");
   IElementType ANONYMOUS_PATTERN_PART = new CypherElementType("ANONYMOUS_PATTERN_PART");
   IElementType ANY_CYPHER_OPTION = new CypherElementType("ANY_CYPHER_OPTION");
+  IElementType ANY_FUNCTION_INVOCATION = new CypherElementType("ANY_FUNCTION_INVOCATION");
   IElementType BULK_IMPORT_QUERY = new CypherElementType("BULK_IMPORT_QUERY");
   IElementType CALL = new CypherElementType("CALL");
   IElementType CASE_ALTERNATIVES = new CypherElementType("CASE_ALTERNATIVES");
@@ -33,9 +36,12 @@ public interface CypherTypes {
   IElementType DROP_RELATIONSHIP_PROPERTY_EXISTENCE_CONSTRAINT = new CypherElementType("DROP_RELATIONSHIP_PROPERTY_EXISTENCE_CONSTRAINT");
   IElementType DROP_UNIQUE_CONSTRAINT = new CypherElementType("DROP_UNIQUE_CONSTRAINT");
   IElementType ESCAPED_SYMBOLIC_NAME_STRING = new CypherElementType("ESCAPED_SYMBOLIC_NAME_STRING");
+  IElementType EXISTS_FUNCTION_INVOCATION = new CypherElementType("EXISTS_FUNCTION_INVOCATION");
   IElementType EXPLAIN = new CypherElementType("EXPLAIN");
   IElementType EXPRESSION = new CypherElementType("EXPRESSION");
+  IElementType EXTRACT_FUNCTION_INVOCATION = new CypherElementType("EXTRACT_FUNCTION_INVOCATION");
   IElementType FILTER_EXPRESSION = new CypherElementType("FILTER_EXPRESSION");
+  IElementType FILTER_FUNCTION_INVOCATION = new CypherElementType("FILTER_FUNCTION_INVOCATION");
   IElementType FOREACH = new CypherElementType("FOREACH");
   IElementType FUNCTION_INVOCATION = new CypherElementType("FUNCTION_INVOCATION");
   IElementType FUNCTION_INVOCATION_BODY = new CypherElementType("FUNCTION_INVOCATION_BODY");
@@ -65,6 +71,7 @@ public interface CypherTypes {
   IElementType NODE_LOOKUP = new CypherElementType("NODE_LOOKUP");
   IElementType NODE_PATTERN = new CypherElementType("NODE_PATTERN");
   IElementType NODE_PROPERTY_EXISTENCE_CONSTRAINT_SYNTAX = new CypherElementType("NODE_PROPERTY_EXISTENCE_CONSTRAINT_SYNTAX");
+  IElementType NONE_FUNCTION_INVOCATION = new CypherElementType("NONE_FUNCTION_INVOCATION");
   IElementType NUMBER_LITERAL = new CypherElementType("NUMBER_LITERAL");
   IElementType OLD_PARAMETER = new CypherElementType("OLD_PARAMETER");
   IElementType ORDER = new CypherElementType("ORDER");
@@ -90,6 +97,7 @@ public interface CypherTypes {
   IElementType QUERY = new CypherElementType("QUERY");
   IElementType QUERY_OPTIONS = new CypherElementType("QUERY_OPTIONS");
   IElementType RANGE_LITERAL = new CypherElementType("RANGE_LITERAL");
+  IElementType REDUCE_FUNCTION_INVOCATION = new CypherElementType("REDUCE_FUNCTION_INVOCATION");
   IElementType REGULAR_QUERY = new CypherElementType("REGULAR_QUERY");
   IElementType RELATIONSHIPS_PATTERN = new CypherElementType("RELATIONSHIPS_PATTERN");
   IElementType RELATIONSHIP_DETAIL = new CypherElementType("RELATIONSHIP_DETAIL");
@@ -109,10 +117,12 @@ public interface CypherTypes {
   IElementType RIGHT_ARROW_HEAD = new CypherElementType("RIGHT_ARROW_HEAD");
   IElementType SET_CLAUSE = new CypherElementType("SET_CLAUSE");
   IElementType SET_ITEM = new CypherElementType("SET_ITEM");
+  IElementType SHORTEST_PATH_FUNCTION_INVOCATION = new CypherElementType("SHORTEST_PATH_FUNCTION_INVOCATION");
   IElementType SHORTEST_PATH_PATTERN = new CypherElementType("SHORTEST_PATH_PATTERN");
   IElementType SIGNED_DECIMAL_INTEGER = new CypherElementType("SIGNED_DECIMAL_INTEGER");
   IElementType SIGNED_INTEGER_LITERAL = new CypherElementType("SIGNED_INTEGER_LITERAL");
   IElementType SIMPLE_PROCEDURE_RESULT = new CypherElementType("SIMPLE_PROCEDURE_RESULT");
+  IElementType SINGLE_FUNCTION_INVOCATION = new CypherElementType("SINGLE_FUNCTION_INVOCATION");
   IElementType SINGLE_QUERY = new CypherElementType("SINGLE_QUERY");
   IElementType SKIP = new CypherElementType("SKIP");
   IElementType SORT_ITEM = new CypherElementType("SORT_ITEM");
@@ -252,11 +262,20 @@ public interface CypherTypes {
        if (type == ALIASED_PROCEDURE_RESULT) {
         return new CypherAliasedProcedureResultImpl(node);
       }
+      else if (type == ALL_FUNCTION_INVOCATION) {
+        return new CypherAllFunctionInvocationImpl(node);
+      }
+      else if (type == ALL_SHORTEST_PATHS_FUNCTION_INVOCATION) {
+        return new CypherAllShortestPathsFunctionInvocationImpl(node);
+      }
       else if (type == ANONYMOUS_PATTERN_PART) {
         return new CypherAnonymousPatternPartImpl(node);
       }
       else if (type == ANY_CYPHER_OPTION) {
         return new CypherAnyCypherOptionImpl(node);
+      }
+      else if (type == ANY_FUNCTION_INVOCATION) {
+        return new CypherAnyFunctionInvocationImpl(node);
       }
       else if (type == BULK_IMPORT_QUERY) {
         return new CypherBulkImportQueryImpl(node);
@@ -324,14 +343,23 @@ public interface CypherTypes {
       else if (type == ESCAPED_SYMBOLIC_NAME_STRING) {
         return new CypherEscapedSymbolicNameStringImpl(node);
       }
+      else if (type == EXISTS_FUNCTION_INVOCATION) {
+        return new CypherExistsFunctionInvocationImpl(node);
+      }
       else if (type == EXPLAIN) {
         return new CypherExplainImpl(node);
       }
       else if (type == EXPRESSION) {
         return new CypherExpressionImpl(node);
       }
+      else if (type == EXTRACT_FUNCTION_INVOCATION) {
+        return new CypherExtractFunctionInvocationImpl(node);
+      }
       else if (type == FILTER_EXPRESSION) {
         return new CypherFilterExpressionImpl(node);
+      }
+      else if (type == FILTER_FUNCTION_INVOCATION) {
+        return new CypherFilterFunctionInvocationImpl(node);
       }
       else if (type == FOREACH) {
         return new CypherForeachImpl(node);
@@ -420,6 +448,9 @@ public interface CypherTypes {
       else if (type == NODE_PROPERTY_EXISTENCE_CONSTRAINT_SYNTAX) {
         return new CypherNodePropertyExistenceConstraintSyntaxImpl(node);
       }
+      else if (type == NONE_FUNCTION_INVOCATION) {
+        return new CypherNoneFunctionInvocationImpl(node);
+      }
       else if (type == NUMBER_LITERAL) {
         return new CypherNumberLiteralImpl(node);
       }
@@ -495,6 +526,9 @@ public interface CypherTypes {
       else if (type == RANGE_LITERAL) {
         return new CypherRangeLiteralImpl(node);
       }
+      else if (type == REDUCE_FUNCTION_INVOCATION) {
+        return new CypherReduceFunctionInvocationImpl(node);
+      }
       else if (type == REGULAR_QUERY) {
         return new CypherRegularQueryImpl(node);
       }
@@ -552,6 +586,9 @@ public interface CypherTypes {
       else if (type == SET_ITEM) {
         return new CypherSetItemImpl(node);
       }
+      else if (type == SHORTEST_PATH_FUNCTION_INVOCATION) {
+        return new CypherShortestPathFunctionInvocationImpl(node);
+      }
       else if (type == SHORTEST_PATH_PATTERN) {
         return new CypherShortestPathPatternImpl(node);
       }
@@ -563,6 +600,9 @@ public interface CypherTypes {
       }
       else if (type == SIMPLE_PROCEDURE_RESULT) {
         return new CypherSimpleProcedureResultImpl(node);
+      }
+      else if (type == SINGLE_FUNCTION_INVOCATION) {
+        return new CypherSingleFunctionInvocationImpl(node);
       }
       else if (type == SINGLE_QUERY) {
         return new CypherSingleQueryImpl(node);

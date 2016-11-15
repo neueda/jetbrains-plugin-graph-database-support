@@ -6,36 +6,10 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.tree.IElementType;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherFunctionInvocationBody;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherLabelName;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherParameter;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherProcedureInvocationBody;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherRelTypeName;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherShortestPathPattern;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherVariable;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CypherSyntaxHighlighterAnnotator implements Annotator {
-
-    private static final List<IElementType> SPECIAL_FUNCTIONS = new ArrayList<>();
-
-    static {
-        SPECIAL_FUNCTIONS.add(CypherTypes.K_SHORTESTPATH);
-        SPECIAL_FUNCTIONS.add(CypherTypes.K_ALLSHORTESTPATHS);
-        SPECIAL_FUNCTIONS.add(CypherTypes.K_FILTER);
-        SPECIAL_FUNCTIONS.add(CypherTypes.K_EXTRACT);
-        SPECIAL_FUNCTIONS.add(CypherTypes.K_REDUCE);
-        SPECIAL_FUNCTIONS.add(CypherTypes.K_ALL);
-        SPECIAL_FUNCTIONS.add(CypherTypes.K_ANY);
-        SPECIAL_FUNCTIONS.add(CypherTypes.K_NONE);
-        SPECIAL_FUNCTIONS.add(CypherTypes.K_SINGLE);
-        SPECIAL_FUNCTIONS.add(CypherTypes.K_EXISTS);
-    }
 
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
@@ -49,18 +23,36 @@ public class CypherSyntaxHighlighterAnnotator implements Annotator {
             setHighlighting(element, holder, CypherSyntaxColors.RELATIONSHIP_TYPE);
         } else if (element instanceof CypherParameter) {
             setHighlighting(element, holder, CypherSyntaxColors.PARAMETER);
-        } else if (element instanceof CypherShortestPathPattern) {
-            CypherShortestPathPattern pattern = (CypherShortestPathPattern) element;
-            if (pattern.getKShortestpath() != null) {
-                setHighlighting(pattern.getKShortestpath(), holder, CypherSyntaxColors.FUNCTION);
-            } else if (pattern.getKAllshortestpaths() != null) {
-                setHighlighting(pattern.getKAllshortestpaths(), holder, CypherSyntaxColors.FUNCTION);
-            }
-        } else {
-            IElementType elementType = element.getNode().getElementType();
-            if (SPECIAL_FUNCTIONS.contains(elementType)) {
-                setHighlighting(element, holder, CypherSyntaxColors.FUNCTION);
-            }
+        } else if (element instanceof CypherShortestPathFunctionInvocation) {
+            CypherShortestPathFunctionInvocation invocation = (CypherShortestPathFunctionInvocation) element;
+            setHighlighting(invocation.getKShortestpath(), holder, CypherSyntaxColors.FUNCTION);
+        } else if (element instanceof CypherAllShortestPathsFunctionInvocation) {
+            CypherAllShortestPathsFunctionInvocation invocation = (CypherAllShortestPathsFunctionInvocation) element;
+            setHighlighting(invocation.getKAllshortestpaths(), holder, CypherSyntaxColors.FUNCTION);
+        } else if (element instanceof CypherFilterFunctionInvocation) {
+            CypherFilterFunctionInvocation invocation = (CypherFilterFunctionInvocation) element;
+            setHighlighting(invocation.getKFilter(), holder, CypherSyntaxColors.FUNCTION);
+        } else if (element instanceof CypherExtractFunctionInvocation) {
+            CypherExtractFunctionInvocation invocation = (CypherExtractFunctionInvocation) element;
+            setHighlighting(invocation.getKExtract(), holder, CypherSyntaxColors.FUNCTION);
+        } else if (element instanceof CypherReduceFunctionInvocation) {
+            CypherReduceFunctionInvocation invocation = (CypherReduceFunctionInvocation) element;
+            setHighlighting(invocation.getKReduce(), holder, CypherSyntaxColors.FUNCTION);
+        } else if (element instanceof CypherAllFunctionInvocation) {
+            CypherAllFunctionInvocation invocation = (CypherAllFunctionInvocation) element;
+            setHighlighting(invocation.getKAll(), holder, CypherSyntaxColors.FUNCTION);
+        } else if (element instanceof CypherAnyFunctionInvocation) {
+            CypherAnyFunctionInvocation invocation = (CypherAnyFunctionInvocation) element;
+            setHighlighting(invocation.getKAny(), holder, CypherSyntaxColors.FUNCTION);
+        } else if (element instanceof CypherNoneFunctionInvocation) {
+            CypherNoneFunctionInvocation invocation = (CypherNoneFunctionInvocation) element;
+            setHighlighting(invocation.getKNone(), holder, CypherSyntaxColors.FUNCTION);
+        } else if (element instanceof CypherSingleFunctionInvocation) {
+            CypherSingleFunctionInvocation invocation = (CypherSingleFunctionInvocation) element;
+            setHighlighting(invocation.getKSingle(), holder, CypherSyntaxColors.FUNCTION);
+        } else if (element instanceof CypherExistsFunctionInvocation) {
+            CypherExistsFunctionInvocation invocation = (CypherExistsFunctionInvocation) element;
+            setHighlighting(invocation.getKExists(), holder, CypherSyntaxColors.FUNCTION);
         }
     }
 

@@ -25,7 +25,7 @@ public class DocumentationStorage {
 
     public Optional<String> lookup(String name) {
         initialize();
-        return Optional.ofNullable(cache.get(name));
+        return Optional.ofNullable(cache.get(name.toLowerCase()));
     }
 
     private synchronized void initialize() {
@@ -40,7 +40,7 @@ public class DocumentationStorage {
                 URL documentationFile = DocumentationStorage.class.getResource(filePath);
                 String documentation = Resources.toString(documentationFile, Charsets.UTF_8);
 
-                cache.put(name, documentation);
+                cache.put(name.toLowerCase(), documentation);
             } catch (Exception e) {
                 LOG.error("Unable to load " + filePath + " documentation", e);
             }

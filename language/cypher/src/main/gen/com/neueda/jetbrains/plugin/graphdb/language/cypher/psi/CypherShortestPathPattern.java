@@ -7,13 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface CypherShortestPathPattern extends PsiElement {
 
-  @NotNull
-  CypherPatternElement getPatternElement();
+  @Nullable
+  CypherAllShortestPathsFunctionInvocation getAllShortestPathsFunctionInvocation();
 
   @Nullable
-  PsiElement getKAllshortestpaths();
-
-  @Nullable
-  PsiElement getKShortestpath();
+  CypherShortestPathFunctionInvocation getShortestPathFunctionInvocation();
 
 }

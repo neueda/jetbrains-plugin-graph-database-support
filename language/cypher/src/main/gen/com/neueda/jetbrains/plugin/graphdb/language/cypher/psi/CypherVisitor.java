@@ -12,11 +12,23 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitAllFunctionInvocation(@NotNull CypherAllFunctionInvocation o) {
+    visitPsiElement(o);
+  }
+
+  public void visitAllShortestPathsFunctionInvocation(@NotNull CypherAllShortestPathsFunctionInvocation o) {
+    visitPsiElement(o);
+  }
+
   public void visitAnonymousPatternPart(@NotNull CypherAnonymousPatternPart o) {
     visitPsiElement(o);
   }
 
   public void visitAnyCypherOption(@NotNull CypherAnyCypherOption o) {
+    visitPsiElement(o);
+  }
+
+  public void visitAnyFunctionInvocation(@NotNull CypherAnyFunctionInvocation o) {
     visitPsiElement(o);
   }
 
@@ -108,6 +120,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitExistsFunctionInvocation(@NotNull CypherExistsFunctionInvocation o) {
+    visitPsiElement(o);
+  }
+
   public void visitExplain(@NotNull CypherExplain o) {
     visitPsiElement(o);
   }
@@ -116,7 +132,15 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitExtractFunctionInvocation(@NotNull CypherExtractFunctionInvocation o) {
+    visitPsiElement(o);
+  }
+
   public void visitFilterExpression(@NotNull CypherFilterExpression o) {
+    visitPsiElement(o);
+  }
+
+  public void visitFilterFunctionInvocation(@NotNull CypherFilterFunctionInvocation o) {
     visitPsiElement(o);
   }
 
@@ -236,6 +260,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitNoneFunctionInvocation(@NotNull CypherNoneFunctionInvocation o) {
+    visitPsiElement(o);
+  }
+
   public void visitNumberLiteral(@NotNull CypherNumberLiteral o) {
     visitPsiElement(o);
   }
@@ -332,6 +360,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitReduceFunctionInvocation(@NotNull CypherReduceFunctionInvocation o) {
+    visitPsiElement(o);
+  }
+
   public void visitRegularQuery(@NotNull CypherRegularQuery o) {
     visitPsiElement(o);
   }
@@ -408,6 +440,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitShortestPathFunctionInvocation(@NotNull CypherShortestPathFunctionInvocation o) {
+    visitPsiElement(o);
+  }
+
   public void visitShortestPathPattern(@NotNull CypherShortestPathPattern o) {
     visitPsiElement(o);
   }
@@ -421,6 +457,10 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitSimpleProcedureResult(@NotNull CypherSimpleProcedureResult o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSingleFunctionInvocation(@NotNull CypherSingleFunctionInvocation o) {
     visitPsiElement(o);
   }
 

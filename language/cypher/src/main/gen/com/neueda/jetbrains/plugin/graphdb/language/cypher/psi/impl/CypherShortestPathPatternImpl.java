@@ -27,21 +27,15 @@ public class CypherShortestPathPatternImpl extends ASTWrapperPsiElement implemen
   }
 
   @Override
-  @NotNull
-  public CypherPatternElement getPatternElement() {
-    return findNotNullChildByClass(CypherPatternElement.class);
+  @Nullable
+  public CypherAllShortestPathsFunctionInvocation getAllShortestPathsFunctionInvocation() {
+    return findChildByClass(CypherAllShortestPathsFunctionInvocation.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getKAllshortestpaths() {
-    return findChildByType(K_ALLSHORTESTPATHS);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getKShortestpath() {
-    return findChildByType(K_SHORTESTPATH);
+  public CypherShortestPathFunctionInvocation getShortestPathFunctionInvocation() {
+    return findChildByClass(CypherShortestPathFunctionInvocation.class);
   }
 
 }

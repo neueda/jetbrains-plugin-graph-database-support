@@ -23,6 +23,11 @@ public class BuiltInFunctionDocumentationTest extends BaseDocumentationTest {
         verify(expectedDocumentation);
     }
 
+    public void testIgnoreCase() throws Exception {
+        configure("RETURN to<caret>STRING(42);");
+        verify(expectedDocumentation);
+    }
+
     public void testNoDocumentation() {
         configure("RETURN nonexistingf<caret>unction();");
         verify(null);
