@@ -1,9 +1,8 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state;
 
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
+import java.util.*;
 
-import java.util.List;
-import java.util.Map;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
 
 public interface DataSourceContainer {
 
@@ -21,6 +20,8 @@ public interface DataSourceContainer {
     void updateDataSource(DataSourceApi oldDataSource, DataSourceApi newDataSource);
 
     void removeDataSources(List<DataSourceApi> dataSourcesForRemoval);
+
+    Optional<DataSourceApi> getDataSource(String dataSourceName);
 
     boolean isDataSourceExists(String dataSourceName);
 

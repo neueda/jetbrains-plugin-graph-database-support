@@ -71,16 +71,16 @@ public class DataSourcesComponentMetadata implements ProjectComponent {
         cypherMetadataProviderService.wipeContainer(dataSource.getName());
         CypherMetadataContainer container = cypherMetadataProviderService.getContainer(dataSource.getName());
 
-        metadata.getMetadata("labels").stream()
+        metadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.LABELS).stream()
                 .map((row) -> row.get("label"))
                 .forEach(container::addLabel);
-        metadata.getMetadata("relationships").stream()
+        metadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.RELATIONSHIP_TYPES).stream()
                 .map((row) -> row.get("relationshipType"))
                 .forEach(container::addRelationshipType);
-        metadata.getMetadata("propertyKeys").stream()
+        metadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.PROPERTY_KEYS).stream()
                 .map((row) -> row.get("propertyKey"))
                 .forEach(container::addPropertyKey);
-        metadata.getMetadata("procedures")
+        metadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.STORED_PROCEDURES)
                 .forEach(row -> container.addProcedure(row.get("name"), row.get("signature")));
     }
 

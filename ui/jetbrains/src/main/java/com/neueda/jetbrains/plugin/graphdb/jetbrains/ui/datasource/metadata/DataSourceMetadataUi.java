@@ -1,13 +1,10 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata;
 
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourcesComponentMetadata;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourceMetadata;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.*;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ValueWithIcon;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
-
-import java.util.Optional;
 
 public class DataSourceMetadataUi {
 
@@ -20,12 +17,9 @@ public class DataSourceMetadataUi {
     public boolean updateDataSourceMetadataUi(PatchedDefaultMutableTreeNode node, DataSourceApi nodeDataSource) {
         switch (nodeDataSource.getDataSourceType()) {
             case NEO4J_BOLT:
-                Optional<DataSourceMetadata> dataSourceMetadata = dataSourcesComponent.getMetadata(nodeDataSource);
-                if (dataSourceMetadata.isPresent()) {
-                    return updateNeo4jBoltCypherMetadataUi(node, dataSourceMetadata.get());
-                } else {
-                    return false;
-                }
+                return dataSourcesComponent.getMetadata(nodeDataSource)
+                           .map(dataSourceMetadata -> updateNeo4jBoltCypherMetadataUi(node, dataSourceMetadata))
+                           .orElse(false);
             default:
                 return false;
         }
@@ -39,32 +33,32 @@ public class DataSourceMetadataUi {
 
         // Prepare new metadata root tree nodes
         PatchedDefaultMutableTreeNode labelsTreeNode = new PatchedDefaultMutableTreeNode(
-                new ValueWithIcon(GraphIcons.Nodes.LABEL, "labels"));
+                   new ValueWithIcon(GraphIcons.Nodes.LABEL, "labels"));
         PatchedDefaultMutableTreeNode relationshipTypesTreeNode = new PatchedDefaultMutableTreeNode(
-                new ValueWithIcon(GraphIcons.Nodes.RELATIONSHIP_TYPE, "relationship types"));
+                   new ValueWithIcon(GraphIcons.Nodes.RELATIONSHIP_TYPE, "relationship types"));
         PatchedDefaultMutableTreeNode propertyKeysTreeNode = new PatchedDefaultMutableTreeNode(
-                new ValueWithIcon(GraphIcons.Nodes.PROPERTY_KEY, "property keys"));
+                   new ValueWithIcon(GraphIcons.Nodes.PROPERTY_KEY, "property keys"));
         PatchedDefaultMutableTreeNode storedProceduresTreeNode = new PatchedDefaultMutableTreeNode(
-                new ValueWithIcon(GraphIcons.Nodes.STORED_PROCEDURE, "stored procedures"));
+                   new ValueWithIcon(GraphIcons.Nodes.STORED_PROCEDURE, "stored procedures"));
 
         // Update metadata tree nodes
         dataSourceMetadata
-                .getMetadata("labels")
-                .forEach((row) -> labelsTreeNode.add(new PatchedDefaultMutableTreeNode(row.get("label"))));
+                   .getMetadata(Neo4jBoltCypherDataSourceMetadata.LABELS)
+                   .forEach((row) -> labelsTreeNode.add(new PatchedDefaultMutableTreeNode(row.get("label"))));
         dataSourceMetadata
-                .getMetadata("relationships")
-                .forEach((row) -> relationshipTypesTreeNode.add(new PatchedDefaultMutableTreeNode(row.get("relationshipType"))));
+                   .getMetadata(Neo4jBoltCypherDataSourceMetadata.RELATIONSHIP_TYPES)
+                   .forEach((row) -> relationshipTypesTreeNode.add(new PatchedDefaultMutableTreeNode(row.get("relationshipType"))));
         dataSourceMetadata
-                .getMetadata("propertyKeys")
-                .forEach((row) -> propertyKeysTreeNode.add(new PatchedDefaultMutableTreeNode(row.get("propertyKey"))));
+                   .getMetadata(Neo4jBoltCypherDataSourceMetadata.PROPERTY_KEYS)
+                   .forEach((row) -> propertyKeysTreeNode.add(new PatchedDefaultMutableTreeNode(row.get("propertyKey"))));
         dataSourceMetadata
-                .getMetadata("procedures")
-                .forEach((row) -> {
-                    PatchedDefaultMutableTreeNode nameNode = new PatchedDefaultMutableTreeNode(row.get("name"));
-                    PatchedDefaultMutableTreeNode descriptionNode = new PatchedDefaultMutableTreeNode(row.get("signature"));
-                    nameNode.add(descriptionNode);
-                    storedProceduresTreeNode.add(nameNode);
-                });
+                   .getMetadata(Neo4jBoltCypherDataSourceMetadata.STORED_PROCEDURES)
+                   .forEach((row) -> {
+                       PatchedDefaultMutableTreeNode nameNode = new PatchedDefaultMutableTreeNode(row.get("name"));
+                       PatchedDefaultMutableTreeNode descriptionNode = new PatchedDefaultMutableTreeNode(row.get("signature"));
+                       nameNode.add(descriptionNode);
+                       storedProceduresTreeNode.add(nameNode);
+                   });
 
         // Add metadata tree nodes back to UI
         dataSourceRootTreeNode.add(labelsTreeNode);

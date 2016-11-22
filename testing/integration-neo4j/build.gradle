@@ -1,0 +1,20 @@
+apply plugin: "org.jetbrains.intellij"
+
+intellij {
+    version intellijSdkVersion
+}
+
+dependencies {
+    testCompile project(':graph-database-support-plugin')
+    testCompile project(':testing:database:neo4j-common')
+    testCompile 'org.xeustechnologies:jcl-core:2.8'
+    testCompile "org.assertj:assertj-core:$versionAssertj"
+}
+
+test {
+    systemProperty "neo4j-package-3.0", "${project(":testing:database:neo4j-3.0").projectDir}/build/libs/neo4j30-shadow.jar"
+    systemProperty "neo4j-package-3.1", "${project(":testing:database:neo4j-3.1").projectDir}/build/libs/neo4j31-shadow.jar"
+}
+
+test.dependsOn(project(":testing:database:neo4j-3.0").assemble)
+test.dependsOn(project(":testing:database:neo4j-3.1").assemble)

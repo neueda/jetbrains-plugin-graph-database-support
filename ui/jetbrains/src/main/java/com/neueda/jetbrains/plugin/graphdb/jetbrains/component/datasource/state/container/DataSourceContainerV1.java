@@ -1,19 +1,15 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.container;
 
+import java.util.*;
+
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceContainer;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.impl.DataSourceV1;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-
 public class DataSourceContainerV1 implements DataSourceContainer {
 
-    public List<DataSourceV1> dataSources = new ArrayList<>();
+    private List<DataSourceApi> dataSources = new ArrayList<>();
 
     @Override
     public List getGenericDataSources() {
@@ -22,9 +18,9 @@ public class DataSourceContainerV1 implements DataSourceContainer {
 
     @Override
     public DataSourceApi findDataSource(String uuid) {
-        Optional<DataSourceV1> foundDataSource = dataSources.stream()
-                .filter((dataSource) -> dataSource.getUUID().equals(uuid))
-                .findFirst();
+        Optional<DataSourceApi> foundDataSource = dataSources.stream()
+                   .filter((dataSource) -> dataSource.getUUID().equals(uuid))
+                   .findFirst();
 
         if (foundDataSource.isPresent()) {
             return foundDataSource.get();
@@ -35,13 +31,13 @@ public class DataSourceContainerV1 implements DataSourceContainer {
 
     @Override
     public void addDataSource(DataSourceApi dataSource) {
-        dataSources.add((DataSourceV1) dataSource);
+        dataSources.add(dataSource);
     }
 
     @Override
     public void updateDataSource(DataSourceApi oldDataSource, DataSourceApi newDataSource) {
         int index = dataSources.indexOf(oldDataSource);
-        dataSources.set(index, (DataSourceV1) newDataSource);
+        dataSources.set(index, newDataSource);
     }
 
     @Override
@@ -49,11 +45,15 @@ public class DataSourceContainerV1 implements DataSourceContainer {
         dataSources.removeAll(dataSourcesForRemoval);
     }
 
+    @Override
+    public Optional<DataSourceApi> getDataSource(final String dataSourceName) {
+        return dataSources.stream()
+                   .filter((dataSource) -> dataSource.getName().equals(dataSourceName))
+                   .findAny();
+    }
+
     public boolean isDataSourceExists(String dataSourceName) {
-        Optional<DataSourceV1> possibleDataSource = dataSources.stream()
-                .filter((dataSource) -> dataSource.getName().equals(dataSourceName))
-                .findAny();
-        return possibleDataSource.isPresent();
+        return getDataSource(dataSourceName).isPresent();
     }
 
     @Override
