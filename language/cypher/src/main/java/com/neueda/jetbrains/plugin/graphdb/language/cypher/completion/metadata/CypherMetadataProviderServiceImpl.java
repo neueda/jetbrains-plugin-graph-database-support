@@ -1,9 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata;
 
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherLabelElement;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherProcedureElement;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherPropertyKeyElement;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherRelationshipTypeElement;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +57,14 @@ public class CypherMetadataProviderServiceImpl implements CypherMetadataProvider
         return sourceData.entrySet().stream()
                 .map(Map.Entry::getValue)
                 .flatMap((container) -> container.getProcedures().stream())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CypherUserFunctionElement> getUserFunctions() {
+        return sourceData.entrySet().stream()
+                .map(Map.Entry::getValue)
+                .flatMap((container) -> container.getUserFunctions().stream())
                 .collect(Collectors.toList());
     }
 }

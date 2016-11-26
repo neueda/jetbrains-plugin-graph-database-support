@@ -1,9 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata;
 
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherLabelElement;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherProcedureElement;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherPropertyKeyElement;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherRelationshipTypeElement;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +12,14 @@ public class CypherMetadataContainer {
     private final List<CypherRelationshipTypeElement> relationshipTypes;
     private final List<CypherPropertyKeyElement> propertyKeys;
     private final List<CypherProcedureElement> procedures;
+    private final List<CypherUserFunctionElement> userFunctions;
 
     public CypherMetadataContainer() {
         labels = new ArrayList<>();
         relationshipTypes = new ArrayList<>();
         propertyKeys = new ArrayList<>();
         procedures = new ArrayList<>();
+        userFunctions = new ArrayList<>();
     }
 
     public void addLabel(String label) {
@@ -34,8 +34,12 @@ public class CypherMetadataContainer {
         propertyKeys.add(new CypherPropertyKeyElement(propertyKey));
     }
 
-    public void addProcedure(String procedureName, String procedureSignature) {
-        procedures.add(new CypherProcedureElement(procedureName, procedureSignature));
+    public void addProcedure(String procedureName, String procedureSignature, @Nullable String procedureDescription) {
+        procedures.add(new CypherProcedureElement(procedureName, procedureSignature, procedureDescription));
+    }
+
+    public void addUserFunction(String userFunctionName, String userFunctionSignature, @Nullable String userFunctionDescription) {
+        userFunctions.add(new CypherUserFunctionElement(userFunctionName, userFunctionSignature, userFunctionDescription));
     }
 
     public List<CypherLabelElement> getLabels() {
@@ -52,5 +56,9 @@ public class CypherMetadataContainer {
 
     public List<CypherProcedureElement> getProcedures() {
         return procedures;
+    }
+
+    public List<CypherUserFunctionElement> getUserFunctions() {
+        return userFunctions;
     }
 }

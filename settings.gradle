@@ -19,7 +19,6 @@ include 'platform'
 // Testing
 include 'testing'
 include 'testing:manual'
-include 'testing:cypher-tests'
 include 'testing:database'
 include 'testing:database:neo4j-common'
 include 'testing:database:neo4j-3.0'

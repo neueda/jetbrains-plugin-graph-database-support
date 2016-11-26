@@ -26,9 +26,10 @@ public final class GraphIcons {
         public static final Icon LABEL = AllIcons.Nodes.Class;
         public static final Icon RELATIONSHIP_TYPE = AllIcons.Vcs.Arrow_right;
         public static final Icon PROPERTY_KEY = AllIcons.Nodes.Property;
-        public static final Icon STORED_PROCEDURE = AllIcons.Nodes.Function;
         public static final Icon VARIABLE = AllIcons.Nodes.Variable;
         public static final Icon FUNCTION = AllIcons.Nodes.Function;
+        public static final Icon STORED_PROCEDURE = AllIcons.Nodes.Function;
+        public static final Icon USER_FUNCTION = AllIcons.Nodes.Function;
     }
 
     private GraphIcons() {

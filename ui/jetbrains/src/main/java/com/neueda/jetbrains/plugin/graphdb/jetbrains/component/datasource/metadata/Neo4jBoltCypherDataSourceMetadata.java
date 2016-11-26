@@ -1,8 +1,13 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata;
 
-import java.util.*;
+import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
+import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultColumn;
+import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultRow;
 
-import com.neueda.jetbrains.plugin.graphdb.database.api.query.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
 
@@ -10,6 +15,7 @@ public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
     public static final String RELATIONSHIP_TYPES = "relationships";
     public static final String PROPERTY_KEYS = "propertyKeys";
     public static final String STORED_PROCEDURES = "procedures";
+    public static final String USER_FUNCTIONS = "functions";
 
     private Map<String, List<Map<String, String>>> dataReceiver = new HashMap<>();
 
@@ -32,6 +38,10 @@ public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
 
     public void addStoredProcedures(GraphQueryResult storedProceduresResult) {
         addDataSourceMetadata(storedProceduresResult, STORED_PROCEDURES);
+    }
+
+    public void addUserFunctions(GraphQueryResult userFunctionsResult) {
+        addDataSourceMetadata(userFunctionsResult, USER_FUNCTIONS);
     }
 
     private void addDataSourceMetadata(GraphQueryResult graphQueryResult, String key) {

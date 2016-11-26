@@ -3,12 +3,7 @@ package com.neueda.jetbrains.plugin.graphdb.language.cypher.completion;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.psi.PsiElement;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.providers.BuiltInFunctionCompletionProvider;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.providers.KeywordCompletionProvider;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.providers.LabelsCompletionProvider;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.providers.ProceduresCompletionProvider;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.providers.PropertyKeyCompletionProvider;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.providers.RelationshipTypeCompletionProvider;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.providers.*;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherStringLiteral;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,6 +36,10 @@ public class CypherCompletionContributor extends CompletionContributor {
         extend(CompletionType.BASIC,
                 ProceduresCompletionProvider.PATTERN,
                 new ProceduresCompletionProvider());
+
+        extend(CompletionType.BASIC,
+                UserFunctionsCompletionProvider.PATTERN,
+                new UserFunctionsCompletionProvider());
     }
 
     @Override

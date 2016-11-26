@@ -13,6 +13,8 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.C
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class DataSourcesComponentMetadata implements ProjectComponent {
@@ -55,13 +57,22 @@ public class DataSourcesComponentMetadata implements ProjectComponent {
 
         GraphQueryResult labelsQueryResult = db.execute("CALL db.labels()");
         GraphQueryResult relationshipQueryResult = db.execute("CALL db.relationshipTypes()");
-        GraphQueryResult propertyKeys = db.execute("CALL db.propertyKeys()");
+        GraphQueryResult propertyKeysResult = db.execute("CALL db.propertyKeys()");
         GraphQueryResult storedProceduresResult = db.execute("CALL dbms.procedures()");
 
         metadata.addLabels(labelsQueryResult);
         metadata.addRelationshipTypes(relationshipQueryResult);
-        metadata.addPropertyKeys(propertyKeys);
+        metadata.addPropertyKeys(propertyKeysResult);
         metadata.addStoredProcedures(storedProceduresResult);
+
+        boolean supportsUserFunctions = metadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.STORED_PROCEDURES)
+                .stream()
+                .anyMatch((map) -> map.get("name").equals("dbms.functions"));
+
+        if (supportsUserFunctions) {
+            GraphQueryResult userFunctionsResult = db.execute("CALL dbms.functions()");
+            metadata.addUserFunctions(userFunctionsResult);
+        }
 
         return metadata;
     }
@@ -81,7 +92,13 @@ public class DataSourcesComponentMetadata implements ProjectComponent {
                 .map((row) -> row.get("propertyKey"))
                 .forEach(container::addPropertyKey);
         metadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.STORED_PROCEDURES)
-                .forEach(row -> container.addProcedure(row.get("name"), row.get("signature")));
+                .forEach(row -> container.addProcedure(row.get("name"), row.get("signature"), row.get("description")));
+
+        List<Map<String, String>> userFunctionMetadata = metadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.USER_FUNCTIONS);
+        if (userFunctionMetadata != null) {
+            userFunctionMetadata
+                    .forEach(row -> container.addUserFunction(row.get("name"), row.get("signature"), row.get("description")));
+        }
     }
 
     @Override
