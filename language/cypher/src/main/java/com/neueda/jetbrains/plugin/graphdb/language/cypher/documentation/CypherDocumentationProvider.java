@@ -47,11 +47,6 @@ public class CypherDocumentationProvider extends AbstractDocumentationProvider {
             return CypherDocumentation.BUILT_IN_FUNCTIONS
                     .lookup(invocation.getFullName())
                     .orElse(null);
-        } else if (element instanceof CypherProcedureInvocation) {
-            CypherProcedureInvocation invocation = (CypherProcedureInvocation) element;
-            return CypherDocumentation.BUILT_IN_PROCEDURES
-                    .lookup(invocation.getFullName())
-                    .orElse(null);
         } else if (element instanceof CypherShortestPathFunctionInvocation) {
             return CypherDocumentation.BUILT_IN_FUNCTIONS
                     .lookup("shortestpath")

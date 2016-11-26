@@ -8,9 +8,4 @@ public class CypherDocumentationTest {
     public void testBuiltInFunctionsLoadsCorrectly() throws Exception {
         CypherDocumentation.BUILT_IN_FUNCTIONS.lookup("toString");
     }
-
-    @Test
-    public void testBuiltInProceduresLoadsCorrectly() throws Exception {
-        CypherDocumentation.BUILT_IN_PROCEDURES.lookup("dbms.procedures");
-    }
 }
