@@ -13,7 +13,9 @@ public class Neo4j31Server implements Neo4jServer {
     @Override
     public void start() {
         if (serverControls == null) {
-            serverControls = new InProcessServerBuilder().newServer();
+            serverControls = new InProcessServerBuilder()
+                    .withFunction(Neo4jTestUserFunction.class)
+                    .newServer();
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 try {
                     serverControls.close();

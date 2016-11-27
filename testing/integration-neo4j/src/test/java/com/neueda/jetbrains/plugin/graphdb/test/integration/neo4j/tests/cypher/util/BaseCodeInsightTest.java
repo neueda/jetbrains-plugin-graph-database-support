@@ -1,10 +1,9 @@
 package com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.tests.cypher.util;
 
 import com.google.common.io.Resources;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import org.jetbrains.annotations.NotNull;
 
-abstract class BaseCodeInsightTest extends LightCodeInsightFixtureTestCase {
+abstract class BaseCodeInsightTest extends BaseGenericTest {
 
     private String namespace;
     private final String dataPath;
