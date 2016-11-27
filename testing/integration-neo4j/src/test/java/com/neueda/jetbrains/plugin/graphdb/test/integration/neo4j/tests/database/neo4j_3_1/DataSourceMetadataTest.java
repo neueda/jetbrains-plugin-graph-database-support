@@ -43,11 +43,11 @@ public class DataSourceMetadataTest extends AbstractDataSourceMetadataTest {
         );
     }
 
-    public void testNoUserFunctions() {
+    public void testHaveTestUserFunctions() {
         DataSourceMetadata metadata = getMetadata();
         List<Map<String, String>> userFunctionsMetadata = metadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.USER_FUNCTIONS);
         assertThat(userFunctionsMetadata)
                 .isNotNull()
-                .hasSize(0);
+                .hasSize(2);
     }
 }
