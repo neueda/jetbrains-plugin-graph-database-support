@@ -9,6 +9,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserFunctionCompletionTest extends BaseCompletionTest {
 
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        dataSource().neo4j31();
+    }
+
     public void testContainsTestUserFunction() throws Exception {
         myFixture.configureByText("test.cyp", "RETURN testFunc<caret>");
         myFixture.completeBasic();

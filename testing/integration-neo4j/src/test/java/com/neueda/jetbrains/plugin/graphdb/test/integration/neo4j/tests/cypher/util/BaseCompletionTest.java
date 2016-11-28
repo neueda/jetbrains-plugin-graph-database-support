@@ -5,7 +5,5 @@ public abstract class BaseCompletionTest extends BaseGenericTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-
-        component().dataSources().refreshAllMetadata();
     }
 }

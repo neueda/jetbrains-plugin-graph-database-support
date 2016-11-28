@@ -9,6 +9,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class StoredProcedureCompletionTest extends BaseCompletionTest {
 
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        dataSource().neo4j30();
+    }
+
     public void testContainsProceduresProcedure() throws Exception {
         myFixture.configureByText("test.cyp", "CALL <caret>");
         myFixture.completeBasic();

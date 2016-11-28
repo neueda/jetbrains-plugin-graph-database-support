@@ -18,6 +18,7 @@ import com.neueda.jetbrains.plugin.graphdb.test.database.neo4j.common.Neo4jServe
 public abstract class Neo4jServerLoader implements Neo4jServer {
 
     private final ExecutorService executor;
+    private Future<Neo4jServer> neo4jServerFuture;
     private Neo4jServer neo4jServer;
 
     public Neo4jServerLoader() {
@@ -30,7 +31,7 @@ public abstract class Neo4jServerLoader implements Neo4jServer {
 
     @Override
     public void start() {
-        Future<Neo4jServer> future = executor.submit(() -> {
+        neo4jServerFuture = executor.submit(() -> {
             try {
                 // Initialize class loader
                 JarClassLoader jarClassLoader = new JarClassLoader();
@@ -46,43 +47,53 @@ public abstract class Neo4jServerLoader implements Neo4jServer {
                 // Start Neo4j server in separate thread
                 Neo4jServer neo4jServer = (Neo4jServer) factory.create(jarClassLoader, getNeo4jServerClass());
                 neo4jServer.start();
+
                 return neo4jServer;
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
         });
-        try {
-            neo4jServer = future.get();
-        } catch (Exception e) {
-            Throwables.propagate(e);
-        }
-        if (neo4jServer == null) {
-            throw new IllegalStateException("Neo4j server should not be null");
-        }
-
-        cleanupNeo4jKnownHosts();
     }
 
     @Override
     public String getBoltHost() {
-        return neo4jServer.getBoltHost();
+        return getNeo4jServer().getBoltHost();
     }
 
     @Override
     public String getBoltPort() {
-        return neo4jServer.getBoltPort();
+        return getNeo4jServer().getBoltPort();
     }
 
-    private void cleanupNeo4jKnownHosts() {
+    private synchronized Neo4jServer getNeo4jServer() {
+        if (neo4jServer == null) {
+            try {
+                neo4jServer = neo4jServerFuture.get();
+            } catch (Exception e) {
+                Throwables.propagate(e);
+            }
+            if (neo4jServer == null) {
+                throw new IllegalStateException("Neo4j server should not be null");
+            }
+
+            cleanupNeo4jKnownHosts(this);
+            return neo4jServer;
+        }
+
+        return neo4jServer;
+    }
+
+    private static synchronized void cleanupNeo4jKnownHosts(Neo4jServerLoader neo4jServerLoader) {
         File hostsFile = Config.defaultConfig().trustStrategy().certFile();
         try {
             if (hostsFile.isFile()) {
                 List<String> lines = FileUtil.loadLines(hostsFile);
                 List<String> updatedLines = lines.stream()
-                           .filter((line) -> !line.startsWith(getBoltHost() + ":" + getBoltPort()))
+                           .filter((line) -> !line.startsWith(neo4jServerLoader.getBoltHost() + ":" + neo4jServerLoader.getBoltPort()))
+                           .filter((line) -> !line.isEmpty())
                            .collect(Collectors.toList());
-                FileUtil.writeToFile(hostsFile, String.join(System.lineSeparator(), updatedLines));
+                FileUtil.writeToFile(hostsFile, String.join(System.lineSeparator(), updatedLines) + System.lineSeparator());
             }
         } catch (Exception e) {
             Throwables.propagate(e);
