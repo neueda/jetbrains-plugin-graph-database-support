@@ -17,6 +17,11 @@ public class CypherMetadataProviderServiceImpl implements CypherMetadataProvider
     }
 
     @Override
+    public void wipeAll() {
+        sourceData.clear();
+    }
+
+    @Override
     public void wipeContainer(String sourceId) {
         sourceData.remove(sourceId);
     }
@@ -75,6 +80,15 @@ public class CypherMetadataProviderServiceImpl implements CypherMetadataProvider
                 .map(Map.Entry::getValue)
                 .flatMap((container) -> container.getProcedures().stream())
                 .filter((procedureElement) -> procedureElement.getName().equals(name))
+                .findFirst();
+    }
+
+    @Override
+    public Optional<CypherUserFunctionElement> findUserFunction(String name) {
+        return sourceData.entrySet().stream()
+                .map(Map.Entry::getValue)
+                .flatMap((container) -> container.getUserFunctions().stream())
+                .filter((userFunctionElement) -> userFunctionElement.getName().equals(name))
                 .findFirst();
     }
 }

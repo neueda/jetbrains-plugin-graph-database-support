@@ -6,7 +6,10 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
 import org.jetbrains.annotations.Nullable;
 
-public class CypherProcedureElement implements CypherElement, CypherElementWithSignature, CypherElementWithDocumentation {
+public class CypherProcedureElement implements
+        CypherElement,
+        CypherElementWithSignature,
+        CypherElementWithDocumentation {
 
     private final String name;
     @Nullable
@@ -32,7 +35,7 @@ public class CypherProcedureElement implements CypherElement, CypherElementWithS
     public String getDocumentation() {
         if (documentation == null) {
             documentation = ""
-                    + "<b>" + name + "</b><br>"
+                    + "procedure <b>" + name + "</b><br>"
                     + "Arguments:<br>"
                     + "&nbsp;&nbsp;&nbsp;&nbsp;" + invokableInformation.getSignature() + "<br>"
                     + "Return:<br>"

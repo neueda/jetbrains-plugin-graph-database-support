@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface CypherMetadataProviderService {
 
+    void wipeAll();
+
     void wipeContainer(String sourceId);
 
     CypherMetadataContainer getContainer(String sourceId);
@@ -22,4 +24,6 @@ public interface CypherMetadataProviderService {
     List<CypherUserFunctionElement> getUserFunctions();
 
     Optional<CypherProcedureElement> findProcedure(String fullName);
+
+    Optional<CypherUserFunctionElement> findUserFunction(String fullName);
 }

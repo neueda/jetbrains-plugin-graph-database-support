@@ -33,7 +33,7 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
         // Clean up any data sources & their information
         List<DataSourceApi> dataSources = new ArrayList<>(component().dataSources().getDataSourceContainer().getDataSources());
         component().dataSources().getDataSourceContainer().removeDataSources(dataSources);
-        dataSources.forEach(dataSource -> services().cypherMetadataProvider().wipeContainer(dataSource.getName()));
+        services().cypherMetadataProvider().wipeAll();
     }
 
     public Services services() {

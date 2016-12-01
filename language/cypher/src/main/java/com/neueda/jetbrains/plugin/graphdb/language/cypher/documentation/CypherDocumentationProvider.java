@@ -9,6 +9,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherProcedureElement;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherUserFunctionElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.documentation.database.CypherDocumentation;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.TraverseUtil;
@@ -59,6 +60,11 @@ public class CypherDocumentationProvider extends AbstractDocumentationProvider {
         Optional<String> storedProcedureDocumentation = storedProcedureDocumentation(element);
         if (storedProcedureDocumentation.isPresent()) {
             return storedProcedureDocumentation.get();
+        }
+
+        Optional<String> userFunctionDocumentation = userFunctionDocumentation(element);
+        if (userFunctionDocumentation.isPresent()) {
+            return userFunctionDocumentation.get();
         }
 
         return null;
@@ -114,6 +120,16 @@ public class CypherDocumentationProvider extends AbstractDocumentationProvider {
             return getMetadataService(element)
                     .findProcedure(cypherProcedureInvocation.getFullName())
                     .map(CypherProcedureElement::getDocumentation);
+        }
+        return Optional.empty();
+    }
+
+    private Optional<String> userFunctionDocumentation(PsiElement element) {
+        if (element instanceof CypherFunctionInvocation) {
+            CypherFunctionInvocation cypherFunctionInvocation = (CypherFunctionInvocation) element;
+            return getMetadataService(element)
+                    .findUserFunction(cypherFunctionInvocation.getFullName())
+                    .map(CypherUserFunctionElement::getDocumentation);
         }
         return Optional.empty();
     }
