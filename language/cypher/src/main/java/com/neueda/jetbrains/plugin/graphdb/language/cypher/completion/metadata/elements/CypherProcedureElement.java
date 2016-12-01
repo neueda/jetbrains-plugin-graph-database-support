@@ -6,18 +6,44 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
 import org.jetbrains.annotations.Nullable;
 
-public class CypherProcedureElement implements CypherElement {
+public class CypherProcedureElement implements CypherElement, CypherElementWithSignature, CypherElementWithDocumentation {
 
     private final String name;
-    private final InvokableInformation information;
+    @Nullable
+    private final String description;
+    private final InvokableInformation invokableInformation;
+    private String documentation;
 
     public CypherProcedureElement(String name, String fullSignature, @Nullable String description) {
         this.name = name;
-        this.information = extractInformation(fullSignature, name);
+        this.description = description;
+        this.invokableInformation = extractInformation(fullSignature, name);
     }
 
-    public InvokableInformation getInformation() {
-        return information;
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public InvokableInformation getInvokableInformation() {
+        return invokableInformation;
+    }
+
+    public String getDocumentation() {
+        if (documentation == null) {
+            documentation = ""
+                    + "<b>" + name + "</b><br>"
+                    + "Arguments:<br>"
+                    + "&nbsp;&nbsp;&nbsp;&nbsp;" + invokableInformation.getSignature() + "<br>"
+                    + "Return:<br>"
+                    + "&nbsp;&nbsp;&nbsp;&nbsp;" + invokableInformation.getReturnType();
+
+            if (description != null) {
+                documentation += "<br><br>"
+                        + description;
+            }
+        }
+        return documentation;
     }
 
     @Override
@@ -26,8 +52,8 @@ public class CypherProcedureElement implements CypherElement {
                 .create(name)
                 .bold()
                 .withIcon(GraphIcons.Nodes.STORED_PROCEDURE)
-                .withTailText(information.getSignature())
-                .withTypeText(information.getReturnType())
-                .withInsertHandler(ParenthesesInsertHandler.getInstance(information.isHasParameters()));
+                .withTailText(invokableInformation.getSignature())
+                .withTypeText(invokableInformation.getReturnType())
+                .withInsertHandler(ParenthesesInsertHandler.getInstance(invokableInformation.isHasParameters()));
     }
 }

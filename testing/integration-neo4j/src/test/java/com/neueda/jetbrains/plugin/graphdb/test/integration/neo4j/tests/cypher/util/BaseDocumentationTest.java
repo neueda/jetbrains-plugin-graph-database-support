@@ -15,6 +15,10 @@ public abstract class BaseDocumentationTest extends BaseGenericTest {
     }
 
     public void verify(String expectedDocumentation) {
+        assertThat(verify()).isEqualTo(expectedDocumentation);
+    }
+
+    public String verify() {
         Editor editor = myFixture.getEditor();
         PsiFile file = myFixture.getFile();
 
@@ -26,7 +30,6 @@ public abstract class BaseDocumentationTest extends BaseGenericTest {
 
         DocumentationProvider documentationProvider = DocumentationManager.getProviderFromElement(originalElement);
 
-        String generatedDoc = documentationProvider.generateDoc(element, originalElement);
-        assertThat(generatedDoc).isEqualTo(expectedDocumentation);
+        return documentationProvider.generateDoc(element, originalElement);
     }
 }

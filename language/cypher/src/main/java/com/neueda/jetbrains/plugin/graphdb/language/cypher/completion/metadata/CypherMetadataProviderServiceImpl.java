@@ -5,6 +5,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.e
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CypherMetadataProviderServiceImpl implements CypherMetadataProviderService {
@@ -66,5 +67,14 @@ public class CypherMetadataProviderServiceImpl implements CypherMetadataProvider
                 .map(Map.Entry::getValue)
                 .flatMap((container) -> container.getUserFunctions().stream())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<CypherProcedureElement> findProcedure(String name) {
+        return sourceData.entrySet().stream()
+                .map(Map.Entry::getValue)
+                .flatMap((container) -> container.getProcedures().stream())
+                .filter((procedureElement) -> procedureElement.getName().equals(name))
+                .findFirst();
     }
 }

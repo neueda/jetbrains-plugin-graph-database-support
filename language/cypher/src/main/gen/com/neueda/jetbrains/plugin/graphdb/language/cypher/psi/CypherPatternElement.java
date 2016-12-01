@@ -1,19 +1,20 @@
 // This is a generated file. Not intended for manual editing.
 package com.neueda.jetbrains.plugin.graphdb.language.cypher.psi;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public interface CypherPatternElement extends PsiElement {
 
-  @Nullable
-  CypherNodePattern getNodePattern();
+    @Nullable
+    CypherNodePattern getNodePattern();
 
-  @Nullable
-  CypherPatternElement getPatternElement();
+    @Nullable
+    CypherPatternElement getPatternElement();
 
-  @NotNull
-  List<CypherPatternElementChain> getPatternElementChainList();
-
+    @NotNull
+    List<CypherPatternElementChain> getPatternElementChainList();
 }

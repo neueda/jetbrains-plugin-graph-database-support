@@ -3,6 +3,7 @@ package com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.*;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CypherMetadataProviderService {
 
@@ -19,4 +20,6 @@ public interface CypherMetadataProviderService {
     List<CypherProcedureElement> getProcedures();
 
     List<CypherUserFunctionElement> getUserFunctions();
+
+    Optional<CypherProcedureElement> findProcedure(String fullName);
 }

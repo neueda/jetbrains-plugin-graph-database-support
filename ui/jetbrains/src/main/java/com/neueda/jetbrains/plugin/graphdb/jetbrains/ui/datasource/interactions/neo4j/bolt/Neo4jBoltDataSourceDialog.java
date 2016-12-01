@@ -5,6 +5,7 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.JBPasswordField;
 import com.intellij.ui.components.JBScrollPane;
@@ -56,8 +57,9 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
         this.dataSourceToEdit = dataSourceToEdit;
     }
 
-    public Neo4jBoltDataSourceDialog(@Nullable Project project, DataSourcesView dataSourcesView) {
+    public Neo4jBoltDataSourceDialog(Project project, DataSourcesView dataSourcesView) {
         super(project);
+        Disposer.register(project, myDisposable);
         init();
 
         databaseManager = ServiceManager.getService(DatabaseManagerService.class);

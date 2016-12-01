@@ -6,13 +6,18 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
 import org.jetbrains.annotations.Nullable;
 
-public class CypherUserFunctionElement implements CypherElement {
+public class CypherUserFunctionElement implements CypherElement, CypherElementWithSignature {
     private final String name;
-    private final InvokableInformation information;
+    private final InvokableInformation invokableInformation;
 
     public CypherUserFunctionElement(String name, String signature, @Nullable String description) {
         this.name = name;
-        this.information = extractInformation(signature, name);
+        this.invokableInformation = extractInformation(signature, name);
+    }
+
+    @Override
+    public InvokableInformation getInvokableInformation() {
+        return invokableInformation;
     }
 
     @Override
@@ -21,8 +26,8 @@ public class CypherUserFunctionElement implements CypherElement {
                 .create(name)
                 .bold()
                 .withIcon(GraphIcons.Nodes.USER_FUNCTION)
-                .withTailText(information.getSignature())
-                .withTypeText(information.getReturnType())
-                .withInsertHandler(ParenthesesInsertHandler.getInstance(information.isHasParameters()));
+                .withTailText(invokableInformation.getSignature())
+                .withTypeText(invokableInformation.getReturnType())
+                .withInsertHandler(ParenthesesInsertHandler.getInstance(invokableInformation.isHasParameters()));
     }
 }
