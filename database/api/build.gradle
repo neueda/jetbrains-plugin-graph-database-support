@@ -2,3 +2,27 @@ dependencies {
     testCompile "junit:junit:$versionJunit"
     testCompile "org.assertj:assertj-core:$versionAssertj"
 }
+
+apply plugin: 'maven'
+
+configure(install.repositories.mavenInstaller) {
+    pom.project {
+        // groupId 'com.neueda.graphdb'
+        // artifactId 'graphdb-api'
+        inceptionYear '2016'
+        packaging 'jar'
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+    }
+}
+
+jar {
+    manifest {
+        name = 'Database API'
+    }
+}

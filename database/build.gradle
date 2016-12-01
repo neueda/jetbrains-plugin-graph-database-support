@@ -1,2 +1,19 @@
 dependencies {
 }
+
+allprojects {
+
+    apply plugin: 'osgi'
+
+    jar {
+        manifest {
+            symbolicName = "com.neueda.graphdb.database.${project.name}"
+            instruction 'Export-Package', "*;version=${version};-noimport:=true"
+            instruction 'Bundle-Vendor', 'neueda.lv'
+            instruction '-removeheaders', 'Tool, Bnd-LastModified'
+            instruction '-nouses', 'true'
+            // instruction '-snapshot', '${tstamp}'
+        }
+    }
+
+}
