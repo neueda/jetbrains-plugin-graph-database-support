@@ -4,6 +4,7 @@ dependencies {
 }
 
 apply plugin: 'maven'
+apply plugin: 'osgi'
 
 configure(install.repositories.mavenInstaller) {
     pom.project {
@@ -24,5 +25,11 @@ configure(install.repositories.mavenInstaller) {
 jar {
     manifest {
         name = 'Database API'
+        symbolicName = "com.neueda.graphdb.database.${project.name}"
+        instruction 'Export-Package', "*;version=${version};-noimport:=true"
+        instruction 'Bundle-Vendor', 'neueda.lv'
+        instruction '-removeheaders', 'Tool, Bnd-LastModified'
+        instruction '-nouses', 'true'
+        // instruction '-snapshot', '${tstamp}'
     }
 }
