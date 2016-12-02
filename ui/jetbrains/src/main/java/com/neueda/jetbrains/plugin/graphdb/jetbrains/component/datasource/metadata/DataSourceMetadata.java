@@ -6,4 +6,6 @@ import java.util.Map;
 public interface DataSourceMetadata {
 
     List<Map<String, String>> getMetadata(String metadataKey);
+
+    boolean isMetadataExists(String metadataKey);
 }

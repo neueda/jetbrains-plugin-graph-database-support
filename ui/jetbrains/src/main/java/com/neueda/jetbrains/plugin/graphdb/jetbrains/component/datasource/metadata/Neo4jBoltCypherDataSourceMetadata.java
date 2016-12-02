@@ -24,6 +24,11 @@ public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
         return dataReceiver.get(metadataKey);
     }
 
+    @Override
+    public boolean isMetadataExists(final String metadataKey) {
+        return dataReceiver.containsKey(metadataKey);
+    }
+
     public void addLabels(GraphQueryResult labelsQueryResult) {
         addDataSourceMetadata(labelsQueryResult, LABELS);
     }

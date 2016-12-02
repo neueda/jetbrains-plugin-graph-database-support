@@ -31,26 +31,33 @@ public class DataSourceMetadataUi {
         // Remove existing metadata from ui
         dataSourceRootTreeNode.removeAllChildren();
 
-        // Prepare new metadata root tree nodes
+        // Labels
         PatchedDefaultMutableTreeNode labelsTreeNode = new PatchedDefaultMutableTreeNode(
                    new ValueWithIcon(GraphIcons.Nodes.LABEL, "labels"));
-        PatchedDefaultMutableTreeNode relationshipTypesTreeNode = new PatchedDefaultMutableTreeNode(
-                   new ValueWithIcon(GraphIcons.Nodes.RELATIONSHIP_TYPE, "relationship types"));
-        PatchedDefaultMutableTreeNode propertyKeysTreeNode = new PatchedDefaultMutableTreeNode(
-                   new ValueWithIcon(GraphIcons.Nodes.PROPERTY_KEY, "property keys"));
-        PatchedDefaultMutableTreeNode storedProceduresTreeNode = new PatchedDefaultMutableTreeNode(
-                   new ValueWithIcon(GraphIcons.Nodes.STORED_PROCEDURE, "stored procedures"));
-
-        // Update metadata tree nodes
         dataSourceMetadata
                    .getMetadata(Neo4jBoltCypherDataSourceMetadata.LABELS)
                    .forEach((row) -> labelsTreeNode.add(new PatchedDefaultMutableTreeNode(row.get("label"))));
+        dataSourceRootTreeNode.add(labelsTreeNode);
+
+        // RelTypes
+        PatchedDefaultMutableTreeNode relationshipTypesTreeNode = new PatchedDefaultMutableTreeNode(
+                   new ValueWithIcon(GraphIcons.Nodes.RELATIONSHIP_TYPE, "relationship types"));
         dataSourceMetadata
                    .getMetadata(Neo4jBoltCypherDataSourceMetadata.RELATIONSHIP_TYPES)
                    .forEach((row) -> relationshipTypesTreeNode.add(new PatchedDefaultMutableTreeNode(row.get("relationshipType"))));
+        dataSourceRootTreeNode.add(relationshipTypesTreeNode);
+
+        // Property Keys
+        PatchedDefaultMutableTreeNode propertyKeysTreeNode = new PatchedDefaultMutableTreeNode(
+                   new ValueWithIcon(GraphIcons.Nodes.PROPERTY_KEY, "property keys"));
         dataSourceMetadata
                    .getMetadata(Neo4jBoltCypherDataSourceMetadata.PROPERTY_KEYS)
                    .forEach((row) -> propertyKeysTreeNode.add(new PatchedDefaultMutableTreeNode(row.get("propertyKey"))));
+        dataSourceRootTreeNode.add(propertyKeysTreeNode);
+
+        // Stored procedures
+        PatchedDefaultMutableTreeNode storedProceduresTreeNode = new PatchedDefaultMutableTreeNode(
+                   new ValueWithIcon(GraphIcons.Nodes.STORED_PROCEDURE, "stored procedures"));
         dataSourceMetadata
                    .getMetadata(Neo4jBoltCypherDataSourceMetadata.STORED_PROCEDURES)
                    .forEach((row) -> {
@@ -59,12 +66,24 @@ public class DataSourceMetadataUi {
                        nameNode.add(descriptionNode);
                        storedProceduresTreeNode.add(nameNode);
                    });
-
-        // Add metadata tree nodes back to UI
-        dataSourceRootTreeNode.add(labelsTreeNode);
-        dataSourceRootTreeNode.add(relationshipTypesTreeNode);
-        dataSourceRootTreeNode.add(propertyKeysTreeNode);
         dataSourceRootTreeNode.add(storedProceduresTreeNode);
+
+        // User Functions
+        if (dataSourceMetadata.isMetadataExists(Neo4jBoltCypherDataSourceMetadata.USER_FUNCTIONS)) {
+            PatchedDefaultMutableTreeNode userFunctionTreeNode = new PatchedDefaultMutableTreeNode(
+                       new ValueWithIcon(GraphIcons.Nodes.USER_FUNCTION, "user functions"));
+
+            dataSourceMetadata
+                       .getMetadata(Neo4jBoltCypherDataSourceMetadata.USER_FUNCTIONS)
+                       .forEach((row) -> {
+                           PatchedDefaultMutableTreeNode nameNode = new PatchedDefaultMutableTreeNode(row.get("name"));
+                           PatchedDefaultMutableTreeNode descriptionNode = new PatchedDefaultMutableTreeNode(row.get("signature"));
+                           nameNode.add(descriptionNode);
+                           userFunctionTreeNode.add(nameNode);
+                       });
+
+            dataSourceRootTreeNode.add(userFunctionTreeNode);
+        }
 
         return true;
     }
