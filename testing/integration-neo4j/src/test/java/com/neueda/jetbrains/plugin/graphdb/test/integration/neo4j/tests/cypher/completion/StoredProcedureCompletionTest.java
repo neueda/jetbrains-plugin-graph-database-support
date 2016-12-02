@@ -12,7 +12,8 @@ public class StoredProcedureCompletionTest extends BaseCompletionTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        dataSource().neo4j30();
+        addStoredProcedure("test.myProcedure", "()", null);
+        addStoredProcedure("some.anotherProcedure", "(signatureAnother)", null);
     }
 
     public void testContainsProceduresProcedure() throws Exception {
@@ -20,13 +21,14 @@ public class StoredProcedureCompletionTest extends BaseCompletionTest {
         myFixture.completeBasic();
         List<String> strings = myFixture.getLookupElementStrings();
         assertThat(strings)
-                .contains("dbms.procedures");
+                   .contains("test.myProcedure")
+                   .contains("some.anotherProcedure");
     }
 
     public void testCompletionCaretAfterParentheses() throws Exception {
-        myFixture.configureByText("test.cyp", "CALL procedu<caret>");
+        myFixture.configureByText("test.cyp", "CALL myProce<caret>");
         myFixture.completeBasic();
-        myFixture.finishLookup(Lookup.REPLACE_SELECT_CHAR);
-        myFixture.checkResult("CALL dbms.procedures()<caret>");
+        myFixture.finishLookup(Lookup.NORMAL_SELECT_CHAR);
+        myFixture.checkResult("CALL test.myProcedure()<caret>");
     }
 }

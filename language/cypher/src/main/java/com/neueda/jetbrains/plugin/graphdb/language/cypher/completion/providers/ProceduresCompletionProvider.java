@@ -1,5 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.providers;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.patterns.ElementPattern;
@@ -8,12 +10,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherLanguage;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherElement;
-import org.jetbrains.annotations.NotNull;
 
 public final class ProceduresCompletionProvider extends BaseCompletionProvider {
     public static final ElementPattern<PsiElement> PATTERN = PlatformPatterns
-                   .psiElement()
-                   .withLanguage(CypherLanguage.INSTANCE);
+               .psiElement()
+               .withLanguage(CypherLanguage.INSTANCE);
 
     @Override
     protected void addCompletions(@NotNull CompletionParameters parameters,
@@ -21,8 +22,8 @@ public final class ProceduresCompletionProvider extends BaseCompletionProvider {
                                   @NotNull CompletionResultSet result) {
         withCypherMetadataProvider(parameters, (metadataProvider -> {
             metadataProvider.getProcedures().stream()
-                    .map(CypherElement::getLookupElement)
-                    .forEach(result::addElement);
+                       .map(CypherElement::getLookupElement)
+                       .forEach(result::addElement);
         }));
     }
 }
