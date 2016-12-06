@@ -9,7 +9,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.
 
 public class DataSourceContainerV1 implements DataSourceContainer {
 
-    private List<DataSourceApi> dataSources = new ArrayList<>();
+    public List<DataSourceApi> dataSources = new ArrayList<>();
 
     @Override
     public List getGenericDataSources() {
