@@ -18,4 +18,8 @@ public class CypherLabelElement implements CypherElement {
                 .withIcon(GraphIcons.Nodes.LABEL)
                 .withTypeText("label");
     }
+
+    public String getName() {
+        return label;
+    }
 }

@@ -75,6 +75,33 @@ public class CypherMetadataProviderServiceImpl implements CypherMetadataProvider
     }
 
     @Override
+    public Optional<CypherLabelElement> findLabel(String labelName) {
+        return sourceData.entrySet().stream()
+                .map(Map.Entry::getValue)
+                .flatMap((container) -> container.getLabels().stream())
+                .filter((labelElement) -> labelElement.getName().equals(labelName))
+                .findFirst();
+    }
+
+    @Override
+    public Optional<CypherRelationshipTypeElement> findRelationshipType(String relationshipTypeName) {
+        return sourceData.entrySet().stream()
+                .map(Map.Entry::getValue)
+                .flatMap((container) -> container.getRelationshipTypes().stream())
+                .filter((relationshipTypeElement) -> relationshipTypeElement.getName().equals(relationshipTypeName))
+                .findFirst();
+    }
+
+    @Override
+    public Optional<CypherPropertyKeyElement> findPropertyKey(String propertyKeyName) {
+        return sourceData.entrySet().stream()
+                .map(Map.Entry::getValue)
+                .flatMap((container) -> container.getPropertyKeys().stream())
+                .filter((propertyKeyElement) -> propertyKeyElement.getName().equals(propertyKeyName))
+                .findFirst();
+    }
+
+    @Override
     public Optional<CypherProcedureElement> findProcedure(String name) {
         return sourceData.entrySet().stream()
                 .map(Map.Entry::getValue)

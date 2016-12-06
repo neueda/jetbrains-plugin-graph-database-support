@@ -18,4 +18,8 @@ public class CypherRelationshipTypeElement implements CypherElement {
                 .withIcon(GraphIcons.Nodes.RELATIONSHIP_TYPE)
                 .withTypeText("relationship type");
     }
+
+    public String getName() {
+        return relationshipType;
+    }
 }

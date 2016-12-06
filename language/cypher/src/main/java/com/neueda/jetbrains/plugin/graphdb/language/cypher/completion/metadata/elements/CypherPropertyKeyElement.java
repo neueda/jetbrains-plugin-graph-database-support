@@ -18,4 +18,8 @@ public class CypherPropertyKeyElement implements CypherElement {
                 .withIcon(GraphIcons.Nodes.PROPERTY_KEY)
                 .withTypeText("property");
     }
+
+    public String getName() {
+        return propertyKey;
+    }
 }

@@ -23,6 +23,12 @@ public interface CypherMetadataProviderService {
 
     List<CypherUserFunctionElement> getUserFunctions();
 
+    Optional<CypherLabelElement> findLabel(String labelName);
+
+    Optional<CypherRelationshipTypeElement> findRelationshipType(String relationshipTypeName);
+
+    Optional<CypherPropertyKeyElement> findPropertyKey(String propertyKeyName);
+
     Optional<CypherProcedureElement> findProcedure(String fullName);
 
     Optional<CypherUserFunctionElement> findUserFunction(String fullName);
