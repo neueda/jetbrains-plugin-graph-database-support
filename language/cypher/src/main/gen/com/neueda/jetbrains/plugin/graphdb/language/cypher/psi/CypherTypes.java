@@ -82,6 +82,7 @@ public interface CypherTypes {
   IElementType PARAMETER = new CypherElementType("PARAMETER");
   IElementType PARENTHESIZED_EXPRESSION = new CypherElementType("PARENTHESIZED_EXPRESSION");
   IElementType PATTERN = new CypherElementType("PATTERN");
+  IElementType PATTERN_COMPREHENSION = new CypherElementType("PATTERN_COMPREHENSION");
   IElementType PATTERN_ELEMENT = new CypherElementType("PATTERN_ELEMENT");
   IElementType PATTERN_ELEMENT_CHAIN = new CypherElementType("PATTERN_ELEMENT_CHAIN");
   IElementType PATTERN_PART = new CypherElementType("PATTERN_PART");
@@ -486,6 +487,9 @@ public interface CypherTypes {
       }
       else if (type == PATTERN) {
         return new CypherPatternImpl(node);
+      }
+      else if (type == PATTERN_COMPREHENSION) {
+        return new CypherPatternComprehensionImpl(node);
       }
       else if (type == PATTERN_ELEMENT) {
         return new CypherPatternElementImpl(node);

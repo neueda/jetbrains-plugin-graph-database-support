@@ -49,6 +49,9 @@ public interface CypherPropertyExpression extends PsiElement {
   @Nullable
   CypherParameter getParameter();
 
+  @Nullable
+  CypherPatternComprehension getPatternComprehension();
+
   @NotNull
   List<CypherPropertyLookup> getPropertyLookupList();
 

@@ -300,6 +300,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitPatternComprehension(@NotNull CypherPatternComprehension o) {
+    visitPsiElement(o);
+  }
+
   public void visitPatternElement(@NotNull CypherPatternElement o) {
     visitPsiElement(o);
   }

@@ -242,6 +242,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == PATTERN) {
       r = Pattern(b, 0);
     }
+    else if (t == PATTERN_COMPREHENSION) {
+      r = PatternComprehension(b, 0);
+    }
     else if (t == PATTERN_ELEMENT) {
       r = PatternElement(b, 0);
     }
@@ -1132,6 +1135,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   //               | MapLiteral
   //               | MapProjection
   //               | ListComprehension
+  //               | PatternComprehension
   //               | ("[" Expression? ("," Expression)* "]")
   //               | FilterFunctionInvocation
   //               | ExtractFunctionInvocation
@@ -1160,7 +1164,8 @@ public class CypherParser implements PsiParser, LightPsiParser {
     if (!r) r = MapLiteral(b, l + 1);
     if (!r) r = MapProjection(b, l + 1);
     if (!r) r = ListComprehension(b, l + 1);
-    if (!r) r = Expression1_10(b, l + 1);
+    if (!r) r = PatternComprehension(b, l + 1);
+    if (!r) r = Expression1_11(b, l + 1);
     if (!r) r = FilterFunctionInvocation(b, l + 1);
     if (!r) r = ExtractFunctionInvocation(b, l + 1);
     if (!r) r = ReduceFunctionInvocation(b, l + 1);
@@ -1179,40 +1184,40 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   // "[" Expression? ("," Expression)* "]"
-  private static boolean Expression1_10(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_10")) return false;
+  private static boolean Expression1_11(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Expression1_11")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, BRACKET_SQUAREOPEN);
-    r = r && Expression1_10_1(b, l + 1);
-    r = r && Expression1_10_2(b, l + 1);
+    r = r && Expression1_11_1(b, l + 1);
+    r = r && Expression1_11_2(b, l + 1);
     r = r && consumeToken(b, BRACKET_SQUARECLOSE);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // Expression?
-  private static boolean Expression1_10_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_10_1")) return false;
+  private static boolean Expression1_11_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Expression1_11_1")) return false;
     Expression(b, l + 1);
     return true;
   }
 
   // ("," Expression)*
-  private static boolean Expression1_10_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_10_2")) return false;
+  private static boolean Expression1_11_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Expression1_11_2")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!Expression1_10_2_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "Expression1_10_2", c)) break;
+      if (!Expression1_11_2_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Expression1_11_2", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
   // "," Expression
-  private static boolean Expression1_10_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_10_2_0")) return false;
+  private static boolean Expression1_11_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Expression1_11_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, OP_COMMA);
@@ -3047,6 +3052,41 @@ public class CypherParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, OP_COMMA);
     r = r && PatternPart(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // "[" RelationshipsPattern (K_WHERE Expression)? "|" Expression "]"
+  public static boolean PatternComprehension(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PatternComprehension")) return false;
+    if (!nextTokenIs(b, BRACKET_SQUAREOPEN)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, BRACKET_SQUAREOPEN);
+    r = r && RelationshipsPattern(b, l + 1);
+    r = r && PatternComprehension_2(b, l + 1);
+    r = r && consumeToken(b, OP_PIPE);
+    r = r && Expression(b, l + 1);
+    r = r && consumeToken(b, BRACKET_SQUARECLOSE);
+    exit_section_(b, m, PATTERN_COMPREHENSION, r);
+    return r;
+  }
+
+  // (K_WHERE Expression)?
+  private static boolean PatternComprehension_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PatternComprehension_2")) return false;
+    PatternComprehension_2_0(b, l + 1);
+    return true;
+  }
+
+  // K_WHERE Expression
+  private static boolean PatternComprehension_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PatternComprehension_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_WHERE);
+    r = r && Expression(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

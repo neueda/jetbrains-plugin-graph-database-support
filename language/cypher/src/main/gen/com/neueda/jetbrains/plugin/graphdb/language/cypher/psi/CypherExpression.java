@@ -53,6 +53,9 @@ public interface CypherExpression extends PsiElement {
   List<CypherParameter> getParameterList();
 
   @NotNull
+  List<CypherPatternComprehension> getPatternComprehensionList();
+
+  @NotNull
   List<CypherPropertyLookup> getPropertyLookupList();
 
   @NotNull

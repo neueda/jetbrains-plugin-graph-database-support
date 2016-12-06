@@ -31,4 +31,8 @@ public class ExpressionsParsingTest extends BaseParsingTest {
     public void testMapProjection() {
         doTest(true);
     }
+
+    public void testPatternComprehension() {
+        doTest(true);
+    }
 }

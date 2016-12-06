@@ -111,6 +111,12 @@ public class CypherPropertyExpressionImpl extends ASTWrapperPsiElement implement
   }
 
   @Override
+  @Nullable
+  public CypherPatternComprehension getPatternComprehension() {
+    return findChildByClass(CypherPatternComprehension.class);
+  }
+
+  @Override
   @NotNull
   public List<CypherPropertyLookup> getPropertyLookupList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherPropertyLookup.class);

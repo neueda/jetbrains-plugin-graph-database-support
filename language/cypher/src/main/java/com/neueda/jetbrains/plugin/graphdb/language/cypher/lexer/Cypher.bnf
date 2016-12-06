@@ -378,6 +378,7 @@ private Expression1 ::= NumberLiteral
               | MapLiteral
               | MapProjection
               | ListComprehension
+              | PatternComprehension
               | ("[" Expression? ("," Expression)* "]")
               | FilterFunctionInvocation
               | ExtractFunctionInvocation
@@ -417,6 +418,8 @@ AnyFunctionInvocation ::= K_ANY "(" FilterExpression ")"
 NoneFunctionInvocation ::= K_NONE "(" FilterExpression ")"
 SingleFunctionInvocation ::= K_SINGLE "(" FilterExpression ")"
 ExistsFunctionInvocation ::= K_EXISTS "(" Expression ")"
+
+PatternComprehension ::= "[" RelationshipsPattern (K_WHERE Expression)? "|" Expression "]"
 
 /*************************
  * Literals
