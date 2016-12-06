@@ -29,6 +29,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == ALL_FUNCTION_INVOCATION) {
       r = AllFunctionInvocation(b, 0);
     }
+    else if (t == ALL_PROPERTIES_SELECTOR) {
+      r = AllPropertiesSelector(b, 0);
+    }
     else if (t == ALL_SHORTEST_PATHS_FUNCTION_INVOCATION) {
       r = AllShortestPathsFunctionInvocation(b, 0);
     }
@@ -164,6 +167,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == LIST_COMPREHENSION) {
       r = ListComprehension(b, 0);
     }
+    else if (t == LITERAL_ENTRY) {
+      r = LiteralEntry(b, 0);
+    }
     else if (t == LITERAL_IDS) {
       r = LiteralIds(b, 0);
     }
@@ -178,6 +184,12 @@ public class CypherParser implements PsiParser, LightPsiParser {
     }
     else if (t == MAP_LITERAL) {
       r = MapLiteral(b, 0);
+    }
+    else if (t == MAP_PROJECTION) {
+      r = MapProjection(b, 0);
+    }
+    else if (t == MAP_PROJECTION_VARIANTS) {
+      r = MapProjectionVariants(b, 0);
     }
     else if (t == MATCH) {
       r = Match(b, 0);
@@ -277,6 +289,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     }
     else if (t == PROPERTY_LOOKUP) {
       r = PropertyLookup(b, 0);
+    }
+    else if (t == PROPERTY_SELECTOR) {
+      r = PropertySelector(b, 0);
     }
     else if (t == QUERY) {
       r = Query(b, 0);
@@ -413,6 +428,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == VARIABLE) {
       r = Variable(b, 0);
     }
+    else if (t == VARIABLE_SELECTOR) {
+      r = VariableSelector(b, 0);
+    }
     else if (t == VERSION_NUMBER) {
       r = VersionNumber(b, 0);
     }
@@ -460,6 +478,19 @@ public class CypherParser implements PsiParser, LightPsiParser {
     r = r && FilterExpression(b, l + 1);
     r = r && consumeToken(b, PARENTHESE_CLOSE);
     exit_section_(b, m, ALL_FUNCTION_INVOCATION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // "." "*"
+  public static boolean AllPropertiesSelector(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AllPropertiesSelector")) return false;
+    if (!nextTokenIs(b, OP_DOT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, OP_DOT);
+    r = r && consumeToken(b, OP_MUL);
+    exit_section_(b, m, ALL_PROPERTIES_SELECTOR, r);
     return r;
   }
 
@@ -1099,6 +1130,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   //               | (K_NULL)
   //               | CaseExpression
   //               | MapLiteral
+  //               | MapProjection
   //               | ListComprehension
   //               | ("[" Expression? ("," Expression)* "]")
   //               | FilterFunctionInvocation
@@ -1126,8 +1158,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, K_NULL);
     if (!r) r = CaseExpression(b, l + 1);
     if (!r) r = MapLiteral(b, l + 1);
+    if (!r) r = MapProjection(b, l + 1);
     if (!r) r = ListComprehension(b, l + 1);
-    if (!r) r = Expression1_9(b, l + 1);
+    if (!r) r = Expression1_10(b, l + 1);
     if (!r) r = FilterFunctionInvocation(b, l + 1);
     if (!r) r = ExtractFunctionInvocation(b, l + 1);
     if (!r) r = ReduceFunctionInvocation(b, l + 1);
@@ -1146,40 +1179,40 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   // "[" Expression? ("," Expression)* "]"
-  private static boolean Expression1_9(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_9")) return false;
+  private static boolean Expression1_10(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Expression1_10")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, BRACKET_SQUAREOPEN);
-    r = r && Expression1_9_1(b, l + 1);
-    r = r && Expression1_9_2(b, l + 1);
+    r = r && Expression1_10_1(b, l + 1);
+    r = r && Expression1_10_2(b, l + 1);
     r = r && consumeToken(b, BRACKET_SQUARECLOSE);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // Expression?
-  private static boolean Expression1_9_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_9_1")) return false;
+  private static boolean Expression1_10_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Expression1_10_1")) return false;
     Expression(b, l + 1);
     return true;
   }
 
   // ("," Expression)*
-  private static boolean Expression1_9_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_9_2")) return false;
+  private static boolean Expression1_10_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Expression1_10_2")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!Expression1_9_2_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "Expression1_9_2", c)) break;
+      if (!Expression1_10_2_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Expression1_10_2", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
   // "," Expression
-  private static boolean Expression1_9_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_9_2_0")) return false;
+  private static boolean Expression1_10_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Expression1_10_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, OP_COMMA);
@@ -2215,6 +2248,19 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // PropertyKeyName ":" Expression
+  public static boolean LiteralEntry(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LiteralEntry")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, LITERAL_ENTRY, "<literal entry>");
+    r = PropertyKeyName(b, l + 1);
+    r = r && consumeToken(b, OP_COLON);
+    r = r && Expression(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
   // UnsignedIntegerLiteral ("," UnsignedIntegerLiteral)*
   public static boolean LiteralIds(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralIds")) return false;
@@ -2396,6 +2442,65 @@ public class CypherParser implements PsiParser, LightPsiParser {
     r = r && consumeToken(b, OP_COLON);
     r = r && Expression(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // Variable "{" MapProjectionVariants? ("," MapProjectionVariants)* "}"
+  public static boolean MapProjection(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MapProjection")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, MAP_PROJECTION, "<map projection>");
+    r = Variable(b, l + 1);
+    r = r && consumeToken(b, BRACKET_CURLYOPEN);
+    r = r && MapProjection_2(b, l + 1);
+    r = r && MapProjection_3(b, l + 1);
+    r = r && consumeToken(b, BRACKET_CURLYCLOSE);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // MapProjectionVariants?
+  private static boolean MapProjection_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MapProjection_2")) return false;
+    MapProjectionVariants(b, l + 1);
+    return true;
+  }
+
+  // ("," MapProjectionVariants)*
+  private static boolean MapProjection_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MapProjection_3")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!MapProjection_3_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "MapProjection_3", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // "," MapProjectionVariants
+  private static boolean MapProjection_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MapProjection_3_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, OP_COMMA);
+    r = r && MapProjectionVariants(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LiteralEntry | PropertySelector | VariableSelector | AllPropertiesSelector
+  public static boolean MapProjectionVariants(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MapProjectionVariants")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, MAP_PROJECTION_VARIANTS, "<map projection variants>");
+    r = LiteralEntry(b, l + 1);
+    if (!r) r = PropertySelector(b, l + 1);
+    if (!r) r = VariableSelector(b, l + 1);
+    if (!r) r = AllPropertiesSelector(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -3276,6 +3381,19 @@ public class CypherParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, OP_DOT);
     r = r && PropertyKeyName(b, l + 1);
     exit_section_(b, m, PROPERTY_LOOKUP, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // "." Variable
+  public static boolean PropertySelector(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PropertySelector")) return false;
+    if (!nextTokenIs(b, OP_DOT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, OP_DOT);
+    r = r && Variable(b, l + 1);
+    exit_section_(b, m, PROPERTY_SELECTOR, r);
     return r;
   }
 
@@ -4682,6 +4800,17 @@ public class CypherParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, VARIABLE, "<variable>");
     r = SymbolicNameString(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // Variable
+  public static boolean VariableSelector(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "VariableSelector")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, VARIABLE_SELECTOR, "<variable selector>");
+    r = Variable(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }

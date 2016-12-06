@@ -27,4 +27,8 @@ public class ExpressionsParsingTest extends BaseParsingTest {
     public void testSpecialFunctions() {
         doTest(true);
     }
+
+    public void testMapProjection() {
+        doTest(true);
+    }
 }

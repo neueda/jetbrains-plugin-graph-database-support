@@ -5,15 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CypherPatternElement extends PsiElement {
-
-  @Nullable
-  CypherNodePattern getNodePattern();
-
-  @Nullable
-  CypherPatternElement getPatternElement();
+public interface CypherMapProjection extends PsiElement {
 
   @NotNull
-  List<CypherPatternElementChain> getPatternElementChainList();
+  List<CypherMapProjectionVariants> getMapProjectionVariantsList();
+
+  @NotNull
+  CypherVariable getVariable();
 
 }

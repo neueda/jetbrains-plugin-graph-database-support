@@ -38,6 +38,9 @@ public interface CypherExpression extends PsiElement {
   List<CypherMapLiteral> getMapLiteralList();
 
   @NotNull
+  List<CypherMapProjection> getMapProjectionList();
+
+  @NotNull
   List<CypherNodeLabels> getNodeLabelsList();
 
   @NotNull

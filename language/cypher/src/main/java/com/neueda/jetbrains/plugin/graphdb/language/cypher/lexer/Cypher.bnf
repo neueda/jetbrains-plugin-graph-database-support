@@ -376,6 +376,7 @@ private Expression1 ::= NumberLiteral
               | (K_NULL)
               | CaseExpression
               | MapLiteral
+              | MapProjection
               | ListComprehension
               | ("[" Expression? ("," Expression)* "]")
               | FilterFunctionInvocation
@@ -416,6 +417,16 @@ AnyFunctionInvocation ::= K_ANY "(" FilterExpression ")"
 NoneFunctionInvocation ::= K_NONE "(" FilterExpression ")"
 SingleFunctionInvocation ::= K_SINGLE "(" FilterExpression ")"
 ExistsFunctionInvocation ::= K_EXISTS "(" Expression ")"
+
+/*************************
+ * Literals
+ */
+MapProjection ::= Variable "{" MapProjectionVariants? ("," MapProjectionVariants)* "}"
+MapProjectionVariants ::= (LiteralEntry | PropertySelector | VariableSelector | AllPropertiesSelector)
+LiteralEntry ::= PropertyKeyName ":" Expression
+PropertySelector ::= "." Variable
+VariableSelector ::= Variable
+AllPropertiesSelector ::= "." "*"
 
 /*************************
  * Literals

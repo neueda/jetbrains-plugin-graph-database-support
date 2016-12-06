@@ -16,6 +16,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitAllPropertiesSelector(@NotNull CypherAllPropertiesSelector o) {
+    visitPsiElement(o);
+  }
+
   public void visitAllShortestPathsFunctionInvocation(@NotNull CypherAllShortestPathsFunctionInvocation o) {
     visitPsiElement(o);
   }
@@ -196,6 +200,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitLiteralEntry(@NotNull CypherLiteralEntry o) {
+    visitPsiElement(o);
+  }
+
   public void visitLiteralIds(@NotNull CypherLiteralIds o) {
     visitPsiElement(o);
   }
@@ -213,6 +221,14 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitMapLiteral(@NotNull CypherMapLiteral o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMapProjection(@NotNull CypherMapProjection o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMapProjectionVariants(@NotNull CypherMapProjectionVariants o) {
     visitPsiElement(o);
   }
 
@@ -345,6 +361,10 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitPropertyLookup(@NotNull CypherPropertyLookup o) {
+    visitPsiElement(o);
+  }
+
+  public void visitPropertySelector(@NotNull CypherPropertySelector o) {
     visitPsiElement(o);
   }
 
@@ -526,6 +546,10 @@ public class CypherVisitor extends PsiElementVisitor {
 
   public void visitVariable(@NotNull CypherVariable o) {
     visitNamedElement(o);
+  }
+
+  public void visitVariableSelector(@NotNull CypherVariableSelector o) {
+    visitPsiElement(o);
   }
 
   public void visitVersionNumber(@NotNull CypherVersionNumber o) {

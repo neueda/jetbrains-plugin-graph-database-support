@@ -10,6 +10,7 @@ public interface CypherTypes {
 
   IElementType ALIASED_PROCEDURE_RESULT = new CypherElementType("ALIASED_PROCEDURE_RESULT");
   IElementType ALL_FUNCTION_INVOCATION = new CypherElementType("ALL_FUNCTION_INVOCATION");
+  IElementType ALL_PROPERTIES_SELECTOR = new CypherElementType("ALL_PROPERTIES_SELECTOR");
   IElementType ALL_SHORTEST_PATHS_FUNCTION_INVOCATION = new CypherElementType("ALL_SHORTEST_PATHS_FUNCTION_INVOCATION");
   IElementType ANONYMOUS_PATTERN_PART = new CypherElementType("ANONYMOUS_PATTERN_PART");
   IElementType ANY_CYPHER_OPTION = new CypherElementType("ANY_CYPHER_OPTION");
@@ -55,11 +56,14 @@ public interface CypherTypes {
   IElementType LEFT_ARROW_HEAD = new CypherElementType("LEFT_ARROW_HEAD");
   IElementType LIMIT = new CypherElementType("LIMIT");
   IElementType LIST_COMPREHENSION = new CypherElementType("LIST_COMPREHENSION");
+  IElementType LITERAL_ENTRY = new CypherElementType("LITERAL_ENTRY");
   IElementType LITERAL_IDS = new CypherElementType("LITERAL_IDS");
   IElementType LOAD_CSV = new CypherElementType("LOAD_CSV");
   IElementType LOAD_CSV_QUERY = new CypherElementType("LOAD_CSV_QUERY");
   IElementType LOOKUP = new CypherElementType("LOOKUP");
   IElementType MAP_LITERAL = new CypherElementType("MAP_LITERAL");
+  IElementType MAP_PROJECTION = new CypherElementType("MAP_PROJECTION");
+  IElementType MAP_PROJECTION_VARIANTS = new CypherElementType("MAP_PROJECTION_VARIANTS");
   IElementType MATCH = new CypherElementType("MATCH");
   IElementType MAYBE_VARIABLE_LENGTH = new CypherElementType("MAYBE_VARIABLE_LENGTH");
   IElementType MERGE = new CypherElementType("MERGE");
@@ -94,6 +98,7 @@ public interface CypherTypes {
   IElementType PROPERTY_EXPRESSION = new CypherElementType("PROPERTY_EXPRESSION");
   IElementType PROPERTY_KEY_NAME = new CypherElementType("PROPERTY_KEY_NAME");
   IElementType PROPERTY_LOOKUP = new CypherElementType("PROPERTY_LOOKUP");
+  IElementType PROPERTY_SELECTOR = new CypherElementType("PROPERTY_SELECTOR");
   IElementType QUERY = new CypherElementType("QUERY");
   IElementType QUERY_OPTIONS = new CypherElementType("QUERY_OPTIONS");
   IElementType RANGE_LITERAL = new CypherElementType("RANGE_LITERAL");
@@ -139,6 +144,7 @@ public interface CypherTypes {
   IElementType UNSIGNED_INTEGER_LITERAL = new CypherElementType("UNSIGNED_INTEGER_LITERAL");
   IElementType UNWIND = new CypherElementType("UNWIND");
   IElementType VARIABLE = new CypherElementType("VARIABLE");
+  IElementType VARIABLE_SELECTOR = new CypherElementType("VARIABLE_SELECTOR");
   IElementType VERSION_NUMBER = new CypherElementType("VERSION_NUMBER");
   IElementType WHERE = new CypherElementType("WHERE");
   IElementType WITH = new CypherElementType("WITH");
@@ -264,6 +270,9 @@ public interface CypherTypes {
       }
       else if (type == ALL_FUNCTION_INVOCATION) {
         return new CypherAllFunctionInvocationImpl(node);
+      }
+      else if (type == ALL_PROPERTIES_SELECTOR) {
+        return new CypherAllPropertiesSelectorImpl(node);
       }
       else if (type == ALL_SHORTEST_PATHS_FUNCTION_INVOCATION) {
         return new CypherAllShortestPathsFunctionInvocationImpl(node);
@@ -400,6 +409,9 @@ public interface CypherTypes {
       else if (type == LIST_COMPREHENSION) {
         return new CypherListComprehensionImpl(node);
       }
+      else if (type == LITERAL_ENTRY) {
+        return new CypherLiteralEntryImpl(node);
+      }
       else if (type == LITERAL_IDS) {
         return new CypherLiteralIdsImpl(node);
       }
@@ -414,6 +426,12 @@ public interface CypherTypes {
       }
       else if (type == MAP_LITERAL) {
         return new CypherMapLiteralImpl(node);
+      }
+      else if (type == MAP_PROJECTION) {
+        return new CypherMapProjectionImpl(node);
+      }
+      else if (type == MAP_PROJECTION_VARIANTS) {
+        return new CypherMapProjectionVariantsImpl(node);
       }
       else if (type == MATCH) {
         return new CypherMatchImpl(node);
@@ -516,6 +534,9 @@ public interface CypherTypes {
       }
       else if (type == PROPERTY_LOOKUP) {
         return new CypherPropertyLookupImpl(node);
+      }
+      else if (type == PROPERTY_SELECTOR) {
+        return new CypherPropertySelectorImpl(node);
       }
       else if (type == QUERY) {
         return new CypherQueryImpl(node);
@@ -651,6 +672,9 @@ public interface CypherTypes {
       }
       else if (type == VARIABLE) {
         return new CypherVariableImpl(node);
+      }
+      else if (type == VARIABLE_SELECTOR) {
+        return new CypherVariableSelectorImpl(node);
       }
       else if (type == VERSION_NUMBER) {
         return new CypherVersionNumberImpl(node);

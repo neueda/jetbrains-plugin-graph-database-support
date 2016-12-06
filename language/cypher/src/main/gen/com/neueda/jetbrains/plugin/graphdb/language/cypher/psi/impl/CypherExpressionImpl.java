@@ -88,6 +88,12 @@ public class CypherExpressionImpl extends ASTWrapperPsiElement implements Cypher
 
   @Override
   @NotNull
+  public List<CypherMapProjection> getMapProjectionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherMapProjection.class);
+  }
+
+  @Override
+  @NotNull
   public List<CypherNodeLabels> getNodeLabelsList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherNodeLabels.class);
   }

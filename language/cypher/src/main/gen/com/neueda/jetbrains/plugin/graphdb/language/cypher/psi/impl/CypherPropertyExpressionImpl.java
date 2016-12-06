@@ -88,6 +88,12 @@ public class CypherPropertyExpressionImpl extends ASTWrapperPsiElement implement
 
   @Override
   @Nullable
+  public CypherMapProjection getMapProjection() {
+    return findChildByClass(CypherMapProjection.class);
+  }
+
+  @Override
+  @Nullable
   public CypherNoneFunctionInvocation getNoneFunctionInvocation() {
     return findChildByClass(CypherNoneFunctionInvocation.class);
   }

@@ -38,6 +38,9 @@ public interface CypherPropertyExpression extends PsiElement {
   CypherMapLiteral getMapLiteral();
 
   @Nullable
+  CypherMapProjection getMapProjection();
+
+  @Nullable
   CypherNoneFunctionInvocation getNoneFunctionInvocation();
 
   @Nullable
