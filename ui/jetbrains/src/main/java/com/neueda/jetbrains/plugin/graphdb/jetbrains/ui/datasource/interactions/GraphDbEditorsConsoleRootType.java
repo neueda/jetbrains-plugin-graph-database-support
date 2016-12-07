@@ -1,15 +1,19 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions;
 
-import com.intellij.execution.console.ConsoleRootType;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.NameUtil;
+import java.util.Optional;
+
+import javax.swing.*;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.Icon;
+import com.intellij.execution.console.ConsoleRootType;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceDescription;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.NameUtil;
 
 public class GraphDbEditorsConsoleRootType extends ConsoleRootType {
 
@@ -25,17 +29,23 @@ public class GraphDbEditorsConsoleRootType extends ConsoleRootType {
     @Nullable
     @Override
     public Icon substituteIcon(@NotNull Project project, @NotNull VirtualFile file) {
-        return getDataSource(project, file).getDescription().getIcon();
+        return getDataSource(project, file)
+                   .map(DataSourceApi::getDescription)
+                   .map(DataSourceDescription::getIcon)
+                   .orElse(null);
     }
 
     @Nullable
     @Override
     public String substituteName(@NotNull Project project, @NotNull VirtualFile file) {
-        return getDataSource(project, file).getName();
+        return getDataSource(project, file)
+                   .map(DataSourceApi::getName)
+                   .orElse(null);
     }
 
-    private DataSourceApi getDataSource(@NotNull Project project, @NotNull VirtualFile file) {
+    private Optional<? extends DataSourceApi> getDataSource(@NotNull Project project, @NotNull VirtualFile file) {
         DataSourcesComponent component = project.getComponent(DataSourcesComponent.class);
-        return component.getDataSourceContainer().findDataSource(NameUtil.extractDataSourceUUID(file.getName()));
+        return component.getDataSourceContainer()
+                   .findDataSource(NameUtil.extractDataSourceUUID(file.getName()));
     }
 }

@@ -25,6 +25,7 @@ import com.neueda.jetbrains.plugin.graphdb.platform.GraphLanguages;
 
 import java.awt.Component;
 import java.awt.event.KeyEvent;
+import java.util.Optional;
 
 public class ExecuteQueryAction extends AnAction {
 
@@ -85,10 +86,12 @@ public class ExecuteQueryAction extends AnAction {
         if (virtualFile != null) {
             String fileName = virtualFile.getName();
             if (fileName.startsWith(GraphConstants.BOUND_DATA_SOURCE_PREFIX)) {
-                DataSourceApi boundDataSource = dataSourcesComponent.getDataSourceContainer()
-                        .findDataSource(NameUtil.extractDataSourceUUID(fileName));
-                executeQuery(messageBus, boundDataSource, executeQueryPayload);
-                return;
+                Optional<? extends DataSourceApi> boundDataSource = dataSourcesComponent.getDataSourceContainer()
+                           .findDataSource(NameUtil.extractDataSourceUUID(fileName));
+                if (boundDataSource.isPresent()) {
+                    executeQuery(messageBus, boundDataSource.get(), executeQueryPayload);
+                    return;
+                }
             }
         }
 

@@ -7,9 +7,10 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceContainer;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.impl.DataSourceV1;
 
+@SuppressWarnings("SuspiciousMethodCalls")
 public class DataSourceContainerV1 implements DataSourceContainer {
 
-    public List<DataSourceApi> dataSources = new ArrayList<>();
+    public List<DataSourceV1> dataSources = new ArrayList<>();
 
     @Override
     public List getGenericDataSources() {
@@ -17,37 +18,31 @@ public class DataSourceContainerV1 implements DataSourceContainer {
     }
 
     @Override
-    public DataSourceApi findDataSource(String uuid) {
-        Optional<DataSourceApi> foundDataSource = dataSources.stream()
+    public Optional<DataSourceApi> findDataSource(String uuid) {
+        return getDataSources().stream()
                    .filter((dataSource) -> dataSource.getUUID().equals(uuid))
                    .findFirst();
-
-        if (foundDataSource.isPresent()) {
-            return foundDataSource.get();
-        } else {
-            throw new IllegalStateException("Data source with UUID[" + uuid + "] does not exist");
-        }
     }
 
     @Override
     public void addDataSource(DataSourceApi dataSource) {
-        dataSources.add(dataSource);
+        getDataSources().add(dataSource);
     }
 
     @Override
     public void updateDataSource(DataSourceApi oldDataSource, DataSourceApi newDataSource) {
-        int index = dataSources.indexOf(oldDataSource);
-        dataSources.set(index, newDataSource);
+        int index = getDataSources().indexOf(oldDataSource);
+        getDataSources().set(index, newDataSource);
     }
 
     @Override
     public void removeDataSources(List<DataSourceApi> dataSourcesForRemoval) {
-        dataSources.removeAll(dataSourcesForRemoval);
+        getDataSources().removeAll(dataSourcesForRemoval);
     }
 
     @Override
     public Optional<DataSourceApi> getDataSource(final String dataSourceName) {
-        return dataSources.stream()
+        return getDataSources().stream()
                    .filter((dataSource) -> dataSource.getName().equals(dataSourceName))
                    .findAny();
     }

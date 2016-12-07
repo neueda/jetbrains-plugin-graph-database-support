@@ -13,7 +13,7 @@ public interface DataSourceContainer {
         return (List<DataSourceApi>) getGenericDataSources();
     }
 
-    DataSourceApi findDataSource(String uuid);
+    Optional<DataSourceApi> findDataSource(String uuid);
 
     void addDataSource(DataSourceApi dataSource);
 
