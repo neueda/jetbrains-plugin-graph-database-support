@@ -30,7 +30,8 @@ Plugin is [available for download](https://plugins.jetbrains.com/plugin/8087) fr
   - Understands queries in `.cyp`, `.cypher` or `.cql` files
   - Syntax highlight and error reporting
   - Refactoring support for identifiers, labels, relationship types and properties
-  - Autocompletion support for identifiers, labels, relationship types, properties and stored procedures. Information gathered from existing queries and configured data sources
+  - Autocompletion support for identifiers, labels, relationship types, properties, functions and stored procedures. Information gathered from existing queries and configured data sources
+  - Provide documentation for functions and stored procedures
   - Auto-inject Cypher language for: [neo4j](https://github.com/neo4j/neo4j), [neo4j-ogm](https://github.com/neo4j/neo4j-ogm), [spring-data-neo4j](https://github.com/spring-projects/spring-data-neo4j), [neo4j-harness](https://github.com/neo4j/neo4j/tree/3.1/community/neo4j-harness), [py2neo](https://github.com/nigelsmall/py2neo)
 
 ## Supported Jetbrains products
