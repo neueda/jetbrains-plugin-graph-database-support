@@ -87,7 +87,7 @@ public abstract class Neo4jServerLoader implements Neo4jServer {
     private static synchronized void cleanupNeo4jKnownHosts(Neo4jServerLoader neo4jServerLoader) {
         File hostsFile = Config.defaultConfig().trustStrategy().certFile();
         try {
-            if (hostsFile.isFile()) {
+            if (hostsFile != null && hostsFile.isFile()) {
                 List<String> lines = FileUtil.loadLines(hostsFile);
                 List<String> updatedLines = lines.stream()
                            .filter((line) -> !line.startsWith(neo4jServerLoader.getBoltHost() + ":" + neo4jServerLoader.getBoltPort()))
