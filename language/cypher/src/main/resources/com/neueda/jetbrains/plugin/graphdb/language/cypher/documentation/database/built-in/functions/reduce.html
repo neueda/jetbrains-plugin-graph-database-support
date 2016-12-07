@@ -1,1 +1,21 @@
-reduce.html
+function <b>reduce</b>(accumulator = initial, variable IN list | expression)<br>
+<br>
+To run an expression against individual elements of a list, and store the result of the expression in an accumulator,
+you can use reduce(). It will go through a list, run an expression on every element, storing the partial result in the accumulator.
+It works like the fold or reduce method in functional languages such as Lisp and Scala.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    accumulator: A variable that will hold the result and the partial results as the list is iterated<br>
+    initial: An expression that runs once to give a starting value to the accumulator<br>
+    list: An expression that returns a list<br>
+    variable: The closure will have a variable introduced in its context. Here you decide which variable to use.<br>
+    expression: This expression will run once per value in the list, and produces the result value.<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH p=(a)-->(b)-->(c)
+    WHERE a.name='Alice' AND b.name='Bob' AND c.name='Daniel'
+    RETURN reduce(totalAge = 0, n IN nodes(p)| totalAge + n.age) AS reduction
+</pre>

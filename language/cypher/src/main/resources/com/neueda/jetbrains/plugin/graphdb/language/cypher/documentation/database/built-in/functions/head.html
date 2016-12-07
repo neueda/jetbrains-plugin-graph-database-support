@@ -1,1 +1,15 @@
-head.html
+function <b>head</b>(expression)<br>
+<br>
+head() returns the first element in a list.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    expression: This expression should return a list of some kind.<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH (a)
+    WHERE a.name='Eskil'
+    RETURN a.array, head(a.array)
+</pre>

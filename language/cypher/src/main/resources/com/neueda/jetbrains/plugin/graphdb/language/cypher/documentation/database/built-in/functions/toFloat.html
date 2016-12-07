@@ -1,1 +1,14 @@
-toFloat.html
+function <b>toFloat</b>(expression)<br>
+<br>
+toFloat() converts the argument to a float. A string is parsed as if it was an floating point number.
+If the parsing fails, NULL will be returned. An integer will be cast to a floating point number.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    expression: An expression that returns anything<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    RETURN toFloat("11.5"), toFloat("not a number")
+</pre>

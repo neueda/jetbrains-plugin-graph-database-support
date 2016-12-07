@@ -1,1 +1,15 @@
-labels.html
+function <b>labels</b>(node)<br>
+<br>
+Returns a list of string representations for the labels attached to a node.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    node: Any expression that returns a single node<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH (a)
+    WHERE a.name='Alice'
+    RETURN labels(a)
+</pre>

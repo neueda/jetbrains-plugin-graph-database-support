@@ -1,1 +1,19 @@
-extract.html
+function <b>extract</b>(variable IN list | expression)<br>
+<br>
+To return a single property, or the value of a function from a list of nodes or relationships, you can use extract().
+It will go through a list, run an expression on every element, and return the results in a list with these values.
+It works like the map method in functional languages such as Lisp and Scala.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    list: An expression that returns a list<br>
+    variable: The closure will have a variable introduced in it’s context. Here you decide which variable to use.<br>
+    expression: This expression will run once per value in the list, and produces the result list.<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH p=(a)-->(b)-->(c)
+    WHERE a.name='Alice' AND b.name='Bob' AND c.name='Daniel'
+    RETURN extract(n IN nodes(p)| n.age) AS extracted
+</pre>

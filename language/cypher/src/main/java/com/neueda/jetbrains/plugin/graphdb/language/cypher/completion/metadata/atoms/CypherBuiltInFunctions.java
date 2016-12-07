@@ -53,7 +53,7 @@ public final class CypherBuiltInFunctions {
     );
     private static final List<CypherBuiltInFunctionElement> FUNCTIONS_LIST = Lists.newArrayList(
             element("nodes", "(path)", NODE.array()),
-            element("relationship", "(path)", RELATIONSHIP.array()),
+            element("relationships", "(path)", RELATIONSHIP.array()),
             element("labels", "(node)", STRING.array()),
             element("keys", "(node)", STRING.array()),
             element("keys", "(relationship)", STRING.array()),
@@ -86,7 +86,7 @@ public final class CypherBuiltInFunctions {
             element("asin", "(expression)", FLOAT.single()),
             element("acos", "(expression)", FLOAT.single()),
             element("atan", "(expression)", FLOAT.single()),
-            element("atan", "(expression, expression)", FLOAT.single()),
+            element("atan2", "(expression, expression)", FLOAT.single()),
             element("pi", "()", FLOAT.single()),
             element("degrees", "(expression)", FLOAT.single()),
             element("radians", "(expression)", FLOAT.single()),

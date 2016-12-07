@@ -1,1 +1,18 @@
-any.html
+function <b>any</b>(variable IN list WHERE predicate)<br>
+<br>
+Tests whether a predicate holds for at least one element in the list.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    list: An expression that returns a list.<br>
+    variable: This is the variable that can be used from the predicate.<br>
+    predicate: A predicate that is tested against all items in the list.<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH (a)
+    WHERE a.name='Eskil' AND ANY (x IN a.array WHERE x = "one")
+    RETURN a
+</pre>
+

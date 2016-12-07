@@ -1,1 +1,24 @@
-size.html
+function <b>size</b>(list|pattern-expression)<br>
+<br>
+To return or filter on the size of a list, use the size() function.<br>
+<br>
+This is the same size() method described before, but instead of passing in a list directly,
+you provide a pattern expression that can be used in a match query to provide a new set of results.
+The size of the result is calculated, not the length of the expression itself.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    list: An expression that returns a list<br>
+    OR<br>
+    pattern expression: A pattern expression that returns a list<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    RETURN size(['Alice', 'Bob']) AS col
+
+    MATCH (a)
+    WHERE a.name='Alice'
+    RETURN size((a)-->()-->()) AS fof
+</pre>
+

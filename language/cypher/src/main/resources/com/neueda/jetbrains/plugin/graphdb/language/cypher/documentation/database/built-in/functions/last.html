@@ -1,1 +1,15 @@
-last.html
+function <b>last</b>(expression)<br>
+<br>
+last() returns the last element in a list.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    expression: This expression should return a list of some kind.<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH (a)
+    WHERE a.name='Eskil'
+    RETURN a.array, last(a.array)
+</pre>

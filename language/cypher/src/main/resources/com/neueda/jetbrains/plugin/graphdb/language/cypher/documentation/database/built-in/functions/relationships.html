@@ -1,6 +1,6 @@
-function <b>nodes</b>(path)<br>
+function <b>relationships</b>(path)<br>
 <br>
-Returns all nodes in a path.<br>
+Returns all relationships in a path.<br>
 <br>
 <b>Arguments:</b>
 <div style="padding-left: 20px">
@@ -11,5 +11,5 @@ Returns all nodes in a path.<br>
 <pre>
     MATCH p=(a)-->(b)-->(c)
     WHERE a.name='Alice' AND c.name='Eskil'
-    RETURN nodes(p)
+    RETURN relationships(p)
 </pre>

@@ -1,1 +1,15 @@
-type.html
+function <b>type</b>(relationship)<br>
+<br>
+Returns a string representation of the relationship type.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    relationship: A relationship.<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH (n)-[r]->()
+    WHERE n.name='Alice'
+    RETURN type(r)
+</pre>

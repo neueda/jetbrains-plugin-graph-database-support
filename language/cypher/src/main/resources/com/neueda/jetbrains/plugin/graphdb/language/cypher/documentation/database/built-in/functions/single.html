@@ -1,1 +1,17 @@
-single.html
+function <b>single</b>(variable in list WHERE predicate)<br>
+<br>
+Returns true if the predicate holds for exactly one of the elements in the list.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    list: An expression that returns a list.<br>
+    variable: This is the variable that can be used from the predicate.<br>
+    predicate: A predicate that is tested against all items in the list.<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH p=(n)-->(b)
+    WHERE n.name='Alice' AND SINGLE (var IN nodes(p) WHERE var.eyes = "blue")
+    RETURN p
+</pre>

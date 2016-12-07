@@ -1,1 +1,15 @@
-keys.html
+function <b>keys</b>(property-container)<br>
+<br>
+Returns a list of string representations for the property names of a node, relationship, or map.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    property-container: A node, a relationship, or a literal map.<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH (a)
+    WHERE a.name='Alice'
+    RETURN keys(a)
+</pre>

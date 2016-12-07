@@ -1,1 +1,14 @@
-endNode.html
+function <b>endNode</b>(relationship)<br>
+<br>
+endNode() returns the end node of a relationship<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    relationship: An expression that returns a relationship<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH (x:foo)-[r]-()
+    RETURN endNode(r)
+</pre>

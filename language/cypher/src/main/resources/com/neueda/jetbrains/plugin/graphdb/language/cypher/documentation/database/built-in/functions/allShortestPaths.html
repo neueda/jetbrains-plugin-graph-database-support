@@ -1,1 +1,9 @@
-allShortestPaths.html
+function <b>allShortestPaths</b>(pattern)<br>
+<br>
+Finds all the shortest paths between two nodes.<br>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH (martin:Person { name:"Martin Sheen" }),(michael:Person { name:"Michael Douglas" }), p = allShortestPaths((martin)-[*]-(michael))
+    RETURN p
+</pre>

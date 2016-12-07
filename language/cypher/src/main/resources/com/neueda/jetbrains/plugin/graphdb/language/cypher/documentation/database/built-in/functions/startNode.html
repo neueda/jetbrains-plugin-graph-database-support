@@ -1,1 +1,14 @@
-startNode.html
+function <b>startNode</b>(relationship)<br>
+<br>
+startNode() returns the starting node of a relationship<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    relationship: An expression that returns a relationship<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH (x:foo)-[r]-()
+    RETURN startNode(r)
+</pre>

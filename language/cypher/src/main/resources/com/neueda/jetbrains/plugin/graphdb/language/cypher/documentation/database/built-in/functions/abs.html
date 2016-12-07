@@ -1,1 +1,16 @@
-abs.html
+function <b>abs</b>(expression)<br>
+<br>
+abs() returns the absolute value of a number.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    expression: A numeric expression.<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH (a),(e)
+    WHERE a.name = 'Alice' AND e.name = 'Eskil'
+    RETURN a.age, e.age, abs(a.age - e.age)
+</pre>
+

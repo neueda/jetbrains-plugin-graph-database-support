@@ -1,1 +1,23 @@
-length.html
+function <b>length</b>(path|string)<br>
+<br>
+To return or filter on the length of a path, use the length() function.<br>
+<br>
+To return or filter on the length of a string, use the length() function.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    path: An expression that returns a path<br>
+    OR<br>
+    string: An expression that returns a string<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH p=(a)-->(b)-->(c)
+    WHERE a.name='Alice'
+    RETURN length(p);
+
+    MATCH (a)
+    WHERE length(a.name)> 6
+    RETURN length(a.name)
+</pre>

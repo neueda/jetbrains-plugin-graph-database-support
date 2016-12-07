@@ -1,1 +1,9 @@
-shortestPath.html
+function <b>shortestPath</b>(pattern)<br>
+<br>
+Find shortest path between two nodes<br>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH (martin:Person { name:"Martin Sheen" }),(oliver:Person { name:"Oliver Stone" }), p = shortestPath((martin)-[*..15]-(oliver))
+    RETURN p
+</pre>

@@ -1,1 +1,14 @@
-toInt.html
+function <b>toInt</b>(expression)<br>
+<br>
+toInt() converts the argument to an integer. A string is parsed as if it was an integer number.
+If the parsing fails, NULL will be returned. A floating point number will be cast into an integer.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    expression: An expression that returns anything<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    RETURN toInt("42"), toInt("not a number")
+</pre>

@@ -1,1 +1,14 @@
-toString.html
+function <b>toString</b>(expression)<br>
+<br>
+toString() converts the argument to a string. It converts integral and floating point numbers and booleans to strings,
+and if called with a string will leave it unchanged.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    expression: An expression that returns a number, a boolean, or a string<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    RETURN toString(11.5), toString("already a string"), toString(TRUE)
+</pre>

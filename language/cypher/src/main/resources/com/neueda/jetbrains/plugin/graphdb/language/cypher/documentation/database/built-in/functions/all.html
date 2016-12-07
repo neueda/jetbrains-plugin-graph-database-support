@@ -1,1 +1,17 @@
-all.html
+function <b>all</b>(variable IN list WHERE predicate)<br>
+<br>
+Tests whether a predicate holds for all elements of this list.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    list: An expression that returns a list.<br>
+    variable: This is the variable that can be used from the predicate.<br>
+    predicate: A predicate that is tested against all items in the list.<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH p=(a)-[*1..3]->(b)
+    WHERE a.name='Alice' AND b.name='Daniel' AND ALL (x IN nodes(p) WHERE x.age > 30)
+    RETURN p
+</pre>

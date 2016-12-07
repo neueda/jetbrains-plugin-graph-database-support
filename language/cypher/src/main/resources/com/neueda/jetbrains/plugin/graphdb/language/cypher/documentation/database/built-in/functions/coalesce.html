@@ -1,1 +1,15 @@
-coalesce.html
+function <b>coalesce</b>(expression [, expression]*)<br>
+<br>
+Returns the first non-NULL value in the list of expressions passed to it. In case all arguments are NULL, NULL will be returned.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    expression: The expression that might return NULL.<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH (a)
+    WHERE a.name='Alice'
+    RETURN coalesce(a.hairColor, a.eyes)
+</pre>

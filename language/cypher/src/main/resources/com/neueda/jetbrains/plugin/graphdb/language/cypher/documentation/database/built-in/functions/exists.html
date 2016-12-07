@@ -1,1 +1,15 @@
-exists.html
+function <b>exists</b>(pattern-or-property)<br>
+<br>
+Returns true if a match for the pattern exists in the graph, or the property exists in the node, relationship or map.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    pattern-or-property: A pattern or a property (in the form 'variable.prop').<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    MATCH (n)
+    WHERE EXISTS(n.name)
+    RETURN n.name AS name, EXISTS((n)-[:MARRIED]->()) AS is_married
+</pre>

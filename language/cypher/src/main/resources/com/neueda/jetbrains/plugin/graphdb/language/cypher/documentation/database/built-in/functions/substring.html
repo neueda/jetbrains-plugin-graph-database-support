@@ -1,1 +1,16 @@
-substring.html
+function <b>substring</b>(original, start [, length])<br>
+<br>
+substring() returns a substring of the original, with a 0-based index start and length.
+If length is omitted, it returns a substring from start until the end of the string.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    original: An expression that returns a string<br>
+    start: An expression that returns a positive number<br>
+    length: An expression that returns a positive number<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    RETURN substring("hello", 1, 3), substring("hello", 2)
+</pre>

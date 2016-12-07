@@ -1,1 +1,15 @@
-properties.html
+function <b>properties</b>(expression)<br>
+<br>
+properties() converts the argument to a map of its properties. If the argument is a node or a relationship,
+the returned map is a map of its properties. If the argument is already a map, it is returned unchanged.<br>
+<br>
+<b>Arguments:</b>
+<div style="padding-left: 20px">
+    expression: An expression that returns a node, a relationship, or a map<br>
+</div>
+<br>
+<b>Example Query:</b>
+<pre>
+    CREATE (p:Person { name: 'Stefan', city: 'Berlin' })
+    RETURN properties(p)
+</pre>
