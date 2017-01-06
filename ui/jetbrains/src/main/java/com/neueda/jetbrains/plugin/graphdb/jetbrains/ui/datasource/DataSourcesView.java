@@ -19,6 +19,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.actions.Refre
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceInteractions;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.DataSourceMetadataUi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.GraphColoredTreeCellRenderer;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.DataSourcesTreeMouseAdapter;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.FileUtil;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService;
 
@@ -110,6 +111,7 @@ public class DataSourcesView implements Disposable {
         dataSourceTree.setModel(treeModel);
         dataSourceTree.setRootVisible(false);
         dataSourceTree.setToggleClickCount(0);
+        dataSourceTree.addMouseListener(new DataSourcesTreeMouseAdapter());
     }
 
     private void decorateDataSourceTree() {

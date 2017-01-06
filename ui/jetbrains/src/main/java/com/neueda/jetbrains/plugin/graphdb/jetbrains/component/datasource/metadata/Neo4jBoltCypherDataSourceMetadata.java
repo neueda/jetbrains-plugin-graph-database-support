@@ -65,4 +65,8 @@ public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
 
         dataReceiver.put(key, dataSourceMetadata);
     }
+
+    public void addDataSourceMetadata(List<Map<String, String>> data, String key) {
+        dataReceiver.put(key, data);
+    }
 }

@@ -26,7 +26,7 @@ public class DataSourceMetadataUi {
     }
 
     // ui
-    private boolean updateNeo4jBoltCypherMetadataUi(PatchedDefaultMutableTreeNode dataSourceRootTreeNode,
+    boolean updateNeo4jBoltCypherMetadataUi(PatchedDefaultMutableTreeNode dataSourceRootTreeNode,
                                                     DataSourceMetadata dataSourceMetadata) {
         // Remove existing metadata from ui
         dataSourceRootTreeNode.removeAllChildren();
