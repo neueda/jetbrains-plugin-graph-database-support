@@ -1,22 +1,23 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.component.highlighter.listener;
 
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorFactory;
+import com.intellij.openapi.editor.*;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.highlighter.SyncedElementHighlighter;
 
 /**
  * Not works as expected. Disabled.
  */
-public class QueryHighlighterDocumentListener extends AbstractQueryHighlighterListener implements DocumentListener {
+public class QueryHighlighterDocumentListener implements DocumentListener {
 
+    private final SyncedElementHighlighter syncedElementHighlighter;
     private final EditorFactory editorFactory;
 
-    public QueryHighlighterDocumentListener(EditorFactory editorFactory) {
+    public QueryHighlighterDocumentListener(SyncedElementHighlighter syncedElementHighlighter, EditorFactory editorFactory) {
+        this.syncedElementHighlighter = syncedElementHighlighter;
         this.editorFactory = editorFactory;
     }
 
@@ -34,7 +35,7 @@ public class QueryHighlighterDocumentListener extends AbstractQueryHighlighterLi
                 return;
             }
             PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
-            highlightStatement(editor, psiFile);
+            syncedElementHighlighter.highlightStatement(editor, psiFile);
         }
     }
 }
