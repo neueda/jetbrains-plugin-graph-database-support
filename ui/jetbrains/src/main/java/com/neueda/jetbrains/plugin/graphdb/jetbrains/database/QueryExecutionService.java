@@ -58,14 +58,14 @@ public class QueryExecutionService {
                 GraphQueryResult result = database.execute(payload.getContent());
 
                 ApplicationManager.getApplication().invokeLater(() -> {
-                    event.resultReceived(result);
-                    event.postResultReceived();
-                    event.executionCompleted();
+                    event.resultReceived(payload, result);
+                    event.postResultReceived(payload);
+                    event.executionCompleted(payload);
                 });
             } catch (Exception e) {
                 ApplicationManager.getApplication().invokeLater(() -> {
-                    event.handleError(e);
-                    event.executionCompleted();
+                    event.handleError(payload, e);
+                    event.executionCompleted(payload);
                 });
             }
         });

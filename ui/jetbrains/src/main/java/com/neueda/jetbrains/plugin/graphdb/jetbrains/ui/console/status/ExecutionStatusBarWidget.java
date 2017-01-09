@@ -10,9 +10,8 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecu
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
+import javax.swing.*;
+import java.awt.*;
 
 public class ExecutionStatusBarWidget extends JPanel implements CustomStatusBarWidget {
 
@@ -34,21 +33,21 @@ public class ExecutionStatusBarWidget extends JPanel implements CustomStatusBarW
             }
 
             @Override
-            public void resultReceived(GraphQueryResult result) {
+            public void resultReceived(ExecuteQueryPayload payload, GraphQueryResult result) {
                 setVisible(false);
             }
 
             @Override
-            public void postResultReceived() {
+            public void postResultReceived(ExecuteQueryPayload payload) {
             }
 
             @Override
-            public void handleError(Exception exception) {
+            public void handleError(ExecuteQueryPayload payload, Exception exception) {
                 setVisible(false);
             }
 
             @Override
-            public void executionCompleted() {
+            public void executionCompleted(ExecuteQueryPayload payload) {
             }
         });
     }

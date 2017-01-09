@@ -14,7 +14,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.MetadataRetrieveEvent;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 
 public class LogPanel implements Disposable {
 
@@ -38,23 +38,23 @@ public class LogPanel implements Disposable {
             }
 
             @Override
-            public void resultReceived(GraphQueryResult result) {
+            public void resultReceived(ExecuteQueryPayload payload, GraphQueryResult result) {
                 info(String.format("Query executed in %sms. %s", result.getExecutionTimeMs(), result.getResultSummary()));
                 newLine();
             }
 
             @Override
-            public void postResultReceived() {
+            public void postResultReceived(ExecuteQueryPayload payload) {
             }
 
             @Override
-            public void handleError(Exception exception) {
+            public void handleError(ExecuteQueryPayload payload, Exception exception) {
                 error("Error occurred: ");
                 printException(exception);
             }
 
             @Override
-            public void executionCompleted() {
+            public void executionCompleted(ExecuteQueryPayload payload) {
                 newLine();
             }
         });

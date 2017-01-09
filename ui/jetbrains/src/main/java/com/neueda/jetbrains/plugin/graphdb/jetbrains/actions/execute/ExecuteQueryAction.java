@@ -80,7 +80,7 @@ public class ExecuteQueryAction extends AnAction {
             return;
         }
 
-        ExecuteQueryPayload executeQueryPayload = new ExecuteQueryPayload(content);
+        ExecuteQueryPayload executeQueryPayload = new ExecuteQueryPayload(content, editor);
         ConsoleToolWindow.ensureOpen(project);
 
         if (virtualFile != null) {

@@ -1,5 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.graph;
 
+import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryEvent;
@@ -47,24 +48,27 @@ public class GraphPanelInteractions {
                     }
 
                     @Override
-                    public void resultReceived(GraphQueryResult result) {
+                    public void resultReceived(ExecuteQueryPayload payload, GraphQueryResult result) {
                         result.getNodes().forEach(visualization::addNode);
                         result.getRelationships().forEach(visualization::addRelation);
                     }
 
                     @Override
-                    public void postResultReceived() {
+                    public void postResultReceived(ExecuteQueryPayload payload) {
                         visualization.paint();
                     }
 
                     @Override
-                    public void handleError(Exception exception) {
+                    public void handleError(ExecuteQueryPayload payload, Exception exception) {
+                        String errorMessage = exception.getMessage() == null ? "Error occurred" : "Error occurred: " + exception.getMessage();
+                        HintManager.getInstance().showErrorHint(payload.getEditor(), errorMessage);
+
                         visualization.stop();
                         visualization.clear();
                     }
 
                     @Override
-                    public void executionCompleted() {
+                    public void executionCompleted(ExecuteQueryPayload payload) {
                     }
                 });
     }

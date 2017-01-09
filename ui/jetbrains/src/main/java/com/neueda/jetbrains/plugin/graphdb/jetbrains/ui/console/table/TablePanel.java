@@ -11,10 +11,10 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecu
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.editor.CompositeTableCellEditor;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.renderer.CompositeTableCellRenderer;
 
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import java.awt.Component;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class TablePanel {
             }
 
             @Override
-            public void resultReceived(GraphQueryResult result) {
+            public void resultReceived(ExecuteQueryPayload payload, GraphQueryResult result) {
                 List<GraphQueryResultColumn> columns = result.getColumns();
                 columns.forEach((column) -> tableModel.addColumn(column.getName()));
 
@@ -63,17 +63,17 @@ public class TablePanel {
             }
 
             @Override
-            public void postResultReceived() {
+            public void postResultReceived(ExecuteQueryPayload payload) {
                 updateColumnWidths();
                 updateRowHeights();
             }
 
             @Override
-            public void handleError(Exception exception) {
+            public void handleError(ExecuteQueryPayload payload, Exception exception) {
             }
 
             @Override
-            public void executionCompleted() {
+            public void executionCompleted(ExecuteQueryPayload payload) {
             }
         });
     }

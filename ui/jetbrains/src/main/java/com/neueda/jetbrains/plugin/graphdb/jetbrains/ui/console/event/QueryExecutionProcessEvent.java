@@ -11,11 +11,11 @@ public interface QueryExecutionProcessEvent {
 
     void executionStarted(ExecuteQueryPayload payload);
 
-    void resultReceived(GraphQueryResult result);
+    void resultReceived(ExecuteQueryPayload payload, GraphQueryResult result);
 
-    void postResultReceived();
+    void postResultReceived(ExecuteQueryPayload payload);
 
-    void handleError(Exception exception);
+    void handleError(ExecuteQueryPayload payload, Exception exception);
 
-    void executionCompleted();
+    void executionCompleted(ExecuteQueryPayload payload);
 }
