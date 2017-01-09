@@ -1,8 +1,8 @@
 {
-  "root": "_docs",
   "structure": {
-    "summary": "_docs/SUMMARY.md",
-    "glossary": "_docs/GLOSSARY.md"
+    "readme": "README.md",
+    "summary": "SUMMARY.md",
+    "glossary": "GLOSSARY.md"
   },
   "title": "Jetbrains Plugin - Graph Database Support",
   "description": "Graph Database support plugin allows you to work with databases without leaving IDE.",
