@@ -1,6 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree;
 
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.impl.DataSourceV1;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ContextMenu;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ValueWithIcon;
@@ -10,23 +11,28 @@ import javax.swing.tree.TreePath;
 import java.util.Optional;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.LABELS;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.RELATIONSHIP_TYPES;
 
 public class ContextMenuService {
 
     private static final int DATASOURCE_INDEX = 1;
     private static final int METADATA_INDEX = 2;
-    private static final int LABELS_DEPTH = 4;
+    private static final int LABELS_OR_REL_DEPTH = 4;
 
-    public Optional<ContextMenu> isContextMenuNeeded(TreePath path) {
-        TreeNode lastPathComponent = (TreeNode) path.getLastPathComponent();
+    public Optional<ContextMenu> getContextMenu(TreePath path) {
+        if (path != null) {
+            TreeNode lastPathComponent = (TreeNode) path.getLastPathComponent();
 
-        if(path.getPathCount() == LABELS_DEPTH) {
-            String metadataType = getMetadataType(path);
-            String uuid = getDataSourceUuid(path);
-            String data = getMetadataValue(lastPathComponent);
+            if (path.getPathCount() == LABELS_OR_REL_DEPTH) {
+                String metadataType = getMetadataType(path);
+                String uuid = getDataSourceUuid(path);
+                String data = getMetadataValue(lastPathComponent);
 
-            if (metadataType.equals(LABELS)) {
-                return Optional.of(new ContextMenu(LABELS, uuid, data));
+                if (metadataType.equals("labels")) {
+                    return Optional.of(new ContextMenu(LABELS, uuid, data));
+                } else if (metadataType.equals("relationship types")) {
+                    return Optional.of(new ContextMenu(RELATIONSHIP_TYPES, uuid, data));
+                }
             }
         }
         return Optional.empty();
