@@ -2,6 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.query;
 
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
+import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryNotification;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultRow;
@@ -141,6 +142,11 @@ public class Neo4jBoltQueryResult implements GraphQueryResult {
     @Override
     public List<GraphRelationship> getRelationships() {
         return buffer.getRelationships();
+    }
+
+    @Override
+    public List<GraphQueryNotification> getNotifications() {
+        return buffer.getNotifications();
     }
 
     private Optional<GraphNode> findNodeById(List<GraphNode> nodes, String id) {

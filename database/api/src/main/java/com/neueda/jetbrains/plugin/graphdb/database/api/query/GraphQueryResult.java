@@ -18,4 +18,6 @@ public interface GraphQueryResult {
     List<GraphNode> getNodes();
 
     List<GraphRelationship> getRelationships();
+
+    List<GraphQueryNotification> getNotifications();
 }
