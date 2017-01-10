@@ -1,7 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree;
 
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.impl.DataSourceV1;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ContextMenu;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ValueWithIcon;
@@ -10,8 +9,8 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import java.util.Optional;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.LABELS;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.RELATIONSHIP_TYPES;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.*;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.DataSourceMetadataUi.*;
 
 public class ContextMenuService {
 
@@ -28,10 +27,12 @@ public class ContextMenuService {
                 String uuid = getDataSourceUuid(path);
                 String data = getMetadataValue(lastPathComponent);
 
-                if (metadataType.equals("labels")) {
+                if (metadataType.equals(LABELS_TITLE)) {
                     return Optional.of(new ContextMenu(LABELS, uuid, data));
-                } else if (metadataType.equals("relationship types")) {
+                } else if (metadataType.equals(RELATIONSHIP_TYPES_TITLE)) {
                     return Optional.of(new ContextMenu(RELATIONSHIP_TYPES, uuid, data));
+                } else if (metadataType.equals(PROPERTY_KEYS_TITLE)) {
+                    return Optional.of(new ContextMenu(PROPERTY_KEYS, uuid, data));
                 }
             }
         }

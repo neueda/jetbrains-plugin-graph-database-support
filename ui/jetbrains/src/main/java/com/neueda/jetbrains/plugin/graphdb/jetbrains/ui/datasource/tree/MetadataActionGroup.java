@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.LABELS;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.PROPERTY_KEYS;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.RELATIONSHIP_TYPES;
 
 public class MetadataActionGroup extends ActionGroup {
@@ -27,9 +28,11 @@ public class MetadataActionGroup extends ActionGroup {
     public AnAction[] getChildren(@Nullable AnActionEvent e) {
         switch (type) {
             case RELATIONSHIP_TYPES:
-                return new AnAction[]{new MetadataLabelAction(label, dataSourceUuid, "Query this relationship", "", GraphIcons.Database.NEO4J)};
+                return new AnAction[]{new MetadataRelationshipAction(label, dataSourceUuid, "Query this relationship", "", GraphIcons.Database.NEO4J)};
             case LABELS:
                 return new AnAction[]{new MetadataLabelAction(label, dataSourceUuid, "Query this label", "", GraphIcons.Database.NEO4J)};
+            case PROPERTY_KEYS:
+                return new AnAction[]{new MetadataPropertyKeyAction(label, dataSourceUuid, "Query this property", "", GraphIcons.Database.NEO4J)};
             default:
                 return new AnAction[]{};
         }

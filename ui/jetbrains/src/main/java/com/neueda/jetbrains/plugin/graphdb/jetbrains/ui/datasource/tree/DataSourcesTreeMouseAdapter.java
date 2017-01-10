@@ -13,6 +13,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.LABELS;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.PROPERTY_KEYS;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.RELATIONSHIP_TYPES;
 
 public class DataSourcesTreeMouseAdapter extends MouseAdapter {
@@ -31,7 +32,9 @@ public class DataSourcesTreeMouseAdapter extends MouseAdapter {
     }
 
     private void popup(ContextMenu dto, Tree tree) {
-        if (dto.getMetadataType().equals(LABELS) || dto.getMetadataType().equals(RELATIONSHIP_TYPES)) {
+        if (dto.getMetadataType().equals(LABELS)
+                || dto.getMetadataType().equals(RELATIONSHIP_TYPES)
+                || dto.getMetadataType().equals(PROPERTY_KEYS)) {
             DataContext dataContext = DataManager.getInstance().getDataContext(tree);
             contextMenu(dto.getMetadataType(), dto.getData(), dto.getDatasourceUuid(), dataContext);
         }
