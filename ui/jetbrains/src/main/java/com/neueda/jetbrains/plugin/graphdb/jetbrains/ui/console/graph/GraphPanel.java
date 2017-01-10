@@ -44,11 +44,9 @@ public class GraphPanel {
     private GraphPanelInteractions interactions;
     private Tree entityDetailsTree;
     private DefaultTreeModel entityDetailsTreeModel;
-    private PatchedDefaultMutableTreeNode noEntityRoot;
 
     public GraphPanel() {
-        noEntityRoot = new PatchedDefaultMutableTreeNode("Select entity...");
-        entityDetailsTreeModel = new DefaultTreeModel(noEntityRoot);
+        entityDetailsTreeModel = new DefaultTreeModel(null);
     }
 
     public void initialize(GraphConsoleView graphConsoleView, Project project) {
@@ -66,11 +64,16 @@ public class GraphPanel {
         messageBus.connect().subscribe(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC, new QueryExecutionProcessEvent() {
             @Override
             public void executionStarted(ExecuteQueryPayload payload) {
-                entityDetailsTreeModel.setRoot(noEntityRoot);
+                entityDetailsTreeModel.setRoot(null);
             }
 
             @Override
             public void resultReceived(ExecuteQueryPayload payload, GraphQueryResult result) {
+                if (result.getNodes().isEmpty()) {
+                    entityDetailsTreeModel.setRoot(null);
+                } else {
+                    entityDetailsTreeModel.setRoot(new PatchedDefaultMutableTreeNode("Select an item in the graph to view details..."));
+                }
             }
 
             @Override
@@ -94,10 +97,6 @@ public class GraphPanel {
                 graphConsoleView,
                 messageBus,
                 visualization);
-    }
-
-    public void handleClick(GraphNode node, VisualItem item, MouseEvent e) {
-        showNodeData(node, item, e);
     }
 
     public void showNodeData(GraphNode node, VisualItem item, MouseEvent e) {

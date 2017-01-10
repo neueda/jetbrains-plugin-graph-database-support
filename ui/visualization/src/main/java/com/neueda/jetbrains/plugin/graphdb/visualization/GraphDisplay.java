@@ -1,5 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.visualization;
 
+import com.intellij.util.ui.UIUtil;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.visualization.controls.CustomNeighborHighlightControl;
@@ -34,7 +35,7 @@ import java.util.Map;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.*;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.*;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.RendererProvider.*;
-import static prefuse.Constants.SHAPE_ELLIPSE;
+import static prefuse.Constants.*;
 
 public class GraphDisplay extends Display {
 
@@ -53,7 +54,11 @@ public class GraphDisplay extends Display {
     public GraphDisplay(LookAndFeelService lookAndFeel) {
         super(new Visualization());
 
-        setBackground(lookAndFeel.getBackgroundColor());
+        if (UIUtil.isUnderDarcula()) {
+            setBackground(lookAndFeel.getBackgroundColor().brighter());
+        } else {
+            setBackground(lookAndFeel.getBackgroundColor());
+        }
 
         graph = new Graph(DIRECTED);
         graph.addColumn(ID, String.class);
