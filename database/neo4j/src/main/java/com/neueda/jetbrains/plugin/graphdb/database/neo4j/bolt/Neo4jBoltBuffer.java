@@ -2,16 +2,22 @@ package com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt;
 
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
+import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryNotification;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultRow;
+import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryNotification;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryResultRow;
+import org.neo4j.driver.v1.summary.InputPosition;
 import org.neo4j.driver.v1.summary.ResultSummary;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 public class Neo4jBoltBuffer {
 
@@ -20,6 +26,7 @@ public class Neo4jBoltBuffer {
     private ResultSummary resultSummary;
     private List<GraphNode> nodes;
     private List<GraphRelationship> relationships;
+    private List<GraphQueryNotification> notifications;
 
     public Neo4jBoltBuffer() {
         this.rows = new ArrayList<>();
@@ -28,7 +35,7 @@ public class Neo4jBoltBuffer {
     public void addColumns(List<String> columns) {
         this.columns = columns.stream()
                 .map(Neo4jBoltQueryResultColumn::new)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public void addResultSummary(ResultSummary resultSummary) {
@@ -55,7 +62,7 @@ public class Neo4jBoltBuffer {
         nodes = rows.stream()
                 .flatMap(row -> row.getNodes().stream())
                 .distinct()
-                .collect(Collectors.toList());
+                .collect(toList());
 
         return nodes;
     }
@@ -68,12 +75,32 @@ public class Neo4jBoltBuffer {
         relationships = rows.stream()
                 .flatMap(row -> row.getRelationships().stream())
                 .distinct()
-                .collect(Collectors.toList());
+                .collect(toList());
 
         return relationships;
     }
 
     public ResultSummary getResultSummary() {
         return resultSummary;
+    }
+
+    public List<GraphQueryNotification> getNotifications() {
+        if (resultSummary == null) {
+            return Collections.emptyList();
+        }
+
+        if (notifications != null) {
+            return notifications;
+        }
+
+        notifications = resultSummary.notifications().stream()
+                .map(notification -> new Neo4jBoltQueryNotification(notification.title(),
+                        notification.description(),
+                        Optional.ofNullable(notification.position())
+                                .map(InputPosition::offset)
+                                .orElse(null)))
+                .collect(toList());
+
+        return notifications;
     }
 }

@@ -150,6 +150,10 @@
         <projectService serviceInterface="com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService"
                         serviceImplementation="com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderServiceImpl"/>
         <lang.documentationProvider language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.documentation.CypherDocumentationProvider"/>
+
+        <localInspection language="Cypher" displayName="Cypher EXPLAIN warning inspection" groupPath="Cypher"
+                         groupName="General" enabledByDefault="true" level="WARNING"
+                         implementationClass="com.neueda.jetbrains.plugin.graphdb.jetbrains.inspection.CypherExplainWarningInspection"/>
     </extensions>
 
     <actions>
