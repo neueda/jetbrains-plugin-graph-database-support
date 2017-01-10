@@ -6,5 +6,17 @@
   },
   "title": "Jetbrains Plugin - Graph Database Support",
   "description": "Graph Database support plugin allows you to work with databases without leaving IDE.",
-  "author": "Dmitry Vrublevsky"
+  "author": "Dmitry Vrublevsky",
+  "plugins": [
+    "-search",
+    "-lunr",
+    "-sharing"
+  ],
+  "pluginsConfig": {
+    "fontsettings": {
+      "theme": "white",
+      "family": "sans",
+      "size": 2
+    }
+  }
 }

@@ -4,7 +4,7 @@
 Graph Database support plugin allows you to work with databases without leaving IDE.
 
 - Bugs, questions, suggestions - [Issue tracker](https://github.com/neueda/jetbrains-plugin-graph-database-support/issues)
-- Documentation (*WIP*) - [Wiki](https://github.com/neueda/jetbrains-plugin-graph-database-support/wiki)
+- [Documentation](https://neueda.gitbooks.io/jetbrains-plugin-graph-database-support/content)
 
 Plugin is developed and supported by [Neueda R&D](http://neueda.lv/).
 

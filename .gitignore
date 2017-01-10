@@ -94,3 +94,5 @@ hs_err_pid*
 .Trash-*
 
 idea-flex.skeleton
+/book-build
+/_book
