@@ -1,5 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.visualization;
 
+import com.intellij.ide.ui.laf.darcula.DarculaLaf;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.visualization.controls.CustomNeighborHighlightControl;
@@ -28,13 +29,14 @@ import prefuse.render.RendererFactory;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.*;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.*;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.RendererProvider.*;
-import static prefuse.Constants.SHAPE_ELLIPSE;
+import static prefuse.Constants.*;
 
 public class GraphDisplay extends Display {
 
@@ -53,7 +55,11 @@ public class GraphDisplay extends Display {
     public GraphDisplay(LookAndFeelService lookAndFeel) {
         super(new Visualization());
 
-        setBackground(lookAndFeel.getBackgroundColor());
+        if (DarculaLaf.NAME.equals(UIManager.getLookAndFeel().getName())) {
+            setBackground(lookAndFeel.getBackgroundColor().brighter());
+        } else {
+            setBackground(lookAndFeel.getBackgroundColor());
+        }
 
         graph = new Graph(DIRECTED);
         graph.addColumn(ID, String.class);
