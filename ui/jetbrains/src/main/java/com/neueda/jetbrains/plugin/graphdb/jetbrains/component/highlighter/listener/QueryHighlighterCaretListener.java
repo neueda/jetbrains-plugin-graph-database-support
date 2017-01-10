@@ -7,14 +7,32 @@ import com.intellij.openapi.editor.event.CaretListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.highlighter.SyncedElementHighlighter;
 
-public class QueryHighlighterCaretListener extends AbstractQueryHighlighterListener implements CaretListener {
+public class QueryHighlighterCaretListener implements CaretListener {
 
-    public QueryHighlighterCaretListener() {
+    private final SyncedElementHighlighter syncedElementHighlighter;
+
+    public QueryHighlighterCaretListener(SyncedElementHighlighter syncedElementHighlighter) {
+        this.syncedElementHighlighter = syncedElementHighlighter;
     }
 
     @Override
     public void caretPositionChanged(CaretEvent e) {
+        processEvent(e);
+    }
+
+    @Override
+    public void caretAdded(CaretEvent e) {
+        processEvent(e);
+    }
+
+    @Override
+    public void caretRemoved(CaretEvent e) {
+        processEvent(e);
+    }
+
+    private void processEvent(CaretEvent e) {
         Editor editor = e.getEditor();
         Project project = editor.getProject();
         if (project == null) {
@@ -24,15 +42,6 @@ public class QueryHighlighterCaretListener extends AbstractQueryHighlighterListe
         Document document = editor.getDocument();
         PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
 
-        highlightStatement(editor, psiFile);
-    }
-
-
-    @Override
-    public void caretAdded(CaretEvent e) {
-    }
-
-    @Override
-    public void caretRemoved(CaretEvent e) {
+        syncedElementHighlighter.highlightStatement(editor, psiFile);
     }
 }
