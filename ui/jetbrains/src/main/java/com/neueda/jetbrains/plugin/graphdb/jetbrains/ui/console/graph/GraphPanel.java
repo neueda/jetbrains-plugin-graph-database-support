@@ -25,14 +25,11 @@ import prefuse.visual.VisualItem;
 
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Enumeration;
 
-import static com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil.getTooltipText;
-import static com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil.getTooltipTitle;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil.*;
 
 public class GraphPanel {
 
@@ -73,19 +70,19 @@ public class GraphPanel {
             }
 
             @Override
-            public void resultReceived(GraphQueryResult result) {
+            public void resultReceived(ExecuteQueryPayload payload, GraphQueryResult result) {
             }
 
             @Override
-            public void postResultReceived() {
+            public void postResultReceived(ExecuteQueryPayload payload) {
             }
 
             @Override
-            public void handleError(Exception exception) {
+            public void handleError(ExecuteQueryPayload payload, Exception exception) {
             }
 
             @Override
-            public void executionCompleted() {
+            public void executionCompleted(ExecuteQueryPayload payload) {
             }
         });
 

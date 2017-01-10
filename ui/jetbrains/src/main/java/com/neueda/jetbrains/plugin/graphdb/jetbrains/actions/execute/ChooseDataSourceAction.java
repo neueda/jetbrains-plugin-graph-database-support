@@ -2,6 +2,8 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
@@ -23,6 +25,7 @@ public class ChooseDataSourceAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         ExecuteQueryEvent executeQueryEvent = messageBus.syncPublisher(ExecuteQueryEvent.EXECUTE_QUERY_TOPIC);
+        Editor editor = e.getData(CommonDataKeys.EDITOR_EVEN_IF_INACTIVE);
         executeQueryEvent.executeQuery(dataSource, executeQueryPayload);
     }
 }
