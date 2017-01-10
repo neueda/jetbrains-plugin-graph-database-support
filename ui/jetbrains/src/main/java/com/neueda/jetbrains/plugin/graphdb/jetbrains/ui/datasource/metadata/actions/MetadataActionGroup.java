@@ -12,12 +12,12 @@ import static com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons.Database.N
 public class MetadataActionGroup extends ActionGroup {
 
     private final String type;
-    private final String label;
+    private final String data;
     private final String dataSourceUuid;
 
-    public MetadataActionGroup(String type, String label, String dataSourceUuid) {
+    public MetadataActionGroup(String type, String data, String dataSourceUuid) {
         this.type = type;
-        this.label = label;
+        this.data = data;
         this.dataSourceUuid = dataSourceUuid;
     }
 
@@ -26,15 +26,13 @@ public class MetadataActionGroup extends ActionGroup {
     public AnAction[] getChildren(@Nullable AnActionEvent e) {
         switch (type) {
             case RELATIONSHIP_TYPES:
-                return new AnAction[]{new MetadataRelationshipAction(label, dataSourceUuid, "Query this relationship", "", NEO4J)};
+                return new AnAction[]{new MetadataRelationshipAction(data, dataSourceUuid, "Query this relationship", "", NEO4J)};
             case LABELS:
-                return new AnAction[]{new MetadataLabelAction(label, dataSourceUuid, "Query this label", "", NEO4J)};
+                return new AnAction[]{new MetadataLabelAction(data, dataSourceUuid, "Query this label", "", NEO4J)};
             case PROPERTY_KEYS:
-                return new AnAction[]{new MetadataPropertyKeyAction(label, dataSourceUuid, "Query this property", "", NEO4J)};
+                return new AnAction[]{new MetadataPropertyKeyAction(data, dataSourceUuid, "Query this property", "", NEO4J)};
             default:
                 return new AnAction[]{};
         }
     }
-
 }
-

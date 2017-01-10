@@ -8,6 +8,7 @@ import com.intellij.ui.treeStructure.Tree;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.actions.MetadataActionGroup;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.dto.ContextMenu;
 
+import javax.swing.*;
 import javax.swing.tree.TreePath;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -22,7 +23,7 @@ public class DataSourcesTreeMouseAdapter extends MouseAdapter {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON3) {
+        if (SwingUtilities.isRightMouseButton(e)) {
             Tree tree = (Tree) e.getComponent();
             TreePath pathForLocation = tree.getPathForLocation(e.getX(), e.getY());
 

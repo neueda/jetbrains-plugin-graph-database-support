@@ -37,6 +37,6 @@ public abstract class MetadataAction extends AnAction {
         DataSourcesComponent dataSourcesComponent = project.getComponent(DataSourcesComponent.class);
         Optional<DataSourceApi> dataSource = dataSourcesComponent.getDataSourceContainer().findDataSource(dataSourceUuid);
 
-        executeQueryEvent.executeQuery(dataSource.get(), payload);
+        dataSource.ifPresent(dataSourceApi -> executeQueryEvent.executeQuery(dataSourceApi, payload));
     }
 }

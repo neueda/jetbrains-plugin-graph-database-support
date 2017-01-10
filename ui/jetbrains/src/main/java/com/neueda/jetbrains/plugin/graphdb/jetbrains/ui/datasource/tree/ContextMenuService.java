@@ -1,7 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree;
 
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.impl.DataSourceV1;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.dto.ContextMenu;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ValueWithIcon;
 
@@ -71,8 +71,8 @@ public class ContextMenuService {
     }
 
     private String extractUuid(Object dsUserObject) {
-        if (dsUserObject instanceof DataSourceV1) {
-            return ((DataSourceV1) dsUserObject).getUUID();
+        if (dsUserObject instanceof DataSourceApi) {
+            return ((DataSourceApi) dsUserObject).getUUID();
         }
         return null;
     }
