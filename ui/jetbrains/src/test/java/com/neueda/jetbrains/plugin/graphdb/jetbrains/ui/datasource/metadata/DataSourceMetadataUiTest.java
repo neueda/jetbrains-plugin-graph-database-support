@@ -5,8 +5,9 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSo
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.impl.DataSourceV1;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.ContextMenuService;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ContextMenu;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.dto.ContextMenu;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ValueWithIcon;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,9 +17,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.*;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.DataSourceMetadataUi.LABELS_TITLE;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.DataSourceMetadataUi.RELATIONSHIP_TYPES_TITLE;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.DataSourceMetadataUi.STORED_PROCEDURES_TITLE;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.DataSourceMetadataUi.*;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,33 +29,31 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class DataSourceMetadataUiTest {
 
-    private static final String UUID = "localuuid";
-    private static final String PERSON = "Person";
+    private static final String UUID = "uuid";
+    private static final String LABEL = "label";
     private static final String REL = "rel";
+    private static final String PROPERTY = "prop";
 
-    private DataSourceMetadataUi ui;
     private PatchedDefaultMutableTreeNode root;
-    private Neo4jBoltCypherDataSourceMetadata metadata = new Neo4jBoltCypherDataSourceMetadata();
 
     private ContextMenuService sut = new ContextMenuService();
     private PatchedDefaultMutableTreeNode datasource;
 
     @Before
     public void setUp() {
-        ui = new DataSourceMetadataUi(null);
         root = new PatchedDefaultMutableTreeNode("treeRoot");
+        DataSourceMetadataUi ui = new DataSourceMetadataUi(null);
         DataSourceV1 dataSourceV1 = new DataSourceV1(UUID, "local", DataSourceType.NEO4J_BOLT, new HashMap<>());
         datasource = new PatchedDefaultMutableTreeNode(dataSourceV1);
-        root.add(datasource);
 
         root.add(datasource);
-        metadata = new Neo4jBoltCypherDataSourceMetadata();
+        Neo4jBoltCypherDataSourceMetadata metadata = new Neo4jBoltCypherDataSourceMetadata();
 
         HashMap<String, String> labels = new HashMap<>();
-        labels.put("label", PERSON);
+        labels.put("label", LABEL);
 
         HashMap<String, String> propertyKeys = new HashMap<>();
-        propertyKeys.put("propertyKey", "name");
+        propertyKeys.put("propertyKey", PROPERTY);
 
         HashMap<String, String> procedures = new HashMap<>();
         procedures.put("signature", "db.labels() :: (label :: STRING?)");
@@ -64,7 +61,7 @@ public class DataSourceMetadataUiTest {
         procedures.put("description", "List all labels in the database.");
 
         HashMap<String, String> relationshipTypes = new HashMap<>();
-        relationshipTypes.put("relationshipType", "rel");
+        relationshipTypes.put("relationshipType", REL);
 
         metadata.addDataSourceMetadata(singletonList(labels), LABELS);
         metadata.addDataSourceMetadata(singletonList(propertyKeys), PROPERTY_KEYS);
@@ -77,51 +74,88 @@ public class DataSourceMetadataUiTest {
 
     @Test
     public void personLabelClicked() {
-        Object[] pathObjects = new Object[]{
-                root,
-                datasource,
-                getChildByName(datasource, LABELS_TITLE),
-                getChildByName(datasource, LABELS_TITLE).getChildAt(0)};
-        TreePath path = new TreePath(pathObjects);
+        TreePath path = new TreePath(getTreePath(LABELS_TITLE, 0));
 
         assertThat(sut.getContextMenu(path).get())
-                .isEqualToComparingFieldByField(new ContextMenu(LABELS, UUID, PERSON));
+                .isEqualToComparingFieldByField(new ContextMenu(LABELS, UUID, LABEL));
     }
 
     @Test
-    public void labelItselfClicked() {
-        Object[] pathObjects = new Object[]{
-                root,
-                datasource,
-                getChildByName(datasource, LABELS_TITLE)};
-        TreePath path = new TreePath(pathObjects);
+    public void labelParentClicked() {
+        TreePath path = new TreePath(getTreePath(LABELS_TITLE));
 
         assertThat(sut.getContextMenu(path)).isNotPresent();
     }
 
     @Test
     public void storedProcedureClicked() {
-        Object[] pathObjects = new Object[]{
-                root,
-                datasource,
-                getChildByName(datasource, STORED_PROCEDURES_TITLE),
-                getChildByName(datasource, STORED_PROCEDURES_TITLE).getChildAt(0)};
-        TreePath path = new TreePath(pathObjects);
+        TreePath path = new TreePath(getTreePath(STORED_PROCEDURES_TITLE, 0));
 
         assertThat(sut.getContextMenu(path)).isNotPresent();
     }
 
     @Test
-    public void relClicked() {
-        Object[] pathObjects = new Object[]{
-                root,
-                datasource,
-                getChildByName(datasource, RELATIONSHIP_TYPES_TITLE),
-                getChildByName(datasource, RELATIONSHIP_TYPES_TITLE).getChildAt(0)};
-        TreePath path = new TreePath(pathObjects);
+    public void storedProcedureParentClicked() {
+        TreePath path = new TreePath(getTreePath(STORED_PROCEDURES_TITLE));
+
+        assertThat(sut.getContextMenu(path)).isNotPresent();
+    }
+
+    @Test
+    public void relationshipClicked() {
+        TreePath path = new TreePath(getTreePath(RELATIONSHIP_TYPES_TITLE, 0));
 
         assertThat(sut.getContextMenu(path).get())
                 .isEqualToComparingFieldByField(new ContextMenu(RELATIONSHIP_TYPES, UUID, REL));
+    }
+
+    @Test
+    public void relationshipParentClicked() {
+        TreePath path = new TreePath(getTreePath(RELATIONSHIP_TYPES_TITLE));
+
+        assertThat(sut.getContextMenu(path)).isNotPresent();
+    }
+
+    @Test
+    public void propertyClicked() {
+        TreePath path = new TreePath(getTreePath(PROPERTY_KEYS_TITLE, 0));
+
+        assertThat(sut.getContextMenu(path).get())
+                .isEqualToComparingFieldByField(new ContextMenu(PROPERTY_KEYS, UUID, PROPERTY));
+    }
+
+    @Test
+    public void propertyParentClicked() {
+        TreePath path = new TreePath(getTreePath(PROPERTY_KEYS_TITLE));
+
+        assertThat(sut.getContextMenu(path)).isNotPresent();
+    }
+
+    @NotNull
+    private Object[] getTreePath(String group) {
+        return new Object[]{
+                root,
+                datasource,
+                getChildByName(datasource, group)};
+    }
+
+    @NotNull
+    private Object[] getTreePath(String group, Integer childIndex) {
+        return new Object[]{
+                root,
+                datasource,
+                getChildByName(datasource, group),
+                getChildByName(datasource, group).getChildAt(childIndex)};
+    }
+
+    @Test
+    public void datasourceClicked() {
+        Object[] pathObjects = new Object[]{
+                root,
+                datasource};
+        TreePath path = new TreePath(pathObjects);
+
+        assertThat(sut.getContextMenu(path)).isNotPresent();
     }
 
     private TreeNode getChildByName(TreeNode node, String name) {

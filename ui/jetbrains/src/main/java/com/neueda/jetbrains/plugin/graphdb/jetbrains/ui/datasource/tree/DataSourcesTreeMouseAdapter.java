@@ -5,8 +5,8 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.ui.treeStructure.Tree;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ContextMenu;
-import com.sun.org.apache.regexp.internal.RE;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.actions.MetadataActionGroup;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.dto.ContextMenu;
 
 import javax.swing.tree.TreePath;
 import java.awt.event.MouseAdapter;

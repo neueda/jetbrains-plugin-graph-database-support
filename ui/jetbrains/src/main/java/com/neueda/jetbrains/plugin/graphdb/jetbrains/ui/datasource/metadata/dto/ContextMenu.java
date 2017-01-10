@@ -1,6 +1,7 @@
-package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto;
+package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.dto;
 
 public class ContextMenu {
+
     private String metadataType;
     private String datasourceUuid;
     private String data;

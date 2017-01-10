@@ -1,4 +1,4 @@
-package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree;
+package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.actions;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -13,10 +13,11 @@ import javax.swing.*;
 import java.util.Optional;
 
 public abstract class MetadataAction extends AnAction {
+
     private String data;
     private String dataSourceUuid;
 
-    public MetadataAction(String data, String dataSourceUuid, String title, String description, Icon icon) {
+    MetadataAction(String data, String dataSourceUuid, String title, String description, Icon icon) {
         super(title, description, icon);
         this.data = data;
         this.dataSourceUuid = dataSourceUuid;
