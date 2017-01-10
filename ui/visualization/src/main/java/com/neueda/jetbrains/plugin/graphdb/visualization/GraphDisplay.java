@@ -1,6 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.visualization;
 
-import com.intellij.ide.ui.laf.darcula.DarculaLaf;
+import com.intellij.util.ui.UIUtil;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.visualization.controls.CustomNeighborHighlightControl;
@@ -29,7 +29,6 @@ import prefuse.render.RendererFactory;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 
-import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +54,7 @@ public class GraphDisplay extends Display {
     public GraphDisplay(LookAndFeelService lookAndFeel) {
         super(new Visualization());
 
-        if (DarculaLaf.NAME.equals(UIManager.getLookAndFeel().getName())) {
+        if (UIUtil.isUnderDarcula()) {
             setBackground(lookAndFeel.getBackgroundColor().brighter());
         } else {
             setBackground(lookAndFeel.getBackgroundColor());
