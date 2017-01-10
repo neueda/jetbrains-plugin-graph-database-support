@@ -1,60 +1,55 @@
 package com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.tests.cypher.inspection;
 
-import com.intellij.psi.PsiFile;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
+import com.intellij.codeInspection.LocalInspectionTool;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.inspection.CypherExplainWarningInspection;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.NameUtil;
-import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.base.BaseIntegrationTest;
+import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants;
+import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.tests.cypher.util.BaseInspectionTest;
 
-public class CypherExplainWarningInspectionTest extends BaseIntegrationTest {
+import java.util.Set;
 
-    private DataSourceApi dsApi;
+import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
+
+public class CypherExplainWarningInspectionTest extends BaseInspectionTest {
 
     @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        this.dsApi = dataSource().neo4j31();
-        myFixture.enableInspections(CypherExplainWarningInspection.class);
+    protected Set<Class<? extends LocalInspectionTool>> provideInspectionClasses() {
+        return singleton(CypherExplainWarningInspection.class);
     }
 
     public void testNonDataSourceFile_NoHighlight() {
-        PsiFile psiFile = myFixture.addFileToProject("a.cyp", "MATCH (a)-->(b) RETURN *");
-        myFixture.configureFromExistingVirtualFile(psiFile.getVirtualFile());
-        myFixture.checkHighlighting();
+        addFileAndCheck("a.cyp", "MATCH (a)-->(b) RETURN *");
     }
 
     public void testDataSourceFile_NoHighlight() {
-        String fileName = NameUtil.createDataSourceFileName(dsApi);
-        PsiFile psiFile = myFixture.addFileToProject(fileName,
-                "MATCH (a)-->(b) RETURN *");
-        myFixture.configureFromExistingVirtualFile(psiFile.getVirtualFile());
-        myFixture.checkHighlighting();
+        addDataSourceFileAndCheck("MATCH (a)-->(b) RETURN *");
     }
 
     public void testDataSourceFile_HighlightExplainWarning() {
-        String fileName = NameUtil.createDataSourceFileName(dsApi);
-        PsiFile psiFile = myFixture.addFileToProject(fileName,
-                        "MATCH (a)-[r:" +
-                                "<warning descr=\"The provided relationship type is not in the database.\">" +
-                                "ART</warning>]-(b) RETURN *;");
-        myFixture.configureFromExistingVirtualFile(psiFile.getVirtualFile());
-        myFixture.checkHighlighting();
+        addDataSourceFileAndCheck("MATCH (a)-[r:" +
+                "<warning descr=\"The provided relationship type is not in the database.\">" +
+                "ART</warning>]-(b) RETURN *;");
     }
 
     public void testDataSourceFile_NoHighlightQueryError() {
-        String fileName = NameUtil.createDataSourceFileName(dsApi);
-        PsiFile psiFile = myFixture.addFileToProject(fileName,
-                        "MATCH (a)-->() RETURN b;");
-        myFixture.configureFromExistingVirtualFile(psiFile.getVirtualFile());
-        myFixture.checkHighlighting();
+        addDataSourceFileAndCheck("MATCH (a)-->() RETURN b;");
     }
 
     public void testDataSourceFile_NoHighlightParserError() {
-        String fileName = NameUtil.createDataSourceFileName(dsApi);
-        PsiFile psiFile = myFixture.addFileToProject(fileName,
-                        "MATCH a<error>-</error>->() RETURN *;");
-        myFixture.configureFromExistingVirtualFile(psiFile.getVirtualFile());
-        myFixture.checkHighlighting();
+        addDataSourceFileAndCheck("MATCH a<error>-</error>->() RETURN *;");
     }
 
+    public void testDataSourceFile_NoDataSource() {
+        component().dataSources().getDataSourceContainer().removeDataSources(singletonList(dataSource().neo4j31()));
+        addFileAndCheck(GraphConstants.BOUND_DATA_SOURCE_PREFIX + "imaginary-ds-uuid-with-36-symbols-in.cypher",
+                "MATCH (a:Turbo)-->() RETURN *;");
+    }
+
+    public void testDataSourceFile_UserCreatedDSLikeFile() {
+        component().dataSources().getDataSourceContainer().removeDataSources(singletonList(dataSource().neo4j31()));
+        // uuid should be 36 symbols long, let's assume user created a file with a name, starting like ds file
+        // but does not match the expected format
+        addFileAndCheck(GraphConstants.BOUND_DATA_SOURCE_PREFIX + "ds-uuid-with-23-symbols.cypher",
+                "MATCH (a:Turbo)-->() RETURN *;");
+    }
 }

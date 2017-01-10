@@ -14,7 +14,6 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.NameUtil;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.neo4j.driver.v1.exceptions.ClientException;
 
 import java.util.Objects;
@@ -53,34 +52,27 @@ public class CypherExplainWarningInspection extends LocalInspectionTool {
 
     private void checkStatement(@NotNull PsiElement statement, @NotNull ProblemsHolder problemsHolder) {
         if (statement.getNode().getElementType() == CypherTypes.SINGLE_QUERY) {
+            Optional.of(statement.getContainingFile().getName())
+                    .filter(s -> s.startsWith(GraphConstants.BOUND_DATA_SOURCE_PREFIX))
+                    .map(this::safeExtractDataSourceUUID)
+                    .flatMap(uuid -> statement.getProject()
+                            .getComponent(DataSourcesComponent.class)
+                            .getDataSourceContainer()
+                            .findDataSource(uuid))
+                    .map(service::getDatabaseFor)
+                    .map(api -> this.executeExplainQuery(api, statement.getText()))
+                    .filter(Objects::nonNull)
+                    .map(GraphQueryResult::getNotifications)
+                    .filter(list -> !list.isEmpty())
+                    .ifPresent(notifications -> notifications.forEach(notification -> {
+                        PsiElement elementAt = Optional.ofNullable(notification.getPositionOffset())
+                                .filter(position -> position > 0)
+                                .map(statement::findElementAt)
+                                .orElse(statement);
 
-            String fileName = statement.getContainingFile().getName();
-            if (fileName.startsWith(GraphConstants.BOUND_DATA_SOURCE_PREFIX)) {
-                DataSourcesComponent component = statement.getProject().getComponent(DataSourcesComponent.class);
-
-                component.getDataSourceContainer()
-                        .findDataSource(NameUtil.extractDataSourceUUID(fileName))
-                        .map(service::getDatabaseFor)
-                        .map(api -> this.executeExplainQuery(api, statement.getText()))
-                        .filter(Objects::nonNull)
-                        .map(GraphQueryResult::getNotifications)
-                        .filter(list -> !list.isEmpty())
-                        .ifPresent(notifications -> notifications.forEach(notification -> {
-                            PsiElement elementAt = Optional.ofNullable(notification.getPositionOffset())
-                                    .filter(position -> position > 0)
-                                    .map(statement::findElementAt)
-                                    .orElse(statement);
-
-                            problemsHolder.registerProblem(elementAt, notification.getTitle());
-                        }));
-            }
+                        problemsHolder.registerProblem(elementAt, notification.getTitle());
+                    }));
         }
-    }
-
-    @Nullable
-    @Override
-    public String loadDescription() {
-        return super.loadDescription();
     }
 
     private GraphQueryResult executeExplainQuery(GraphDatabaseApi api, String query) {
@@ -91,4 +83,11 @@ public class CypherExplainWarningInspection extends LocalInspectionTool {
         }
     }
 
+    private String safeExtractDataSourceUUID(String fileName) {
+        try {
+            return NameUtil.extractDataSourceUUID(fileName);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
 }
