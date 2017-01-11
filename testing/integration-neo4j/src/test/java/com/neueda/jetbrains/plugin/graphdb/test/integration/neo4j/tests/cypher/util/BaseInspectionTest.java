@@ -13,7 +13,6 @@ public abstract class BaseInspectionTest extends BaseIntegrationTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        dataSource().neo4j31();
         myFixture.enableInspections(provideInspectionClasses());
     }
 
