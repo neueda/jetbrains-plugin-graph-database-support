@@ -29,12 +29,10 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Enumeration;
 
-import static com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil.*;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil.getTooltipText;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil.getTooltipTitle;
 
 public class GraphPanel {
-
-    private static final int TYPES_DEPTH = 2;
-    private static final int PROPERTY_DEPTH = 3;
 
     private PrefuseVisualization visualization;
     private LookAndFeelService lookAndFeelService;

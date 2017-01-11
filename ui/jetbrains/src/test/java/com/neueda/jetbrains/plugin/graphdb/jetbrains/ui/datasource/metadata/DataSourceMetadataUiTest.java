@@ -4,9 +4,9 @@ import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.impl.DataSourceV1;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.ContextMenuService;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.dto.ContextMenu;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ValueWithIcon;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.*;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,16 +17,9 @@ import java.util.Enumeration;
 import java.util.HashMap;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.*;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.DataSourceMetadataUi.*;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Tests here rely on a specific implementation details:
- *
- * - PatchedDefaultMutableTreeNode is used for metadata tree
- * - ValueWithIcon is used as userObject in datasource children
- */
 public class DataSourceMetadataUiTest {
 
     private static final String UUID = "uuid";
@@ -41,10 +34,11 @@ public class DataSourceMetadataUiTest {
 
     @Before
     public void setUp() {
-        root = new PatchedDefaultMutableTreeNode("treeRoot");
+        root = new PatchedDefaultMutableTreeNode(DataSourcesView.ROOT_NAME);
         DataSourceMetadataUi ui = new DataSourceMetadataUi(null);
         DataSourceV1 dataSourceV1 = new DataSourceV1(UUID, "local", DataSourceType.NEO4J_BOLT, new HashMap<>());
-        datasource = new PatchedDefaultMutableTreeNode(dataSourceV1);
+        TreeNodeModelApi model = new TreeNodeModel(Neo4jTreeNodeType.DATASOURCE, dataSourceV1);
+        datasource = new PatchedDefaultMutableTreeNode(model);
 
         root.add(datasource);
         Neo4jBoltCypherDataSourceMetadata metadata = new Neo4jBoltCypherDataSourceMetadata();
@@ -74,78 +68,73 @@ public class DataSourceMetadataUiTest {
 
     @Test
     public void personLabelClicked() {
-        TreePath path = new TreePath(getTreePath(LABELS_TITLE, 0));
+        TreePath path = new TreePath(getTreePath(Neo4jTreeNodeType.LABELS, Neo4jTreeNodeType.LABEL));
 
         assertThat(sut.getContextMenu(path).get())
-                .isEqualToComparingFieldByField(new ContextMenu(LABELS, UUID, LABEL));
+                .isEqualToComparingFieldByField(new ContextMenu(Neo4jTreeNodeType.LABEL, UUID, LABEL));
     }
 
     @Test
     public void labelParentClicked() {
-        TreePath path = new TreePath(getTreePath(LABELS_TITLE));
+        TreePath path = new TreePath(getTreePath(Neo4jTreeNodeType.LABELS));
 
         assertThat(sut.getContextMenu(path)).isNotPresent();
     }
 
     @Test
     public void storedProcedureClicked() {
-        TreePath path = new TreePath(getTreePath(STORED_PROCEDURES_TITLE, 0));
+        TreePath path = new TreePath(getTreePath(Neo4jTreeNodeType.STORED_PROCEDURES, Neo4jTreeNodeType.STORED_PROCEDURE));
 
         assertThat(sut.getContextMenu(path)).isNotPresent();
     }
 
     @Test
     public void storedProcedureParentClicked() {
-        TreePath path = new TreePath(getTreePath(STORED_PROCEDURES_TITLE));
+        TreePath path = new TreePath(getTreePath(Neo4jTreeNodeType.STORED_PROCEDURES));
 
         assertThat(sut.getContextMenu(path)).isNotPresent();
     }
 
     @Test
     public void relationshipClicked() {
-        TreePath path = new TreePath(getTreePath(RELATIONSHIP_TYPES_TITLE, 0));
+        TreePath path = new TreePath(getTreePath(Neo4jTreeNodeType.RELATIONSHIPS, Neo4jTreeNodeType.RELATIONSHIP));
 
         assertThat(sut.getContextMenu(path).get())
-                .isEqualToComparingFieldByField(new ContextMenu(RELATIONSHIP_TYPES, UUID, REL));
+                .isEqualToComparingFieldByField(new ContextMenu(Neo4jTreeNodeType.RELATIONSHIP, UUID, REL));
     }
 
     @Test
     public void relationshipParentClicked() {
-        TreePath path = new TreePath(getTreePath(RELATIONSHIP_TYPES_TITLE));
+        TreePath path = new TreePath(getTreePath(Neo4jTreeNodeType.RELATIONSHIPS));
 
         assertThat(sut.getContextMenu(path)).isNotPresent();
     }
 
     @Test
     public void propertyClicked() {
-        TreePath path = new TreePath(getTreePath(PROPERTY_KEYS_TITLE, 0));
+        TreePath path = new TreePath(getTreePath(Neo4jTreeNodeType.PROPERTY_KEYS, Neo4jTreeNodeType.PROPERTY_KEY));
 
         assertThat(sut.getContextMenu(path).get())
-                .isEqualToComparingFieldByField(new ContextMenu(PROPERTY_KEYS, UUID, PROPERTY));
+                .isEqualToComparingFieldByField(new ContextMenu(Neo4jTreeNodeType.PROPERTY_KEY, UUID, PROPERTY));
     }
 
     @Test
     public void propertyParentClicked() {
-        TreePath path = new TreePath(getTreePath(PROPERTY_KEYS_TITLE));
+        TreePath path = new TreePath(getTreePath(Neo4jTreeNodeType.PROPERTY_KEYS));
 
         assertThat(sut.getContextMenu(path)).isNotPresent();
     }
 
     @NotNull
-    private Object[] getTreePath(String group) {
-        return new Object[]{
-                root,
-                datasource,
-                getChildByName(datasource, group)};
+    private Object[] getTreePath(Neo4jTreeNodeType group) {
+        return new Object[]{root, datasource, getChildByType(datasource, group)};
     }
 
     @NotNull
-    private Object[] getTreePath(String group, Integer childIndex) {
-        return new Object[]{
-                root,
-                datasource,
-                getChildByName(datasource, group),
-                getChildByName(datasource, group).getChildAt(childIndex)};
+    private Object[] getTreePath(Neo4jTreeNodeType child, Neo4jTreeNodeType subchild) {
+        TreeNode node = getChildByType(datasource, child);
+        TreeNode last = getChildByType(node, subchild);
+        return new Object[]{root, datasource, node, last};
     }
 
     @Test
@@ -158,12 +147,12 @@ public class DataSourceMetadataUiTest {
         assertThat(sut.getContextMenu(path)).isNotPresent();
     }
 
-    private TreeNode getChildByName(TreeNode node, String name) {
+    private TreeNode getChildByType(TreeNode node, Neo4jTreeNodeType type) {
         Enumeration children = node.children();
         while (children.hasMoreElements()) {
             PatchedDefaultMutableTreeNode child = (PatchedDefaultMutableTreeNode) children.nextElement();
-            String value = ((ValueWithIcon) child.getUserObject()).getValue();
-            if (name.equals(value)) {
+            TreeNodeModelApi model = ((TreeNodeModelApi) child.getUserObject());
+            if (type == model.getType()) {
                 return child;
             }
         }

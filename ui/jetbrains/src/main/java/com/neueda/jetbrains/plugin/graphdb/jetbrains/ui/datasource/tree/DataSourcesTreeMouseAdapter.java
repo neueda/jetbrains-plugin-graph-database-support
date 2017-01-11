@@ -13,10 +13,6 @@ import javax.swing.tree.TreePath;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.LABELS;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.PROPERTY_KEYS;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.RELATIONSHIP_TYPES;
-
 public class DataSourcesTreeMouseAdapter extends MouseAdapter {
 
     private ContextMenuService contextMenuService = new ContextMenuService();
@@ -33,15 +29,15 @@ public class DataSourcesTreeMouseAdapter extends MouseAdapter {
     }
 
     private void popup(ContextMenu dto, Tree tree) {
-        if (dto.getMetadataType().equals(LABELS)
-                || dto.getMetadataType().equals(RELATIONSHIP_TYPES)
-                || dto.getMetadataType().equals(PROPERTY_KEYS)) {
+        if (dto.getMetadataType() == Neo4jTreeNodeType.LABEL
+                || dto.getMetadataType() == Neo4jTreeNodeType.RELATIONSHIP
+                || dto.getMetadataType() == Neo4jTreeNodeType.PROPERTY_KEY) {
             DataContext dataContext = DataManager.getInstance().getDataContext(tree);
             contextMenu(dto.getMetadataType(), dto.getData(), dto.getDatasourceUuid(), dataContext);
         }
     }
 
-    private void contextMenu(String type, String data, String uuid, DataContext dataContext) {
+    private void contextMenu(NodeType type, String data, String uuid, DataContext dataContext) {
         ListPopup popup = JBPopupFactory.getInstance().createActionGroupPopup(
                 data,
                 new MetadataActionGroup(type, data, uuid),

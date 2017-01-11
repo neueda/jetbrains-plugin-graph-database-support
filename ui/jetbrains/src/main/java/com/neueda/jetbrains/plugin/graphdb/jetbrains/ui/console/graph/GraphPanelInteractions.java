@@ -12,8 +12,6 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecu
 import com.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 
-import java.util.Optional;
-
 public class GraphPanelInteractions {
 
     private final GraphConsoleView graphConsoleView;

@@ -1,18 +1,22 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata;
 
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.*;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourceMetadata;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourcesComponentMetadata;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ValueWithIcon;
-import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModel;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModelApi;
+
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.*;
 
 public class DataSourceMetadataUi {
 
-    public static final String RELATIONSHIP_TYPES_TITLE = "relationship types";
-    public static final String PROPERTY_KEYS_TITLE = "property keys";
-    public static final String LABELS_TITLE = "labels";
-    public static final String STORED_PROCEDURES_TITLE = "stored procedures";
-    public static final String USER_FUNCTIONS_TITLE = "user functions";
+    private static final String RELATIONSHIP_TYPES_TITLE = "relationship types";
+    private static final String PROPERTY_KEYS_TITLE = "property keys";
+    private static final String LABELS_TITLE = "labels";
+    private static final String STORED_PROCEDURES_TITLE = "stored procedures";
+    private static final String USER_FUNCTIONS_TITLE = "user functions";
 
     private final DataSourcesComponentMetadata dataSourcesComponent;
 
@@ -36,39 +40,41 @@ public class DataSourceMetadataUi {
                                                     DataSourceMetadata dataSourceMetadata) {
         // Remove existing metadata from ui
         dataSourceRootTreeNode.removeAllChildren();
+        TreeNodeModelApi model = (TreeNodeModelApi) dataSourceRootTreeNode.getUserObject();
+        DataSourceApi dataSourceApi = model.getDataSourceApi();
 
         // Labels
         PatchedDefaultMutableTreeNode labelsTreeNode = new PatchedDefaultMutableTreeNode(
-                   new ValueWithIcon(GraphIcons.Nodes.LABEL, LABELS_TITLE));
+                   new TreeNodeModel(LABELS, dataSourceApi, LABELS_TITLE));
         dataSourceMetadata
                    .getMetadata(Neo4jBoltCypherDataSourceMetadata.LABELS)
-                   .forEach((row) -> labelsTreeNode.add(new PatchedDefaultMutableTreeNode(row.get("label"))));
+                   .forEach((row) -> labelsTreeNode.add(of(new TreeNodeModel(LABEL, dataSourceApi, row.get("label")))));
         dataSourceRootTreeNode.add(labelsTreeNode);
 
         // RelTypes
         PatchedDefaultMutableTreeNode relationshipTypesTreeNode = new PatchedDefaultMutableTreeNode(
-                   new ValueWithIcon(GraphIcons.Nodes.RELATIONSHIP_TYPE, RELATIONSHIP_TYPES_TITLE));
+                new TreeNodeModel(RELATIONSHIPS, dataSourceApi, RELATIONSHIP_TYPES_TITLE));
         dataSourceMetadata
                    .getMetadata(Neo4jBoltCypherDataSourceMetadata.RELATIONSHIP_TYPES)
-                   .forEach((row) -> relationshipTypesTreeNode.add(new PatchedDefaultMutableTreeNode(row.get("relationshipType"))));
+                   .forEach((row) -> relationshipTypesTreeNode.add(of(new TreeNodeModel(RELATIONSHIP, dataSourceApi, row.get("relationshipType")))));
         dataSourceRootTreeNode.add(relationshipTypesTreeNode);
 
         // Property Keys
         PatchedDefaultMutableTreeNode propertyKeysTreeNode = new PatchedDefaultMutableTreeNode(
-                   new ValueWithIcon(GraphIcons.Nodes.PROPERTY_KEY, PROPERTY_KEYS_TITLE));
+                new TreeNodeModel(PROPERTY_KEYS, dataSourceApi, PROPERTY_KEYS_TITLE));
         dataSourceMetadata
                    .getMetadata(Neo4jBoltCypherDataSourceMetadata.PROPERTY_KEYS)
-                   .forEach((row) -> propertyKeysTreeNode.add(new PatchedDefaultMutableTreeNode(row.get("propertyKey"))));
+                   .forEach((row) -> propertyKeysTreeNode.add(of(new TreeNodeModel(PROPERTY_KEY, dataSourceApi, row.get("propertyKey")))));
         dataSourceRootTreeNode.add(propertyKeysTreeNode);
 
         // Stored procedures
         PatchedDefaultMutableTreeNode storedProceduresTreeNode = new PatchedDefaultMutableTreeNode(
-                   new ValueWithIcon(GraphIcons.Nodes.STORED_PROCEDURE, STORED_PROCEDURES_TITLE));
+                new TreeNodeModel(STORED_PROCEDURES, dataSourceApi, STORED_PROCEDURES_TITLE));
         dataSourceMetadata
                    .getMetadata(Neo4jBoltCypherDataSourceMetadata.STORED_PROCEDURES)
                    .forEach((row) -> {
-                       PatchedDefaultMutableTreeNode nameNode = new PatchedDefaultMutableTreeNode(row.get("name"));
-                       PatchedDefaultMutableTreeNode descriptionNode = new PatchedDefaultMutableTreeNode(row.get("signature"));
+                       PatchedDefaultMutableTreeNode nameNode = of(new TreeNodeModel(STORED_PROCEDURE, dataSourceApi, row.get("name")));
+                       PatchedDefaultMutableTreeNode descriptionNode = of(new TreeNodeModel(STORED_PROCEDURE, dataSourceApi, row.get("signature")));
                        nameNode.add(descriptionNode);
                        storedProceduresTreeNode.add(nameNode);
                    });
@@ -77,13 +83,13 @@ public class DataSourceMetadataUi {
         // User Functions
         if (dataSourceMetadata.isMetadataExists(Neo4jBoltCypherDataSourceMetadata.USER_FUNCTIONS)) {
             PatchedDefaultMutableTreeNode userFunctionTreeNode = new PatchedDefaultMutableTreeNode(
-                       new ValueWithIcon(GraphIcons.Nodes.USER_FUNCTION, USER_FUNCTIONS_TITLE));
+                    new TreeNodeModel(USER_FUNCTIONS, dataSourceApi, USER_FUNCTIONS_TITLE));
 
             dataSourceMetadata
                        .getMetadata(Neo4jBoltCypherDataSourceMetadata.USER_FUNCTIONS)
                        .forEach((row) -> {
-                           PatchedDefaultMutableTreeNode nameNode = new PatchedDefaultMutableTreeNode(row.get("name"));
-                           PatchedDefaultMutableTreeNode descriptionNode = new PatchedDefaultMutableTreeNode(row.get("signature"));
+                           PatchedDefaultMutableTreeNode nameNode = of(new TreeNodeModel(LABEL, dataSourceApi, row.get("name")));
+                           PatchedDefaultMutableTreeNode descriptionNode = of(new TreeNodeModel(LABEL, dataSourceApi, row.get("signature")));
                            nameNode.add(descriptionNode);
                            userFunctionTreeNode.add(nameNode);
                        });
@@ -92,5 +98,9 @@ public class DataSourceMetadataUi {
         }
 
         return true;
+    }
+
+    private PatchedDefaultMutableTreeNode of(TreeNodeModel model) {
+        return new PatchedDefaultMutableTreeNode(model);
     }
 }
