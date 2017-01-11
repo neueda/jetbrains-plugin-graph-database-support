@@ -52,4 +52,9 @@ public class CypherExplainWarningInspectionTest extends BaseInspectionTest {
         addFileAndCheck(GraphConstants.BOUND_DATA_SOURCE_PREFIX + "ds-uuid-with-23-symbols.cypher",
                 "MATCH (a:Turbo)-->() RETURN *;");
     }
+
+    public void testDataSourceFile_DBIsUnavailable() {
+        //no highlight and no exception
+        addUnavailableDataSourceFileAndCheck("MATCH (a:Turbo)-->() RETURN *;");
+    }
 }

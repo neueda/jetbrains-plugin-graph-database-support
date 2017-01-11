@@ -14,7 +14,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.NameUtil;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants;
 import org.jetbrains.annotations.NotNull;
-import org.neo4j.driver.v1.exceptions.ClientException;
+import org.neo4j.driver.v1.exceptions.Neo4jException;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -78,7 +78,7 @@ public class CypherExplainWarningInspection extends LocalInspectionTool {
     private GraphQueryResult executeExplainQuery(GraphDatabaseApi api, String query) {
         try {
             return api.execute("EXPLAIN " + query);
-        } catch (ClientException ex) {
+        } catch (Neo4jException ex) {
             return null;
         }
     }
