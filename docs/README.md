@@ -8,7 +8,7 @@ Graph Database support plugin allows you to work with databases without leaving 
 
 Plugin is developed and supported by [Neueda R&D](http://neueda.lv/).
 
-![plugin screenshot](docs/screenshots/plugin.png)
+![plugin screenshot](screenshots/plugin.png)
 
 ## Installation
 
