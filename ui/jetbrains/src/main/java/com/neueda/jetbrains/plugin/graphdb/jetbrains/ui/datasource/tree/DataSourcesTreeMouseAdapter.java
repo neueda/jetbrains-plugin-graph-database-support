@@ -5,6 +5,8 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.ui.treeStructure.Tree;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.actions.DataSourceActionGroup;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.actions.MetadataActionGroup;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.dto.ContextMenu;
 
@@ -29,18 +31,32 @@ public class DataSourcesTreeMouseAdapter extends MouseAdapter {
     }
 
     private void popup(ContextMenu dto, Tree tree) {
+        DataContext dataContext = DataManager.getInstance().getDataContext(tree);
         if (dto.getMetadataType() == Neo4jTreeNodeType.LABEL
                 || dto.getMetadataType() == Neo4jTreeNodeType.RELATIONSHIP
                 || dto.getMetadataType() == Neo4jTreeNodeType.PROPERTY_KEY) {
-            DataContext dataContext = DataManager.getInstance().getDataContext(tree);
-            contextMenu(dto.getMetadataType(), dto.getData(), dto.getDatasourceUuid(), dataContext);
+            metadataContextMenu(dto.getMetadataType(), dto.getData(), dto.getDataSourceApi().getUUID(), dataContext);
+        } else if (dto.getMetadataType() == Neo4jTreeNodeType.DATASOURCE) {
+            dataSourceContextMenu(dto.getDataSourceApi(), dataContext);
         }
     }
 
-    private void contextMenu(NodeType type, String data, String uuid, DataContext dataContext) {
+    private void metadataContextMenu(NodeType type, String data, String uuid, DataContext dataContext) {
         ListPopup popup = JBPopupFactory.getInstance().createActionGroupPopup(
                 data,
                 new MetadataActionGroup(type, data, uuid),
+                dataContext,
+                JBPopupFactory.ActionSelectionAid.SPEEDSEARCH,
+                true
+        );
+
+        popup.showInBestPositionFor(dataContext);
+    }
+
+    private void dataSourceContextMenu(DataSourceApi dataSourceApi, DataContext dataContext) {
+        ListPopup popup = JBPopupFactory.getInstance().createActionGroupPopup(
+                dataSourceApi.getName(),
+                new DataSourceActionGroup(dataSourceApi),
                 dataContext,
                 JBPopupFactory.ActionSelectionAid.SPEEDSEARCH,
                 true

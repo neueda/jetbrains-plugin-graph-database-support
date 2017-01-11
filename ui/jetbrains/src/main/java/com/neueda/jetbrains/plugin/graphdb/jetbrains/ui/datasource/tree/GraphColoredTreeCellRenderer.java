@@ -34,7 +34,7 @@ public class GraphColoredTreeCellRenderer extends ColoredTreeCellRenderer {
         } else if (userObject instanceof TreeNodeModelApi) {
             TreeNodeModelApi model = (TreeNodeModelApi) userObject;
             model.getIcon().ifPresent(this::setIcon);
-            model.getValue().ifPresent(this::append);
+            model.getText().ifPresent(this::append);
         } else {
             append(value.toString());
         }

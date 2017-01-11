@@ -7,6 +7,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metada
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModelApi;
+import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.*;
 
@@ -45,7 +46,7 @@ public class DataSourceMetadataUi {
 
         // Labels
         PatchedDefaultMutableTreeNode labelsTreeNode = new PatchedDefaultMutableTreeNode(
-                   new TreeNodeModel(LABELS, dataSourceApi, LABELS_TITLE));
+                   new TreeNodeModel(LABELS, dataSourceApi, LABELS_TITLE, GraphIcons.Nodes.LABEL));
         dataSourceMetadata
                    .getMetadata(Neo4jBoltCypherDataSourceMetadata.LABELS)
                    .forEach((row) -> labelsTreeNode.add(of(new TreeNodeModel(LABEL, dataSourceApi, row.get("label")))));
@@ -53,7 +54,7 @@ public class DataSourceMetadataUi {
 
         // RelTypes
         PatchedDefaultMutableTreeNode relationshipTypesTreeNode = new PatchedDefaultMutableTreeNode(
-                new TreeNodeModel(RELATIONSHIPS, dataSourceApi, RELATIONSHIP_TYPES_TITLE));
+                new TreeNodeModel(RELATIONSHIPS, dataSourceApi, RELATIONSHIP_TYPES_TITLE, GraphIcons.Nodes.RELATIONSHIP_TYPE));
         dataSourceMetadata
                    .getMetadata(Neo4jBoltCypherDataSourceMetadata.RELATIONSHIP_TYPES)
                    .forEach((row) -> relationshipTypesTreeNode.add(of(new TreeNodeModel(RELATIONSHIP, dataSourceApi, row.get("relationshipType")))));
@@ -61,7 +62,7 @@ public class DataSourceMetadataUi {
 
         // Property Keys
         PatchedDefaultMutableTreeNode propertyKeysTreeNode = new PatchedDefaultMutableTreeNode(
-                new TreeNodeModel(PROPERTY_KEYS, dataSourceApi, PROPERTY_KEYS_TITLE));
+                new TreeNodeModel(PROPERTY_KEYS, dataSourceApi, PROPERTY_KEYS_TITLE, GraphIcons.Nodes.PROPERTY_KEY));
         dataSourceMetadata
                    .getMetadata(Neo4jBoltCypherDataSourceMetadata.PROPERTY_KEYS)
                    .forEach((row) -> propertyKeysTreeNode.add(of(new TreeNodeModel(PROPERTY_KEY, dataSourceApi, row.get("propertyKey")))));
@@ -69,7 +70,7 @@ public class DataSourceMetadataUi {
 
         // Stored procedures
         PatchedDefaultMutableTreeNode storedProceduresTreeNode = new PatchedDefaultMutableTreeNode(
-                new TreeNodeModel(STORED_PROCEDURES, dataSourceApi, STORED_PROCEDURES_TITLE));
+                new TreeNodeModel(STORED_PROCEDURES, dataSourceApi, STORED_PROCEDURES_TITLE, GraphIcons.Nodes.STORED_PROCEDURE));
         dataSourceMetadata
                    .getMetadata(Neo4jBoltCypherDataSourceMetadata.STORED_PROCEDURES)
                    .forEach((row) -> {
@@ -83,13 +84,13 @@ public class DataSourceMetadataUi {
         // User Functions
         if (dataSourceMetadata.isMetadataExists(Neo4jBoltCypherDataSourceMetadata.USER_FUNCTIONS)) {
             PatchedDefaultMutableTreeNode userFunctionTreeNode = new PatchedDefaultMutableTreeNode(
-                    new TreeNodeModel(USER_FUNCTIONS, dataSourceApi, USER_FUNCTIONS_TITLE));
+                    new TreeNodeModel(USER_FUNCTIONS, dataSourceApi, USER_FUNCTIONS_TITLE, GraphIcons.Nodes.USER_FUNCTION));
 
             dataSourceMetadata
                        .getMetadata(Neo4jBoltCypherDataSourceMetadata.USER_FUNCTIONS)
                        .forEach((row) -> {
-                           PatchedDefaultMutableTreeNode nameNode = of(new TreeNodeModel(LABEL, dataSourceApi, row.get("name")));
-                           PatchedDefaultMutableTreeNode descriptionNode = of(new TreeNodeModel(LABEL, dataSourceApi, row.get("signature")));
+                           PatchedDefaultMutableTreeNode nameNode = of(new TreeNodeModel(USER_FUNCTION, dataSourceApi, row.get("name")));
+                           PatchedDefaultMutableTreeNode descriptionNode = of(new TreeNodeModel(USER_FUNCTION, dataSourceApi, row.get("signature")));
                            nameNode.add(descriptionNode);
                            userFunctionTreeNode.add(nameNode);
                        });

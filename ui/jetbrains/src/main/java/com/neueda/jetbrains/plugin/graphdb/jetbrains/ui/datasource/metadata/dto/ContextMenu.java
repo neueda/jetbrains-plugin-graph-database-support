@@ -1,16 +1,22 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.dto;
 
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.NodeType;
 
 public class ContextMenu {
 
     private NodeType metadataType;
-    private String datasourceUuid;
+    private DataSourceApi dataSourceApi;
     private String data;
 
-    public ContextMenu(NodeType metadataType, String datasourceUuid, String data) {
+    public ContextMenu(NodeType metadataType, DataSourceApi dataSourceApi) {
         this.metadataType = metadataType;
-        this.datasourceUuid = datasourceUuid;
+        this.dataSourceApi = dataSourceApi;
+    }
+
+    public ContextMenu(NodeType metadataType, DataSourceApi dataSourceApi, String data) {
+        this.metadataType = metadataType;
+        this.dataSourceApi = dataSourceApi;
         this.data = data;
     }
 
@@ -18,8 +24,8 @@ public class ContextMenu {
         return metadataType;
     }
 
-    public String getDatasourceUuid() {
-        return datasourceUuid;
+    public DataSourceApi getDataSourceApi() {
+        return dataSourceApi;
     }
 
     public String getData() {

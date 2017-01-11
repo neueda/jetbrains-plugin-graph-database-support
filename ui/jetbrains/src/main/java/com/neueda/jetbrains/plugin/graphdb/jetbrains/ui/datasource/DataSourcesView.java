@@ -128,7 +128,7 @@ public class DataSourcesView implements Disposable {
 
     private void showDataSources() {
         component.getDataSourceContainer().getDataSources()
-                .forEach((dataSource) -> treeRoot.add(new PatchedDefaultMutableTreeNode(new TreeNodeModel(Neo4jTreeNodeType.DATASOURCE, dataSource))));
+                .forEach((dataSource) -> treeRoot.add(new PatchedDefaultMutableTreeNode(new DataSourceTreeNodeModel(dataSource))));
         treeModel.reload();
     }
 
@@ -156,7 +156,7 @@ public class DataSourcesView implements Disposable {
     public void createDataSource(DataSourceApi dataSource) {
         Analytics.event(dataSource, "create");
         component.getDataSourceContainer().addDataSource(dataSource);
-        TreeNodeModel model = new TreeNodeModel(Neo4jTreeNodeType.DATASOURCE, dataSource);
+        TreeNodeModelApi model = new DataSourceTreeNodeModel(dataSource);
         PatchedDefaultMutableTreeNode treeNode = new PatchedDefaultMutableTreeNode(model);
         treeRoot.add(treeNode);
         refreshDataSourceMetadata(treeNode);
@@ -166,7 +166,7 @@ public class DataSourcesView implements Disposable {
     public void updateDataSource(PatchedDefaultMutableTreeNode treeNode, DataSourceApi oldDataSource, DataSourceApi newDataSource) {
         Analytics.event(newDataSource, "update");
         component.getDataSourceContainer().updateDataSource(oldDataSource, newDataSource);
-        treeNode.setUserObject(new TreeNodeModel(Neo4jTreeNodeType.DATASOURCE, newDataSource));
+        treeNode.setUserObject(new DataSourceTreeNodeModel(newDataSource));
         refreshDataSourceMetadata(treeNode);
         treeModel.reload();
     }

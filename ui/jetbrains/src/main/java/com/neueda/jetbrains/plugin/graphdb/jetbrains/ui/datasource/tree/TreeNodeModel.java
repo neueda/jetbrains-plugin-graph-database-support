@@ -26,26 +26,25 @@ public class TreeNodeModel implements TreeNodeModelApi {
         prepareContextMenu();
     }
 
-    public TreeNodeModel(Neo4jTreeNodeType type, DataSourceApi dataSourceApi) {
+    public TreeNodeModel(Neo4jTreeNodeType type, DataSourceApi dataSourceApi, String value, Icon icon) {
         this.type = type;
+        this.value = value;
         this.dataSourceApi = dataSourceApi;
-        moveName(dataSourceApi);
+        this.icon = icon;
         prepareContextMenu();
     }
 
-    public void prepareContextMenu() {
+    public TreeNodeModel(Neo4jTreeNodeType type, DataSourceApi dataSourceApi) {
+        this.type = type;
+        this.dataSourceApi = dataSourceApi;
+        prepareContextMenu();
+    }
+
+    private void prepareContextMenu() {
         if (type == Neo4jTreeNodeType.LABEL
             || type == Neo4jTreeNodeType.RELATIONSHIP
             || type == Neo4jTreeNodeType.PROPERTY_KEY) {
-                contextMenu = new ContextMenu(type, getDataSourceApi().getUUID(), value);
-        }
-    }
-
-    // FIXME remove name from DataSourceApi and get rid of this method
-    @Deprecated
-    private void moveName(DataSourceApi dataSourceApi) {
-        if (dataSourceApi.getName() != null) {
-            this.value = getDataSourceApi().getName();
+                contextMenu = new ContextMenu(type, getDataSourceApi(), value);
         }
     }
 
@@ -69,7 +68,7 @@ public class TreeNodeModel implements TreeNodeModelApi {
 
     @Override
     public Optional<Icon> getIcon() {
-        return Optional.ofNullable(type.getIcon().orElse(icon));
+        return Optional.ofNullable(icon);
     }
 
     public void setIcon(Icon icon) {
@@ -77,7 +76,7 @@ public class TreeNodeModel implements TreeNodeModelApi {
     }
 
     @Override
-    public Optional<String> getValue() {
+    public Optional<String> getText() {
         return Optional.ofNullable(value);
     }
 

@@ -14,7 +14,7 @@ public interface TreeNodeModelApi {
 
     Optional<Icon> getIcon();
 
-    Optional<String> getValue();
+    Optional<String> getText();
 
     DataSourceApi getDataSourceApi();
 }
