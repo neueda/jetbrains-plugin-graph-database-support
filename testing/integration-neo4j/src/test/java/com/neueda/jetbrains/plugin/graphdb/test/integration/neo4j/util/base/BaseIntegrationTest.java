@@ -1,7 +1,5 @@
 package com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.base;
 
-import java.util.*;
-
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.Neo4jBoltConfiguration;
@@ -14,10 +12,16 @@ import com.neueda.jetbrains.plugin.graphdb.test.database.neo4j.common.Neo4jServe
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.server.Neo4j30ServerLoader;
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.server.Neo4j31ServerLoader;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCase {
 
     private static final String NEO4J30 = "neo4j30";
     private static final String NEO4J31 = "neo4j31";
+    private static final String UNAVAILABLE_DS = "unavailable";
 
     private Components components;
     private DataSources dataSources;
@@ -48,19 +52,23 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
         return dataSources;
     }
 
-    private DataSourceApi createDataSource(String name, Neo4jServer neo4jServer) {
+    private DataSourceApi createDataSource(String name, String host, String port, String user, String password) {
         Map<String, String> configuration = new HashMap<>();
-        configuration.put(Neo4jBoltConfiguration.HOST, neo4jServer.getBoltHost());
-        configuration.put(Neo4jBoltConfiguration.PORT, neo4jServer.getBoltPort());
-        configuration.put(Neo4jBoltConfiguration.USER, null);
-        configuration.put(Neo4jBoltConfiguration.PASSWORD, null);
+        configuration.put(Neo4jBoltConfiguration.HOST, host);
+        configuration.put(Neo4jBoltConfiguration.PORT, port);
+        configuration.put(Neo4jBoltConfiguration.USER, user);
+        configuration.put(Neo4jBoltConfiguration.PASSWORD, password);
 
         return component().dataSources().getDataSourceContainer().createDataSource(
-                   null,
-                   DataSourceType.NEO4J_BOLT,
-                   name,
-                   configuration
+                null,
+                DataSourceType.NEO4J_BOLT,
+                name,
+                configuration
         );
+    }
+
+    private DataSourceApi createDataSource(String name, Neo4jServer neo4jServer) {
+        return createDataSource(name, neo4jServer.getBoltHost(), neo4jServer.getBoltPort(), null, null);
     }
 
     public final class Services {
@@ -86,6 +94,7 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
     public final class DataSources {
         private DataSourceApi neo4j30DataSource;
         private DataSourceApi neo4j31DataSource;
+        private DataSourceApi unavalableDataSource;
 
         public DataSourceApi neo4j30() {
             if (neo4j30DataSource == null) {
@@ -115,6 +124,22 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
                            });
             }
             return neo4j31DataSource;
+        }
+
+        public DataSourceApi unavailable() {
+            if (unavalableDataSource == null) {
+                unavalableDataSource = component().dataSources()
+                        .getDataSourceContainer()
+                        .getDataSource(UNAVAILABLE_DS)
+                        .orElseGet(() -> {
+                            DataSourceApi dataSource = createDataSource(UNAVAILABLE_DS, "unexisting.domain.dev",
+                                    "7474", null, null);
+                            component().dataSources().getDataSourceContainer().addDataSource(dataSource);
+                            component().dataSources().refreshAllMetadata();
+                            return dataSource;
+                        });
+            }
+            return unavalableDataSource;
         }
     }
 }

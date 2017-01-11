@@ -6,16 +6,14 @@ import com.intellij.psi.PsiFile;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.NameUtil;
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.base.BaseIntegrationTest;
 
-import java.util.Optional;
 import java.util.Set;
 
 public abstract class BaseInspectionTest extends BaseIntegrationTest {
-    private String dsApiUUID;
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        this.dsApiUUID = dataSource().neo4j31().getUUID();
+        dataSource().neo4j31();
         myFixture.enableInspections(provideInspectionClasses());
     }
 
@@ -27,11 +25,12 @@ public abstract class BaseInspectionTest extends BaseIntegrationTest {
     }
 
     protected void addDataSourceFileAndCheck(String fileContent) {
-        String fileName = Optional.of(dsApiUUID)
-                .flatMap(uuid -> component().dataSources().getDataSourceContainer().findDataSource(uuid))
-                .map(NameUtil::createDataSourceFileName)
-                .orElseThrow(IllegalStateException::new);
+        String fileName = NameUtil.createDataSourceFileName(dataSource().neo4j31());
+        addFileAndCheck(fileName, fileContent);
+    }
 
+    protected void addUnavailableDataSourceFileAndCheck(String fileContent) {
+        String fileName = NameUtil.createDataSourceFileName(dataSource().unavailable());
         addFileAndCheck(fileName, fileContent);
     }
 
