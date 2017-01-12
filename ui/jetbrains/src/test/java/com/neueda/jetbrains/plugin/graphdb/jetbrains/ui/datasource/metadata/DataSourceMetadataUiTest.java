@@ -58,11 +58,11 @@ public class DataSourceMetadataUiTest {
         HashMap<String, String> relationshipTypes = new HashMap<>();
         relationshipTypes.put("relationshipType", REL);
 
-        metadata.addDataSourceMetadata(singletonList(labels), LABELS);
-        metadata.addDataSourceMetadata(singletonList(propertyKeys), PROPERTY_KEYS);
-        metadata.addDataSourceMetadata(singletonList(procedures), STORED_PROCEDURES);
-        metadata.addDataSourceMetadata(singletonList(relationshipTypes), RELATIONSHIP_TYPES);
-        metadata.addDataSourceMetadata(singletonList(new HashMap<>()), USER_FUNCTIONS);
+        metadata.addDataSourceMetadata(LABELS, singletonList(labels));
+        metadata.addDataSourceMetadata(PROPERTY_KEYS, singletonList(propertyKeys));
+        metadata.addDataSourceMetadata(STORED_PROCEDURES, singletonList(procedures));
+        metadata.addDataSourceMetadata(RELATIONSHIP_TYPES, singletonList(relationshipTypes));
+        metadata.addDataSourceMetadata(USER_FUNCTIONS, singletonList(new HashMap<>()));
 
         ui.updateNeo4jBoltCypherMetadataUi(datasource, metadata);
     }
