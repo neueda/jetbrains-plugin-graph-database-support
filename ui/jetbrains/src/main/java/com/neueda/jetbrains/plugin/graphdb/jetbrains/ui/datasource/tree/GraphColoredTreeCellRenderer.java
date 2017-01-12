@@ -7,7 +7,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.dto.ValueWithIcon;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class GraphColoredTreeCellRenderer extends ColoredTreeCellRenderer {
@@ -31,6 +31,10 @@ public class GraphColoredTreeCellRenderer extends ColoredTreeCellRenderer {
             ValueWithIcon val = (ValueWithIcon) userObject;
             setIcon(val.getIcon());
             append(val.getValue());
+        } else if (userObject instanceof TreeNodeModelApi) {
+            TreeNodeModelApi model = (TreeNodeModelApi) userObject;
+            model.getIcon().ifPresent(this::setIcon);
+            model.getText().ifPresent(this::append);
         } else {
             append(value.toString());
         }

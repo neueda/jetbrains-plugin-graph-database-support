@@ -30,26 +30,26 @@ public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
     }
 
     public void addLabels(GraphQueryResult labelsQueryResult) {
-        addDataSourceMetadata(labelsQueryResult, LABELS);
+        addDataSourceMetadata(LABELS, labelsQueryResult);
     }
 
     public void addRelationshipTypes(GraphQueryResult relationshipQueryResult) {
-        addDataSourceMetadata(relationshipQueryResult, RELATIONSHIP_TYPES);
+        addDataSourceMetadata(RELATIONSHIP_TYPES, relationshipQueryResult);
     }
 
     public void addPropertyKeys(GraphQueryResult propertyKeysResult) {
-        addDataSourceMetadata(propertyKeysResult, PROPERTY_KEYS);
+        addDataSourceMetadata(PROPERTY_KEYS, propertyKeysResult);
     }
 
     public void addStoredProcedures(GraphQueryResult storedProceduresResult) {
-        addDataSourceMetadata(storedProceduresResult, STORED_PROCEDURES);
+        addDataSourceMetadata(STORED_PROCEDURES, storedProceduresResult);
     }
 
     public void addUserFunctions(GraphQueryResult userFunctionsResult) {
-        addDataSourceMetadata(userFunctionsResult, USER_FUNCTIONS);
+        addDataSourceMetadata(USER_FUNCTIONS, userFunctionsResult);
     }
 
-    private void addDataSourceMetadata(GraphQueryResult graphQueryResult, String key) {
+    private void addDataSourceMetadata(String key, GraphQueryResult graphQueryResult) {
         List<Map<String, String>> dataSourceMetadata = new ArrayList<>();
 
         List<GraphQueryResultColumn> columns = graphQueryResult.getColumns();
@@ -64,5 +64,9 @@ public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
         }
 
         dataReceiver.put(key, dataSourceMetadata);
+    }
+
+    public void addDataSourceMetadata(String key, List<Map<String, String>> data) {
+        dataReceiver.put(key, data);
     }
 }

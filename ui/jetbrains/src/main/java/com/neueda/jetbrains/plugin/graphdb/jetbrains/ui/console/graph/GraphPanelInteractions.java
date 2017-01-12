@@ -61,7 +61,7 @@ public class GraphPanelInteractions {
                     @Override
                     public void handleError(ExecuteQueryPayload payload, Exception exception) {
                         String errorMessage = exception.getMessage() == null ? "Error occurred" : "Error occurred: " + exception.getMessage();
-                        HintManager.getInstance().showErrorHint(payload.getEditor(), errorMessage);
+                        payload.getEditor().ifPresent(editor -> HintManager.getInstance().showErrorHint(editor, errorMessage));
 
                         visualization.stop();
                         visualization.clear();
