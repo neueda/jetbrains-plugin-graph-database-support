@@ -18,6 +18,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.actions.RefreshDataSourcesAction;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceInteractions;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.DataSourceMetadataUi;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.RootTreeNodeModel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.*;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.FileUtil;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService;
@@ -33,8 +34,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class DataSourcesView implements Disposable {
-
-    public static final String ROOT_NAME = "treeRoot";
 
     private boolean initialized;
 
@@ -65,7 +64,7 @@ public class DataSourcesView implements Disposable {
             componentMetadata = project.getComponent(DataSourcesComponentMetadata.class);
             cypherMetadataProviderService = ServiceManager.getService(project, CypherMetadataProviderService.class);
             dataSourceMetadataUi = new DataSourceMetadataUi(componentMetadata);
-            treeRoot = new PatchedDefaultMutableTreeNode(new TreeNodeModel(Neo4jTreeNodeType.ROOT, ROOT_NAME));
+            treeRoot = new PatchedDefaultMutableTreeNode(new RootTreeNodeModel());
             treeModel = new DefaultTreeModel(treeRoot, false);
             decorator = ToolbarDecorator.createDecorator(dataSourceTree);
             decorator.addExtraAction(new RefreshDataSourcesAction(this));

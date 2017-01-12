@@ -13,31 +13,17 @@ public class ContextMenuService {
         if (path != null) {
             TreeNode lastPathComponent = (TreeNode) path.getLastPathComponent();
 
-            TreeNodeModelApi model = extractUserObject(lastPathComponent);
+            Optional<TreeNodeModelApi> model = extractUserObject(lastPathComponent);
 
-            return Optional.ofNullable(decideOnMenu(model));
+            return model.flatMap(TreeNodeModelApi::getContextMenu);
         }
         return Optional.empty();
     }
 
-    public ContextMenu decideOnMenu(TreeNodeModelApi model) {
-        NodeType type = model.getType();
-        if (model.getText().isPresent()
-                && (type == Neo4jTreeNodeType.LABEL
-                || type == Neo4jTreeNodeType.RELATIONSHIP
-                || type == Neo4jTreeNodeType.PROPERTY_KEY)) {
-            return new ContextMenu(type, model.getDataSourceApi(), model.getText().get());
-        } else if (type == Neo4jTreeNodeType.DATASOURCE) {
-            return new ContextMenu(type, model.getDataSourceApi());
-        } else {
-            return null;
-        }
-    }
-
-    private TreeNodeModelApi extractUserObject(TreeNode node) {
+    private Optional<TreeNodeModelApi> extractUserObject(TreeNode node) {
         if (node instanceof PatchedDefaultMutableTreeNode) {
-            return (TreeNodeModelApi) ((PatchedDefaultMutableTreeNode) node).getUserObject();
+            return Optional.of((TreeNodeModelApi) ((PatchedDefaultMutableTreeNode) node).getUserObject());
         }
-        return null;
+        return Optional.empty();
     }
 }

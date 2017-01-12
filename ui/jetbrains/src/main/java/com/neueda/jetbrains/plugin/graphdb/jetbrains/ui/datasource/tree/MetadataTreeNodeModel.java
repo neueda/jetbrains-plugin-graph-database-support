@@ -2,31 +2,24 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree;
 
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.dto.ContextMenu;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.dto.MetadataContextMenu;
 
 import javax.swing.*;
 import java.util.Optional;
 
-public class TreeNodeModel implements TreeNodeModelApi {
+public class MetadataTreeNodeModel implements TreeNodeModelApi {
 
-    private ContextMenu contextMenu;
+    private MetadataContextMenu metadataContextMenu;
     private NodeType type;
     private Icon icon;
     private String value;
     private DataSourceApi dataSourceApi;
 
-    public TreeNodeModel(Neo4jTreeNodeType type, String value) {
-        this.type = type;
-        this.value = value;
+    public MetadataTreeNodeModel(Neo4jTreeNodeType type, DataSourceApi dataSourceApi, String value) {
+        this(type, dataSourceApi, value, null);
     }
 
-    public TreeNodeModel(Neo4jTreeNodeType type, DataSourceApi dataSourceApi, String value) {
-        this.type = type;
-        this.value = value;
-        this.dataSourceApi = dataSourceApi;
-        prepareContextMenu();
-    }
-
-    public TreeNodeModel(Neo4jTreeNodeType type, DataSourceApi dataSourceApi, String value, Icon icon) {
+    public MetadataTreeNodeModel(Neo4jTreeNodeType type, DataSourceApi dataSourceApi, String value, Icon icon) {
         this.type = type;
         this.value = value;
         this.dataSourceApi = dataSourceApi;
@@ -34,27 +27,16 @@ public class TreeNodeModel implements TreeNodeModelApi {
         prepareContextMenu();
     }
 
-    public TreeNodeModel(Neo4jTreeNodeType type, DataSourceApi dataSourceApi) {
-        this.type = type;
-        this.dataSourceApi = dataSourceApi;
-        prepareContextMenu();
-    }
-
     private void prepareContextMenu() {
         if (type == Neo4jTreeNodeType.LABEL
             || type == Neo4jTreeNodeType.RELATIONSHIP
             || type == Neo4jTreeNodeType.PROPERTY_KEY) {
-                contextMenu = new ContextMenu(type, getDataSourceApi(), value);
+                metadataContextMenu = new MetadataContextMenu(type, getDataSourceApi(), value);
         }
     }
 
-    @Override
     public Optional<ContextMenu> getContextMenu() {
-        return Optional.ofNullable(contextMenu);
-    }
-
-    public void setContextMenu(ContextMenu contextMenu) {
-        this.contextMenu = contextMenu;
+        return Optional.ofNullable(metadataContextMenu);
     }
 
     @Override
@@ -87,9 +69,5 @@ public class TreeNodeModel implements TreeNodeModelApi {
     @Override
     public DataSourceApi getDataSourceApi() {
         return dataSourceApi;
-    }
-
-    public void setDataSourceApi(DataSourceApi dataSourceApi) {
-        this.dataSourceApi = dataSourceApi;
     }
 }

@@ -4,8 +4,9 @@ import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.impl.DataSourceV1;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.dto.ContextMenu;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.dto.DataSourceContextMenu;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.dto.MetadataContextMenu;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.RootTreeNodeModel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.*;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
@@ -34,7 +35,7 @@ public class DataSourceMetadataUiTest {
 
     @Before
     public void setUp() {
-        root = new PatchedDefaultMutableTreeNode(DataSourcesView.ROOT_NAME);
+        root = new PatchedDefaultMutableTreeNode(RootTreeNodeModel.ROOT_NAME);
         DataSourceMetadataUi ui = new DataSourceMetadataUi(null);
         dataSourceApi = new DataSourceV1(UUID, "local", DataSourceType.NEO4J_BOLT, new HashMap<>());
         TreeNodeModelApi model = new DataSourceTreeNodeModel(dataSourceApi);
@@ -71,7 +72,7 @@ public class DataSourceMetadataUiTest {
         TreePath path = new TreePath(getTreePath(Neo4jTreeNodeType.LABELS, Neo4jTreeNodeType.LABEL));
 
         assertThat(sut.getContextMenu(path).get())
-                .isEqualToComparingFieldByField(new ContextMenu(Neo4jTreeNodeType.LABEL, dataSourceApi, LABEL));
+                .isEqualToComparingFieldByField(new MetadataContextMenu(Neo4jTreeNodeType.LABEL, dataSourceApi, LABEL));
     }
 
     @Test
@@ -100,7 +101,7 @@ public class DataSourceMetadataUiTest {
         TreePath path = new TreePath(getTreePath(Neo4jTreeNodeType.RELATIONSHIPS, Neo4jTreeNodeType.RELATIONSHIP));
 
         assertThat(sut.getContextMenu(path).get())
-                .isEqualToComparingFieldByField(new ContextMenu(Neo4jTreeNodeType.RELATIONSHIP, dataSourceApi, REL));
+                .isEqualToComparingFieldByField(new MetadataContextMenu(Neo4jTreeNodeType.RELATIONSHIP, dataSourceApi, REL));
     }
 
     @Test
@@ -115,7 +116,7 @@ public class DataSourceMetadataUiTest {
         TreePath path = new TreePath(getTreePath(Neo4jTreeNodeType.PROPERTY_KEYS, Neo4jTreeNodeType.PROPERTY_KEY));
 
         assertThat(sut.getContextMenu(path).get())
-                .isEqualToComparingFieldByField(new ContextMenu(Neo4jTreeNodeType.PROPERTY_KEY, dataSourceApi, PROPERTY));
+                .isEqualToComparingFieldByField(new MetadataContextMenu(Neo4jTreeNodeType.PROPERTY_KEY, dataSourceApi, PROPERTY));
     }
 
     @Test
@@ -145,7 +146,7 @@ public class DataSourceMetadataUiTest {
         TreePath path = new TreePath(pathObjects);
 
         assertThat(sut.getContextMenu(path).get())
-                .isEqualToComparingFieldByField(new ContextMenu(Neo4jTreeNodeType.DATASOURCE, dataSourceApi));
+                .isEqualToComparingFieldByField(new DataSourceContextMenu(dataSourceApi));
     }
 
     private TreeNode getChildByType(TreeNode node, Neo4jTreeNodeType type) {
