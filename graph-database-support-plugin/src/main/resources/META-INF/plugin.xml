@@ -125,6 +125,8 @@
                         serviceImplementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView"/>
         <projectService serviceInterface="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView"
                         serviceImplementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView"/>
+        <projectService serviceInterface="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params.ParametersService"
+                        serviceImplementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params.ParametersService"/>
         <scratch.rootType implementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.GraphDbEditorsConsoleRootType"/>
         <applicationConfigurable groupId="tools"
                                  instance="com.neueda.jetbrains.plugin.graphdb.jetbrains.configuration.GraphDatabaseSupportConfiguration"/>

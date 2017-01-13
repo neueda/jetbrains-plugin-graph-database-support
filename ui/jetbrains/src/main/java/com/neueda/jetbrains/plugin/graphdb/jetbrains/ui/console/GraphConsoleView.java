@@ -25,15 +25,14 @@ import com.intellij.ui.treeStructure.Tree;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analytics;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.graph.GraphPanel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.log.LogPanel;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params.ParametersPanel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.status.ExecutionStatusBarWidget;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.TablePanel;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants;
 import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
 
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import javax.swing.*;
+import java.awt.*;
 
 public class GraphConsoleView implements Disposable {
 
@@ -56,6 +55,7 @@ public class GraphConsoleView implements Disposable {
     private JPanel entityDetailsScrollContent;
     private JPanel logTab;
     private JPanel graphTab;
+    private JPanel parametersTab;
     private JBTabbedPane defaultTabContainer;
     private JBSplitter graphSplitter;
 
@@ -64,6 +64,7 @@ public class GraphConsoleView implements Disposable {
     private TablePanel tablePanel;
     private GraphPanel graphPanel;
     private LogPanel logPanel;
+    private ParametersPanel parametersPanel;
 
     public GraphConsoleView() {
         initialized = false;
@@ -71,6 +72,7 @@ public class GraphConsoleView implements Disposable {
         tablePanel = new TablePanel();
         graphPanel = new GraphPanel();
         logPanel = new LogPanel();
+        parametersPanel = new ParametersPanel();
         lookAndFeelService = ServiceManager.getService(LookAndFeelService.class);
     }
 
@@ -95,6 +97,8 @@ public class GraphConsoleView implements Disposable {
                     .setText("Graph"));
             consoleTabs.addTab(new TabInfo(tableScrollPane)
                     .setText("Table"));
+            consoleTabs.addTab(new TabInfo(parametersTab)
+                    .setText("Parameters"));
             consoleTabs.setSelectionChangeHandler((info, requestFocus, doChangeSelection) -> {
                 Analytics.event("console", "openTab[" + info.getText() + "]");
                 ActionCallback callback = doChangeSelection.run();
@@ -126,12 +130,14 @@ public class GraphConsoleView implements Disposable {
         entityDetailsScrollPane.setBorder(IdeBorderFactory.createEmptyBorder());
         logTab.setBorder(IdeBorderFactory.createEmptyBorder());
         graphTab.setBorder(IdeBorderFactory.createEmptyBorder());
+        parametersTab.setBorder(IdeBorderFactory.createEmptyBorder());
     }
 
     private void initializeUiComponents(Project project) {
         graphPanel.initialize(this, project);
         tablePanel.initialize(this, project);
         logPanel.initialize(this, project);
+        parametersPanel.initialize(this, project);
     }
 
     private void initializeWidgets(Project project) {
@@ -166,6 +172,10 @@ public class GraphConsoleView implements Disposable {
 
     public JPanel getLogTab() {
         return logTab;
+    }
+
+    public JPanel getParametersTab() {
+        return parametersTab;
     }
 
     @Override

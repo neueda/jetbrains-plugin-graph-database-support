@@ -35,13 +35,23 @@ public class Neo4jBoltDatabase implements GraphDatabaseApi {
 
     @Override
     public GraphQueryResult execute(String query) {
+        return execute(query, null);
+    }
+
+    @Override
+    public GraphQueryResult execute(String query, Map<String, Object> statementParameters) {
         try (Driver driver = GraphDatabase.driver(url, auth);
-             Session session = driver.session()) {
+            Session session = driver.session()) {
 
             Neo4jBoltBuffer buffer = new Neo4jBoltBuffer();
 
             long startTime = System.currentTimeMillis();
-            StatementResult statementResult = session.run(query);
+            StatementResult statementResult;
+            if (statementParameters == null) {
+                statementResult = session.run(query);
+            } else {
+                statementResult = session.run(query, statementParameters);
+            }
             buffer.addColumns(statementResult.keys());
 
             for (Record record : statementResult.list()) {

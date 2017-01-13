@@ -92,6 +92,14 @@
               </component>
             </children>
           </scrollpane>
+          <grid id="d329c" binding="parametersTab" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints>
+              <tabbedpane title="Parameters"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children/>
+          </grid>
         </children>
       </tabbedpane>
       <component id="b903c" class="com.intellij.ui.tabs.impl.JBTabsImpl" binding="consoleTabs" custom-create="true">
