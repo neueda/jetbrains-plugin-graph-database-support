@@ -20,4 +20,10 @@ public interface GraphQueryResult {
     List<GraphRelationship> getRelationships();
 
     List<GraphQueryNotification> getNotifications();
+
+    boolean hasPlan();
+
+    boolean hasProfile();
+
+    GraphQueryPlan getPlan();
 }

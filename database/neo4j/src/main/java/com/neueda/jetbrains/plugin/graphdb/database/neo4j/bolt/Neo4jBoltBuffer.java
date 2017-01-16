@@ -3,12 +3,15 @@ package com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryNotification;
+import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryPlan;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultRow;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryNotification;
+import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryPlan;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryResultRow;
 import org.neo4j.driver.v1.summary.InputPosition;
+import org.neo4j.driver.v1.summary.Plan;
 import org.neo4j.driver.v1.summary.ResultSummary;
 
 import java.util.ArrayList;
@@ -18,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 public class Neo4jBoltBuffer {
 
@@ -103,4 +107,39 @@ public class Neo4jBoltBuffer {
 
         return notifications;
     }
+
+    public boolean hasPlan() {
+        return Optional.ofNullable(resultSummary)
+                .map(ResultSummary::hasPlan)
+                .orElse(false);
+    }
+
+    public boolean hasProfile() {
+        return Optional.ofNullable(resultSummary)
+                .map(ResultSummary::hasProfile)
+                .orElse(false);
+    }
+
+    public GraphQueryPlan getQueryPlan() {
+        if (!hasPlan()) {
+            return null;
+        }
+
+        Plan plan = resultSummary.plan();
+        return new Neo4jBoltQueryPlan(plan.operatorType(), getArguments(plan), plan.identifiers(),
+                getPlanChildren(plan.children()));
+    }
+
+    private static List<Neo4jBoltQueryPlan> getPlanChildren(List<? extends Plan> childrenPlans) {
+        return childrenPlans.stream()
+                .map(plan -> new Neo4jBoltQueryPlan(plan.operatorType(), getArguments(plan), plan.identifiers(),
+                        getPlanChildren(plan.children())))
+                .collect(toList());
+    }
+
+    private static Map<String, Object> getArguments(Plan plan) {
+        return plan.arguments().entrySet().stream()
+                .collect(toMap(Map.Entry::getKey, e -> e.getValue().asObject()));
+    }
+
 }
