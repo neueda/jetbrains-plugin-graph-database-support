@@ -11,7 +11,7 @@ enum QueryPlanArgumentKeys {
     RUNTIME_IMPL("runtime-impl"),
     PLANNER("planner"),
     VERSION("version");
-    
+
     private String key;
 
     QueryPlanArgumentKeys(String key) {
@@ -22,5 +22,5 @@ enum QueryPlanArgumentKeys {
         return key;
     }
 
-    
+
 }

@@ -86,8 +86,8 @@ public class QueryPlanPanel implements Disposable {
                                 .map(col -> col.valueOf(value))
                                 .orElseThrow(() ->
                                         new ShouldNeverHappenException("Sergey Ishchenko",
-                                                "columns are statically defined, and each column set should contain " +
-                                                        "operator column"));
+                                                "columns are statically defined, and each column set should contain "
+                                                        + "operator column"));
 
                         JComponent result = (JComponent) myBaseRenderer.getTreeCellRendererComponent(tree,
                                 transformedValue, selected, expanded, leaf, row, hasFocus);
@@ -146,7 +146,11 @@ public class QueryPlanPanel implements Disposable {
         return sb.toString();
     }
 
-    public static abstract class CloseTab extends AnAction implements DumbAware {
+    public static class CloseTab extends AnAction implements DumbAware {
+
+        @Override
+        public void actionPerformed(AnActionEvent e) {
+        }
 
         @Override
         public void update(final AnActionEvent e) {

@@ -166,16 +166,20 @@ public class GraphConsoleView implements Disposable {
             }
 
             @Override
-            public void mouseClicked(MouseEvent e) {}
+            public void mouseClicked(MouseEvent e) {
+            }
 
             @Override
-            public void mousePressed(MouseEvent e) {}
+            public void mousePressed(MouseEvent e) {
+            }
 
             @Override
-            public void mouseEntered(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {
+            }
 
             @Override
-            public void mouseExited(MouseEvent e) {}
+            public void mouseExited(MouseEvent e) {
+            }
         });
     }
 
@@ -201,7 +205,7 @@ public class GraphConsoleView implements Disposable {
     }
 
     private void createNewQueryPlanTab(String originalQuery,
-                                             GraphQueryResult result, int tabId) {
+                                       GraphQueryResult result, int tabId) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout(0, 3));
 
@@ -212,6 +216,7 @@ public class GraphConsoleView implements Disposable {
         DefaultActionGroup tabActions = new DefaultActionGroup(new QueryPlanPanel.CloseTab() {
             @Override
             public void actionPerformed(AnActionEvent e) {
+                super.actionPerformed(e);
                 consoleTabs.removeTab(tabInfo);
             }
         });
