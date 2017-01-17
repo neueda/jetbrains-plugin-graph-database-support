@@ -17,7 +17,8 @@ dependencies {
         exclude group: "org.slf4j", module: "jcl-over-slf4j"
     }
 
-    compile("org.codehaus.jackson:jackson-mapper-asl:$versionJacksonMapper")
+    compile("com.fasterxml.jackson.core:jackson-core:$versionJacksonMapper")
+    compile("com.fasterxml.jackson.core:jackson-databind:$versionJacksonMapper")
 
     testCompile "junit:junit:$versionJunit"
     testCompile "org.assertj:assertj-core:$versionAssertj"

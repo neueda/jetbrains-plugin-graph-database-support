@@ -89,7 +89,7 @@ public class ExecuteQueryAction extends AnAction {
             ParametersService service = ServiceManager.getService(project, ParametersService.class);
             parameters = service.getParameters();
         } catch (Exception exception) {
-            registerParametersRetrievalErrorEvent(messageBus, exception, editor);
+            sendParametersRetrievalErrorEvent(messageBus, exception, editor);
             return;
         }
 
@@ -139,7 +139,7 @@ public class ExecuteQueryAction extends AnAction {
         }
     }
 
-    private void registerParametersRetrievalErrorEvent(MessageBus messageBus, Exception exception, Editor editor) {
+    private void sendParametersRetrievalErrorEvent(MessageBus messageBus, Exception exception, Editor editor) {
         QueryParametersRetrievalErrorEvent event = messageBus
                 .syncPublisher(QueryParametersRetrievalErrorEvent.QUERY_PARAMETERS_RETRIEVAL_ERROR_EVENT_TOPIC);
         event.handleError(exception, editor);
