@@ -12,9 +12,13 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQuer
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.MetadataRetrieveEvent;
 
 import java.awt.*;
+import java.util.Map;
+
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.*;
 
 public class LogPanel implements Disposable {
 
@@ -35,6 +39,10 @@ public class LogPanel implements Disposable {
                 info("Executing query: ");
                 userInput(payload.getContent());
                 newLine();
+                if (!payload.getParameters().isEmpty()) {
+                    info("With parameters: ");
+                    printParametersMap(payload.getParameters());
+                }
             }
 
             @Override
@@ -80,10 +88,24 @@ public class LogPanel implements Disposable {
                 newLine();
             }
         });
+
+        messageBus.connect().subscribe(QueryParametersRetrievalErrorEvent.QUERY_PARAMETERS_RETRIEVAL_ERROR_EVENT_TOPIC,
+                (exception, editor) -> {
+                    error(PARAMS_ERROR_COMMON_MSG);
+                    printException(exception);
+                });
     }
 
     public void userInput(String message) {
         log.print(message, ConsoleViewContentType.USER_INPUT);
+    }
+
+    public void printParametersMap(Map<String, Object> parameters) {
+        for (Map.Entry<String, Object> entry : parameters.entrySet()) {
+            String message = String.format("%s: %s", entry.getKey(), entry.getValue());
+            log.print(message, ConsoleViewContentType.USER_INPUT);
+            newLine();
+        }
     }
 
     public void info(String message) {

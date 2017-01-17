@@ -3,9 +3,15 @@ package com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.query.Neo4jBoltQueryResult;
+import org.neo4j.driver.v1.AuthToken;
+import org.neo4j.driver.v1.AuthTokens;
+import org.neo4j.driver.v1.Driver;
+import org.neo4j.driver.v1.GraphDatabase;
+import org.neo4j.driver.v1.Record;
+import org.neo4j.driver.v1.Session;
+import org.neo4j.driver.v1.StatementResult;
 
-import org.neo4j.driver.v1.*;
-
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -35,13 +41,18 @@ public class Neo4jBoltDatabase implements GraphDatabaseApi {
 
     @Override
     public GraphQueryResult execute(String query) {
+        return execute(query, Collections.emptyMap());
+    }
+
+    @Override
+    public GraphQueryResult execute(String query, Map<String, Object> statementParameters) {
         try (Driver driver = GraphDatabase.driver(url, auth);
-             Session session = driver.session()) {
+            Session session = driver.session()) {
 
             Neo4jBoltBuffer buffer = new Neo4jBoltBuffer();
 
             long startTime = System.currentTimeMillis();
-            StatementResult statementResult = session.run(query);
+            StatementResult statementResult = session.run(query, statementParameters);
             buffer.addColumns(statementResult.keys());
 
             for (Record record : statementResult.list()) {

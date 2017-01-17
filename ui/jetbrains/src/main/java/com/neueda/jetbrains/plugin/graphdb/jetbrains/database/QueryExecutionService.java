@@ -55,7 +55,7 @@ public class QueryExecutionService {
         runningQuery = ApplicationManager.getApplication().executeOnPooledThread(() -> {
             try {
                 GraphDatabaseApi database = databaseManager.getDatabaseFor(dataSource);
-                GraphQueryResult result = database.execute(payload.getContent());
+                GraphQueryResult result = database.execute(payload.getContent(), payload.getParameters());
 
                 ApplicationManager.getApplication().invokeLater(() -> {
                     event.resultReceived(payload, result);

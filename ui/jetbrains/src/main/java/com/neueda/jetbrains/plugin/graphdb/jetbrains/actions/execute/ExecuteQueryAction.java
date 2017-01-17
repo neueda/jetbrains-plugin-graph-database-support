@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.ActionButtonComponent;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -18,13 +19,16 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSo
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.psi.PsiTraversalUtilities;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params.ParametersService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.NameUtil;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Notifier;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphLanguages;
 
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.Map;
 import java.util.Optional;
 
 public class ExecuteQueryAction extends AnAction {
@@ -80,7 +84,16 @@ public class ExecuteQueryAction extends AnAction {
             return;
         }
 
-        ExecuteQueryPayload executeQueryPayload = new ExecuteQueryPayload(content, editor);
+        Map<String, Object> parameters;
+        try {
+            ParametersService service = ServiceManager.getService(project, ParametersService.class);
+            parameters = service.getParameters();
+        } catch (Exception exception) {
+            sendParametersRetrievalErrorEvent(messageBus, exception, editor);
+            return;
+        }
+
+        ExecuteQueryPayload executeQueryPayload = new ExecuteQueryPayload(content, parameters, editor);
         ConsoleToolWindow.ensureOpen(project);
 
         if (virtualFile != null) {
@@ -124,5 +137,11 @@ public class ExecuteQueryAction extends AnAction {
         } else {
             return element.getText();
         }
+    }
+
+    private void sendParametersRetrievalErrorEvent(MessageBus messageBus, Exception exception, Editor editor) {
+        QueryParametersRetrievalErrorEvent event = messageBus
+                .syncPublisher(QueryParametersRetrievalErrorEvent.QUERY_PARAMETERS_RETRIEVAL_ERROR_EVENT_TOPIC);
+        event.handleError(exception, editor);
     }
 }

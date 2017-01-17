@@ -20,6 +20,14 @@ public class FileUtil {
         );
     }
 
+    public static VirtualFile getScratchFile(Project project, String fileName) throws IOException {
+        return ScratchFileService.getInstance().findFile(
+                GraphDbEditorsConsoleRootType.getInstance(),
+                fileName + project.getName(),
+                ScratchFileService.Option.create_if_missing
+        );
+    }
+
     public static FileEditor[] openFile(Project project, VirtualFile file) {
         return FileEditorManager.getInstance(project).openFile(file, true);
     }
