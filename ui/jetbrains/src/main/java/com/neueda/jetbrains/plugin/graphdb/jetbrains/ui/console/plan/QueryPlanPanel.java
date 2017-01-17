@@ -25,6 +25,7 @@ import javax.swing.tree.TreeCellRenderer;
 import java.awt.*;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.plan.ColumnDefinitions.getProfileQueryPlanColumns;
@@ -47,7 +48,12 @@ public class QueryPlanPanel implements Disposable {
         queryLabel.setRows(3);
         queryLabel.setEditable(false);
 
-        ListTreeTableModelOnColumns model = createModel(result.getPlan(), result.hasProfile());
+        GraphQueryPlan graphQueryPlan = result.getPlan()
+                .orElseThrow(() ->
+                        new ShouldNeverHappenException("Sergey Ishchenko",
+                                "GraphQueryPanel is initialized when explain or profile queries are executed"));
+
+        ListTreeTableModelOnColumns model = createModel(graphQueryPlan, result.isProfilePlan());
 
         treeTable = new TreeTableView(model);
         treeTable.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
@@ -131,16 +137,20 @@ public class QueryPlanPanel implements Disposable {
 
     @NotNull
     private static String getStatusText(GraphQueryResult result) {
-        Map<String, Object> args = result.getPlan().getArguments();
         StringBuilder sb = new StringBuilder();
-        sb.append("Cypher version: ").append(args.getOrDefault(VERSION.getKey(), '-')).append(", ")
-                .append("planner: ").append(args.getOrDefault(PLANNER.getKey(), '-'))
-                .append("(").append(args.getOrDefault(PLANNER_IMPL.getKey(), '-')).append("), ")
-                .append("runtime: ").append(args.getOrDefault(RUNTIME.getKey(), '-'));
 
-        if (result.hasProfile()) {
-            sb.append(", ").append(calculateTotalDbHits(result.getPlan())).append(" total db hits in ")
-                    .append(result.getExecutionTimeMs()).append("ms.");
+        Optional<GraphQueryPlan> plan = result.getPlan();
+        if (plan.isPresent()) {
+            Map<String, Object> args = plan.get().getArguments();
+            sb.append("Cypher version: ").append(args.getOrDefault(VERSION.getKey(), '-')).append(", ")
+                    .append("planner: ").append(args.getOrDefault(PLANNER.getKey(), '-'))
+                    .append("(").append(args.getOrDefault(PLANNER_IMPL.getKey(), '-')).append("), ")
+                    .append("runtime: ").append(args.getOrDefault(RUNTIME.getKey(), '-'));
+
+            if (result.isProfilePlan()) {
+                sb.append(", ").append(calculateTotalDbHits(plan.get())).append(" total db hits in ")
+                        .append(result.getExecutionTimeMs()).append("ms.");
+            }
         }
 
         return sb.toString();

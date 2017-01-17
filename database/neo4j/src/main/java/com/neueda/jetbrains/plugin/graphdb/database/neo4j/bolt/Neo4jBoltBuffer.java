@@ -114,20 +114,20 @@ public class Neo4jBoltBuffer {
                 .orElse(false);
     }
 
-    public boolean hasProfile() {
+    public boolean isProfilePlan() {
         return Optional.ofNullable(resultSummary)
                 .map(ResultSummary::hasProfile)
                 .orElse(false);
     }
 
-    public GraphQueryPlan getQueryPlan() {
+    public Optional<GraphQueryPlan> getQueryPlan() {
         if (!hasPlan()) {
-            return null;
+            return Optional.empty();
         }
 
         Plan plan = resultSummary.plan();
-        return new Neo4jBoltQueryPlan(plan.operatorType(), getArguments(plan), plan.identifiers(),
-                getPlanChildren(plan.children()));
+        return Optional.of(new Neo4jBoltQueryPlan(plan.operatorType(), getArguments(plan), plan.identifiers(),
+                getPlanChildren(plan.children())));
     }
 
     private static List<Neo4jBoltQueryPlan> getPlanChildren(List<? extends Plan> childrenPlans) {

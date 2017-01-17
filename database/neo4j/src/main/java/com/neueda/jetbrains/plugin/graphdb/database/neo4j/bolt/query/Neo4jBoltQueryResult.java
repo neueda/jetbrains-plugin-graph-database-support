@@ -156,12 +156,12 @@ public class Neo4jBoltQueryResult implements GraphQueryResult {
     }
 
     @Override
-    public boolean hasProfile() {
-        return buffer.hasProfile();
+    public boolean isProfilePlan() {
+        return buffer.isProfilePlan();
     }
 
     @Override
-    public GraphQueryPlan getPlan() {
+    public Optional<GraphQueryPlan> getPlan() {
         return buffer.getQueryPlan();
     }
 

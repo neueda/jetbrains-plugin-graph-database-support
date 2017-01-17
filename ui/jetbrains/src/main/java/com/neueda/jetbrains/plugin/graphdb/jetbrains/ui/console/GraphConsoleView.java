@@ -41,8 +41,8 @@ import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelSer
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -52,6 +52,8 @@ import static java.time.temporal.ChronoField.*;
 
 public class GraphConsoleView implements Disposable {
 
+    public static final String PROFILE_PLAN_TITLE = "Profile";
+    public static final String EXPLAIN_PLAN_TITLE = "Explain";
     private boolean initialized;
 
     private ExecutionStatusBarWidget executionStatusBarWidget;
@@ -153,35 +155,19 @@ public class GraphConsoleView implements Disposable {
         consoleTabsPane = new JBTabsPaneImpl(null, SwingConstants.TOP, this);
         consoleTabs = (JBTabsImpl) consoleTabsPane.getTabs();
 
-        consoleTabs.addTabMouseListener(new MouseListener() {
+        consoleTabs.addTabMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (UIUtil.isCloseClick(e, MouseEvent.MOUSE_RELEASED)) {
                     final TabInfo info = consoleTabs.findInfo(e);
                     if (info != null) {
                         String tabTitle = info.getText();
-                        if (tabTitle.startsWith("Profile") || tabTitle.startsWith("Explain")) {
+                        if (tabTitle.startsWith(PROFILE_PLAN_TITLE) || tabTitle.startsWith(EXPLAIN_PLAN_TITLE)) {
                             IdeEventQueue.getInstance().blockNextEvents(e);
                             consoleTabs.removeTab(info);
                         }
                     }
                 }
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
             }
         });
     }
@@ -225,7 +211,7 @@ public class GraphConsoleView implements Disposable {
         });
         tabInfo.setTabLabelActions(tabActions, ActionPlaces.EDITOR_TAB);
 
-        String planType = result.hasProfile() ? "Profile" : "Explain";
+        String planType = result.isProfilePlan() ? PROFILE_PLAN_TITLE : EXPLAIN_PLAN_TITLE;
         consoleTabs.addTab(tabInfo.setText(String.format("%1s %2d - %3s", planType, tabId,
                 LocalDateTime.now().format(QUERY_PLAN_TIME_FORMAT))));
     }

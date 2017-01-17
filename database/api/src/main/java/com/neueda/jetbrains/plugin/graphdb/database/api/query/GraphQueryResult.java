@@ -4,6 +4,7 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GraphQueryResult {
 
@@ -23,7 +24,7 @@ public interface GraphQueryResult {
 
     boolean hasPlan();
 
-    boolean hasProfile();
+    boolean isProfilePlan();
 
-    GraphQueryPlan getPlan();
+    Optional<GraphQueryPlan> getPlan();
 }
