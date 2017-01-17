@@ -158,9 +158,12 @@ public class GraphConsoleView implements Disposable {
             public void mouseReleased(MouseEvent e) {
                 if (UIUtil.isCloseClick(e, MouseEvent.MOUSE_RELEASED)) {
                     final TabInfo info = consoleTabs.findInfo(e);
-                    if (info != null && info.getText().startsWith("Query ")) {
-                        IdeEventQueue.getInstance().blockNextEvents(e);
-                        consoleTabs.removeTab(info);
+                    if (info != null) {
+                        String tabTitle = info.getText();
+                        if (tabTitle.startsWith("Profile") || tabTitle.startsWith("Explain")) {
+                            IdeEventQueue.getInstance().blockNextEvents(e);
+                            consoleTabs.removeTab(info);
+                        }
                     }
                 }
             }
