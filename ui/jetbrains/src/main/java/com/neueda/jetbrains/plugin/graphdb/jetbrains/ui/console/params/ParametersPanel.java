@@ -3,6 +3,7 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.json.JsonFileType;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
@@ -29,6 +30,7 @@ public class ParametersPanel implements ParametersProvider {
         MessageBus messageBus = project.getMessageBus();
 
         editor = getJsonEditorFromScratchFile(project);
+        setInitialContent(editor.getDocument());
 
         graphConsoleView.getParametersTab().add(editor, BorderLayout.CENTER);
 
@@ -55,7 +57,16 @@ public class ParametersPanel implements ParametersProvider {
             throw new RuntimeException(e);
         }
         Document document = FILE_DOCUMENT_MANAGER.getDocument(file);
+
         return new EditorTextField(document, project, new JsonFileType(), false, false);
+    }
+
+    private void setInitialContent(Document document) {
+        if (document.getText().isEmpty()) {
+            final Runnable setTextRunner = () -> document.setText("// Provide query parameters in JSON format here:");
+            ApplicationManager.getApplication()
+                    .invokeLater(() -> ApplicationManager.getApplication().runWriteAction(setTextRunner));
+        }
     }
 
     public String getParametersJson() {
