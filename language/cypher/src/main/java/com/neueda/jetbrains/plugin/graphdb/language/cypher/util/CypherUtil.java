@@ -2,6 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.language.cypher.util;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FileTypeIndex;
@@ -42,6 +43,10 @@ public class CypherUtil {
         return findAllAndFilter(file, elementType, (element) -> name.equals(element.getName()));
     }
 
+    public static <T extends CypherNamedElement> List<T> findAllByName(PsiElement psiElement, IElementType elementType, String name) {
+        return findAllAndFilter(psiElement, elementType, (element) -> name.equals(element.getName()));
+    }
+
     public static <T extends CypherNamedElement> List<T> findAllAndFilter(Project project, IElementType elementType, Filter filter) {
         Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance()
                 .getContainingFiles(FileTypeIndex.NAME, CypherFileType.INSTANCE, GlobalSearchScope.allScope(project));
@@ -59,9 +64,21 @@ public class CypherUtil {
     }
 
     public static <T extends CypherNamedElement> List<T> findAllAndFilter(PsiFile file, IElementType elementType, Filter filter) {
-        List<T> sameElements = null;
         List<T> candidates = TraverseUtil.collectPsiElementsByType(file, elementType);
+        return filterSameElementsFromCandidates(candidates, filter);
+    }
 
+    public static <T extends CypherNamedElement> List<T> findAllAndFilter(PsiElement psiElement, IElementType elementType, Filter filter) {
+        List<T> candidates = TraverseUtil.collectPsiElementsByType(psiElement, elementType);
+        return filterSameElementsFromCandidates(candidates, filter);
+    }
+
+    public interface Filter {
+        boolean filter(CypherNamedElement element);
+    }
+
+    private static <T extends CypherNamedElement> List<T> filterSameElementsFromCandidates(List<T> candidates, Filter filter) {
+        List<T> sameElements = null;
         for (T candidate : candidates) {
             if (filter.filter(candidate)) {
                 if (sameElements == null) {
@@ -72,10 +89,5 @@ public class CypherUtil {
         }
 
         return sameElements != null ? sameElements : Collections.emptyList();
-
-    }
-
-    public interface Filter {
-        boolean filter(CypherNamedElement element);
     }
 }

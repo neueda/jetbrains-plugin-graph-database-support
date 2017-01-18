@@ -10,7 +10,7 @@ import com.intellij.openapi.editor.markup.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.Colors;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.psi.PsiTraversalUtilities;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.PsiTraversalUtilities;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphLanguages;
 
 public class SyncedElementHighlighter {

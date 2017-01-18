@@ -1,5 +1,5 @@
-MATCH (renamed)
-RETURN (renamed);
+MATCH (renameThis)
+RETURN (renameThis);
 
 MATCH (renamed)
 RETURN (renamed);
