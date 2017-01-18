@@ -35,7 +35,8 @@ public class ParametersServiceTest {
     @Test
     public void testParsingEmptyJsonObject() throws Exception {
         parametersProvider.setParametersJson("{}");
-        Map<String, Object> result = parametersService.getParameters();
+        Map<String, Object> result = parametersService
+                .getParameters("match (p:Person) return p;");
 
         assertThat(result.isEmpty()).isTrue();
     }
@@ -51,7 +52,8 @@ public class ParametersServiceTest {
     @Test
     public void testParsingStringParameter() throws Exception {
         parametersProvider.setParametersJson("{\"name\": \"Anna\"}");
-        Map<String, Object> result = parametersService.getParameters();
+        Map<String, Object> result = parametersService
+                .getParameters("match (p:Person) where p.name = $name return *");
 
         assertThat(result.keySet().contains("name")).isTrue();
         assertThat(result.values().contains("Anna")).isTrue();
@@ -60,7 +62,8 @@ public class ParametersServiceTest {
     @Test
     public void testParsingIntegerParameter() throws Exception {
         parametersProvider.setParametersJson("{\"p1\": 17}");
-        Map<String, Object> result = parametersService.getParameters();
+        Map<String, Object> result = parametersService
+                .getParameters("match (p:Person) where p.age = $p1 return *");
 
         assertThat(result.get("p1").toString()).isEqualTo("17");
     }
@@ -68,7 +71,8 @@ public class ParametersServiceTest {
     @Test
     public void testParsingBooleanParameter() throws Exception {
         parametersProvider.setParametersJson("{\"p2\": false}");
-        Map<String, Object> result = parametersService.getParameters();
+        Map<String, Object> result = parametersService.
+                getParameters("match (p:Person) where p.is_citizen = $p2 return *");
 
         assertThat(result.get("p2").toString()).isEqualTo("false");
     }
@@ -76,7 +80,8 @@ public class ParametersServiceTest {
     @Test
     public void testParsingJsonObjectParameter() throws Exception {
         parametersProvider.setParametersJson("{\"p3\": {\"name\":\"Alex\"}}");
-        Map<String, Object> result = parametersService.getParameters();
+        Map<String, Object> result = parametersService.
+                getParameters("match (p:Person) where p.father = $p3 return *");
 
         Map<String, Object> jsonVal = (Map<String, Object>) result.get("p3");
         assertThat(jsonVal).containsKey("name");
@@ -86,7 +91,10 @@ public class ParametersServiceTest {
     @Test
     public void testParsingMultipleParameters() throws Exception {
         parametersProvider.setParametersJson("{\"firstName\": \"Kaleb\", \"lastName\": \"Johnson\"}");
-        Map<String, Object> result = parametersService.getParameters();
+        Map<String, Object> result = parametersService
+                .getParameters("match (p:Person)\n" +
+                        "where p.first_name = $firstName " +
+                        "   and p.last_name = $lastName return *");
 
         assertThat(result.get("firstName").toString()).isEqualTo("Kaleb");
         assertThat(result.get("lastName").toString()).isEqualTo("Johnson");

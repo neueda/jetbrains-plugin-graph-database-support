@@ -87,7 +87,7 @@ public class ExecuteQueryAction extends AnAction {
         Map<String, Object> parameters;
         try {
             ParametersService service = ServiceManager.getService(project, ParametersService.class);
-            parameters = service.getParameters();
+            parameters = service.getParameters(content);
         } catch (Exception exception) {
             sendParametersRetrievalErrorEvent(messageBus, exception, editor);
             return;

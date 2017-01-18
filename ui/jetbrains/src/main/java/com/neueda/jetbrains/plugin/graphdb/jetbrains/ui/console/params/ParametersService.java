@@ -9,7 +9,10 @@ import com.google.common.base.Throwables;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ParametersService {
 
@@ -31,11 +34,37 @@ public class ParametersService {
         this.parametersProvider = parametersProvider;
     }
 
-    public Map<String, Object> getParameters() throws Exception {
+    public Map<String, Object> getParameters(String queryContent) throws Exception {
         if (!isValidParametersMap(parametersProvider.getParametersJson())) {
             return Collections.emptyMap();
         }
-        return MAPPER.readValue(parametersProvider.getParametersJson(), new TypeReference<Map<String, Object>>() { });
+
+        Map<String, Object> allParameters = MAPPER
+                .readValue(parametersProvider.getParametersJson(), new TypeReference<Map<String, Object>>() { });
+
+        return extractQueryParameters(queryContent, allParameters);
+    }
+
+    private Map<String, Object> extractQueryParameters(String query, Map<String, Object> allParameters) {
+        if (StringUtils.isBlank(query)) {
+            return Collections.emptyMap();
+        }
+
+        List<String> parameterNames = extractParameterNames(query);
+        if (parameterNames.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        return allParameters.entrySet().stream()
+                .filter(entry -> parameterNames.contains(entry.getKey()))
+                .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
+    }
+
+    private List<String> extractParameterNames(String query) {
+        return Stream.of(query.split("\\s")) // split by whitespace character
+                .filter(w -> w.startsWith("$"))
+                .map(w -> w.substring(1))
+                .collect(Collectors.toList());
     }
 
     private static boolean isValidParametersMap(String parametersJson) {
