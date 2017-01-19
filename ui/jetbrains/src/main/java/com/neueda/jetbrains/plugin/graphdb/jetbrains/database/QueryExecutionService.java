@@ -9,6 +9,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQuer
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analytics;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryPlanEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Notifier;
 
 import java.util.concurrent.Future;
@@ -61,6 +62,11 @@ public class QueryExecutionService {
                     event.resultReceived(payload, result);
                     event.postResultReceived(payload);
                     event.executionCompleted(payload);
+
+                    if (result.hasPlan()) {
+                        QueryPlanEvent queryPlanEvent = messageBus.syncPublisher(QueryPlanEvent.QUERY_PLAN_EVENT);
+                        queryPlanEvent.queryPlanReceived(payload.getContent(), result);
+                    }
                 });
             } catch (Exception e) {
                 ApplicationManager.getApplication().invokeLater(() -> {

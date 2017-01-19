@@ -1,9 +1,13 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console;
 
+import com.intellij.ide.IdeEventQueue;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.ActionCallback;
@@ -22,10 +26,14 @@ import com.intellij.ui.table.JBTable;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.ui.tabs.impl.JBTabsImpl;
 import com.intellij.ui.treeStructure.Tree;
+import com.intellij.util.ui.UIUtil;
+import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analytics;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryPlanEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.graph.GraphPanel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.log.LogPanel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params.ParametersPanel;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.plan.QueryPlanPanel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.status.ExecutionStatusBarWidget;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.TablePanel;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants;
@@ -33,9 +41,19 @@ import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelSer
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.time.temporal.ChronoField.*;
 
 public class GraphConsoleView implements Disposable {
 
+    public static final String PROFILE_PLAN_TITLE = "Profile";
+    public static final String EXPLAIN_PLAN_TITLE = "Explain";
     private boolean initialized;
 
     private ExecutionStatusBarWidget executionStatusBarWidget;
@@ -65,6 +83,15 @@ public class GraphConsoleView implements Disposable {
     private GraphPanel graphPanel;
     private LogPanel logPanel;
     private ParametersPanel parametersPanel;
+
+    private static final DateTimeFormatter QUERY_PLAN_TIME_FORMAT = new DateTimeFormatterBuilder()
+            .appendValue(HOUR_OF_DAY, 2)
+            .appendLiteral(':')
+            .appendValue(MINUTE_OF_HOUR, 2)
+            .optionalStart()
+            .appendLiteral(':')
+            .appendValue(SECOND_OF_MINUTE, 2)
+            .toFormatter();
 
     public GraphConsoleView() {
         initialized = false;
@@ -106,6 +133,10 @@ public class GraphConsoleView implements Disposable {
                 return callback;
             });
 
+            AtomicInteger tabId = new AtomicInteger(0);
+            project.getMessageBus().connect().subscribe(QueryPlanEvent.QUERY_PLAN_EVENT,
+                    (query, result) -> createNewQueryPlanTab(query, result, tabId.incrementAndGet()));
+
             // Actions
             final ActionGroup consoleActionGroup = (ActionGroup)
                     ActionManager.getInstance().getAction(GraphConstants.Actions.CONSOLE_ACTIONS);
@@ -123,6 +154,22 @@ public class GraphConsoleView implements Disposable {
         graphCanvas = new JPanel(new GridLayout(0, 1));
         consoleTabsPane = new JBTabsPaneImpl(null, SwingConstants.TOP, this);
         consoleTabs = (JBTabsImpl) consoleTabsPane.getTabs();
+
+        consoleTabs.addTabMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (UIUtil.isCloseClick(e, MouseEvent.MOUSE_RELEASED)) {
+                    final TabInfo info = consoleTabs.findInfo(e);
+                    if (info != null) {
+                        String tabTitle = info.getText();
+                        if (tabTitle.startsWith(PROFILE_PLAN_TITLE) || tabTitle.startsWith(EXPLAIN_PLAN_TITLE)) {
+                            IdeEventQueue.getInstance().blockNextEvents(e);
+                            consoleTabs.removeTab(info);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void updateLookAndFeel() {
@@ -144,6 +191,29 @@ public class GraphConsoleView implements Disposable {
         StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
         executionStatusBarWidget = new ExecutionStatusBarWidget(project.getMessageBus());
         statusBar.addWidget(executionStatusBarWidget, "before Position");
+    }
+
+    private void createNewQueryPlanTab(String originalQuery,
+                                       GraphQueryResult result, int tabId) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout(0, 3));
+
+        QueryPlanPanel qpPanel = new QueryPlanPanel(originalQuery, result);
+        qpPanel.initialize(panel);
+
+        TabInfo tabInfo = new TabInfo(panel);
+        DefaultActionGroup tabActions = new DefaultActionGroup(new QueryPlanPanel.CloseTab() {
+            @Override
+            public void actionPerformed(AnActionEvent e) {
+                super.actionPerformed(e);
+                consoleTabs.removeTab(tabInfo);
+            }
+        });
+        tabInfo.setTabLabelActions(tabActions, ActionPlaces.EDITOR_TAB);
+
+        String planType = result.isProfilePlan() ? PROFILE_PLAN_TITLE : EXPLAIN_PLAN_TITLE;
+        consoleTabs.addTab(tabInfo.setText(String.format("%1s %2d - %3s", planType, tabId,
+                LocalDateTime.now().format(QUERY_PLAN_TIME_FORMAT))));
     }
 
     public TablePanel getTablePanel() {
