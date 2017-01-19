@@ -3,7 +3,9 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Throwables;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Collections;
@@ -30,10 +32,28 @@ public class ParametersService {
     }
 
     public Map<String, Object> getParameters() throws Exception {
-        if (parametersProvider == null || StringUtils.isBlank(parametersProvider.getParametersJson())) {
+        if (!isValidParametersMap(parametersProvider.getParametersJson())) {
             return Collections.emptyMap();
         }
         return MAPPER.readValue(parametersProvider.getParametersJson(), new TypeReference<Map<String, Object>>() { });
+    }
+
+    private static boolean isValidParametersMap(String parametersJson) {
+        try {
+            if (parametersJson == null || StringUtils.isBlank(parametersJson)) {
+                return false;
+            }
+
+            JsonParser parser = FACTORY.createParser(parametersJson);
+            JsonNode node = MAPPER.readTree(parser);
+            if (node == null) {
+                return false;
+            }
+        } catch (Exception e) {
+            throw Throwables.propagate(e);
+        }
+
+        return true;
     }
 
 }

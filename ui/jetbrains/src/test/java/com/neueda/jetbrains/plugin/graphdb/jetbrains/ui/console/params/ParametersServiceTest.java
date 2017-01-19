@@ -1,5 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,6 +35,14 @@ public class ParametersServiceTest {
     @Test
     public void testParsingEmptyJsonObject() throws Exception {
         parametersProvider.setParametersJson("{}");
+        Map<String, Object> result = parametersService.getParameters();
+
+        assertThat(result.isEmpty()).isTrue();
+    }
+
+    @Test
+    public void testParsingEmptyParameters() throws Exception {
+        parametersProvider.setParametersJson("");
         Map<String, Object> result = parametersService.getParameters();
 
         assertThat(result.isEmpty()).isTrue();
@@ -81,6 +90,53 @@ public class ParametersServiceTest {
 
         assertThat(result.get("firstName").toString()).isEqualTo("Kaleb");
         assertThat(result.get("lastName").toString()).isEqualTo("Johnson");
+    }
+
+    @Test
+    public void testParsingCommentOnly() throws Exception {
+        parametersProvider.setParametersJson("// Provide query parameters in JSON format here:");
+        Map<String, Object> result = parametersService.getParameters();
+
+        assertThat(result.isEmpty()).isTrue();
+    }
+
+
+    @Test
+    public void testParsingCommentWithParameter() throws Exception {
+        parametersProvider.setParametersJson("// Provide query parameters in JSON format here:\n{\"name\": \"Eva\"}");
+        Map<String, Object> result = parametersService.getParameters();
+
+        assertThat(result.size() == 1).isTrue();
+    }
+
+    @Test(expected = Exception.class)
+    public void testParsingJsonArray() throws Exception {
+        parametersProvider.setParametersJson("// Provide query parameters in JSON format here:\n[\"item1\",\"item2\"]");
+        parametersService.getParameters();
+    }
+
+    @Test(expected = JsonMappingException.class)
+    public void testParsingNumber() throws Exception {
+        parametersProvider.setParametersJson("1");
+        parametersService.getParameters();
+    }
+
+    @Test(expected = JsonMappingException.class)
+    public void testParsingString() throws Exception {
+        parametersProvider.setParametersJson("\"abc\"");
+        parametersService.getParameters();
+    }
+
+    @Test(expected = JsonMappingException.class)
+    public void testParsingUnwrappedParameter() throws Exception {
+        parametersProvider.setParametersJson("\"param1\":\"val1\"");
+        parametersService.getParameters();
+    }
+
+    @Test(expected = Exception.class)
+    public void testParsingParamWithObjAccessor() throws Exception {
+        parametersProvider.setParametersJson("{\"param1\": person[\"name\"]}");
+        parametersService.getParameters();
     }
 
 }

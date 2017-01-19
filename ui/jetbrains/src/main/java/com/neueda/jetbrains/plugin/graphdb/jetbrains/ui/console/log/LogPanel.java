@@ -91,7 +91,7 @@ public class LogPanel implements Disposable {
 
         messageBus.connect().subscribe(QueryParametersRetrievalErrorEvent.QUERY_PARAMETERS_RETRIEVAL_ERROR_EVENT_TOPIC,
                 (exception, editor) -> {
-                    error(PARAMS_ERROR_COMMON_MSG);
+                    error(String.format("%s ", PARAMS_ERROR_COMMON_MSG));
                     printException(exception);
                 });
     }
