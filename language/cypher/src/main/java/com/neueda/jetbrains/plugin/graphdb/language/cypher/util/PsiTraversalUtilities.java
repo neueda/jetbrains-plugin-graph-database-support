@@ -1,4 +1,4 @@
-package com.neueda.jetbrains.plugin.graphdb.jetbrains.psi;
+package com.neueda.jetbrains.plugin.graphdb.language.cypher.util;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;

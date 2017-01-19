@@ -4,9 +4,11 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveResult;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherStatement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherReferenceBase;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.CypherUtil;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.PsiTraversalUtilities;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +26,8 @@ public class CypherVariableReference extends CypherReferenceBase {
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
-        return resolveResults(CypherUtil.findAllByName(myElement.getContainingFile(), CypherTypes.VARIABLE, name));
+        PsiElement statementElement = PsiTraversalUtilities.getParentOfType(myElement, CypherStatement.class);
+        return resolveResults(CypherUtil.findAllByName(statementElement, CypherTypes.VARIABLE, name));
     }
 
     @NotNull
