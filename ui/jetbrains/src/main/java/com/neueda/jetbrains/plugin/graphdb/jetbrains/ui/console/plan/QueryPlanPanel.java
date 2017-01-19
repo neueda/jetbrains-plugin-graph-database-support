@@ -56,10 +56,10 @@ public class QueryPlanPanel implements Disposable {
         ListTreeTableModelOnColumns model = createModel(graphQueryPlan, result.isProfilePlan());
 
         treeTable = new TreeTableView(model);
-        treeTable.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
         treeTable.setAutoCreateColumnsFromModel(true);
         treeTable.setRootVisible(true);
         treeTable.setCellSelectionEnabled(false);
+        treeTable.setAutoResizeMode(TreeTableView.AUTO_RESIZE_OFF);
 
         treeTable.getTree().setShowsRootHandles(true);
 
@@ -72,7 +72,8 @@ public class QueryPlanPanel implements Disposable {
 
         container.add(new JBScrollPane(queryLabel), BorderLayout.NORTH);
         // scroll pane is needed to correctly fit all the tree content and to show table header
-        container.add(new JBScrollPane(treeTable), BorderLayout.CENTER);
+        container.add(new JBScrollPane(treeTable, JBScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JBScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
         container.add(infoLabel, BorderLayout.SOUTH);
     }
 

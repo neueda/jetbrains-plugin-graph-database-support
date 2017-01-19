@@ -9,6 +9,7 @@
         * [Canvas](console/graph/canvas.md)
     * [Table](console/table.md)
     * [Parameters](console/parameters.md)
+    * [Plan](console/plan.md)
 * [Cypher](cypher/index.md)
     * [Syntax](cypher/syntax.md)
     * [Autocompletion](cypher/autocompletion.md)
