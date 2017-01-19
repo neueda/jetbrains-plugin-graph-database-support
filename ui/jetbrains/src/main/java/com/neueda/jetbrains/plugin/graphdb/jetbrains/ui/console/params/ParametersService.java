@@ -5,9 +5,11 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Map;
 
 public class ParametersService {
@@ -31,16 +33,37 @@ public class ParametersService {
     }
 
     public Map<String, Object> getParameters() throws Exception {
-        if (parametersProvider == null || StringUtils.isBlank(parametersProvider.getParametersJson())) {
-            return Collections.emptyMap();
-        }
-
-        JsonParser parser = FACTORY.createParser(parametersProvider.getParametersJson());
-        JsonNode node = MAPPER.readTree(parser);
-        if (node == null) {
+        if (!isValidParametersMap(parametersProvider.getParametersJson())) {
             return Collections.emptyMap();
         }
         return MAPPER.readValue(parametersProvider.getParametersJson(), new TypeReference<Map<String, Object>>() { });
+    }
+
+    private static boolean isValidParametersMap(String parametersJson) {
+        try {
+            if (parametersJson == null || StringUtils.isBlank(parametersJson)) {
+                return false;
+            }
+
+            JsonParser parser = FACTORY.createParser(parametersJson);
+            JsonNode node = MAPPER.readTree(parser);
+            if (node == null) {
+                return false;
+            }
+
+            if (!(node instanceof ObjectNode)) {
+                return false;
+            }
+
+            if (!(node.fields() instanceof Iterator)) {
+                return false;
+            }
+
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 
 }

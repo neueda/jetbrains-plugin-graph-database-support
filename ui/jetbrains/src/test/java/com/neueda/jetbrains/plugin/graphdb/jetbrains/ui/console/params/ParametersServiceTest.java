@@ -108,4 +108,34 @@ public class ParametersServiceTest {
         assertThat(result.size() == 1).isTrue();
     }
 
+    @Test
+    public void testParsingJsonArray() throws Exception {
+        parametersProvider.setParametersJson("// Provide query parameters in JSON format here:\n[\"item1\",\"item2\"]");
+        assertThat(parametersService.getParameters().isEmpty()).isTrue();
+    }
+
+    @Test
+    public void testParsingNumber() throws Exception {
+        parametersProvider.setParametersJson("1");
+        assertThat(parametersService.getParameters().isEmpty()).isTrue();
+    }
+
+    @Test
+    public void testParsingString() throws Exception {
+        parametersProvider.setParametersJson("\"abc\"");
+        assertThat(parametersService.getParameters().isEmpty()).isTrue();
+    }
+
+    @Test
+    public void testParsingUnwrappedParameter() throws Exception {
+        parametersProvider.setParametersJson("\"param1\":\"val1\"");
+        assertThat(parametersService.getParameters().isEmpty()).isTrue();
+    }
+
+    @Test
+    public void testParsingParamWithArraylikeAccessor() throws Exception {
+        parametersProvider.setParametersJson("{\"param1\": person[\"name\"]}");
+        assertThat(parametersService.getParameters().isEmpty()).isTrue();
+    }
+
 }
