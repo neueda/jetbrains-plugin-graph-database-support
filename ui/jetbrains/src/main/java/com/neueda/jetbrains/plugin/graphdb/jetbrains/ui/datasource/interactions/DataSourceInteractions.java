@@ -11,6 +11,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSo
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.neo4j.bolt.Neo4jBoltDataSourceDialog;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModelApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.FileUtil;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Notifier;
 
@@ -57,10 +58,10 @@ public class DataSourceInteractions {
     private void initRemoveAction() {
         decorator.setRemoveAction(anActionButton -> {
             DefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(DefaultMutableTreeNode.class,
-                    (node) -> node.getUserObject() instanceof DataSourceApi);
+                    this::hasModel);
 
             List<DataSourceApi> dataSourcesForRemoval = Arrays.stream(selectedNodes)
-                    .map((node) -> (DataSourceApi) node.getUserObject())
+                    .map(this::getDataSourceApi)
                     .collect(Collectors.toList());
 
             if (dataSourcesForRemoval.size() > 0) {
@@ -69,7 +70,7 @@ public class DataSourceInteractions {
         });
         decorator.setRemoveActionUpdater(e -> {
             DefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(DefaultMutableTreeNode.class,
-                    (node) -> node.getUserObject() instanceof DataSourceApi);
+                    this::hasModel);
 
             return selectedNodes.length > 0;
         });
@@ -78,18 +79,18 @@ public class DataSourceInteractions {
     private void initEditAction() {
         decorator.setEditActionUpdater(e -> {
             DefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(DefaultMutableTreeNode.class,
-                    (node) -> node.getUserObject() instanceof DataSourceApi);
+                    this::hasModel);
 
             return selectedNodes.length == 1;
         });
         decorator.setEditAction(anActionButton -> {
             PatchedDefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(PatchedDefaultMutableTreeNode.class,
-                    (node) -> node.getUserObject() instanceof DataSourceApi);
+                    (node) -> node.getUserObject() instanceof TreeNodeModelApi);
 
             if (selectedNodes.length == 1) {
                 PatchedDefaultMutableTreeNode treeNode = selectedNodes[0];
 
-                DataSourceApi dataSourceToEdit = (DataSourceApi) treeNode.getUserObject();
+                DataSourceApi dataSourceToEdit = getDataSourceApi(treeNode);
 
                 DataSourceDialog dialog = null;
                 if (dataSourceToEdit.getDataSourceType().equals(DataSourceType.NEO4J_BOLT)) {
@@ -112,13 +113,13 @@ public class DataSourceInteractions {
                 int clickCount = e.getClickCount();
                 if (clickCount == 2) {
                     DefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(DefaultMutableTreeNode.class,
-                            (node) -> node.getUserObject() instanceof DataSourceApi);
+                            DataSourceInteractions.this::hasModel);
 
                     if (selectedNodes.length != 1) {
                         return;
                     }
 
-                    DataSourceApi dataSource = (DataSourceApi) selectedNodes[0].getUserObject();
+                    DataSourceApi dataSource = getDataSourceApi(selectedNodes[0]);
                     Analytics.event(dataSource, "openEditor");
 
                     try {
@@ -130,5 +131,13 @@ public class DataSourceInteractions {
             }
         };
         dataSourceTree.addMouseListener(mouseAdapter);
+    }
+
+    private boolean hasModel(DefaultMutableTreeNode node) {
+        return node.getUserObject() instanceof TreeNodeModelApi;
+    }
+
+    private DataSourceApi getDataSourceApi(DefaultMutableTreeNode node) {
+        return ((TreeNodeModelApi) node.getUserObject()).getDataSourceApi();
     }
 }
