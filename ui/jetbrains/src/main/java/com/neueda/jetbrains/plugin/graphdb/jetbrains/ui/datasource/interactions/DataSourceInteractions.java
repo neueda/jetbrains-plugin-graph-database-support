@@ -11,6 +11,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSo
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.neo4j.bolt.Neo4jBoltDataSourceDialog;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModelApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.FileUtil;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Notifier;
@@ -58,7 +59,7 @@ public class DataSourceInteractions {
     private void initRemoveAction() {
         decorator.setRemoveAction(anActionButton -> {
             DefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(DefaultMutableTreeNode.class,
-                    this::hasModel);
+                    this::isDataSource);
 
             List<DataSourceApi> dataSourcesForRemoval = Arrays.stream(selectedNodes)
                     .map(this::getDataSourceApi)
@@ -70,7 +71,7 @@ public class DataSourceInteractions {
         });
         decorator.setRemoveActionUpdater(e -> {
             DefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(DefaultMutableTreeNode.class,
-                    this::hasModel);
+                    this::isDataSource);
 
             return selectedNodes.length > 0;
         });
@@ -79,7 +80,7 @@ public class DataSourceInteractions {
     private void initEditAction() {
         decorator.setEditActionUpdater(e -> {
             DefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(DefaultMutableTreeNode.class,
-                    this::hasModel);
+                    this::isDataSource);
 
             return selectedNodes.length == 1;
         });
@@ -113,7 +114,7 @@ public class DataSourceInteractions {
                 int clickCount = e.getClickCount();
                 if (clickCount == 2) {
                     DefaultMutableTreeNode[] selectedNodes = dataSourceTree.getSelectedNodes(DefaultMutableTreeNode.class,
-                            DataSourceInteractions.this::hasModel);
+                            DataSourceInteractions.this::isDataSource);
 
                     if (selectedNodes.length != 1) {
                         return;
@@ -133,8 +134,9 @@ public class DataSourceInteractions {
         dataSourceTree.addMouseListener(mouseAdapter);
     }
 
-    private boolean hasModel(DefaultMutableTreeNode node) {
-        return node.getUserObject() instanceof TreeNodeModelApi;
+    private boolean isDataSource(DefaultMutableTreeNode node) {
+        return node.getUserObject() instanceof TreeNodeModelApi
+                && ((TreeNodeModelApi) node.getUserObject()).getType() == Neo4jTreeNodeType.DATASOURCE;
     }
 
     private DataSourceApi getDataSourceApi(DefaultMutableTreeNode node) {
