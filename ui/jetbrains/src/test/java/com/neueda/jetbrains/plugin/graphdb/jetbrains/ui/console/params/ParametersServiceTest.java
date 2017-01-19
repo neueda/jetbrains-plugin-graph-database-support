@@ -40,6 +40,14 @@ public class ParametersServiceTest {
     }
 
     @Test
+    public void testParsingEmptyParameters() throws Exception {
+        parametersProvider.setParametersJson("");
+        Map<String, Object> result = parametersService.getParameters();
+
+        assertThat(result.isEmpty()).isTrue();
+    }
+
+    @Test
     public void testParsingStringParameter() throws Exception {
         parametersProvider.setParametersJson("{\"name\": \"Anna\"}");
         Map<String, Object> result = parametersService.getParameters();
@@ -81,6 +89,23 @@ public class ParametersServiceTest {
 
         assertThat(result.get("firstName").toString()).isEqualTo("Kaleb");
         assertThat(result.get("lastName").toString()).isEqualTo("Johnson");
+    }
+
+    @Test
+    public void testParsingCommentOnly() throws Exception {
+        parametersProvider.setParametersJson("// Provide query parameters in JSON format here:");
+        Map<String, Object> result = parametersService.getParameters();
+
+        assertThat(result.isEmpty()).isTrue();
+    }
+
+
+    @Test
+    public void testParsingCommentWithParameter() throws Exception {
+        parametersProvider.setParametersJson("// Provide query parameters in JSON format here:\n{\"name\": \"Eva\"}");
+        Map<String, Object> result = parametersService.getParameters();
+
+        assertThat(result.size() == 1).isTrue();
     }
 
 }

@@ -3,6 +3,7 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.StringUtils;
 
@@ -31,6 +32,12 @@ public class ParametersService {
 
     public Map<String, Object> getParameters() throws Exception {
         if (parametersProvider == null || StringUtils.isBlank(parametersProvider.getParametersJson())) {
+            return Collections.emptyMap();
+        }
+
+        JsonParser parser = FACTORY.createParser(parametersProvider.getParametersJson());
+        JsonNode node = MAPPER.readTree(parser);
+        if (node == null) {
             return Collections.emptyMap();
         }
         return MAPPER.readValue(parametersProvider.getParametersJson(), new TypeReference<Map<String, Object>>() { });
