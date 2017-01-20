@@ -17,6 +17,47 @@ IntelliJ:
 * Editor font: Fira Code, 16
 * Enable ligatures: true
 
+Make sure that tool windows are properly sized by using ctrl+shift+arrows shortcut.
+Hide tool window completely, then make it visible. (3 times for console window, 4 times for data source window)
+
+## GIF
+
+### Preparation
+
+Use [simplescreenrecorder](http://www.maartenbaert.be/simplescreenrecorder/) to record .mkv
+Use [giflossy](https://github.com/pornel/giflossy/releases/tag/lossy/1.82.1) for GIF compression (aliased as gifsicle)
+
+### Recording MKV
+
+Configure simplescreenrecorder:
+
+* Set frame rate to 10
+* Don't record audio
+* Record a fixed rectangle at 1280x960 at (0,0)
+
+Resize and move window to upper-left corner:
+
+```
+xdotool search --name "graph-examples" windowsize 1280 960 windowmove 0 0
+```
+
+Save recorded video with screencast.mkv name
+
+### Generate GIF
+
+cd into directory where screencast.mkv resides
+
+Execute following commands
+
+```sh
+mkdir /tmp/frames
+ffmpeg -i screencast.mkv -vf fps=4 /tmp/frames/ffout%03d.png
+convert -loop 0 -delay 20 /tmp/frames/ffout*.png /tmp/output.gif
+gifsicle -O3 --lossy=80 --colors 256  /tmp/output.gif > screencast.gif
+rm -r /tmp/frames
+rm /tmp/output.gif
+```
+
 # Database seed
 
 ## Queries
