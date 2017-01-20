@@ -36,7 +36,7 @@ Plugin is [available for download](https://plugins.jetbrains.com/plugin/8087) fr
 
 ## Supported Jetbrains products
 
-* IntelliJ IDEA - **tested**.
+* IntelliJ IDEA
 * RubyMine
 * WebStorm
 * PhpStorm
@@ -45,9 +45,6 @@ Plugin is [available for download](https://plugins.jetbrains.com/plugin/8087) fr
 * Android Studio
 * Datagrip
 * CLion
-
-Plugin is not tested (yet) with all existing Jetbrains products.
-However it should work without any issues.
 
 ## Development
 
