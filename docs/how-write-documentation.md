@@ -17,14 +17,17 @@ IntelliJ:
 * Editor font: Fira Code, 16
 * Enable ligatures: true
 
-# GIF
+Make sure that tool windows are properly sized by using ctrl+shift+arrows shortcut.
+Hide tool window completely, then make it visible. (3 times for console window, 4 times for data source window)
 
-## Preparation
+## GIF
+
+### Preparation
 
 Use [simplescreenrecorder](http://www.maartenbaert.be/simplescreenrecorder/) to record .mkv
 Use [giflossy](https://github.com/pornel/giflossy/releases/tag/lossy/1.82.1) for GIF compression (aliased as gifsicle)
 
-## Recording MKV
+### Recording MKV
 
 Configure simplescreenrecorder:
 
@@ -40,21 +43,20 @@ xdotool search --name "graph-examples" windowsize 1280 960 windowmove 0 0
 
 Save recorded video with screencast.mkv name
 
-## Generate GIF
+### Generate GIF
 
 cd into directory where screencast.mkv resides
 
 Execute following commands
 
 ```sh
-mkdir frames
-ffmpeg -i screencast.mkv -vf fps=4 frames/ffout%03d.png
-convert -loop 0 -delay 20 frames/ffout*.png output.gif
-gifsicle -O3 --lossy=80 --colors 256  output.gif > result.gif
-rm -r frames
-rm output.gif
+mkdir /tmp/frames
+ffmpeg -i screencast.mkv -vf fps=4 /tmp/frames/ffout%03d.png
+convert -loop 0 -delay 20 /tmp/frames/ffout*.png /tmp/output.gif
+gifsicle -O3 --lossy=80 --colors 256  /tmp/output.gif > screencast.gif
+rm -r /tmp/frames
+rm /tmp/output.gif
 ```
-
 
 # Database seed
 
