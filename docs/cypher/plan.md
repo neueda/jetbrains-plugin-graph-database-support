@@ -1,7 +1,7 @@
 # Console - Plan
 
-When any `EXPLAIN` or `PROFILE` queries are executed, plugin creates a closeable tab in console, which contains the plan
-of query, rendered as tree table.
+When any `EXPLAIN` or `PROFILE` queries are executed, plugin creates a closeable tab in console,
+which contains the plan of query, rendered as tree table.
  
 ![EXPLAIN plan](../screenshots/explain_plan.png)
 

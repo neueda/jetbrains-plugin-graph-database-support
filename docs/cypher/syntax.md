@@ -1,3 +1,0 @@
-# Cypher - Syntax
-
-TODO

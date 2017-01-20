@@ -2,9 +2,11 @@
 
 ### Canvas
 
-Detailed [more information](canvas.md) about canvas features.
+TODO
 
 ### Entity view
+
+TODO
 
 <!--
 Node information
