@@ -1,0 +1,17 @@
+Release should be done manually & carefully.
+
+Be sure to check that plugin works before releasing!
+
+Commands:
+
+1) Push new release tag to github
+./gradlew release
+
+2) Checkout new release tag locally
+git checkout <new-release-tag>
+
+3) Clean everything
+./gradlew clean
+
+4) Publish plugin to Jetbrains Plugin Registry
+./gradlew publishPlugin
