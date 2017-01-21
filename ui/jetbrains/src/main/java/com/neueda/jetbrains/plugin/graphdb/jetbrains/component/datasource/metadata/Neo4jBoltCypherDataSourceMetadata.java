@@ -57,7 +57,7 @@ public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
             Map<String, String> data = new HashMap<>();
 
             for (GraphQueryResultColumn column : columns) {
-                data.put(column.getName(), (String) row.getValue(column));
+                data.put(column.getName(), row.getValue(column).toString());
             }
 
             dataSourceMetadata.add(data);
