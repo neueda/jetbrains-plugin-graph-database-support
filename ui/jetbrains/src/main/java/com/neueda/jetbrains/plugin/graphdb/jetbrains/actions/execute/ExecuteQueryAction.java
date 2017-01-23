@@ -68,16 +68,19 @@ public class ExecuteQueryAction extends AnAction {
         Caret caret = editor.getCaretModel().getPrimaryCaret();
 
         String content = null;
+        Optional<PsiElement> cypherStatement = Optional.empty();
         if (caret.hasSelection()) {
             content = caret.getSelectedText();
         } else if (psiFile != null) {
             if (psiFile.getLanguage().getID().equals(GraphLanguages.CYPHER)) {
-                String cypherStatement = getCypherStatement(psiFile, caret);
-                if (cypherStatement != null) {
-                    content = cypherStatement;
+                cypherStatement = getCypherStatement(psiFile, caret);
+                if (cypherStatement.isPresent()) {
+                    content = cypherStatement.get().getText();
                 }
             }
         }
+
+        Analytics.event("query-content", caret.hasSelection() ? "contentFromSelect" : "contentFromCaret");
 
         if (content == null) {
             Notifier.error("Query execution error", "No query selected");
@@ -87,7 +90,7 @@ public class ExecuteQueryAction extends AnAction {
         Map<String, Object> parameters;
         try {
             ParametersService service = ServiceManager.getService(project, ParametersService.class);
-            parameters = service.getParameters(content);
+            parameters = service.getParameters(cypherStatement); // support parameters for PsiElement only
         } catch (Exception exception) {
             sendParametersRetrievalErrorEvent(messageBus, exception, editor);
             return;
@@ -129,13 +132,13 @@ public class ExecuteQueryAction extends AnAction {
         executeQueryEvent.executeQuery(dataSource, payload);
     }
 
-    private String getCypherStatement(PsiFile psiFile, Caret caret) {
+    private Optional<PsiElement> getCypherStatement(PsiFile psiFile, Caret caret) {
         PsiElement element = PsiTraversalUtilities.Cypher.getCypherStatementAtOffset(psiFile, caret.getOffset());
 
         if (element == null) {
-            return null;
+            return Optional.empty();
         } else {
-            return element.getText();
+            return Optional.of(element);
         }
     }
 

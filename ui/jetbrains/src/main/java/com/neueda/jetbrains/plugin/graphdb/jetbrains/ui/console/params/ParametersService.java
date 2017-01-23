@@ -6,13 +6,16 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
+import com.intellij.psi.PsiElement;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.TraverseUtil;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ParametersService {
 
@@ -27,14 +30,21 @@ public class ParametersService {
 
     private ParametersProvider parametersProvider;
 
+    public boolean isParametersProviderRegistered() {
+        return parametersProvider != null;
+    }
+
     public void registerParametersProvider(final ParametersProvider parametersProvider) {
-        if (this.parametersProvider != null) {
+        if (isParametersProviderRegistered()) {
             throw new IllegalStateException("Parameters provider already registered");
         }
         this.parametersProvider = parametersProvider;
     }
 
-    public Map<String, Object> getParameters(String queryContent) throws Exception {
+    public Map<String, Object> getParameters(Optional<PsiElement> query) throws Exception {
+        if (!query.isPresent()) {
+            return Collections.emptyMap();
+        }
         if (!isValidParametersMap(parametersProvider.getParametersJson())) {
             return Collections.emptyMap();
         }
@@ -42,11 +52,11 @@ public class ParametersService {
         Map<String, Object> allParameters = MAPPER
                 .readValue(parametersProvider.getParametersJson(), new TypeReference<Map<String, Object>>() { });
 
-        return extractQueryParameters(queryContent, allParameters);
+        return extractQueryParameters(query.get(), allParameters);
     }
 
-    private Map<String, Object> extractQueryParameters(String query, Map<String, Object> allParameters) {
-        if (StringUtils.isBlank(query)) {
+    private Map<String, Object> extractQueryParameters(PsiElement query, Map<String, Object> allParameters) {
+        if (query == null) {
             return Collections.emptyMap();
         }
 
@@ -60,11 +70,20 @@ public class ParametersService {
                 .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
     }
 
-    private List<String> extractParameterNames(String query) {
-        return Stream.of(query.split("\\s")) // split by whitespace character
-                .filter(w -> w.startsWith("$"))
-                .map(w -> w.substring(1))
+    private List<String> extractParameterNames(PsiElement query) {
+        List<PsiElement> parameterElements = TraverseUtil.collectPsiElementsByType(query, CypherTypes.PARAMETER);
+        return parameterElements.stream()
+                .map(elem -> extractParameterName(elem.getText()))
+                .distinct()
                 .collect(Collectors.toList());
+
+    }
+
+    /**
+     * Extract name from parameter labels like $param, {param}, {0}, $0
+     */
+    private static String extractParameterName(String parameterLabel) {
+        return parameterLabel.startsWith("$") ? parameterLabel.substring(1) : parameterLabel.substring(1, parameterLabel.length() - 1);
     }
 
     private static boolean isValidParametersMap(String parametersJson) {
