@@ -54,7 +54,14 @@ public class CypherLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
     @Nullable
     @Override
     public CommonCodeStyleSettings getDefaultCommonSettings() {
-        return new CommonCodeStyleSettings(CypherLanguage.INSTANCE);
+        CommonCodeStyleSettings settings = new CommonCodeStyleSettings(getLanguage());
+        CommonCodeStyleSettings.IndentOptions indentOptions = settings.initIndentOptions();
+        indentOptions.INDENT_SIZE = 2;
+        indentOptions.CONTINUATION_INDENT_SIZE = 2;
+        indentOptions.TAB_SIZE = 2;
+        indentOptions.USE_TAB_CHARACTER = true;
+
+        return settings;
     }
 
     @Override
