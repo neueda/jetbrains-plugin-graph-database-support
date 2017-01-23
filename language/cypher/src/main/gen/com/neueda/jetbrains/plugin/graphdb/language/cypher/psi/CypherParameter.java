@@ -13,4 +13,6 @@ public interface CypherParameter extends PsiElement {
   @Nullable
   CypherOldParameter getOldParameter();
 
+  String getParameterName();
+
 }

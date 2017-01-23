@@ -35,10 +35,7 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
         super.setUp();
 
         parametersService = new ParametersService();
-
-        if (!parametersService.isParametersProviderRegistered()) {
-            parametersService.registerParametersProvider(parametersProvider);
-        }
+        parametersService.registerParametersProvider(parametersProvider);
     }
 
     public void testParsingEmptyJsonObject() throws Exception {

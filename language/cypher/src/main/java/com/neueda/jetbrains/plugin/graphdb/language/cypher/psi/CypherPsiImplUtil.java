@@ -69,6 +69,19 @@ public class CypherPsiImplUtil {
         return element.getProcedureInvocationBody().getText();
     }
 
+    public static String getParameterName(CypherParameter element) {
+        if (element.getNewParameter() != null) {
+            return "?";
+
+        }
+
+        if (element.getOldParameter() != null) {
+            return "?";
+        }
+
+        throw new IllegalStateException("wtf is going on");
+    }
+
     /**
      * Safely replaces symbolic name node with new node.
      * It's possible that nothing happens if newElement is invalid. No error thrown in such case.
