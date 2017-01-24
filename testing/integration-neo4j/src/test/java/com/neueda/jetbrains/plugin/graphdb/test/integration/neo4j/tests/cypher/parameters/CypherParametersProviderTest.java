@@ -7,7 +7,6 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params.Parameter
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.base.BaseIntegrationTest;
 
 import java.util.Map;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -111,6 +110,35 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
         assertThat(result.size() == 1).isTrue();
     }
 
+    public void testParsingNumericParameter() throws Exception {
+        parametersProvider.setParametersJson("{\"0\": \"Tom\"}");
+        Map<String, Object> result = parametersService.getParameters(getPsiFile("RETURN $0"));
+
+        assertThat(result).containsKey("0");
+    }
+
+    public void testParsingOldStyleStringParameter() throws Exception {
+        parametersProvider.setParametersJson("{\"name\": \"Ethan\"}");
+        Map<String, Object> result = parametersService.getParameters(getPsiFile("RETURN {name}"));
+
+        assertThat(result).containsKey("name");
+    }
+
+    public void testParsingOldStyleNumericParameter() throws Exception {
+        parametersProvider.setParametersJson("{\"0\": \"Simon\"}");
+        Map<String, Object> result = parametersService.getParameters(getPsiFile("RETURN {0}"));
+
+        assertThat(result).containsKey("0");
+    }
+
+    public void testFilteringUsedParameters() throws Exception {
+        parametersProvider.setParametersJson("{\"firstName\": \"Frodo\", \"lastName\": \"Baggins\"}");
+        Map<String, Object> result = parametersService.getParameters(getPsiFile("RETURN $lastName"));
+
+        assertThat(result).hasSize(1);
+        assertThat(result).containsKey("lastName");
+    }
+
     public void testParsingJsonArray() throws Exception {
         try {
             parametersProvider.setParametersJson("// Provide query parameters in JSON format here:\n[\"item1\",\"item2\"]");
@@ -152,11 +180,11 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
     }
 
     public void testParametersRetrievalWithNoPsiElement() throws Exception {
-        Map<String, Object> result = parametersService.getParameters(Optional.empty());
+        Map<String, Object> result = parametersService.getParameters(null);
         assertThat(result).isEmpty();
     }
 
-    private Optional<PsiElement> getPsiFile(String queryText) {
-        return Optional.of(myFixture.configureByText("test.cypher", queryText));
+    private PsiElement getPsiFile(String queryText) {
+        return myFixture.configureByText("test.cypher", queryText);
     }
 }

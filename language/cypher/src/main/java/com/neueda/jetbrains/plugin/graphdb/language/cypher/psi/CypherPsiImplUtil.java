@@ -70,16 +70,30 @@ public class CypherPsiImplUtil {
     }
 
     public static String getParameterName(CypherParameter element) {
-        if (element.getNewParameter() != null) {
-            return "?";
+        CypherNewParameter newParameter = element.getNewParameter();
+        CypherOldParameter oldParameter = element.getOldParameter();
 
+        if (newParameter != null) {
+            if (newParameter.getSymbolicNameString() != null) {
+                return newParameter.getSymbolicNameString().getUnescapedSymbolicNameString().getText();
+            }
+            if (newParameter.getUnsignedDecimalInteger() != null) {
+                return newParameter.getUnsignedDecimalInteger().getLInteger().getText();
+            }
+            throw new IllegalStateException("New parameter should have symbolic name or unsigned decimal integer value");
         }
 
-        if (element.getOldParameter() != null) {
-            return "?";
+        if (oldParameter != null) {
+            if (oldParameter.getSymbolicNameString() != null) {
+                return oldParameter.getSymbolicNameString().getUnescapedSymbolicNameString().getText();
+            }
+            if (oldParameter.getUnsignedDecimalInteger() != null) {
+                return oldParameter.getUnsignedDecimalInteger().getLInteger().getText();
+            }
+            throw new IllegalStateException("Old parameter should have symbolic name or unsigned decimal integer value");
         }
 
-        throw new IllegalStateException("wtf is going on");
+        throw new IllegalStateException("Parameter should have either new parameter or old parameter representation");
     }
 
     /**

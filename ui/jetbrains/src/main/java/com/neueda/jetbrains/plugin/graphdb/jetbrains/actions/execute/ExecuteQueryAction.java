@@ -17,17 +17,18 @@ import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analytics;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.PsiTraversalUtilities;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params.ParametersService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.NameUtil;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Notifier;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.PsiTraversalUtilities;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphLanguages;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -68,14 +69,22 @@ public class ExecuteQueryAction extends AnAction {
         Caret caret = editor.getCaretModel().getPrimaryCaret();
 
         String content = null;
-        Optional<PsiElement> cypherStatement = Optional.empty();
+        PsiElement cypherStatement = null;
+        Map<String, Object> parameters = Collections.emptyMap();
         if (caret.hasSelection()) {
             content = caret.getSelectedText();
         } else if (psiFile != null) {
             if (psiFile.getLanguage().getID().equals(GraphLanguages.CYPHER)) {
                 cypherStatement = getCypherStatement(psiFile, caret);
-                if (cypherStatement.isPresent()) {
-                    content = cypherStatement.get().getText();
+                if (cypherStatement != null) {
+                    content = cypherStatement.getText();
+                    try { // support parameters for PsiElement only
+                        ParametersService service = ServiceManager.getService(project, ParametersService.class);
+                        parameters = service.getParameters(cypherStatement);
+                    } catch (Exception exception) {
+                        sendParametersRetrievalErrorEvent(messageBus, exception, editor);
+                        return;
+                    }
                 }
             }
         }
@@ -84,15 +93,6 @@ public class ExecuteQueryAction extends AnAction {
 
         if (content == null) {
             Notifier.error("Query execution error", "No query selected");
-            return;
-        }
-
-        Map<String, Object> parameters;
-        try {
-            ParametersService service = ServiceManager.getService(project, ParametersService.class);
-            parameters = service.getParameters(cypherStatement); // support parameters for PsiElement only
-        } catch (Exception exception) {
-            sendParametersRetrievalErrorEvent(messageBus, exception, editor);
             return;
         }
 
@@ -132,14 +132,8 @@ public class ExecuteQueryAction extends AnAction {
         executeQueryEvent.executeQuery(dataSource, payload);
     }
 
-    private Optional<PsiElement> getCypherStatement(PsiFile psiFile, Caret caret) {
-        PsiElement element = PsiTraversalUtilities.Cypher.getCypherStatementAtOffset(psiFile, caret.getOffset());
-
-        if (element == null) {
-            return Optional.empty();
-        } else {
-            return Optional.of(element);
-        }
+    private PsiElement getCypherStatement(PsiFile psiFile, Caret caret) {
+        return PsiTraversalUtilities.Cypher.getCypherStatementAtOffset(psiFile, caret.getOffset());
     }
 
     private void sendParametersRetrievalErrorEvent(MessageBus messageBus, Exception exception, Editor editor) {
