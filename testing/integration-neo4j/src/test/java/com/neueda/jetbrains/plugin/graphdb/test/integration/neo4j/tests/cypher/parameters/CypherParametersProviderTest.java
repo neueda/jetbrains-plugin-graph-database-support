@@ -55,8 +55,7 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
         Map<String, Object> result = parametersService
                 .getParameters(getPsiFile("match (p:Person) where p.name = $name return *"));
 
-        assertThat(result.keySet()).contains("name");
-        assertThat(result.values()).contains("Anna");
+        assertThat(result).containsEntry("name", "Anna");
     }
 
     public void testParsingIntegerParameter() throws Exception {
@@ -64,7 +63,7 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
         Map<String, Object> result = parametersService
                 .getParameters(getPsiFile("match (p:Person) where p.age = $p1 return *"));
 
-        assertThat(result.get("p1").toString()).isEqualTo("17");
+        assertThat(result).containsEntry("p1", 17);
     }
 
     public void testParsingBooleanParameter() throws Exception {
@@ -72,7 +71,7 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
         Map<String, Object> result = parametersService.
                 getParameters(getPsiFile("match (p:Person) where p.is_citizen = $p2 return *"));
 
-        assertThat(result.get("p2").toString()).isEqualTo("false");
+        assertThat(result).containsEntry("p2", false);
     }
 
     public void testParsingJsonObjectParameter() throws Exception {
@@ -81,8 +80,7 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
                 getParameters(getPsiFile("match (p:Person) where p.father = $p3 return *"));
 
         Map<String, Object> jsonVal = (Map<String, Object>) result.get("p3");
-        assertThat(jsonVal).containsKey("name");
-        assertThat(jsonVal).containsValue("Alex");
+        assertThat(jsonVal).containsEntry("name", "Alex");
     }
 
     public void testParsingMultipleParameters() throws Exception {
@@ -92,8 +90,10 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
                         "where p.first_name = $firstName " +
                         "   and p.last_name = $lastName return *"));
 
-        assertThat(result.get("firstName").toString()).isEqualTo("Kaleb");
-        assertThat(result.get("lastName").toString()).isEqualTo("Johnson");
+        assertThat(result)
+                .hasSize(2)
+                .containsEntry("firstName", "Kaleb")
+                .containsEntry("lastName", "Johnson");
     }
 
     public void testParsingCommentOnly() throws Exception {
@@ -107,36 +107,37 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
         parametersProvider.setParametersJson("// Provide query parameters in JSON format here:\n{\"name\": \"Eva\"}");
         Map<String, Object> result = parametersService.getParameters(getPsiFile("RETURN $name"));
 
-        assertThat(result.size() == 1).isTrue();
+        assertThat(result).hasSize(1);
     }
 
     public void testParsingNumericParameter() throws Exception {
         parametersProvider.setParametersJson("{\"0\": \"Tom\"}");
         Map<String, Object> result = parametersService.getParameters(getPsiFile("RETURN $0"));
 
-        assertThat(result).containsKey("0");
+        assertThat(result).containsEntry("0", "Tom");
     }
 
     public void testParsingOldStyleStringParameter() throws Exception {
         parametersProvider.setParametersJson("{\"name\": \"Ethan\"}");
         Map<String, Object> result = parametersService.getParameters(getPsiFile("RETURN {name}"));
 
-        assertThat(result).containsKey("name");
+        assertThat(result).containsEntry("name", "Ethan");
     }
 
     public void testParsingOldStyleNumericParameter() throws Exception {
         parametersProvider.setParametersJson("{\"0\": \"Simon\"}");
         Map<String, Object> result = parametersService.getParameters(getPsiFile("RETURN {0}"));
 
-        assertThat(result).containsKey("0");
+        assertThat(result).containsEntry("0", "Simon");
     }
 
     public void testFilteringUsedParameters() throws Exception {
         parametersProvider.setParametersJson("{\"firstName\": \"Frodo\", \"lastName\": \"Baggins\"}");
         Map<String, Object> result = parametersService.getParameters(getPsiFile("RETURN $lastName"));
 
-        assertThat(result).hasSize(1);
-        assertThat(result).containsKey("lastName");
+        assertThat(result)
+                .hasSize(1)
+                .containsEntry("lastName", "Baggins");
     }
 
     public void testParsingJsonArray() throws Exception {
@@ -145,7 +146,7 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
             parametersService.getParameters(getPsiFile("return 1"));
             fail("JsonMappingException expected because of array in parameters json expected");
         } catch (JsonMappingException e) {
-            // do nothing
+            // do nothing, exception was expected
         }
     }
 

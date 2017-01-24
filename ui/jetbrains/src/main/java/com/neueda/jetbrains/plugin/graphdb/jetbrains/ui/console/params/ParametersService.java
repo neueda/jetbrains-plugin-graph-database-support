@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
 import com.intellij.psi.PsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherParameter;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherPsiImplUtil;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.TraverseUtil;
 import org.apache.commons.lang.StringUtils;
@@ -43,7 +42,7 @@ public class ParametersService {
         this.parametersProvider = parametersProvider;
     }
 
-    public Map<String, Object> getParameters(PsiElement query) throws Exception {
+    public Map<String, Object> getParameters(PsiElement element) throws Exception {
         if (!isValidParametersMap(parametersProvider.getParametersJson())) {
             return Collections.emptyMap();
         }
@@ -51,11 +50,11 @@ public class ParametersService {
         Map<String, Object> allParameters = MAPPER
                 .readValue(parametersProvider.getParametersJson(), new TypeReference<Map<String, Object>>() { });
 
-        return extractQueryParameters(query, allParameters);
+        return extractQueryParameters(element, allParameters);
     }
 
-    private Map<String, Object> extractQueryParameters(PsiElement query, Map<String, Object> allParameters) {
-        Set<String> parameterNames = extractParameterNames(query);
+    private Map<String, Object> extractQueryParameters(PsiElement element, Map<String, Object> allParameters) {
+        Set<String> parameterNames = extractParameterNames(element);
         if (parameterNames.isEmpty()) {
             return Collections.emptyMap();
         }
@@ -65,10 +64,10 @@ public class ParametersService {
                 .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
     }
 
-    private Set<String> extractParameterNames(PsiElement query) {
-        List<PsiElement> parameterElements = TraverseUtil.collectPsiElementsByType(query, CypherTypes.PARAMETER);
+    private Set<String> extractParameterNames(PsiElement element) {
+        List<PsiElement> parameterElements = TraverseUtil.collectPsiElementsByType(element, CypherTypes.PARAMETER);
         return parameterElements.stream()
-                .map(elem -> CypherPsiImplUtil.getParameterName(((CypherParameter) elem)))
+                .map(elem -> ((CypherParameter) elem).getParameterName())
                 .distinct()
                 .collect(Collectors.toSet());
     }

@@ -70,30 +70,27 @@ public class CypherPsiImplUtil {
     }
 
     public static String getParameterName(CypherParameter element) {
-        CypherNewParameter newParameter = element.getNewParameter();
-        CypherOldParameter oldParameter = element.getOldParameter();
-
-        if (newParameter != null) {
+        if (element.getNewParameter() != null) {
+            CypherNewParameter newParameter = element.getNewParameter();
             if (newParameter.getSymbolicNameString() != null) {
                 return newParameter.getSymbolicNameString().getUnescapedSymbolicNameString().getText();
             }
             if (newParameter.getUnsignedDecimalInteger() != null) {
                 return newParameter.getUnsignedDecimalInteger().getLInteger().getText();
             }
-            throw new IllegalStateException("New parameter should have symbolic name or unsigned decimal integer value");
         }
 
-        if (oldParameter != null) {
+        if (element.getOldParameter() != null) {
+            CypherOldParameter oldParameter = element.getOldParameter();
             if (oldParameter.getSymbolicNameString() != null) {
                 return oldParameter.getSymbolicNameString().getUnescapedSymbolicNameString().getText();
             }
             if (oldParameter.getUnsignedDecimalInteger() != null) {
                 return oldParameter.getUnsignedDecimalInteger().getLInteger().getText();
             }
-            throw new IllegalStateException("Old parameter should have symbolic name or unsigned decimal integer value");
         }
 
-        throw new IllegalStateException("Parameter should have either new parameter or old parameter representation");
+        return "graphbdb-plugin-invalid-parameter-name-should-never-happen";
     }
 
     /**
