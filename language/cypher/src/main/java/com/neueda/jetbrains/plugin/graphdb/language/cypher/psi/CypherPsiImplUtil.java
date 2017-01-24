@@ -69,6 +69,30 @@ public class CypherPsiImplUtil {
         return element.getProcedureInvocationBody().getText();
     }
 
+    public static String getParameterName(CypherParameter element) {
+        if (element.getNewParameter() != null) {
+            CypherNewParameter newParameter = element.getNewParameter();
+            if (newParameter.getSymbolicNameString() != null) {
+                return newParameter.getSymbolicNameString().getUnescapedSymbolicNameString().getText();
+            }
+            if (newParameter.getUnsignedDecimalInteger() != null) {
+                return newParameter.getUnsignedDecimalInteger().getLInteger().getText();
+            }
+        }
+
+        if (element.getOldParameter() != null) {
+            CypherOldParameter oldParameter = element.getOldParameter();
+            if (oldParameter.getSymbolicNameString() != null) {
+                return oldParameter.getSymbolicNameString().getUnescapedSymbolicNameString().getText();
+            }
+            if (oldParameter.getUnsignedDecimalInteger() != null) {
+                return oldParameter.getUnsignedDecimalInteger().getLInteger().getText();
+            }
+        }
+
+        return "graphbdb-plugin-invalid-parameter-name-should-never-happen";
+    }
+
     /**
      * Safely replaces symbolic name node with new node.
      * It's possible that nothing happens if newElement is invalid. No error thrown in such case.

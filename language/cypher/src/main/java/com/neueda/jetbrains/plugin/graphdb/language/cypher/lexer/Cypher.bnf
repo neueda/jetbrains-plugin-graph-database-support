@@ -441,7 +441,9 @@ Variable ::= SymbolicNameString {
 }
 FunctionName ::= l_identifier
 ProcedureName ::= SymbolicNameString
-Parameter ::= NewParameter | OldParameter
+Parameter ::= NewParameter | OldParameter {
+    methods=[getParameterName]
+}
 OldParameter ::= "{" (SymbolicNameString | UnsignedDecimalInteger) "}"
 NewParameter ::= "$" (SymbolicNameString | UnsignedDecimalInteger)
 NodeLabel ::= ":" LabelName

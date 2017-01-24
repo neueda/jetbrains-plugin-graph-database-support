@@ -1,6 +1,5 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.application.ApplicationManager;
@@ -40,7 +39,7 @@ public class ParametersPanel implements ParametersProvider {
         messageBus.connect().subscribe(QueryParametersRetrievalErrorEvent.QUERY_PARAMETERS_RETRIEVAL_ERROR_EVENT_TOPIC,
                 (exception, editor) -> {
                     String errorMessage;
-                    if (exception instanceof JsonParseException && exception.getMessage() != null) {
+                    if (exception.getMessage() != null) {
                         errorMessage = String.format("%s: %s", PARAMS_ERROR_COMMON_MSG, exception.getMessage());
                     } else {
                         errorMessage = PARAMS_ERROR_COMMON_MSG;
