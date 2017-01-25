@@ -28,7 +28,11 @@ public class MetadataActionGroup extends ActionGroup {
         if (type == Neo4jTreeNodeType.RELATIONSHIP) {
             return new AnAction[]{new MetadataRelationshipAction(data, dataSourceUuid, "Query this relationship", "", NEO4J)};
         } else if (type == Neo4jTreeNodeType.LABEL) {
-            return new AnAction[]{new MetadataLabelAction(data, dataSourceUuid, "Query this label", "", NEO4J)};
+            return new AnAction[]{
+                    new MetadataLabelAction(data, dataSourceUuid, "Nodes with this label", "", NEO4J),
+                    new MetadataLabelFromAction(data, dataSourceUuid, "Outgoing relationships", "", NEO4J),
+                    new MetadataLabelToAction(data, dataSourceUuid, "Incoming relationships", "", NEO4J)
+            };
         } else if (type == Neo4jTreeNodeType.PROPERTY_KEY) {
             return new AnAction[]{new MetadataPropertyKeyAction(data, dataSourceUuid, "Query this property", "", NEO4J)};
         } else {

@@ -18,6 +18,9 @@ public class DataSourceActionGroup extends ActionGroup {
     @NotNull
     @Override
     public AnAction[] getChildren(@Nullable AnActionEvent e) {
-        return new AnAction[]{new DataSourceAction("Open editor", "", null, dataSourceApi)};
+        return new AnAction[]{
+                new DataSourceAction("Open editor", "", null, dataSourceApi),
+                new DataSourceOpenBrowserAction("Open in browser", "", null, dataSourceApi)
+        };
     }
 }
