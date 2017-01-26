@@ -16,6 +16,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.FileUtil;
 
+import javax.swing.*;
 import java.awt.*;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.*;
@@ -62,6 +63,7 @@ public class ParametersPanel implements ParametersProvider {
                 VirtualFile file = FileUtil.getScratchFile(project, "Neo4jGraphDbConsoleParametersPanel.json");
                 Document document = FILE_DOCUMENT_MANAGER.getDocument(file);
                 editor = createEditor(project, document);
+                editor.setHeaderComponent(new JLabel("Provide query parameters in JSON format here:"));
                 setInitialContent(document);
                 initializeUi();
             } catch (Throwable e) {
@@ -72,7 +74,7 @@ public class ParametersPanel implements ParametersProvider {
 
     private void setInitialContent(Document document) {
         if (document.getText().isEmpty()) {
-            final Runnable setTextRunner = () -> document.setText("// Provide query parameters in JSON format here:\n{}");
+            final Runnable setTextRunner = () -> document.setText("{}");
             ApplicationManager.getApplication()
                     .invokeLater(() -> ApplicationManager.getApplication().runWriteAction(setTextRunner));
         }
