@@ -1,21 +1,22 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params;
 
+import com.google.common.base.Throwables;
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.ui.EditorTextField;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.FileUtil;
 
 import java.awt.*;
-import java.io.IOException;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.*;
 
@@ -23,17 +24,24 @@ public class ParametersPanel implements ParametersProvider {
 
     private static final FileDocumentManager FILE_DOCUMENT_MANAGER = FileDocumentManager.getInstance();
 
-    private EditorTextField editor;
+    private Editor editor;
+    private GraphConsoleView graphConsoleView;
+    private MessageBus messageBus;
+    private ParametersService service;
 
     public void initialize(GraphConsoleView graphConsoleView, Project project) {
-        MessageBus messageBus = project.getMessageBus();
+        this.graphConsoleView = graphConsoleView;
+        this.messageBus = project.getMessageBus();
+        this.service = ServiceManager.getService(project, ParametersService.class);
+        setupEditor(project);
+    }
 
-        editor = getJsonEditorFromScratchFile(project);
-        setInitialContent(editor.getDocument());
+    public String getParametersJson() {
+        return editor.getDocument().getText();
+    }
 
-        graphConsoleView.getParametersTab().add(editor, BorderLayout.CENTER);
-
-        ParametersService service = ServiceManager.getService(project, ParametersService.class);
+    private void initializeUi() {
+        graphConsoleView.getParametersTab().add(editor.getComponent(), BorderLayout.CENTER);
         service.registerParametersProvider(this);
 
         messageBus.connect().subscribe(QueryParametersRetrievalErrorEvent.QUERY_PARAMETERS_RETRIEVAL_ERROR_EVENT_TOPIC,
@@ -48,28 +56,30 @@ public class ParametersPanel implements ParametersProvider {
                 });
     }
 
-    private static EditorTextField getJsonEditorFromScratchFile(Project project) {
-        VirtualFile file;
-        try {
-            file = FileUtil.getScratchFile(project, "Neo4jGraphDbConsoleParametersPanel");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        Document document = FILE_DOCUMENT_MANAGER.getDocument(file);
-
-        return new EditorTextField(document, project, new JsonFileType(), false, false);
+    private void setupEditor(Project project) {
+        ApplicationManager.getApplication().runWriteAction(() -> {
+            try {
+                VirtualFile file = FileUtil.getScratchFile(project, "Neo4jGraphDbConsoleParametersPanel.json");
+                Document document = FILE_DOCUMENT_MANAGER.getDocument(file);
+                editor = createEditor(project, document);
+                setInitialContent(document);
+                initializeUi();
+            } catch (Throwable e) {
+                throw Throwables.propagate(e);
+            }
+        });
     }
 
     private void setInitialContent(Document document) {
         if (document.getText().isEmpty()) {
-            final Runnable setTextRunner = () -> document.setText("// Provide query parameters in JSON format here:");
+            final Runnable setTextRunner = () -> document.setText("// Provide query parameters in JSON format here:\n{}");
             ApplicationManager.getApplication()
                     .invokeLater(() -> ApplicationManager.getApplication().runWriteAction(setTextRunner));
         }
     }
 
-    public String getParametersJson() {
-        return editor.getText();
+    private static Editor createEditor(Project project, Document document) {
+        return EditorFactory.getInstance().createEditor(document, project, new JsonFileType(), false);
     }
 
 }

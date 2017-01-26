@@ -6,6 +6,7 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params.ParameterRootType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.GraphDbEditorsConsoleRootType;
 
 import java.io.IOException;
@@ -22,8 +23,8 @@ public class FileUtil {
 
     public static VirtualFile getScratchFile(Project project, String fileName) throws IOException {
         return ScratchFileService.getInstance().findFile(
-                GraphDbEditorsConsoleRootType.getInstance(),
-                fileName + project.getName(),
+                ParameterRootType.getInstance(),
+                 project.getName() + fileName,
                 ScratchFileService.Option.create_if_missing
         );
     }
