@@ -177,16 +177,12 @@
                     text="Explain query"
                     icon="/general/run.png"
                     description="Explain query">
-                <keyboard-shortcut first-keystroke="ctrl ENTER"
-                                   keymap="$default"/>
             </action>
             <action id="GraphDatabaseActionGroup.ProfileQuery"
                     class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ProfileQueryAction"
                     text="Profile query"
                     icon="/general/run.png"
                     description="Profile query">
-                <keyboard-shortcut first-keystroke="ctrl ENTER"
-                                   keymap="$default"/>
             </action>
             <add-to-group group-id="EditorPopupMenu"/>
         </group>

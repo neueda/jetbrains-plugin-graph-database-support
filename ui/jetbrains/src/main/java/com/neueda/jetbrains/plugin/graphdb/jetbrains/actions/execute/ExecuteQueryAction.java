@@ -88,7 +88,7 @@ public class ExecuteQueryAction extends AnAction {
             }
         }
 
-        Analytics.event("query-query", caret.hasSelection() ? "contentFromSelect" : "contentFromCaret");
+        Analytics.event("query-content", caret.hasSelection() ? "contentFromSelect" : "contentFromCaret");
 
         if (query == null) {
             Notifier.error("Query execution error", "No query selected");
