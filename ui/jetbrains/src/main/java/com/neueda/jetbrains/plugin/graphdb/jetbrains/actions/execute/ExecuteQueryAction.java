@@ -68,16 +68,15 @@ public class ExecuteQueryAction extends AnAction {
 
         Caret caret = editor.getCaretModel().getPrimaryCaret();
 
-        String content = null;
-        PsiElement cypherStatement = null;
+        String query = null;
         Map<String, Object> parameters = Collections.emptyMap();
         if (caret.hasSelection()) {
-            content = caret.getSelectedText();
+            query = caret.getSelectedText();
         } else if (psiFile != null) {
             if (psiFile.getLanguage().getID().equals(GraphLanguages.CYPHER)) {
-                cypherStatement = getCypherStatement(psiFile, caret);
+                PsiElement cypherStatement = getCypherStatement(psiFile, caret);
                 if (cypherStatement != null) {
-                    content = cypherStatement.getText();
+                    query = cypherStatement.getText();
                     try { // support parameters for PsiElement only
                         ParametersService service = ServiceManager.getService(project, ParametersService.class);
                         parameters = service.getParameters(cypherStatement);
@@ -91,12 +90,14 @@ public class ExecuteQueryAction extends AnAction {
 
         Analytics.event("query-content", caret.hasSelection() ? "contentFromSelect" : "contentFromCaret");
 
-        if (content == null) {
+        if (query == null) {
             Notifier.error("Query execution error", "No query selected");
             return;
         }
 
-        ExecuteQueryPayload executeQueryPayload = new ExecuteQueryPayload(content, parameters, editor);
+        query = decorateQuery(query);
+
+        ExecuteQueryPayload executeQueryPayload = new ExecuteQueryPayload(query, parameters, editor);
         ConsoleToolWindow.ensureOpen(project);
 
         if (virtualFile != null) {
@@ -130,6 +131,10 @@ public class ExecuteQueryAction extends AnAction {
     public void executeQuery(MessageBus messageBus, DataSourceApi dataSource, ExecuteQueryPayload payload) {
         ExecuteQueryEvent executeQueryEvent = messageBus.syncPublisher(ExecuteQueryEvent.EXECUTE_QUERY_TOPIC);
         executeQueryEvent.executeQuery(dataSource, payload);
+    }
+
+    protected String decorateQuery(String query) {
+        return query;
     }
 
     private PsiElement getCypherStatement(PsiFile psiFile, Caret caret) {
