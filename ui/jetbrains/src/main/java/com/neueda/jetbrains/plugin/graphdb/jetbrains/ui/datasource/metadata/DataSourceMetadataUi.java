@@ -13,9 +13,9 @@ import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.N
 
 public class DataSourceMetadataUi {
 
-    private static final String RELATIONSHIP_TYPES_TITLE = "relationship types";
+    private static final String RELATIONSHIP_TYPES_TITLE = "relationship types (%s)";
     private static final String PROPERTY_KEYS_TITLE = "property keys";
-    private static final String LABELS_TITLE = "labels";
+    private static final String LABELS_TITLE = "labels (%s)";
     private static final String STORED_PROCEDURES_TITLE = "stored procedures";
     private static final String USER_FUNCTIONS_TITLE = "user functions";
 
@@ -45,16 +45,22 @@ public class DataSourceMetadataUi {
         DataSourceApi dataSourceApi = model.getDataSourceApi();
 
         // Labels
+        int labelCount = dataSourceMetadata
+            .getMetadata(Neo4jBoltCypherDataSourceMetadata.LABELS)
+            .size();
         PatchedDefaultMutableTreeNode labelsTreeNode = new PatchedDefaultMutableTreeNode(
-                   new MetadataTreeNodeModel(LABELS, dataSourceApi, LABELS_TITLE, GraphIcons.Nodes.LABEL));
+                   new MetadataTreeNodeModel(LABELS, dataSourceApi, String.format(LABELS_TITLE, labelCount), GraphIcons.Nodes.LABEL));
         dataSourceMetadata
                    .getMetadata(Neo4jBoltCypherDataSourceMetadata.LABELS)
                    .forEach((row) -> labelsTreeNode.add(of(new MetadataTreeNodeModel(LABEL, dataSourceApi, row.get("label")))));
         dataSourceRootTreeNode.add(labelsTreeNode);
 
         // RelTypes
+        int relationshipTypesCount = dataSourceMetadata
+            .getMetadata(Neo4jBoltCypherDataSourceMetadata.RELATIONSHIP_TYPES)
+            .size();
         PatchedDefaultMutableTreeNode relationshipTypesTreeNode = new PatchedDefaultMutableTreeNode(
-                new MetadataTreeNodeModel(RELATIONSHIPS, dataSourceApi, RELATIONSHIP_TYPES_TITLE, GraphIcons.Nodes.RELATIONSHIP_TYPE));
+                new MetadataTreeNodeModel(RELATIONSHIPS, dataSourceApi, String.format(RELATIONSHIP_TYPES_TITLE, relationshipTypesCount), GraphIcons.Nodes.RELATIONSHIP_TYPE));
         dataSourceMetadata
                    .getMetadata(Neo4jBoltCypherDataSourceMetadata.RELATIONSHIP_TYPES)
                    .forEach((row) -> relationshipTypesTreeNode.add(of(new MetadataTreeNodeModel(RELATIONSHIP, dataSourceApi, row.get("relationshipType")))));
