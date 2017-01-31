@@ -14,7 +14,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.formatter.FormatterUtil;
-import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.impl.source.tree.TreeUtil;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
 import org.jetbrains.annotations.NotNull;
@@ -95,14 +94,6 @@ public class CypherBlock implements ASTBlock {
         if (isReturnBodyKeywords(node)) {
             wrap = Wrap.createWrap(WrapType.ALWAYS, true);
             indent = Indent.getNormalIndent(false);
-        }
-
-        if (isTopLevel(node)) {
-            String original = node.getPsi().getText();
-            String text = original.toUpperCase();
-            if (!original.equals(text)) {
-                node.getPsi(LeafPsiElement.class).rawReplaceWithText(text);
-            }
         }
 
         return new CypherBlock(node, codeStyleSettings, wrap, indent, null);

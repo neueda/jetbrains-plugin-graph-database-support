@@ -31,10 +31,18 @@ public class CypherLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
                     "After ':'",
                     CodeStyleSettingsCustomizable.SPACES_OTHER);
 
+            consumer.showCustomOption(CypherCodeStyleSettings.class,
+                    "SPACE_BETWEEN_LABEL_AND_PARAMS",
+                    "Before params block",
+                    CodeStyleSettingsCustomizable.SPACES_OTHER);
+
             consumer.showStandardOptions("SPACE_WITHIN_BRACKETS",
                     "SPACE_WITHIN_BRACES",
                     "SPACE_AFTER_COMMA",
-                    "SPACE_BEFORE_COMMA");
+                    "SPACE_BEFORE_COMMA",
+                    "SPACE_AROUND_EQUALITY_OPERATORS",
+                    "SPACE_AROUND_ADDITIVE_OPERATORS",
+                    "SPACE_AROUND_MULTIPLICATIVE_OPERATORS");
         } else if (settingsType == SettingsType.BLANK_LINES_SETTINGS) {
             consumer.showStandardOptions("KEEP_BLANK_LINES_IN_CODE");
         } else if (settingsType == SettingsType.WRAPPING_AND_BRACES_SETTINGS) {
@@ -66,8 +74,8 @@ public class CypherLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSe
 
     @Override
     public String getCodeSample(@NotNull SettingsType settingsType) {
-        return "MATCH (a:Person)-[r:WORKS_IN]->(b:Company)\n"
-                + "WHERE a.name='Peter'\n"
-                + "RETURN a,b,r;";
+        return "MATCH (a:Person{name:\"Dmitry\"})-[r:WORKS_IN]->(b:Company) "
+                + "WHERE b.title='Neueda' "
+                + "RETURN a,b,r LIMIT 5";
     }
 }
