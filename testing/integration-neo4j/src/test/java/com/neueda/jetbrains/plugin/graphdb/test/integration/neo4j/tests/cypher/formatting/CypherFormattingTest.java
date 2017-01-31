@@ -3,8 +3,10 @@ package com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.tests.cypher.
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
+import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.formatter.CypherCodeStyleSettings;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherLanguage;
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.base.BaseIntegrationTest;
 
@@ -13,14 +15,17 @@ import static java.util.Collections.singletonList;
 public class CypherFormattingTest extends BaseIntegrationTest {
 
     public void testFormatter() {
-        PsiFile file = myFixture.addFileToProject("test.cypher", "match (a:Person)-[]-(b) return a,b;");
+        PsiFile file = myFixture.addFileToProject("test.cypher",
+                "match (a:Person{name:'Dmitry'})-[]-(b) where b.title='Neueda' return a,b;");
         myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
 
-        CommonCodeStyleSettings settings = CodeStyleSettingsManager.getSettings(getProject())
-                .getCommonSettings(CypherLanguage.INSTANCE);
-        settings.SPACE_AFTER_COLON = true;
-        settings.SPACE_WITHIN_BRACKETS = true;
-        settings.SPACE_AFTER_COMMA = true;
+        CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(getProject());
+        CommonCodeStyleSettings commonSettings = settings.getCommonSettings(CypherLanguage.INSTANCE);
+        CypherCodeStyleSettings customSettings = settings.getCustomSettings(CypherCodeStyleSettings.class);
+
+        customSettings.SPACE_AFTER_COLON = true;
+        commonSettings.SPACE_WITHIN_BRACKETS = true;
+        commonSettings.SPACE_AFTER_COMMA = true;
 
         new WriteCommandAction.Simple(getProject()) {
             @Override
@@ -31,6 +36,8 @@ public class CypherFormattingTest extends BaseIntegrationTest {
             }
         }.execute();
 
-        myFixture.checkResult("match ( a: Person )-[]-( b ) return a, b;");
+        myFixture.checkResult("match ( a: Person {name: 'Dmitry'} )-[]-( b )\n" +
+                "where b.title = 'Neueda'\n" +
+                "return a, b;");
     }
 }
