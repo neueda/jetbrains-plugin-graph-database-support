@@ -62,6 +62,11 @@ public class MetadataTreeNodeModel implements TreeNodeModelApi {
         return Optional.ofNullable(value);
     }
 
+    @Override
+    public Optional<String> getValue() {
+        return Optional.ofNullable(value);
+    }
+
     public void setValue(String value) {
         this.value = value;
     }

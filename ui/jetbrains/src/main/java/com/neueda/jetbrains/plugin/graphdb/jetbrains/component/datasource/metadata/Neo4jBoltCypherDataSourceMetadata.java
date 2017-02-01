@@ -11,13 +11,14 @@ import java.util.Map;
 
 public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
 
-    public static final String LABELS = "labels";
-    public static final String RELATIONSHIP_TYPES = "relationships";
     public static final String PROPERTY_KEYS = "propertyKeys";
     public static final String STORED_PROCEDURES = "procedures";
     public static final String USER_FUNCTIONS = "functions";
 
     private Map<String, List<Map<String, String>>> dataReceiver = new HashMap<>();
+
+    private List<Neo4jLabelMetadata> labels = new ArrayList<>();
+    private List<Neo4jRelationshipTypeMetadata> relationshipTypes = new ArrayList<>();
 
     @Override
     public List<Map<String, String>> getMetadata(String metadataKey) {
@@ -27,14 +28,6 @@ public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
     @Override
     public boolean isMetadataExists(final String metadataKey) {
         return dataReceiver.containsKey(metadataKey);
-    }
-
-    public void addLabels(GraphQueryResult labelsQueryResult) {
-        addDataSourceMetadata(LABELS, labelsQueryResult);
-    }
-
-    public void addRelationshipTypes(GraphQueryResult relationshipQueryResult) {
-        addDataSourceMetadata(RELATIONSHIP_TYPES, relationshipQueryResult);
     }
 
     public void addPropertyKeys(GraphQueryResult propertyKeysResult) {
@@ -68,5 +61,37 @@ public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
 
     public void addDataSourceMetadata(String key, List<Map<String, String>> data) {
         dataReceiver.put(key, data);
+    }
+
+    public void addLabels(GraphQueryResult labelCountResult, List<String> labelNames) {
+        GraphQueryResultColumn column = labelCountResult.getColumns().get(0);
+        for (int i = 0; i < labelCountResult.getRows().size(); i++) {
+            GraphQueryResultRow row = labelCountResult.getRows().get(i);
+            labels.add(new Neo4jLabelMetadata(labelNames.get(i), (Long) row.getValue(column)));
+        }
+    }
+
+    public void addLabel(Neo4jLabelMetadata labelMetadata) {
+        labels.add(labelMetadata);
+    }
+
+    public List<Neo4jLabelMetadata> getLabels() {
+        return labels;
+    }
+
+    public void addRelationshipTypes(GraphQueryResult relationshipTypeCountResult, List<String> relationshipTypeNames) {
+        GraphQueryResultColumn column = relationshipTypeCountResult.getColumns().get(0);
+        for (int i = 0; i < relationshipTypeCountResult.getRows().size(); i++) {
+            GraphQueryResultRow row = relationshipTypeCountResult.getRows().get(i);
+            relationshipTypes.add(new Neo4jRelationshipTypeMetadata(relationshipTypeNames.get(i), (Long) row.getValue(column)));
+        }
+    }
+
+    public void addRelationshipType(Neo4jRelationshipTypeMetadata relationshipTypeMetadata) {
+        relationshipTypes.add(relationshipTypeMetadata);
+    }
+
+    public List<Neo4jRelationshipTypeMetadata> getRelationshipTypes() {
+        return relationshipTypes;
     }
 }

@@ -17,6 +17,8 @@ public interface TreeNodeModelApi {
 
     Optional<String> getText();
 
+    Optional<String> getValue();
+
     @Nullable
     DataSourceApi getDataSourceApi();
 }
