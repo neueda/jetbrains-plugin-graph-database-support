@@ -108,7 +108,7 @@ public class DataSourcesComponentMetadata implements ProjectComponent {
     private String queryRelationshipTypeCount(List<String> relationshipTypes) {
         return relationshipTypes
             .stream()
-            .map(label -> "MATCH ()-[r:" + label + "]->() RETURN count(r)")
+            .map(relationshipType -> "MATCH ()-[r:" + relationshipType + "]->() RETURN count(r)")
             .collect(Collectors.joining(" UNION "));
     }
 

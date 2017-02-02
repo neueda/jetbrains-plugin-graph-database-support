@@ -55,7 +55,7 @@ public class GraphDisplay extends Display {
         super(new Visualization());
 
         if (UIUtil.isUnderDarcula()) {
-            setBackground(lookAndFeel.getBackgroundColor().brighter());
+            setBackground(lookAndFeel.getBackgroundColor().darker());
         } else {
             setBackground(lookAndFeel.getBackgroundColor());
         }
