@@ -3,6 +3,8 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata;
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jLabelMetadata;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jRelationshipTypeMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.impl.DataSourceV1;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.dto.DataSourceContextMenu;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.dto.MetadataContextMenu;
@@ -44,8 +46,6 @@ public class DataSourceMetadataUiTest {
         root.add(datasource);
         Neo4jBoltCypherDataSourceMetadata metadata = new Neo4jBoltCypherDataSourceMetadata();
 
-        HashMap<String, String> labels = new HashMap<>();
-        labels.put("label", LABEL);
 
         HashMap<String, String> propertyKeys = new HashMap<>();
         propertyKeys.put("propertyKey", PROPERTY);
@@ -55,13 +55,10 @@ public class DataSourceMetadataUiTest {
         procedures.put("name", "db.labels");
         procedures.put("description", "List all labels in the database.");
 
-        HashMap<String, String> relationshipTypes = new HashMap<>();
-        relationshipTypes.put("relationshipType", REL);
-
-        metadata.addDataSourceMetadata(LABELS, singletonList(labels));
+        metadata.addLabel(new Neo4jLabelMetadata(LABEL, 3L));
+        metadata.addRelationshipType(new Neo4jRelationshipTypeMetadata(REL, 4L));
         metadata.addDataSourceMetadata(PROPERTY_KEYS, singletonList(propertyKeys));
         metadata.addDataSourceMetadata(STORED_PROCEDURES, singletonList(procedures));
-        metadata.addDataSourceMetadata(RELATIONSHIP_TYPES, singletonList(relationshipTypes));
         metadata.addDataSourceMetadata(USER_FUNCTIONS, singletonList(new HashMap<>()));
 
         ui.updateNeo4jBoltCypherMetadataUi(datasource, metadata);

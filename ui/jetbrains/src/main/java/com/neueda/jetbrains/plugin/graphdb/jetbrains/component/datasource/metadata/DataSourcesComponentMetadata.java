@@ -6,6 +6,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
+import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DatabaseManagerService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.MetadataRetrieveEvent;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class DataSourcesComponentMetadata implements ProjectComponent {
 
@@ -37,7 +39,7 @@ public class DataSourcesComponentMetadata implements ProjectComponent {
             case NEO4J_BOLT:
                 try {
                     DataSourceMetadata metadata = getNeo4jBoltMetadata(dataSource);
-                    updateNeo4jBoltMetadata(dataSource, metadata);
+                    updateNeo4jBoltMetadata(dataSource, (Neo4jBoltCypherDataSourceMetadata) metadata);
                     metadataRetrieveEvent.metadataRefreshSucceed(dataSource);
                     return Optional.of(metadata);
                 } catch (Exception exception) {
@@ -60,14 +62,24 @@ public class DataSourcesComponentMetadata implements ProjectComponent {
         GraphQueryResult propertyKeysResult = db.execute("CALL db.propertyKeys()");
         GraphQueryResult storedProceduresResult = db.execute("CALL dbms.procedures()");
 
-        metadata.addLabels(labelsQueryResult);
-        metadata.addRelationshipTypes(relationshipQueryResult);
+        List<String> listOfLabels = extractLabels(labelsQueryResult);
+        if (!listOfLabels.isEmpty()) {
+            GraphQueryResult labelCount = db.execute(queryLabelCount(listOfLabels));
+            metadata.addLabels(labelCount, listOfLabels);
+        }
+
+        List<String> listOfRelationshipTypes = extractRelationshipTypes(relationshipQueryResult);
+        if (!listOfRelationshipTypes.isEmpty()) {
+            GraphQueryResult relationshipTypeCountResult = db.execute(queryRelationshipTypeCount(listOfRelationshipTypes));
+            metadata.addRelationshipTypes(relationshipTypeCountResult, listOfRelationshipTypes);
+        }
+
         metadata.addPropertyKeys(propertyKeysResult);
         metadata.addStoredProcedures(storedProceduresResult);
 
         boolean supportsUserFunctions = metadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.STORED_PROCEDURES)
-                .stream()
-                .anyMatch((map) -> map.get("name").equals("dbms.functions"));
+            .stream()
+            .anyMatch((map) -> map.get("name").equals("dbms.functions"));
 
         if (supportsUserFunctions) {
             GraphQueryResult userFunctionsResult = db.execute("CALL dbms.functions()");
@@ -77,27 +89,59 @@ public class DataSourcesComponentMetadata implements ProjectComponent {
         return metadata;
     }
 
-    private void updateNeo4jBoltMetadata(DataSourceApi dataSource, DataSourceMetadata metadata) {
+    private List<String> extractRelationshipTypes(GraphQueryResult relationshipQueryResult) {
+        GraphQueryResultColumn column = relationshipQueryResult.getColumns().get(0);
+        return relationshipQueryResult.getRows()
+            .stream()
+            .map(row -> (String) row.getValue(column))
+            .collect(Collectors.toList());
+    }
+
+    private List<String> extractLabels(GraphQueryResult labelsQueryResult) {
+        GraphQueryResultColumn column = labelsQueryResult.getColumns().get(0);
+        return labelsQueryResult.getRows()
+            .stream()
+            .map(row -> (String) row.getValue(column))
+            .collect(Collectors.toList());
+    }
+
+    private String queryRelationshipTypeCount(List<String> relationshipTypes) {
+        return relationshipTypes
+            .stream()
+            .map(relationshipType -> "MATCH ()-[r:" + relationshipType + "]->() RETURN count(r)")
+            .collect(Collectors.joining(" UNION "));
+    }
+
+    private String queryLabelCount(List<String> labels) {
+        return labels
+            .stream()
+            .map(label -> "MATCH (n:" + label + ") RETURN count(n)")
+            .collect(Collectors.joining(" UNION "));
+    }
+
+    private void updateNeo4jBoltMetadata(DataSourceApi dataSource, Neo4jBoltCypherDataSourceMetadata metadata) {
         // Refresh cypher metadata provider
         cypherMetadataProviderService.wipeContainer(dataSource.getName());
         CypherMetadataContainer container = cypherMetadataProviderService.getContainer(dataSource.getName());
 
-        metadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.LABELS).stream()
-                .map((row) -> row.get("label"))
-                .forEach(container::addLabel);
-        metadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.RELATIONSHIP_TYPES).stream()
-                .map((row) -> row.get("relationshipType"))
-                .forEach(container::addRelationshipType);
+        metadata.getLabels()
+            .stream()
+            .map(Neo4jLabelMetadata::getName)
+            .forEach(container::addLabel);
+        metadata.getRelationshipTypes()
+            .stream()
+            .map(Neo4jRelationshipTypeMetadata::getName)
+            .forEach(container::addRelationshipType);
         metadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.PROPERTY_KEYS).stream()
-                .map((row) -> row.get("propertyKey"))
-                .forEach(container::addPropertyKey);
+            .map((row) -> row.get("propertyKey"))
+            .forEach(container::addPropertyKey);
         metadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.STORED_PROCEDURES)
-                .forEach(row -> container.addProcedure(row.get("name"), row.get("signature"), row.get("description")));
+            .forEach(row -> container.addProcedure(row.get("name"), row.get("signature"), row.get("description")));
 
         List<Map<String, String>> userFunctionMetadata = metadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.USER_FUNCTIONS);
         if (userFunctionMetadata != null) {
             userFunctionMetadata
-                    .forEach(row -> container.addUserFunction(row.get("name"), row.get("signature"), row.get("description")));
+                .forEach(row -> container.addUserFunction(row.get("name"), row.get("signature"), row.get("description")));
         }
     }
 

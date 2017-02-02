@@ -31,6 +31,11 @@ public class RootTreeNodeModel implements TreeNodeModelApi {
     }
 
     @Override
+    public Optional<String> getValue() {
+        return Optional.empty();
+    }
+
+    @Override
     public DataSourceApi getDataSourceApi() {
         return null;
     }
