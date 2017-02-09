@@ -15,6 +15,7 @@ import com.intellij.ui.treeStructure.treetable.TreeTableCellRenderer;
 import com.intellij.ui.treeStructure.treetable.TreeTableModel;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryPlan;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.ColumnResizer;
 import com.neueda.jetbrains.plugin.graphdb.platform.ShouldNeverHappenException;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,6 +60,7 @@ public class QueryPlanPanel implements Disposable {
         treeTable.setAutoCreateColumnsFromModel(true);
         treeTable.setRootVisible(true);
         treeTable.setCellSelectionEnabled(false);
+        treeTable.setRowSelectionAllowed(true);
         treeTable.setAutoResizeMode(TreeTableView.AUTO_RESIZE_OFF);
 
         treeTable.getTree().setShowsRootHandles(true);
@@ -75,6 +77,8 @@ public class QueryPlanPanel implements Disposable {
         container.add(new JBScrollPane(treeTable, JBScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JBScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
         container.add(infoLabel, BorderLayout.SOUTH);
+
+        new ColumnResizer(treeTable).resize();
     }
 
     private void initTreeCellRenderer(ListTreeTableModelOnColumns model) {
