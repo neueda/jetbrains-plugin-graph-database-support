@@ -131,6 +131,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == FOREACH) {
       r = Foreach(b, 0);
     }
+    else if (t == FUNCTION_ARGUMENTS) {
+      r = FunctionArguments(b, 0);
+    }
     else if (t == FUNCTION_INVOCATION) {
       r = FunctionInvocation(b, 0);
     }
@@ -1901,8 +1904,61 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // "(" K_DISTINCT? Expression? ("," Expression)* ")"
+  public static boolean FunctionArguments(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionArguments")) return false;
+    if (!nextTokenIs(b, PARENTHESE_OPEN)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, PARENTHESE_OPEN);
+    r = r && FunctionArguments_1(b, l + 1);
+    r = r && FunctionArguments_2(b, l + 1);
+    r = r && FunctionArguments_3(b, l + 1);
+    r = r && consumeToken(b, PARENTHESE_CLOSE);
+    exit_section_(b, m, FUNCTION_ARGUMENTS, r);
+    return r;
+  }
+
+  // K_DISTINCT?
+  private static boolean FunctionArguments_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionArguments_1")) return false;
+    consumeToken(b, K_DISTINCT);
+    return true;
+  }
+
+  // Expression?
+  private static boolean FunctionArguments_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionArguments_2")) return false;
+    Expression(b, l + 1);
+    return true;
+  }
+
+  // ("," Expression)*
+  private static boolean FunctionArguments_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionArguments_3")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!FunctionArguments_3_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "FunctionArguments_3", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // "," Expression
+  private static boolean FunctionArguments_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionArguments_3_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, OP_COMMA);
+    r = r && Expression(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // (FunctionInvocationBody "(" "*" ")")
-  //                      | (FunctionInvocationBody "(" K_DISTINCT? Expression? ("," Expression)* ")")
+  //                      | (FunctionInvocationBody FunctionArguments)
   public static boolean FunctionInvocation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionInvocation")) return false;
     boolean r;
@@ -1924,54 +1980,13 @@ public class CypherParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // FunctionInvocationBody "(" K_DISTINCT? Expression? ("," Expression)* ")"
+  // FunctionInvocationBody FunctionArguments
   private static boolean FunctionInvocation_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionInvocation_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = FunctionInvocationBody(b, l + 1);
-    r = r && consumeToken(b, PARENTHESE_OPEN);
-    r = r && FunctionInvocation_1_2(b, l + 1);
-    r = r && FunctionInvocation_1_3(b, l + 1);
-    r = r && FunctionInvocation_1_4(b, l + 1);
-    r = r && consumeToken(b, PARENTHESE_CLOSE);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // K_DISTINCT?
-  private static boolean FunctionInvocation_1_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionInvocation_1_2")) return false;
-    consumeToken(b, K_DISTINCT);
-    return true;
-  }
-
-  // Expression?
-  private static boolean FunctionInvocation_1_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionInvocation_1_3")) return false;
-    Expression(b, l + 1);
-    return true;
-  }
-
-  // ("," Expression)*
-  private static boolean FunctionInvocation_1_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionInvocation_1_4")) return false;
-    int c = current_position_(b);
-    while (true) {
-      if (!FunctionInvocation_1_4_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "FunctionInvocation_1_4", c)) break;
-      c = current_position_(b);
-    }
-    return true;
-  }
-
-  // "," Expression
-  private static boolean FunctionInvocation_1_4_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionInvocation_1_4_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, OP_COMMA);
-    r = r && Expression(b, l + 1);
+    r = r && FunctionArguments(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

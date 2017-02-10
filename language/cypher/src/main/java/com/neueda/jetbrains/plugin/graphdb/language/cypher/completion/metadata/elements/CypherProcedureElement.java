@@ -57,6 +57,6 @@ public class CypherProcedureElement implements
                 .withIcon(GraphIcons.Nodes.STORED_PROCEDURE)
                 .withTailText(invokableInformation.getSignature())
                 .withTypeText(invokableInformation.getReturnType())
-                .withInsertHandler(ParenthesesInsertHandler.getInstance(invokableInformation.isHasParameters()));
+                .withInsertHandler(ParenthesesInsertHandler.getInstance(invokableInformation.hasParameters()));
     }
 }

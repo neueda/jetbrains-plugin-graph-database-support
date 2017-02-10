@@ -46,6 +46,12 @@ public class CypherDocumentationProvider extends AbstractDocumentationProvider {
 
     @Nullable
     @Override
+    public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
+        return super.getQuickNavigateInfo(element, originalElement);
+    }
+
+    @Nullable
+    @Override
     public String generateDoc(PsiElement element, @Nullable PsiElement originalElement) {
         Optional<String> builtInFunctionDocumentation = builtInFunctionDocumentation(element);
         if (builtInFunctionDocumentation.isPresent()) {

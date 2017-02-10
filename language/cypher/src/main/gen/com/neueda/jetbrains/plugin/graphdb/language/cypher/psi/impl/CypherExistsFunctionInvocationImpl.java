@@ -38,4 +38,8 @@ public class CypherExistsFunctionInvocationImpl extends ASTWrapperPsiElement imp
     return findNotNullChildByType(K_EXISTS);
   }
 
+  public String getFullName() {
+    return CypherPsiImplUtil.getFullName(this);
+  }
+
 }

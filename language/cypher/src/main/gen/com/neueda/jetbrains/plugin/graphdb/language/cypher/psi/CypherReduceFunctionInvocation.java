@@ -4,8 +4,9 @@ package com.neueda.jetbrains.plugin.graphdb.language.cypher.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation;
 
-public interface CypherReduceFunctionInvocation extends PsiElement {
+public interface CypherReduceFunctionInvocation extends CypherInvocation {
 
   @NotNull
   List<CypherExpression> getExpressionList();
@@ -18,5 +19,7 @@ public interface CypherReduceFunctionInvocation extends PsiElement {
 
   @NotNull
   PsiElement getKReduce();
+
+  String getFullName();
 
 }

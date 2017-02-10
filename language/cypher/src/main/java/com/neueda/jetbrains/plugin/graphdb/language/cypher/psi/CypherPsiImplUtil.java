@@ -69,6 +69,38 @@ public class CypherPsiImplUtil {
         return element.getProcedureInvocationBody().getText();
     }
 
+    public static String getFullName(CypherExtractFunctionInvocation element) {
+        return "extract";
+    }
+
+    public static String getFullName(CypherAllFunctionInvocation element) {
+        return "all";
+    }
+
+    public static String getFullName(CypherAnyFunctionInvocation element) {
+        return "any";
+    }
+
+    public static String getFullName(CypherFilterFunctionInvocation element) {
+        return "filter";
+    }
+
+    public static String getFullName(CypherReduceFunctionInvocation element) {
+        return "reduce";
+    }
+
+    public static String getFullName(CypherNoneFunctionInvocation element) {
+        return "none";
+    }
+
+    public static String getFullName(CypherSingleFunctionInvocation element) {
+        return "single";
+    }
+
+    public static String getFullName(CypherExistsFunctionInvocation element) {
+        return "exists";
+    }
+
     public static String getParameterName(CypherParameter element) {
         if (element.getNewParameter() != null) {
             CypherNewParameter newParameter = element.getNewParameter();
@@ -96,7 +128,7 @@ public class CypherPsiImplUtil {
     /**
      * Safely replaces symbolic name node with new node.
      * It's possible that nothing happens if newElement is invalid. No error thrown in such case.
-     *
+     * <p>
      * TODO: handle cases with invalid newElement (e.g. cyrilic name is set)
      */
     private static void safelyReplaceSymbolicName(CypherNamedElement element,

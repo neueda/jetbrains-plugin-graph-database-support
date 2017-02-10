@@ -2,6 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.
 
 import com.intellij.openapi.util.text.StringUtil;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,6 +16,7 @@ public interface CypherElementWithSignature {
     }
 
     final class InvokableInformation {
+        private final String name;
         private final String signature;
         private final String returnType;
         private final boolean hasParameters;
@@ -31,8 +33,19 @@ public interface CypherElementWithSignature {
                 returnType = "<?>";
             }
 
-
+            this.name = name;
             this.hasParameters = !this.signature.startsWith("()");
+        }
+
+        public InvokableInformation(String name, String signature, String returnType) {
+            this.name = name;
+            this.signature = signature;
+            this.returnType = returnType;
+            this.hasParameters = !Objects.equals(signature, "()");
+        }
+
+        public String getName() {
+            return name;
         }
 
         public String getSignature() {
@@ -43,7 +56,7 @@ public interface CypherElementWithSignature {
             return returnType;
         }
 
-        public boolean isHasParameters() {
+        public boolean hasParameters() {
             return hasParameters;
         }
     }
