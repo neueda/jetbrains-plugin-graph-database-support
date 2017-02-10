@@ -1,10 +1,8 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.plan;
 
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.treeStructure.treetable.TreeTableModel;
 import com.intellij.util.ui.ColumnInfo;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryPlan;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,12 +56,6 @@ class ColumnDefinitions {
                 public String valueOf(DefaultMutableTreeNode o) {
                     return ((GraphQueryPlan) o.getUserObject()).getOperatorType();
                 }
-
-                @Override
-                @NonNls
-                public String getPreferredStringValue() {
-                    return StringUtil.repeatSymbol('m', 25);
-                }
             };
 
     private static final ColumnInfo<DefaultMutableTreeNode, String> ESTIMATED_ROWS_COL =
@@ -86,12 +78,6 @@ class ColumnDefinitions {
                             .map(Object::toString)
                             .collect(joining(", "));
                 }
-
-                @Override
-                @NonNls
-                public String getPreferredStringValue() {
-                    return StringUtil.repeatSymbol('m', 15);
-                }
             };
 
     private static final ColumnInfo<DefaultMutableTreeNode, String> IDENTIFIERS_COL =
@@ -101,12 +87,6 @@ class ColumnDefinitions {
                 public String valueOf(DefaultMutableTreeNode o) {
                     return ((GraphQueryPlan) o.getUserObject()).getIdentifiers().stream()
                             .collect(joining(", "));
-                }
-
-                @Override
-                @NonNls
-                public String getPreferredStringValue() {
-                    return StringUtil.repeatSymbol('m', 12);
                 }
             };
 
@@ -128,12 +108,6 @@ class ColumnDefinitions {
                             return val.toString();
                         })
                         .orElse("0");
-            }
-
-            @Override
-            @NonNls
-            public String getPreferredStringValue() {
-                return StringUtil.repeatSymbol('m', 5);
             }
         };
     }
