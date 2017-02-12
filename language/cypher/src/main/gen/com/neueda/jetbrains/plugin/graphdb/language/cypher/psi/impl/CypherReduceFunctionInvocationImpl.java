@@ -50,4 +50,8 @@ public class CypherReduceFunctionInvocationImpl extends ASTWrapperPsiElement imp
     return findNotNullChildByType(K_REDUCE);
   }
 
+  public String getFullName() {
+    return CypherPsiImplUtil.getFullName(this);
+  }
+
 }

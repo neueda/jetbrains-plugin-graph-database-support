@@ -4,7 +4,9 @@ package com.neueda.jetbrains.plugin.graphdb.language.cypher.psi;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherNamedElement;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherArgumentList;
 
 public class CypherVisitor extends PsiElementVisitor {
 
@@ -13,7 +15,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitAllFunctionInvocation(@NotNull CypherAllFunctionInvocation o) {
-    visitPsiElement(o);
+    visitInvocation(o);
   }
 
   public void visitAllPropertiesSelector(@NotNull CypherAllPropertiesSelector o) {
@@ -33,7 +35,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitAnyFunctionInvocation(@NotNull CypherAnyFunctionInvocation o) {
-    visitPsiElement(o);
+    visitInvocation(o);
   }
 
   public void visitBulkImportQuery(@NotNull CypherBulkImportQuery o) {
@@ -125,7 +127,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitExistsFunctionInvocation(@NotNull CypherExistsFunctionInvocation o) {
-    visitPsiElement(o);
+    visitInvocation(o);
   }
 
   public void visitExplain(@NotNull CypherExplain o) {
@@ -137,7 +139,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitExtractFunctionInvocation(@NotNull CypherExtractFunctionInvocation o) {
-    visitPsiElement(o);
+    visitInvocation(o);
   }
 
   public void visitFilterExpression(@NotNull CypherFilterExpression o) {
@@ -145,15 +147,19 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitFilterFunctionInvocation(@NotNull CypherFilterFunctionInvocation o) {
-    visitPsiElement(o);
+    visitInvocation(o);
   }
 
   public void visitForeach(@NotNull CypherForeach o) {
     visitPsiElement(o);
   }
 
+  public void visitFunctionArguments(@NotNull CypherFunctionArguments o) {
+    visitArgumentList(o);
+  }
+
   public void visitFunctionInvocation(@NotNull CypherFunctionInvocation o) {
-    visitPsiElement(o);
+    visitInvocation(o);
   }
 
   public void visitFunctionInvocationBody(@NotNull CypherFunctionInvocationBody o) {
@@ -277,7 +283,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitNoneFunctionInvocation(@NotNull CypherNoneFunctionInvocation o) {
-    visitPsiElement(o);
+    visitInvocation(o);
   }
 
   public void visitNumberLiteral(@NotNull CypherNumberLiteral o) {
@@ -321,11 +327,11 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitProcedureArguments(@NotNull CypherProcedureArguments o) {
-    visitPsiElement(o);
+    visitArgumentList(o);
   }
 
   public void visitProcedureInvocation(@NotNull CypherProcedureInvocation o) {
-    visitPsiElement(o);
+    visitInvocation(o);
   }
 
   public void visitProcedureInvocationBody(@NotNull CypherProcedureInvocationBody o) {
@@ -385,7 +391,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitReduceFunctionInvocation(@NotNull CypherReduceFunctionInvocation o) {
-    visitPsiElement(o);
+    visitInvocation(o);
   }
 
   public void visitRegularQuery(@NotNull CypherRegularQuery o) {
@@ -485,7 +491,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitSingleFunctionInvocation(@NotNull CypherSingleFunctionInvocation o) {
-    visitPsiElement(o);
+    visitInvocation(o);
   }
 
   public void visitSingleQuery(@NotNull CypherSingleQuery o) {
@@ -569,6 +575,14 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitParenthesizedExpression(@NotNull CypherParenthesizedExpression o) {
+    visitPsiElement(o);
+  }
+
+  public void visitArgumentList(@NotNull CypherArgumentList o) {
+    visitPsiElement(o);
+  }
+
+  public void visitInvocation(@NotNull CypherInvocation o) {
     visitPsiElement(o);
   }
 

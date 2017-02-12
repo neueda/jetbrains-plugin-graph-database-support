@@ -44,6 +44,7 @@ public interface CypherTypes {
   IElementType FILTER_EXPRESSION = new CypherElementType("FILTER_EXPRESSION");
   IElementType FILTER_FUNCTION_INVOCATION = new CypherElementType("FILTER_FUNCTION_INVOCATION");
   IElementType FOREACH = new CypherElementType("FOREACH");
+  IElementType FUNCTION_ARGUMENTS = new CypherElementType("FUNCTION_ARGUMENTS");
   IElementType FUNCTION_INVOCATION = new CypherElementType("FUNCTION_INVOCATION");
   IElementType FUNCTION_INVOCATION_BODY = new CypherElementType("FUNCTION_INVOCATION_BODY");
   IElementType FUNCTION_NAME = new CypherElementType("FUNCTION_NAME");
@@ -373,6 +374,9 @@ public interface CypherTypes {
       }
       else if (type == FOREACH) {
         return new CypherForeachImpl(node);
+      }
+      else if (type == FUNCTION_ARGUMENTS) {
+        return new CypherFunctionArgumentsImpl(node);
       }
       else if (type == FUNCTION_INVOCATION) {
         return new CypherFunctionInvocationImpl(node);

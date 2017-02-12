@@ -293,10 +293,13 @@ Limit ::= K_LIMIT Expression
 //-- Call
 Call ::= K_CALL ProcedureInvocation ProcedureResults?
 ProcedureInvocation ::= ProcedureInvocationBody ProcedureArguments {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation"
     methods=[getFullName]
 }
 ProcedureInvocationBody ::= Namespace ProcedureName
-ProcedureArguments ::= "(" Expression? ("," Expression)* ")"
+ProcedureArguments ::= "(" Expression? ("," Expression)* ")" {
+   implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherArgumentList"
+}
 ProcedureResults ::= K_YIELD ProcedureResult ("," ProcedureResult)*
 ProcedureResult ::= AliasedProcedureResult | SimpleProcedureResult
 AliasedProcedureResult ::= ProcedureOutput K_AS Variable
@@ -400,8 +403,12 @@ FilterExpression ::= IdInColl (K_WHERE Expression)?
 IdInColl ::= Variable K_IN Expression
 parenthesizedExpression ::= "(" Expression ")" {pin=1}
 FunctionInvocation ::= (FunctionInvocationBody "(" "*" ")")
-                     | (FunctionInvocationBody "(" K_DISTINCT? Expression? ("," Expression)* ")") {
+                     | (FunctionInvocationBody FunctionArguments) {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation"
     methods=[getFullName]
+}
+FunctionArguments ::= "(" K_DISTINCT? Expression? ("," Expression)* ")"{
+   implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherArgumentList"
 }
 FunctionInvocationBody ::= Namespace FunctionName
 CaseExpression ::= ((K_CASE CaseAlternatives+) | (K_CASE Expression CaseAlternatives+))
@@ -410,14 +417,38 @@ CaseExpression ::= ((K_CASE CaseAlternatives+) | (K_CASE Expression CaseAlternat
 CaseAlternatives ::= K_WHEN Expression K_THEN Expression
 PropertyExpression ::= Expression1 (PropertyLookup)+
 
-FilterFunctionInvocation ::= K_FILTER "(" FilterExpression ")"
-ExtractFunctionInvocation ::= K_EXTRACT "(" FilterExpression ("|" Expression)? ")"
-ReduceFunctionInvocation ::= K_REDUCE "(" Variable "=" Expression "," IdInColl "|" Expression ")"
-AllFunctionInvocation ::= K_ALL "(" FilterExpression ")"
-AnyFunctionInvocation ::= K_ANY "(" FilterExpression ")"
-NoneFunctionInvocation ::= K_NONE "(" FilterExpression ")"
-SingleFunctionInvocation ::= K_SINGLE "(" FilterExpression ")"
-ExistsFunctionInvocation ::= K_EXISTS "(" Expression ")"
+FilterFunctionInvocation ::= K_FILTER "(" FilterExpression ")" {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation"
+    methods=[getFullName]
+}
+ExtractFunctionInvocation ::= K_EXTRACT "(" FilterExpression ("|" Expression)? ")" {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation"
+    methods=[getFullName]
+}
+ReduceFunctionInvocation ::= K_REDUCE "(" Variable "=" Expression "," IdInColl "|" Expression ")" {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation"
+    methods=[getFullName]
+}
+AllFunctionInvocation ::= K_ALL "(" FilterExpression ")" {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation"
+    methods=[getFullName]
+}
+AnyFunctionInvocation ::= K_ANY "(" FilterExpression ")" {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation"
+    methods=[getFullName]
+}
+NoneFunctionInvocation ::= K_NONE "(" FilterExpression ")" {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation"
+    methods=[getFullName]
+}
+SingleFunctionInvocation ::= K_SINGLE "(" FilterExpression ")" {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation"
+    methods=[getFullName]
+}
+ExistsFunctionInvocation ::= K_EXISTS "(" Expression ")" {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation"
+    methods=[getFullName]
+}
 
 PatternComprehension ::= "[" RelationshipsPattern (K_WHERE Expression)? "|" Expression "]"
 

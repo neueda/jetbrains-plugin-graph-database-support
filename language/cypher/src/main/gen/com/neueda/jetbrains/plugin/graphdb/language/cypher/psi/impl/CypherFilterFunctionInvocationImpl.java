@@ -38,4 +38,8 @@ public class CypherFilterFunctionInvocationImpl extends ASTWrapperPsiElement imp
     return findNotNullChildByType(K_FILTER);
   }
 
+  public String getFullName() {
+    return CypherPsiImplUtil.getFullName(this);
+  }
+
 }

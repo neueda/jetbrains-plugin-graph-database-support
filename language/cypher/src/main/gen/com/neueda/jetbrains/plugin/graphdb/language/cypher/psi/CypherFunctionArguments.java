@@ -6,9 +6,12 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherArgumentList;
 
-public interface CypherProcedureArguments extends CypherArgumentList {
+public interface CypherFunctionArguments extends CypherArgumentList {
 
   @NotNull
   List<CypherExpression> getExpressionList();
+
+  @Nullable
+  PsiElement getKDistinct();
 
 }

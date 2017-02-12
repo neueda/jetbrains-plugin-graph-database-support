@@ -4,8 +4,9 @@ package com.neueda.jetbrains.plugin.graphdb.language.cypher.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation;
 
-public interface CypherExtractFunctionInvocation extends PsiElement {
+public interface CypherExtractFunctionInvocation extends CypherInvocation {
 
   @Nullable
   CypherExpression getExpression();
@@ -15,5 +16,7 @@ public interface CypherExtractFunctionInvocation extends PsiElement {
 
   @NotNull
   PsiElement getKExtract();
+
+  String getFullName();
 
 }

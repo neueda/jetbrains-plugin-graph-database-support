@@ -58,6 +58,6 @@ public class CypherUserFunctionElement implements
                 .withIcon(GraphIcons.Nodes.USER_FUNCTION)
                 .withTailText(invokableInformation.getSignature())
                 .withTypeText(invokableInformation.getReturnType())
-                .withInsertHandler(ParenthesesInsertHandler.getInstance(invokableInformation.isHasParameters()));
+                .withInsertHandler(ParenthesesInsertHandler.getInstance(invokableInformation.hasParameters()));
     }
 }

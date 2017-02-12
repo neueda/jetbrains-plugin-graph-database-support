@@ -3,20 +3,13 @@ package com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.
 import com.google.common.collect.Lists;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherBuiltInFunctionElement;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherElementWithSignature.InvokableInformation;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherFunctionReturnType.ANY;
-import static com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherFunctionReturnType.BOOLEAN;
-import static com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherFunctionReturnType.FLOAT;
-import static com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherFunctionReturnType.INTEGER;
-import static com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherFunctionReturnType.MAP;
-import static com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherFunctionReturnType.NODE;
-import static com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherFunctionReturnType.PATH;
-import static com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherFunctionReturnType.RELATIONSHIP;
-import static com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherFunctionReturnType.STRING;
+import static com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherFunctionReturnType.*;
 
 public final class CypherBuiltInFunctions {
 
@@ -40,7 +33,7 @@ public final class CypherBuiltInFunctions {
             element("type", "(relationship)", STRING.single()),
             element("id", "(node)", INTEGER.single()),
             element("id", "(relationship)", INTEGER.single()),
-            element("coalesce", "(expression [, expression]*)", ANY.single()),
+            element("coalesce", "(expression...)", ANY.single()),
             element("head", "(expression)", ANY.single()),
             element("last", "(expression)", ANY.single()),
             element("timestamp", "()", INTEGER.single()),
@@ -94,7 +87,7 @@ public final class CypherBuiltInFunctions {
     );
     private static final List<CypherBuiltInFunctionElement> FUNCTIONS_STRING = Lists.newArrayList(
             element("replace", "(original, search, replace)", STRING.single()),
-            element("substring", "(original, start [, length])", STRING.single()),
+            element("substring", "(original, start, length?)", STRING.single()),
             element("left", "(original, length)", STRING.single()),
             element("right", "(original, length)", STRING.single()),
             element("ltrim", "(original)", STRING.single()),
@@ -123,13 +116,15 @@ public final class CypherBuiltInFunctions {
             .collect(Collectors.toList());
 
     public static final List<String> FUNCTION_NAMES = FUNCTIONS.stream()
-            .map(CypherBuiltInFunctionElement::getFunctionName)
+            .map(CypherBuiltInFunctionElement::getInvokable)
+            .map(InvokableInformation::getName)
             .distinct()
             .collect(Collectors.toList());
 
     private static CypherBuiltInFunctionElement element(String functionName,
                                                         String functionSignature,
                                                         String functionReturnType) {
-        return new CypherBuiltInFunctionElement(functionName, functionSignature, functionReturnType);
+        return new CypherBuiltInFunctionElement(
+                new InvokableInformation(functionName, functionSignature, functionReturnType));
     }
 }

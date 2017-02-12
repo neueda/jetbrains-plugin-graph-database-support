@@ -44,4 +44,8 @@ public class CypherExtractFunctionInvocationImpl extends ASTWrapperPsiElement im
     return findNotNullChildByType(K_EXTRACT);
   }
 
+  public String getFullName() {
+    return CypherPsiImplUtil.getFullName(this);
+  }
+
 }
