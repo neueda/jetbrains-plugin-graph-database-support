@@ -11,10 +11,18 @@ import java.awt.*;
 public class ColumnResizer implements TableModelListener {
 
     private final JTable table;
+    private final Integer maxWidth;
     private final int minMargin;
 
     public ColumnResizer(JTable table) {
         this.table = table;
+        this.maxWidth = null;
+        minMargin = strWidth("ww");
+    }
+
+    public ColumnResizer(JTable table, Integer maxWidth) {
+        this.table = table;
+        this.maxWidth = maxWidth;
         minMargin = strWidth("ww");
     }
 
@@ -29,7 +37,7 @@ public class ColumnResizer implements TableModelListener {
         for (int c = 0; c < cols; c++) {
             TableColumn col = model.getColumn(c);
             String header = String.valueOf(col.getHeaderValue());
-            int headerWidth = strWidth(header) + margin;
+            int minWidth = strWidth(header) + margin;
 
             for (int r = 0; r < rows; r++) {
                 TableCellRenderer render = table.getCellRenderer(r, c);
@@ -37,8 +45,14 @@ public class ColumnResizer implements TableModelListener {
                 int rendererWidth = component.getPreferredSize().width;
 
                 int cellWidth = Math.max(rendererWidth + margin, 1);
+                minWidth = Math.max(minWidth, cellWidth);
 
-                col.setPreferredWidth(Math.max(headerWidth, cellWidth));
+                if (maxWidth != null && minWidth >= maxWidth) {
+                    col.setPreferredWidth(maxWidth);
+                    break;
+                }
+
+                col.setPreferredWidth(minWidth);
             }
         }
     }

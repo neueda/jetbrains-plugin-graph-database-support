@@ -12,8 +12,6 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.editor.Com
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.renderer.CompositeTableCellRenderer;
 
 import javax.swing.*;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +36,8 @@ public class TablePanel {
         table.setDefaultRenderer(Object.class, new CompositeTableCellRenderer());
         table.setDefaultEditor(Object.class, new CompositeTableCellEditor());
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+        ColumnResizer cr = new ColumnResizer(table, MAX_WIDTH);
 
         messageBus.connect().subscribe(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC, new QueryExecutionProcessEvent() {
             @Override
@@ -64,7 +64,7 @@ public class TablePanel {
 
             @Override
             public void postResultReceived(ExecuteQueryPayload payload) {
-                updateColumnWidths();
+                cr.resize();
                 updateRowHeights();
             }
 
@@ -76,28 +76,6 @@ public class TablePanel {
             public void executionCompleted(ExecuteQueryPayload payload) {
             }
         });
-    }
-
-    private void updateColumnWidths() {
-        for (int column = 0; column < table.getColumnCount(); column++) {
-            TableColumn tableColumn = table.getColumnModel().getColumn(column);
-            int preferredWidth = tableColumn.getMinWidth();
-            int maxWidth = MAX_WIDTH;
-
-            for (int row = 0; row < table.getRowCount(); row++) {
-                TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
-                Component c = table.prepareRenderer(cellRenderer, row, column);
-                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
-                preferredWidth = Math.max(preferredWidth, width);
-
-                //  We've exceeded the maximum width, no need to check other rows
-                if (preferredWidth >= MAX_WIDTH) {
-                    preferredWidth = MAX_WIDTH;
-                    break;
-                }
-            }
-            tableColumn.setPreferredWidth(preferredWidth);
-        }
     }
 
     public void updateRowHeights() {
