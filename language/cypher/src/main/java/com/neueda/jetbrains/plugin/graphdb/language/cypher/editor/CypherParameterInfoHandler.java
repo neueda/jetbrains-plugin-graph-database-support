@@ -150,7 +150,8 @@ public class CypherParameterInfoHandler
 
         int current = context.getCurrentParameterIndex();
 
-        if (signature == null) {
+        if (signature == null || Objects.equals(signature, "()")) {
+            context.setUIComponentEnabled(false);
             return;
         }
 
