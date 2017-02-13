@@ -35,4 +35,8 @@ public class ExpressionsParsingTest extends BaseParsingTest {
     public void testPatternComprehension() {
         doTest(true);
     }
+
+    public void testCountFunction() {
+        doTest(true);
+    }
 }

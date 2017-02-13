@@ -130,6 +130,12 @@ public class CypherSymbolicNameStringImpl extends ASTWrapperPsiElement implement
 
   @Override
   @Nullable
+  public PsiElement getKCount() {
+    return findChildByType(K_COUNT);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getKCreate() {
     return findChildByType(K_CREATE);
   }

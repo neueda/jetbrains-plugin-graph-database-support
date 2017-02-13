@@ -27,12 +27,6 @@ public class CypherFilterExpressionImpl extends ASTWrapperPsiElement implements 
   }
 
   @Override
-  @Nullable
-  public CypherExpression getExpression() {
-    return findChildByClass(CypherExpression.class);
-  }
-
-  @Override
   @NotNull
   public CypherIdInColl getIdInColl() {
     return findNotNullChildByClass(CypherIdInColl.class);
@@ -40,8 +34,8 @@ public class CypherFilterExpressionImpl extends ASTWrapperPsiElement implements 
 
   @Override
   @Nullable
-  public PsiElement getKWhere() {
-    return findChildByType(K_WHERE);
+  public CypherWhere getWhere() {
+    return findChildByClass(CypherWhere.class);
   }
 
 }

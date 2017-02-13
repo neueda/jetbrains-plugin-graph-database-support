@@ -17,6 +17,9 @@ public interface CypherPropertyExpression extends PsiElement {
   CypherCaseExpression getCaseExpression();
 
   @Nullable
+  CypherCountStar getCountStar();
+
+  @Nullable
   CypherExistsFunctionInvocation getExistsFunctionInvocation();
 
   @NotNull

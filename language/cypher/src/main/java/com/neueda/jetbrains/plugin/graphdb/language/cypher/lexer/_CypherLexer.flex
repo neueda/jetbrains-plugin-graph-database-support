@@ -101,6 +101,7 @@ K_EXPLAIN=(E|e)(X|x)(P|p)(L|l)(A|a)(I|i)(N|n)
 K_CYPHER=(C|c)(Y|y)(P|p)(H|h)(E|e)(R|r)
 K_CALL=(C|c)(A|a)(L|l)(L|l)
 K_YIELD=(Y|y)(I|i)(E|e)(L|l)(D|d)
+K_COUNT=(C|c)(O|o)(U|u)(N|n)(T|t)
 L_IDENTIFIER=[a-zA-Z_][a-zA-Z_$0-9]*
 L_IDENTIFIER_TEXT=\`[^`]+\`
 L_DECIMAL=[+-]?(([1-9][0-9]+)|([0-9]))\.[0-9]+
@@ -225,6 +226,7 @@ BLOCK_COMMENT = "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
   {K_CYPHER}                { return K_CYPHER; }
   {K_CALL}                  { return K_CALL; }
   {K_YIELD}                 { return K_YIELD; }
+  {K_COUNT}                 { return K_COUNT; }
   {L_IDENTIFIER}            { return L_IDENTIFIER; }
   {L_IDENTIFIER_TEXT}       { return L_IDENTIFIER_TEXT; }
   {L_DECIMAL}               { return L_DECIMAL; }

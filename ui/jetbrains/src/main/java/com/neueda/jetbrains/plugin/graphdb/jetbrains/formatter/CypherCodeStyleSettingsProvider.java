@@ -46,5 +46,17 @@ public class CypherCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
         CypherCodeStyleMainPanel(CodeStyleSettings currentSettings, CodeStyleSettings settings) {
             super(CypherLanguage.INSTANCE, currentSettings, settings);
         }
+
+        @Override
+        protected void addSpacesTab(CodeStyleSettings settings) {
+        }
+
+        @Override
+        protected void addBlankLinesTab(CodeStyleSettings settings) {
+        }
+
+        @Override
+        protected void addWrappingAndBracesTab(CodeStyleSettings settings) {
+        }
     }
 }

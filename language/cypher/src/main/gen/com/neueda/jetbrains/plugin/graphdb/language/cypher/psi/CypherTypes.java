@@ -22,6 +22,7 @@ public interface CypherTypes {
   IElementType CLAUSE = new CypherElementType("CLAUSE");
   IElementType COMMAND = new CypherElementType("COMMAND");
   IElementType CONFIGURATION_OPTION = new CypherElementType("CONFIGURATION_OPTION");
+  IElementType COUNT_STAR = new CypherElementType("COUNT_STAR");
   IElementType CREATE = new CypherElementType("CREATE");
   IElementType CREATE_INDEX = new CypherElementType("CREATE_INDEX");
   IElementType CREATE_NODE_PROPERTY_EXISTENCE_CONSTRAINT = new CypherElementType("CREATE_NODE_PROPERTY_EXISTENCE_CONSTRAINT");
@@ -171,6 +172,7 @@ public interface CypherTypes {
   IElementType K_COMMIT = new CypherTokenType("K_COMMIT");
   IElementType K_CONSTRAINT = new CypherTokenType("K_CONSTRAINT");
   IElementType K_CONTAINS = new CypherTokenType("K_CONTAINS");
+  IElementType K_COUNT = new CypherTokenType("K_COUNT");
   IElementType K_CREATE = new CypherTokenType("K_CREATE");
   IElementType K_CSV = new CypherTokenType("K_CSV");
   IElementType K_CYPHER = new CypherTokenType("K_CYPHER");
@@ -308,6 +310,9 @@ public interface CypherTypes {
       }
       else if (type == CONFIGURATION_OPTION) {
         return new CypherConfigurationOptionImpl(node);
+      }
+      else if (type == COUNT_STAR) {
+        return new CypherCountStarImpl(node);
       }
       else if (type == CREATE) {
         return new CypherCreateImpl(node);

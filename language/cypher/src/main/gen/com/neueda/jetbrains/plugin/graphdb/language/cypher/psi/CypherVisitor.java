@@ -66,6 +66,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitCountStar(@NotNull CypherCountStar o) {
+    visitPsiElement(o);
+  }
+
   public void visitCreate(@NotNull CypherCreate o) {
     visitPsiElement(o);
   }

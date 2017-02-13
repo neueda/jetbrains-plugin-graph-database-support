@@ -46,6 +46,12 @@ public class CypherPropertyExpressionImpl extends ASTWrapperPsiElement implement
 
   @Override
   @Nullable
+  public CypherCountStar getCountStar() {
+    return findChildByClass(CypherCountStar.class);
+  }
+
+  @Override
+  @Nullable
   public CypherExistsFunctionInvocation getExistsFunctionInvocation() {
     return findChildByClass(CypherExistsFunctionInvocation.class);
   }

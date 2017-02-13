@@ -28,8 +28,8 @@ public class CypherPatternComprehensionImpl extends ASTWrapperPsiElement impleme
 
   @Override
   @NotNull
-  public List<CypherExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherExpression.class);
+  public CypherExpression getExpression() {
+    return findNotNullChildByClass(CypherExpression.class);
   }
 
   @Override
@@ -40,8 +40,8 @@ public class CypherPatternComprehensionImpl extends ASTWrapperPsiElement impleme
 
   @Override
   @Nullable
-  public PsiElement getKWhere() {
-    return findChildByType(K_WHERE);
+  public CypherWhere getWhere() {
+    return findChildByClass(CypherWhere.class);
   }
 
 }

@@ -7,7 +7,13 @@ import com.intellij.psi.PsiElement;
 
 public interface CypherFunctionName extends PsiElement {
 
-  @NotNull
-  PsiElement getLIdentifier();
+  @Nullable
+  CypherEscapedSymbolicNameString getEscapedSymbolicNameString();
+
+  @Nullable
+  CypherUnescapedSymbolicNameString getUnescapedSymbolicNameString();
+
+  @Nullable
+  PsiElement getKCount();
 
 }
