@@ -29,7 +29,7 @@ public class ColumnResizer implements TableModelListener {
         for (int c = 0; c < cols; c++) {
             TableColumn col = model.getColumn(c);
             String header = String.valueOf(col.getHeaderValue());
-            int headerWidth = strWidth(header) + margin;
+            int minWidth = strWidth(header) + margin;
 
             for (int r = 0; r < rows; r++) {
                 TableCellRenderer render = table.getCellRenderer(r, c);
@@ -37,8 +37,9 @@ public class ColumnResizer implements TableModelListener {
                 int rendererWidth = component.getPreferredSize().width;
 
                 int cellWidth = Math.max(rendererWidth + margin, 1);
+                minWidth = Math.max(minWidth, cellWidth);
 
-                col.setPreferredWidth(Math.max(headerWidth, cellWidth));
+                col.setPreferredWidth(minWidth);
             }
         }
     }
