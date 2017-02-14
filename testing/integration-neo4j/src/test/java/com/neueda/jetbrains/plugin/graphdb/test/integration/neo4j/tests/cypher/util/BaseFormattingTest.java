@@ -7,7 +7,7 @@ import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.base.Base
 
 import static java.util.Collections.singletonList;
 
-public class BaseFormattingTest extends BaseIntegrationTest {
+public abstract class BaseFormattingTest extends BaseIntegrationTest {
     protected void doTest(String actual, String expected) {
         PsiFile file = myFixture.addFileToProject("test.cypher", actual);
         myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
