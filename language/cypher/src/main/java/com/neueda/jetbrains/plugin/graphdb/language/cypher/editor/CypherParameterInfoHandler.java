@@ -123,11 +123,16 @@ public class CypherParameterInfoHandler
         return true;
     }
 
+
     @Override
     public void updateUI(CypherInvocation ci, @NotNull ParameterInfoUIContext context) {
+        getPresentation(ci, context);
+    }
+
+    public String getPresentation(CypherInvocation ci, @NotNull ParameterInfoUIContext context) {
         if (ci == null) {
             context.setUIComponentEnabled(false);
-            return;
+            return null;
         }
 
         String signature;
@@ -152,14 +157,14 @@ public class CypherParameterInfoHandler
 
         if (signature == null || Objects.equals(signature, "()")) {
             context.setUIComponentEnabled(false);
-            return;
+            return null;
         }
 
         String stripped = signature.substring(1, signature.length() - 1) + ",";
         int from = StringUtils.ordinalIndexOf(stripped, ",", current) + 2;
         int to = StringUtils.ordinalIndexOf(stripped, ",", current + 1) + 1;
 
-        context.setupUIComponentPresentation(
+        return context.setupUIComponentPresentation(
                 signature,
                 from, to,
                 false, false, false,
