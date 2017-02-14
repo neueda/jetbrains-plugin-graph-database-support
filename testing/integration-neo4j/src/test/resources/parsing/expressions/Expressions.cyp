@@ -49,7 +49,6 @@ AND [expr, expr]
 AND (n)-[]-()
 AND (expr)
 AND func()
-AND func(*)
 AND func(var)
 AND func(var, var)
 AND func(DISTINCT var)

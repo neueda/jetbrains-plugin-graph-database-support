@@ -46,6 +46,12 @@ public class CypherExpressionImpl extends ASTWrapperPsiElement implements Cypher
 
   @Override
   @NotNull
+  public List<CypherCountStar> getCountStarList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherCountStar.class);
+  }
+
+  @Override
+  @NotNull
   public List<CypherExistsFunctionInvocation> getExistsFunctionInvocationList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherExistsFunctionInvocation.class);
   }

@@ -7,13 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface CypherFilterExpression extends PsiElement {
 
-  @Nullable
-  CypherExpression getExpression();
-
   @NotNull
   CypherIdInColl getIdInColl();
 
   @Nullable
-  PsiElement getKWhere();
+  CypherWhere getWhere();
 
 }

@@ -59,6 +59,9 @@ public interface CypherSymbolicNameString extends PsiElement {
   PsiElement getKContains();
 
   @Nullable
+  PsiElement getKCount();
+
+  @Nullable
   PsiElement getKCreate();
 
   @Nullable

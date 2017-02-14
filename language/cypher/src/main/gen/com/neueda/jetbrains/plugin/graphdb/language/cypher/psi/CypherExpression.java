@@ -17,6 +17,9 @@ public interface CypherExpression extends PsiElement {
   List<CypherCaseExpression> getCaseExpressionList();
 
   @NotNull
+  List<CypherCountStar> getCountStarList();
+
+  @NotNull
   List<CypherExistsFunctionInvocation> getExistsFunctionInvocationList();
 
   @NotNull

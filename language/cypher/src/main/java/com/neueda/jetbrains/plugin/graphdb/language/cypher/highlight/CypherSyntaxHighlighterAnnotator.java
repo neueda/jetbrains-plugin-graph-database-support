@@ -53,6 +53,16 @@ public class CypherSyntaxHighlighterAnnotator implements Annotator {
         } else if (element instanceof CypherExistsFunctionInvocation) {
             CypherExistsFunctionInvocation invocation = (CypherExistsFunctionInvocation) element;
             setHighlighting(invocation.getKExists(), holder, CypherSyntaxColors.FUNCTION);
+        } else if (element instanceof CypherNodeLookup) {
+            CypherNodeLookup nodeLookup = (CypherNodeLookup) element;
+            setHighlighting(nodeLookup.getKNode(), holder, CypherSyntaxColors.FUNCTION);
+        } else if (element instanceof CypherRelationshipLookup) {
+            CypherRelationshipLookup relLookup = (CypherRelationshipLookup) element;
+            if (relLookup.getKRel() != null) {
+                setHighlighting(relLookup.getKRel(), holder, CypherSyntaxColors.FUNCTION);
+            } else if (relLookup.getKRelationship() != null) {
+                setHighlighting(relLookup.getKRelationship(), holder, CypherSyntaxColors.FUNCTION);
+            }
         }
     }
 

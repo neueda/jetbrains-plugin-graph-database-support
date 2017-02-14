@@ -5,15 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CypherPatternComprehension extends PsiElement {
+public interface CypherCountStar extends PsiElement {
 
   @NotNull
-  CypherExpression getExpression();
-
-  @NotNull
-  CypherRelationshipsPattern getRelationshipsPattern();
-
-  @Nullable
-  CypherWhere getWhere();
+  PsiElement getKCount();
 
 }

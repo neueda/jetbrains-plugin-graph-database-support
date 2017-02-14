@@ -1,3 +1,3 @@
 MATCH (n)
-WHERE n.renamedProperty = "test"
+WHERE n.renamedProperty = 'test'
 RETURN n.renamedProperty;
