@@ -24,8 +24,13 @@ public class FunctionCaseConverter extends AbstractCypherConverter {
         if (element.getNode().getElementType() == CypherTypes.FUNCTION_NAME
                 && TreeUtil.findChildBackward(element.getNode(), CypherTypes.K_COUNT) == null) {
             String text = element.getText();
+
+            if (text == null || text.isEmpty()) {
+                return null;
+            }
+
             char first = text.charAt(0);
-            return Character.toLowerCase(first) + text.substring(1);
+            return Character.toLowerCase(first) + (text.length() > 1 ? text.substring(1) : "");
         }
 
         return null;
@@ -33,14 +38,18 @@ public class FunctionCaseConverter extends AbstractCypherConverter {
 
     private boolean isLookupFunction(@NotNull ASTNode node) {
         IElementType type = node.getElementType();
-        return (type == CypherTypes.K_NODE || type == CypherTypes.K_REL || type == CypherTypes.K_RELATIONSHIP)
-                && TreeUtil.findParent(node, CypherTypes.LOOKUP) != null;
+        return (type == CypherTypes.K_NODE && testParentType(node, CypherTypes.NODE_LOOKUP))
+                || ((type == CypherTypes.K_REL || type == CypherTypes.K_RELATIONSHIP)
+                && testParentType(node, CypherTypes.RELATIONSHIP_LOOKUP));
 
     }
 
     private boolean isNonStarCount(@NotNull ASTNode node) {
         IElementType type = node.getElementType();
-        return type == CypherTypes.K_COUNT && TreeUtil.findParent(node, CypherTypes.COUNT_STAR) == null;
+        return type == CypherTypes.K_COUNT && !testParentType(node, CypherTypes.COUNT_STAR);
+    }
 
+    private boolean testParentType(ASTNode node, IElementType type) {
+        return node != null && node.getTreeParent() != null && node.getTreeParent().getElementType() == type;
     }
 }

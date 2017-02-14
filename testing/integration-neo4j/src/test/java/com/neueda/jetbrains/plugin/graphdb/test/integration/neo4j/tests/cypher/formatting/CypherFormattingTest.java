@@ -1,15 +1,10 @@
 package com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.tests.cypher.formatting;
 
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.base.BaseIntegrationTest;
+import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.tests.cypher.util.BaseFormattingTest;
 
-import static java.util.Collections.singletonList;
-
-public class CypherFormattingTest extends BaseIntegrationTest {
+public class CypherFormattingTest extends BaseFormattingTest {
 
     public void testFormatter() {
         doTest("match (a:Person{name:'Dmitry'})-[]-(b) where b.title='Neueda' return a,b;",
@@ -38,11 +33,6 @@ public class CypherFormattingTest extends BaseIntegrationTest {
         doTest("return (1 + 2) * 3", "RETURN (1 + 2) * 3");
     }
 
-    // todo
-    public void ignoreConvertHyphensInRel() {
-        doTest("MATCH (m)-[:OWNS-VEHICLE]->(n) RETURN m.name", "MATCH (m)-[:OWNS_VEHICLE]->(n)\nRETURN m.name");
-    }
-
     //Casing tests
     public void testUpperCaseKeywords() {
         doTest("create (n)", "CREATE (n)");
@@ -66,11 +56,6 @@ public class CypherFormattingTest extends BaseIntegrationTest {
 
     public void testLowerCaseBooleanLiterals() {
         doTest("WITH TRUE AS n1, False AS n2 RETURN n1 && n2", "WITH true AS n1, false AS n2\nRETURN n1 && n2");
-    }
-
-    // todo
-    public void ignoreLabelsInCamelCase() {
-        doTest("match (n:editor-in-chief) return n.name", "MATCH (n:EditorInChief)\nRETURN n.name");
     }
 
     public void testLowerCaseFunction() {
@@ -119,7 +104,6 @@ public class CypherFormattingTest extends BaseIntegrationTest {
     }
 
     public void testWrappingSpaceAroundOperators() {
-//        doTest("MATCH (p)=(m)-->(n) WHERE m.age<>n.age RETURN n.name", "MATCH p = (m)-->(n)\n  WHERE m.age <> n.age\nRETURN n.name");
         doTest("MATCH p=(m)-->(n) WHERE m.age<>n.age RETURN n.name", "MATCH p = (m)-->(n)\n  WHERE m.age <> n.age\nRETURN n.name");
     }
 
@@ -378,19 +362,9 @@ public class CypherFormattingTest extends BaseIntegrationTest {
                 "RETURN split('original', 'i')");
     }
 
-    private void doTest(String actual, String expected) {
-        PsiFile file = myFixture.addFileToProject("test.cypher", actual);
-        myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
-
-        new WriteCommandAction.Simple(getProject()) {
-            @Override
-            protected void run() throws Throwable {
-                PsiFile f = myFixture.getFile();
-                CodeStyleManager.getInstance(getProject())
-                        .reformatText(f, singletonList(f.getTextRange()));
-            }
-        }.execute();
-
-        myFixture.checkResult(expected);
+    public void testEscapedCharsStayEscaped() {
+        doTest("RETURN 'I\'m escaping \\n to the new \"line\"'",
+                "RETURN 'I\'m escaping \\n to the new \"line\"'");
     }
+
 }

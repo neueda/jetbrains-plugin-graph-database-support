@@ -20,11 +20,10 @@ public class QuotesConverter extends AbstractCypherConverter {
             int singleCount = CharMatcher.is('\'').countIn(text);
             int doubleCount = CharMatcher.is('"').countIn(text);
 
-            text = text.replace("\\", "");
-
             if (singleCount <= doubleCount) {
                 text = text
-                        .replace("'", "\\'");
+                        .replace("'", "\\'")
+                        .replace("\\\"", "\"");
                 return "'" + text + "'";
             } else {
                 text = text

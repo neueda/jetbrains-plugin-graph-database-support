@@ -12,6 +12,4 @@
     <suppress files="DataSourcesComponentState.java" checks="VisibilityModifier"/>
     <suppress files="DataSourceContainerV\d+.java" checks="VisibilityModifier"/>
     <suppress files="[\w_]+Test.java" checks="[a-zA-Z0-9]*"/>
-    <suppress files="CypherCodeStyleSettings.java" checks="MemberName"/>
-    <suppress files="CypherCodeStyleSettings.java" checks="VisibilityModifier"/>
 </suppressions>
