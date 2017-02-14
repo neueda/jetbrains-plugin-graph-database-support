@@ -123,15 +123,30 @@ public class CypherBlock implements ASTBlock {
         IElementType parentType = this.node.getElementType();
         IElementType type = node.getElementType();
 
-        if (parentType == CypherTypes.SINGLE_QUERY && type == CypherTypes.CLAUSE) return Indent.getNoneIndent();
-        if (type == CypherTypes.CLAUSE) return Indent.getNormalIndent();
-        if (type == CypherTypes.MERGE_ACTION) return Indent.getNormalIndent();
-        if (isReturnBodyKeywords(node)) return Indent.getNormalIndent();
-        if (type == CypherTypes.PATTERN_PART || type == CypherTypes.RELATIONSHIP_PATTERN)
+        if (parentType == CypherTypes.SINGLE_QUERY && type == CypherTypes.CLAUSE) {
+            return Indent.getNoneIndent();
+        }
+        if (type == CypherTypes.CLAUSE) {
+            return Indent.getNormalIndent();
+        }
+        if (type == CypherTypes.MERGE_ACTION) {
+            return Indent.getNormalIndent();
+        }
+        if (isReturnBodyKeywords(node)) {
+            return Indent.getNormalIndent();
+        }
+        if (type == CypherTypes.PATTERN_PART || type == CypherTypes.RELATIONSHIP_PATTERN) {
             return Indent.getContinuationIndent();
-        if (type == CypherTypes.PROPERTY_KEY_NAME) return Indent.getContinuationIndent();
-        if (type == CypherTypes.WHERE) return Indent.getNormalIndent();
-        if (type == CypherTypes.K_AS) return Indent.getContinuationIndent();
+        }
+        if (type == CypherTypes.PROPERTY_KEY_NAME) {
+            return Indent.getContinuationIndent();
+        }
+        if (type == CypherTypes.WHERE) {
+            return Indent.getNormalIndent();
+        }
+        if (type == CypherTypes.K_AS) {
+            return Indent.getContinuationIndent();
+        }
 
         return Indent.getNoneIndent();
     }
@@ -140,19 +155,39 @@ public class CypherBlock implements ASTBlock {
     private Wrap calcWrap(@NotNull ASTNode node) {
         IElementType type = node.getElementType();
 
-        if (type == CypherTypes.CLAUSE) return Wrap.createWrap(WrapType.ALWAYS, true);
-        if (type == CypherTypes.K_USING) return Wrap.createWrap(WrapType.ALWAYS, true);
-        if (type == CypherTypes.CALL) return Wrap.createWrap(WrapType.ALWAYS, true);
-        if (type == CypherTypes.MERGE_ACTION) return Wrap.createWrap(WrapType.ALWAYS, true);
-        if (isReturnBodyKeywords(node)) return Wrap.createWrap(WrapType.ALWAYS, true);
-        if (type == CypherTypes.PATTERN_PART || type == CypherTypes.RELATIONSHIP_PATTERN)
+        if (type == CypherTypes.CLAUSE) {
+            return Wrap.createWrap(WrapType.ALWAYS, true);
+        }
+        if (type == CypherTypes.K_USING) {
+            return Wrap.createWrap(WrapType.ALWAYS, true);
+        }
+        if (type == CypherTypes.CALL) {
+            return Wrap.createWrap(WrapType.ALWAYS, true);
+        }
+        if (type == CypherTypes.MERGE_ACTION) {
+            return Wrap.createWrap(WrapType.ALWAYS, true);
+        }
+        if (isReturnBodyKeywords(node)) {
+            return Wrap.createWrap(WrapType.ALWAYS, true);
+        }
+        if (type == CypherTypes.PATTERN_PART || type == CypherTypes.RELATIONSHIP_PATTERN) {
             return Wrap.createWrap(WrapType.CHOP_DOWN_IF_LONG, true);
-        if (type == CypherTypes.WHERE && TreeUtil.findParent(node, CypherTypes.LIST_COMPREHENSION) != null)
+        }
+        if (type == CypherTypes.WHERE && TreeUtil.findParent(node, CypherTypes.LIST_COMPREHENSION) != null) {
             return Wrap.createWrap(WrapType.CHOP_DOWN_IF_LONG, true);
-        if (type == CypherTypes.WHERE) return Wrap.createWrap(WrapType.ALWAYS, true);
-        if (type == CypherTypes.PROPERTY_KEY_NAME) return Wrap.createWrap(WrapType.CHOP_DOWN_IF_LONG, true);
-        if (type == CypherTypes.K_AS) return Wrap.createWrap(WrapType.CHOP_DOWN_IF_LONG, true);
-        if (type == CypherTypes.FOREACH) return Wrap.createWrap(WrapType.ALWAYS, true);
+        }
+        if (type == CypherTypes.WHERE) {
+            return Wrap.createWrap(WrapType.ALWAYS, true);
+        }
+        if (type == CypherTypes.PROPERTY_KEY_NAME) {
+            return Wrap.createWrap(WrapType.CHOP_DOWN_IF_LONG, true);
+        }
+        if (type == CypherTypes.K_AS) {
+            return Wrap.createWrap(WrapType.CHOP_DOWN_IF_LONG, true);
+        }
+        if (type == CypherTypes.FOREACH) {
+            return Wrap.createWrap(WrapType.ALWAYS, true);
+        }
 
         return Wrap.createWrap(WrapType.NONE, false);
     }
@@ -186,9 +221,7 @@ public class CypherBlock implements ASTBlock {
     @NotNull
     @Override
     public ChildAttributes getChildAttributes(int newChildIndex) {
-        Indent indent = Indent.getContinuationIndent(true);
-        //todo add child indentation rules
-        return new ChildAttributes(indent, null);
+        return new ChildAttributes(Indent.getNoneIndent(), null);
     }
 
     @Override

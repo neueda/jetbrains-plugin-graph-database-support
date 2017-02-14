@@ -23,9 +23,8 @@ public class CypherPreFormatter implements PreFormatProcessor {
     @Override
     public TextRange process(@NotNull ASTNode element, @NotNull TextRange range) {
         PsiElement psiElement = element.getPsi();
-        if (psiElement != null &&
-                psiElement.isValid() &&
-                psiElement.getLanguage().is(CypherLanguage.INSTANCE)) {
+        if (psiElement != null && psiElement.isValid()
+                && psiElement.getLanguage().is(CypherLanguage.INSTANCE)) {
             FormatterTask converter = new FormatterTask(psiElement, range);
 
             if (converter.getDocument() != null) {
@@ -54,11 +53,11 @@ public class CypherPreFormatter implements PreFormatProcessor {
             myDocument = myDocumentManager.getDocument(file);
         }
 
-        public TextRange getTextRange() {
+        TextRange getTextRange() {
             return myTextRange.grown(delta);
         }
 
-        public Document getDocument() {
+        Document getDocument() {
             return myDocument;
         }
 

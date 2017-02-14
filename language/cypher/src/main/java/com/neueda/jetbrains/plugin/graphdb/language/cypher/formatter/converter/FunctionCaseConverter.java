@@ -21,8 +21,8 @@ public class FunctionCaseConverter extends AbstractCypherConverter {
             return element.getText().toLowerCase();
         }
 
-        if (element.getNode().getElementType() == CypherTypes.FUNCTION_NAME &&
-                TreeUtil.findChildBackward(element.getNode(), CypherTypes.K_COUNT) == null) {
+        if (element.getNode().getElementType() == CypherTypes.FUNCTION_NAME
+                && TreeUtil.findChildBackward(element.getNode(), CypherTypes.K_COUNT) == null) {
             String text = element.getText();
             char first = text.charAt(0);
             return Character.toLowerCase(first) + text.substring(1);
