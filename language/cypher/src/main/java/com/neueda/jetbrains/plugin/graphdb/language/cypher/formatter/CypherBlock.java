@@ -35,7 +35,8 @@ public class CypherBlock implements ASTBlock {
     private static final Map<IElementType, List<IElementType>> ALIGNMENT_MAPPING = ContainerUtil.newHashMap(
             pair(CypherTypes.PATTERN, list(CypherTypes.PATTERN_PART, CypherTypes.RELATIONSHIPS_PATTERN)),
             pair(CypherTypes.MAP_LITERAL, list(CypherTypes.PROPERTY_KEY_NAME, CypherTypes.EXPRESSION)),
-            pair(CypherTypes.RETURN_ITEMS, list(CypherTypes.OP_MUL, CypherTypes.RETURN_ITEM))
+            pair(CypherTypes.RETURN_ITEMS, list(CypherTypes.OP_MUL, CypherTypes.RETURN_ITEM, CypherTypes.WHERE)),
+            pair(CypherTypes.FILTER_EXPRESSION, list(CypherTypes.ID_IN_COLL, CypherTypes.WHERE))
     );
 
     private ASTNode node;
@@ -84,7 +85,11 @@ public class CypherBlock implements ASTBlock {
                 if (isWhitespaceOrEmpty.test(subNode)) {
                     continue;
                 }
-                Alignment alignment = strategy != null ? strategy.getAlignment(subNode.getElementType()) : null;
+
+                Alignment alignment = strategy != null
+                            ? strategy.getAlignment(getNode().getElementType(), subNode.getElementType())
+                            : null;
+
                 CypherBlock block = makeSubBlock(subNode, alignment);
                 subBlocks.add(block);
             }
@@ -195,6 +200,9 @@ public class CypherBlock implements ASTBlock {
             return Wrap.createWrap(WrapType.CHOP_DOWN_IF_LONG, true);
         }
         if (node.getTreeParent().getElementType() == CypherTypes.ARRAY && type == CypherTypes.EXPRESSION) {
+            return Wrap.createWrap(WrapType.CHOP_DOWN_IF_LONG, true);
+        }
+        if (type == CypherTypes.K_AS) {
             return Wrap.createWrap(WrapType.CHOP_DOWN_IF_LONG, true);
         }
 
