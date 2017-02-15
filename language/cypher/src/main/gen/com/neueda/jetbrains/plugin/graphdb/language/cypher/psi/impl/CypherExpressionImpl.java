@@ -40,6 +40,12 @@ public class CypherExpressionImpl extends ASTWrapperPsiElement implements Cypher
 
   @Override
   @NotNull
+  public List<CypherArray> getArrayList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherArray.class);
+  }
+
+  @Override
+  @NotNull
   public List<CypherCaseExpression> getCaseExpressionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherCaseExpression.class);
   }

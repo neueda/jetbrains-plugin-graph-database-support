@@ -40,6 +40,12 @@ public class CypherPropertyExpressionImpl extends ASTWrapperPsiElement implement
 
   @Override
   @Nullable
+  public CypherArray getArray() {
+    return findChildByClass(CypherArray.class);
+  }
+
+  @Override
+  @Nullable
   public CypherCaseExpression getCaseExpression() {
     return findChildByClass(CypherCaseExpression.class);
   }
@@ -54,12 +60,6 @@ public class CypherPropertyExpressionImpl extends ASTWrapperPsiElement implement
   @Nullable
   public CypherExistsFunctionInvocation getExistsFunctionInvocation() {
     return findChildByClass(CypherExistsFunctionInvocation.class);
-  }
-
-  @Override
-  @NotNull
-  public List<CypherExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherExpression.class);
   }
 
   @Override

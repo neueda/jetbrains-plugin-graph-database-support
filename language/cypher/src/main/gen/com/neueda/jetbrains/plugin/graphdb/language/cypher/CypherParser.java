@@ -44,6 +44,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == ANY_FUNCTION_INVOCATION) {
       r = AnyFunctionInvocation(b, 0);
     }
+    else if (t == ARRAY) {
+      r = Array(b, 0);
+    }
     else if (t == BULK_IMPORT_QUERY) {
       r = BulkImportQuery(b, 0);
     }
@@ -551,6 +554,51 @@ public class CypherParser implements PsiParser, LightPsiParser {
     r = r && FilterExpression(b, l + 1);
     r = r && consumeToken(b, PARENTHESE_CLOSE);
     exit_section_(b, m, ANY_FUNCTION_INVOCATION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // "[" Expression? ("," Expression)* "]"
+  public static boolean Array(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Array")) return false;
+    if (!nextTokenIs(b, BRACKET_SQUAREOPEN)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, BRACKET_SQUAREOPEN);
+    r = r && Array_1(b, l + 1);
+    r = r && Array_2(b, l + 1);
+    r = r && consumeToken(b, BRACKET_SQUARECLOSE);
+    exit_section_(b, m, ARRAY, r);
+    return r;
+  }
+
+  // Expression?
+  private static boolean Array_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Array_1")) return false;
+    Expression(b, l + 1);
+    return true;
+  }
+
+  // ("," Expression)*
+  private static boolean Array_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Array_2")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!Array_2_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Array_2", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // "," Expression
+  private static boolean Array_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Array_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, OP_COMMA);
+    r = r && Expression(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -1150,7 +1198,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   //               | CountStar
   //               | ListComprehension
   //               | PatternComprehension
-  //               | ("[" Expression? ("," Expression)* "]")
+  //               | Array
   //               | FilterFunctionInvocation
   //               | ExtractFunctionInvocation
   //               | ReduceFunctionInvocation
@@ -1180,7 +1228,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
     if (!r) r = CountStar(b, l + 1);
     if (!r) r = ListComprehension(b, l + 1);
     if (!r) r = PatternComprehension(b, l + 1);
-    if (!r) r = Expression1_12(b, l + 1);
+    if (!r) r = Array(b, l + 1);
     if (!r) r = FilterFunctionInvocation(b, l + 1);
     if (!r) r = ExtractFunctionInvocation(b, l + 1);
     if (!r) r = ReduceFunctionInvocation(b, l + 1);
@@ -1194,49 +1242,6 @@ public class CypherParser implements PsiParser, LightPsiParser {
     if (!r) r = parenthesizedExpression(b, l + 1);
     if (!r) r = FunctionInvocation(b, l + 1);
     if (!r) r = Variable(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // "[" Expression? ("," Expression)* "]"
-  private static boolean Expression1_12(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_12")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, BRACKET_SQUAREOPEN);
-    r = r && Expression1_12_1(b, l + 1);
-    r = r && Expression1_12_2(b, l + 1);
-    r = r && consumeToken(b, BRACKET_SQUARECLOSE);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // Expression?
-  private static boolean Expression1_12_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_12_1")) return false;
-    Expression(b, l + 1);
-    return true;
-  }
-
-  // ("," Expression)*
-  private static boolean Expression1_12_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_12_2")) return false;
-    int c = current_position_(b);
-    while (true) {
-      if (!Expression1_12_2_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "Expression1_12_2", c)) break;
-      c = current_position_(b);
-    }
-    return true;
-  }
-
-  // "," Expression
-  private static boolean Expression1_12_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression1_12_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, OP_COMMA);
-    r = r && Expression(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

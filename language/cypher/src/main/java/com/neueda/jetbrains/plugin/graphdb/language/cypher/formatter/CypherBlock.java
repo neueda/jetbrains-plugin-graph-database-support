@@ -24,9 +24,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
+import static com.intellij.openapi.util.Pair.pair;
+import static com.intellij.util.containers.ContainerUtil.list;
+
 public class CypherBlock implements ASTBlock {
+
+    private static final Map<IElementType, List<IElementType>> ALIGNMENT_MAPPING = ContainerUtil.newHashMap(
+            pair(CypherTypes.PATTERN, list(CypherTypes.PATTERN_PART, CypherTypes.RELATIONSHIPS_PATTERN)),
+            pair(CypherTypes.MAP_LITERAL, list(CypherTypes.PROPERTY_KEY_NAME, CypherTypes.EXPRESSION)),
+            pair(CypherTypes.RETURN_ITEMS, list(CypherTypes.OP_MUL, CypherTypes.RETURN_ITEM))
+    );
 
     private ASTNode node;
     private Wrap wrap;
@@ -51,19 +61,6 @@ public class CypherBlock implements ASTBlock {
         this.spacingBuilder = spacingBuilder;
     }
 
-    CypherBlock(@NotNull ASTNode node,
-                @NotNull CodeStyleSettings settings,
-                @Nullable Wrap wrap,
-                @Nullable Indent indent,
-                @Nullable Alignment alignment) {
-        this.node = node;
-        this.codeStyleSettings = settings;
-        this.wrap = wrap;
-        this.indent = indent;
-        this.alignment = alignment;
-        this.spacingBuilder = CypherFormattingModelBuilder.createSpacingBuilder(settings);
-    }
-
     @Override
     public ASTNode getNode() {
         return node;
@@ -80,23 +77,7 @@ public class CypherBlock implements ASTBlock {
     public List<Block> getSubBlocks() {
         if (subBlocks == null) {
             Predicate<ASTNode> isWhitespaceOrEmpty = CypherBlock::isWhitespaceOrEmpty;
-
-            AlignmentStrategy.AlignmentPerTypeStrategy strategy = null;
-
-            boolean isPattern = getNode().getElementType() == CypherTypes.PATTERN;
-            boolean isProperty = getNode().getElementType() == CypherTypes.MAP_LITERAL;
-
-            if (isPattern) {
-                strategy = AlignmentStrategy.createAlignmentPerTypeStrategy(
-                        ContainerUtil.list(CypherTypes.PATTERN_PART, CypherTypes.RELATIONSHIPS_PATTERN),
-                        CypherTypes.PATTERN, true);
-            }
-
-            if (isProperty) {
-                strategy = AlignmentStrategy.createAlignmentPerTypeStrategy(
-                        ContainerUtil.list(CypherTypes.PROPERTY_KEY_NAME, CypherTypes.EXPRESSION),
-                        CypherTypes.MAP_LITERAL, true);
-            }
+            AlignmentStrategy.AlignmentPerTypeStrategy strategy = createStrategy(getNode());
 
             subBlocks = new ArrayList<>();
             for (ASTNode subNode = node.getFirstChildNode(); subNode != null; subNode = subNode.getTreeNext()) {
@@ -109,6 +90,20 @@ public class CypherBlock implements ASTBlock {
             }
         }
         return subBlocks;
+    }
+
+    private AlignmentStrategy.AlignmentPerTypeStrategy createStrategy(ASTNode node) {
+        if (node == null) {
+            return null;
+        }
+
+        List<IElementType> childTypes = ALIGNMENT_MAPPING.get(node.getElementType());
+        if (childTypes == null) {
+            return null;
+        }
+
+        return AlignmentStrategy.createAlignmentPerTypeStrategy(childTypes,
+                node.getElementType(), true);
     }
 
     private CypherBlock makeSubBlock(@NotNull ASTNode node, Alignment alignment) {
@@ -138,13 +133,21 @@ public class CypherBlock implements ASTBlock {
         if (type == CypherTypes.PATTERN_PART || type == CypherTypes.RELATIONSHIP_PATTERN) {
             return Indent.getContinuationIndent();
         }
-        if (type == CypherTypes.PROPERTY_KEY_NAME) {
+        if (type == CypherTypes.RETURN_ITEM) {
             return Indent.getContinuationIndent();
         }
         if (type == CypherTypes.WHERE) {
             return Indent.getNormalIndent();
         }
-        if (type == CypherTypes.K_AS) {
+        if (parentType == CypherTypes.CASE_EXPRESSION || parentType == CypherTypes.CASE_ALTERNATIVES) {
+            if (type == CypherTypes.K_WHEN || type == CypherTypes.K_ELSE || type == CypherTypes.K_END) {
+                return Indent.getContinuationIndent();
+            }
+        }
+        if (type == CypherTypes.PROPERTY_KEY_NAME) {
+            return Indent.getContinuationIndent();
+        }
+        if (parentType == CypherTypes.ARRAY && type == CypherTypes.EXPRESSION) {
             return Indent.getContinuationIndent();
         }
 
@@ -179,14 +182,20 @@ public class CypherBlock implements ASTBlock {
         if (type == CypherTypes.WHERE) {
             return Wrap.createWrap(WrapType.ALWAYS, true);
         }
-        if (type == CypherTypes.PROPERTY_KEY_NAME) {
-            return Wrap.createWrap(WrapType.CHOP_DOWN_IF_LONG, true);
-        }
-        if (type == CypherTypes.K_AS) {
+        if (type == CypherTypes.RETURN_ITEM) {
             return Wrap.createWrap(WrapType.CHOP_DOWN_IF_LONG, true);
         }
         if (type == CypherTypes.FOREACH) {
             return Wrap.createWrap(WrapType.ALWAYS, true);
+        }
+        if (type == CypherTypes.K_ELSE || type == CypherTypes.K_END) {
+            return Wrap.createWrap(WrapType.ALWAYS, true);
+        }
+        if (type == CypherTypes.PROPERTY_KEY_NAME) {
+            return Wrap.createWrap(WrapType.CHOP_DOWN_IF_LONG, true);
+        }
+        if (node.getTreeParent().getElementType() == CypherTypes.ARRAY && type == CypherTypes.EXPRESSION) {
+            return Wrap.createWrap(WrapType.CHOP_DOWN_IF_LONG, true);
         }
 
         return Wrap.createWrap(WrapType.NONE, false);

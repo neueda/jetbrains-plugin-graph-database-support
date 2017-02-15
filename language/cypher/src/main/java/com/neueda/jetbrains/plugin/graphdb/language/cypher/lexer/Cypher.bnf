@@ -384,7 +384,7 @@ private Expression1 ::= NumberLiteral
               | CountStar
               | ListComprehension
               | PatternComprehension
-              | ("[" Expression? ("," Expression)* "]")
+              | Array
               | FilterFunctionInvocation
               | ExtractFunctionInvocation
               | ReduceFunctionInvocation
@@ -399,6 +399,7 @@ private Expression1 ::= NumberLiteral
               | FunctionInvocation
               | Variable
 
+Array ::= ("[" Expression? ("," Expression)* "]")
 PropertyLookup ::= "." PropertyKeyName
 ListComprehension ::= "[" FilterExpression ("|"  Expression)? "]"
 FilterExpression ::= IdInColl Where?
