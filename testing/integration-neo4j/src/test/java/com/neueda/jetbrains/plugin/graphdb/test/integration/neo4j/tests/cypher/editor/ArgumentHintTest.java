@@ -74,7 +74,7 @@ public class ArgumentHintTest extends BaseIntegrationTest {
 
     public void testUserDefinedFunction() {
         doTest("RETURN com.neueda.jetbrains.plugin.graphdb.test.database.neo4j_3_1.secondTestFunction(<caret>\"test\");",
-                "<html>(<b>param :: STRING?</b>)</html>");
+                "<html>(<b>index :: STRING?</b>)</html>");
     }
 
     public void testNoParams() {

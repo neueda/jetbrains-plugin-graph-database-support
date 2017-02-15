@@ -3,7 +3,7 @@ package com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.
 import com.google.common.collect.Lists;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherBuiltInFunctionElement;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherElementWithSignature.InvokableInformation;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.InvokableInformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,7 @@ public final class CypherBuiltInFunctions {
             element("extract", "(variable IN list | expression)", ANY.array()),
             element("filter", "(variable IN list WHERE predicate)", ANY.array()),
             element("tail", "(expression)", ANY.array()),
-            element("range", "(start, end [, step])", INTEGER.array()),
+            element("range", "(start, end, step = 1)", INTEGER.array()),
             element("reduce", "(accumulator = initial, variable IN list | expression)", ANY.single())
     );
     private static final List<CypherBuiltInFunctionElement> FUNCTIONS_MATH_NUMERIC = Lists.newArrayList(
@@ -87,7 +87,7 @@ public final class CypherBuiltInFunctions {
     );
     private static final List<CypherBuiltInFunctionElement> FUNCTIONS_STRING = Lists.newArrayList(
             element("replace", "(original, search, replace)", STRING.single()),
-            element("substring", "(original, start, length?)", STRING.single()),
+            element("substring", "(original, start, length = length(original))", STRING.single()),
             element("left", "(original, length)", STRING.single()),
             element("right", "(original, length)", STRING.single()),
             element("ltrim", "(original)", STRING.single()),
