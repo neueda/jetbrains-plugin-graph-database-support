@@ -38,6 +38,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitInvocation(o);
   }
 
+  public void visitArray(@NotNull CypherArray o) {
+    visitPsiElement(o);
+  }
+
   public void visitBulkImportQuery(@NotNull CypherBulkImportQuery o) {
     visitPsiElement(o);
   }

@@ -23,9 +23,10 @@ public class CypherFormattingModelBuilder implements FormattingModelBuilder {
     @NotNull
     @Override
     public FormattingModel createModel(PsiElement element, CodeStyleSettings settings) {
-        CypherBlock block = new CypherBlock(element.getNode(), settings, Wrap.createWrap(WrapType.NONE, false),
-                Indent.getNoneIndent(),
-                Alignment.createAlignment()
+        CypherBlock block = new CypherBlock(element.getNode(), Alignment.createAlignment(),
+                Indent.getNoneIndent(), Wrap.createWrap(WrapType.NONE, false),
+                settings,
+                CypherFormattingModelBuilder.createSpacingBuilder(settings)
         );
         return FormattingModelProvider.createFormattingModelForPsiFile(element.getContainingFile(), block, settings);
     }
@@ -64,6 +65,9 @@ public class CypherFormattingModelBuilder implements FormattingModelBuilder {
                 .between(VARIABLE, NODE_LABELS).none()
 
                 .between(K_FOREACH, PARENTHESE_OPEN).spaces(1)
+                .between(EXPRESSION, OP_PIPE).spaces(1)
+                .between(ID_IN_COLL, OP_PIPE).spaces(1)
+                .between(FILTER_EXPRESSION, OP_PIPE).spaces(1)
 
                 .aroundInside(PATTERN_ELEMENT, PATTERN_PART).none()
                 .aroundInside(DASH, RELATIONSHIP_PATTERN).none()
@@ -88,6 +92,9 @@ public class CypherFormattingModelBuilder implements FormattingModelBuilder {
                 .around(OP_GREATERTHANEQUALS).spaces(1)
 
                 .between(STATEMENT_ITEM, STATEMENT_ITEM).blankLines(1)
-                .after(PATTERN_COMPREHENSION).lineBreakInCode();
+                .after(PATTERN_COMPREHENSION).lineBreakInCode()
+                .between(K_RETURN, RETURN_BODY).spaces(1)
+                .between(K_WITH, RETURN_BODY).spaces(1)
+                .between(K_DISTINCT, RETURN_BODY).spaces(1);
     }
 }

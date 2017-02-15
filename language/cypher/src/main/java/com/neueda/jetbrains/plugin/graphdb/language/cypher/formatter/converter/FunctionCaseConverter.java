@@ -5,6 +5,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.tree.TreeUtil;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.spellchecker.util.Strings;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.formatter.CypherPreFormatter;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +28,10 @@ public class FunctionCaseConverter extends AbstractCypherConverter {
 
             if (text == null || text.isEmpty()) {
                 return null;
+            }
+
+            if (Strings.isUpperCase(text)) {
+                return text.toLowerCase();
             }
 
             char first = text.charAt(0);

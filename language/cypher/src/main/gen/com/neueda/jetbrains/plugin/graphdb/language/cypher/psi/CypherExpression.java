@@ -14,6 +14,9 @@ public interface CypherExpression extends PsiElement {
   List<CypherAnyFunctionInvocation> getAnyFunctionInvocationList();
 
   @NotNull
+  List<CypherArray> getArrayList();
+
+  @NotNull
   List<CypherCaseExpression> getCaseExpressionList();
 
   @NotNull

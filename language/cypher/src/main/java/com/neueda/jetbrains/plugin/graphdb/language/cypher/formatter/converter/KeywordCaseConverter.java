@@ -6,6 +6,7 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.tree.TreeUtil;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.containers.ContainerUtil;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.formatter.CypherPreFormatter;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTokenType;
@@ -42,6 +43,16 @@ public class KeywordCaseConverter extends AbstractCypherConverter {
         if (CypherTokenType.class.isAssignableFrom(element.getNode().getElementType().getClass())) {
             CypherTokenType type = (CypherTokenType) element.getNode().getElementType();
             if (type.getOriginalName().startsWith("K_")) {
+                if (TreeUtil.findParent(element.getNode(), TokenSet.create(
+                        CypherTypes.VARIABLE,
+                        CypherTypes.LABEL_NAME,
+                        CypherTypes.REL_TYPE_NAME,
+                        CypherTypes.PROPERTY_KEY_NAME,
+                        CypherTypes.NAMESPACE,
+                        CypherTypes.PARAMETER)) != null) {
+                    return null;
+                }
+
                 if (SPECIAL_FUNCTIONS.containsKey(type)) {
                     return SPECIAL_FUNCTIONS.get(type);
                 }

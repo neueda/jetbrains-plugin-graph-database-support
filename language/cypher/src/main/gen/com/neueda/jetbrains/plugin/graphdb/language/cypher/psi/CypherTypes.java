@@ -15,6 +15,7 @@ public interface CypherTypes {
   IElementType ANONYMOUS_PATTERN_PART = new CypherElementType("ANONYMOUS_PATTERN_PART");
   IElementType ANY_CYPHER_OPTION = new CypherElementType("ANY_CYPHER_OPTION");
   IElementType ANY_FUNCTION_INVOCATION = new CypherElementType("ANY_FUNCTION_INVOCATION");
+  IElementType ARRAY = new CypherElementType("ARRAY");
   IElementType BULK_IMPORT_QUERY = new CypherElementType("BULK_IMPORT_QUERY");
   IElementType CALL = new CypherElementType("CALL");
   IElementType CASE_ALTERNATIVES = new CypherElementType("CASE_ALTERNATIVES");
@@ -289,6 +290,9 @@ public interface CypherTypes {
       }
       else if (type == ANY_FUNCTION_INVOCATION) {
         return new CypherAnyFunctionInvocationImpl(node);
+      }
+      else if (type == ARRAY) {
+        return new CypherArrayImpl(node);
       }
       else if (type == BULK_IMPORT_QUERY) {
         return new CypherBulkImportQueryImpl(node);

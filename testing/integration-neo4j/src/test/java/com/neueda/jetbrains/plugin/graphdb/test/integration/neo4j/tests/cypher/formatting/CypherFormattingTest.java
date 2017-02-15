@@ -203,14 +203,15 @@ public class CypherFormattingTest extends BaseFormattingTest {
     }
 
     //positive line-breaking tests with width
-    public void testNestedWhereOnNewLineAndIndented() {
+    public void ignoreNestedWhereOnNewLineAndIndented() {
         CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(getProject());
 
         settings.setDefaultRightMargin(26);
 
-        doTest("return [x in range(0,10) where x + 2 = 0 | x^3] as result", "RETURN [x IN range(0, 10)\n" +
-                "  WHERE x + 2 = 0 | x ^ 3]\n" +
-                "  AS result");
+        doTest("return [x in range(0,10) where x + 2 = 0 | x^3] as result",
+                "RETURN [x IN range(0, 10)\n" +
+                "         WHERE x + 2 = 0 | x ^ 3]\n" +
+                "       AS result");
     }
 
     //negative line-breaking tests
