@@ -157,6 +157,10 @@
         <localInspection language="Cypher" displayName="Cypher EXPLAIN warning inspection" groupPath="Cypher"
                          groupName="General" enabledByDefault="true" level="WARNING"
                          implementationClass="com.neueda.jetbrains.plugin.graphdb.jetbrains.inspection.CypherExplainWarningInspection"/>
+        <localInspection language="Cypher" displayName="Function call inspection" groupPath="Cypher"
+                         groupName="General" enabledByDefault="true" level="ERROR"
+                         implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.inspections.CypherFunctionCallInspection"/>
+
         <codeInsight.parameterInfo language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.editor.CypherParameterInfoHandler"/>
 
         <codeStyleSettingsProvider implementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.formatter.CypherCodeStyleSettingsProvider"/>
