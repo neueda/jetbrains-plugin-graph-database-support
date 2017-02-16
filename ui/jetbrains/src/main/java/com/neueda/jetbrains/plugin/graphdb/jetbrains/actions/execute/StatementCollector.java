@@ -47,7 +47,9 @@ public class StatementCollector extends PsiElementVisitor {
 
     @Override
     public void visitElement(PsiElement element) {
-        if (hasErrors) return;
+        if (hasErrors) {
+            return;
+        }
 
         if (element.getNode().getElementType() == CypherTypes.STATEMENT_ITEM) {
             queries.add(element.getText());

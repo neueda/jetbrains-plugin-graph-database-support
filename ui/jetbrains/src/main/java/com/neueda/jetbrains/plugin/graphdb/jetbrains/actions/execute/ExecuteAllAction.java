@@ -35,7 +35,8 @@ public class ExecuteAllAction extends AnAction {
         StatementCollector statementCollector = new StatementCollector(messageBus, parameterService);
         psiFile.acceptChildren(statementCollector);
         if (!statementCollector.hasErrors()) {
-            ExecuteQueryPayload executeQueryPayload = new ExecuteQueryPayload(statementCollector.getQueries(), statementCollector.getParameters(), psiFile.getName());
+            ExecuteQueryPayload executeQueryPayload =
+                new ExecuteQueryPayload(statementCollector.getQueries(), statementCollector.getParameters(), psiFile.getName());
             ConsoleToolWindow.ensureOpen(project);
 
             DataSourcesComponent dataSourcesComponent = project.getComponent(DataSourcesComponent.class);
