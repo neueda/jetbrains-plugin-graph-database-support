@@ -1,6 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.tests.cypher.util;
 
 import com.intellij.codeInspection.LocalInspectionTool;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.NameUtil;
@@ -26,6 +27,12 @@ public abstract class BaseInspectionTest extends BaseIntegrationTest {
     protected void addDataSourceFileAndCheck(String fileContent) {
         String fileName = NameUtil.createDataSourceFileName(dataSource().neo4j31());
         addFileAndCheck(fileName, fileContent);
+    }
+
+    protected void deletFile() {
+        ApplicationManager.getApplication().runWriteAction(() -> {
+                myFixture.getFile().delete();
+        });
     }
 
     protected void addUnavailableDataSourceFileAndCheck(String fileContent) {

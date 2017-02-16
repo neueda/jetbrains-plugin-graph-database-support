@@ -14,90 +14,90 @@ import static com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.met
 public final class CypherBuiltInFunctions {
 
     private static final List<CypherBuiltInFunctionElement> FUNCTIONS_PREDICATE = Lists.newArrayList(
-            element("all", "(variable IN list WHERE predicate)", BOOLEAN.single()),
-            element("any", "(variable IN list WHERE predicate)", BOOLEAN.single()),
-            element("none", "(variable in list WHERE predicate)", BOOLEAN.single()),
-            element("single", "(variable in list WHERE predicate)", BOOLEAN.single()),
-            element("exists", "(pattern)", BOOLEAN.single()),
-            element("exists", "(property)", BOOLEAN.single())
+            element("all", "(variable IN list WHERE predicate :: ANY)", BOOLEAN.single()),
+            element("any", "(variable IN list WHERE predicate :: ANY)", BOOLEAN.single()),
+            element("none", "(variable in list WHERE predicate :: ANY)", BOOLEAN.single()),
+            element("single", "(variable in list WHERE predicate :: ANY)", BOOLEAN.single()),
+            element("exists", "(pattern :: ANY)", BOOLEAN.single()),
+            element("exists", "(property :: ANY)", BOOLEAN.single())
     );
     private static final List<CypherBuiltInFunctionElement> FUNCTIONS_SHORTEST_PATH = Lists.newArrayList(
-            element("shortestPath", "(pattern)", PATH.single()),
-            element("allShortestPaths", "(pattern)", PATH.array())
+            element("shortestPath", "(pattern :: PATH)", PATH.single()),
+            element("allShortestPaths", "(pattern :: PATH)", PATH.array())
     );
     private static final List<CypherBuiltInFunctionElement> FUNCTIONS_SCALAR = Lists.newArrayList(
-            element("size", "(list)", INTEGER.single()),
-            element("size", "(pattern)", INTEGER.single()),
-            element("length", "(path)", INTEGER.single()),
-            element("length", "(string)", INTEGER.single()),
-            element("type", "(relationship)", STRING.single()),
-            element("id", "(node)", INTEGER.single()),
-            element("id", "(relationship)", INTEGER.single()),
-            element("coalesce", "(expression...)", ANY.single()),
-            element("head", "(expression)", ANY.single()),
-            element("last", "(expression)", ANY.single()),
+            element("size", "(list :: LIST OF ANY)", INTEGER.single()),
+            element("size", "(pattern :: ANY)", INTEGER.single()),
+            element("length", "(path :: ANY)", INTEGER.single()),
+            element("length", "(string :: STRING)", INTEGER.single()),
+            element("type", "(relationship :: RELATIONSHIP)", STRING.single()),
+            element("id", "(node :: NODE)", INTEGER.single()),
+            element("id", "(relationship :: RELATIONSHIP)", INTEGER.single()),
+            element("coalesce", "(expression... :: ANY)", ANY.single()),
+            element("head", "(expression :: LIST OF ANY)", ANY.single()),
+            element("last", "(expression :: LIST OF ANY)", ANY.single()),
             element("timestamp", "()", INTEGER.single()),
-            element("startNode", "(relationship)", NODE.single()),
-            element("endNode", "(relationship", NODE.single()),
-            element("properties", "(node)", MAP.single()),
-            element("properties", "(relationship)", MAP.single()),
-            element("toInt", "(expression)", INTEGER.single()),
-            element("toFloat", "(expression)", FLOAT.single())
+            element("startNode", "(relationship :: RELATIONSHIP)", NODE.single()),
+            element("endNode", "(relationship :: RELATIONSHIP)", NODE.single()),
+            element("properties", "(node :: NODE)", MAP.single()),
+            element("properties", "(relationship :: RELATIONSHIP)", MAP.single()),
+            element("toInt", "(expression :: STRING)", INTEGER.single()),
+            element("toFloat", "(expression :: STRING)", FLOAT.single())
     );
     private static final List<CypherBuiltInFunctionElement> FUNCTIONS_LIST = Lists.newArrayList(
-            element("nodes", "(path)", NODE.array()),
-            element("relationships", "(path)", RELATIONSHIP.array()),
-            element("labels", "(node)", STRING.array()),
-            element("keys", "(node)", STRING.array()),
-            element("keys", "(relationship)", STRING.array()),
-            element("extract", "(variable IN list | expression)", ANY.array()),
-            element("filter", "(variable IN list WHERE predicate)", ANY.array()),
-            element("tail", "(expression)", ANY.array()),
-            element("range", "(start, end, step = 1)", INTEGER.array()),
-            element("reduce", "(accumulator = initial, variable IN list | expression)", ANY.single())
+            element("nodes", "(path :: PATH)", NODE.array()),
+            element("relationships", "(path :: PATH)", RELATIONSHIP.array()),
+            element("labels", "(node :: NODE)", STRING.array()),
+            element("keys", "(node :: NODE)", STRING.array()),
+            element("keys", "(relationship :: RELATIONSHIP)", STRING.array()),
+            element("extract", "(variable IN list | expression :: ANY)", ANY.array()),
+            element("filter", "(variable IN list WHERE predicate :: ANY)", ANY.array()),
+            element("tail", "(expression :: LIST OF ANY)", ANY.array()),
+            element("range", "(start :: INTEGER, end :: INTEGER, step = 1 :: INTEGER)", INTEGER.array()),
+            element("reduce", "(accumulator = initial :: ANY, variable IN list | expression :: ANY)", ANY.single())
     );
     private static final List<CypherBuiltInFunctionElement> FUNCTIONS_MATH_NUMERIC = Lists.newArrayList(
-            element("abs", "(expression)", INTEGER.single()),
-            element("ceil", "(expression)", INTEGER.single()),
-            element("floor", "(expression)", INTEGER.single()),
-            element("round", "(expression)", INTEGER.single()),
-            element("sign", "(expression)", INTEGER.single()),
+            element("abs", "(expression :: NUMBER)", INTEGER.single()),
+            element("ceil", "(expression :: NUMBER)", INTEGER.single()),
+            element("floor", "(expression :: NUMBER)", INTEGER.single()),
+            element("round", "(expression :: NUMBER)", INTEGER.single()),
+            element("sign", "(expression :: NUMBER)", INTEGER.single()),
             element("rand", "()", FLOAT.single())
     );
     private static final List<CypherBuiltInFunctionElement> FUNCTIONS_MATH_LOGARITHMIC = Lists.newArrayList(
-            element("log", "(expression)", FLOAT.single()),
-            element("log10", "(expression)", FLOAT.single()),
-            element("exp", "(expression)", FLOAT.single()),
+            element("log", "(expression :: NUMBER)", FLOAT.single()),
+            element("log10", "(expression :: NUMBER)", FLOAT.single()),
+            element("exp", "(expression :: NUMBER)", FLOAT.single()),
             element("e", "()", FLOAT.single()),
-            element("sqrt", "(expression)", FLOAT.single())
+            element("sqrt", "(expression :: NUMBER)", FLOAT.single())
     );
     private static final List<CypherBuiltInFunctionElement> FUNCTIONS_MATH_TRIGONOMETRIC = Lists.newArrayList(
-            element("sin", "(expression)", FLOAT.single()),
-            element("cos", "(expression)", FLOAT.single()),
-            element("tan", "(expression)", FLOAT.single()),
-            element("cot", "(expression)", FLOAT.single()),
-            element("asin", "(expression)", FLOAT.single()),
-            element("acos", "(expression)", FLOAT.single()),
-            element("atan", "(expression)", FLOAT.single()),
-            element("atan2", "(expression, expression)", FLOAT.single()),
+            element("sin", "(expression :: NUMBER)", FLOAT.single()),
+            element("cos", "(expression :: NUMBER)", FLOAT.single()),
+            element("tan", "(expression :: NUMBER)", FLOAT.single()),
+            element("cot", "(expression :: NUMBER)", FLOAT.single()),
+            element("asin", "(expression :: NUMBER)", FLOAT.single()),
+            element("acos", "(expression :: NUMBER)", FLOAT.single()),
+            element("atan", "(expression :: NUMBER)", FLOAT.single()),
+            element("atan2", "(expression :: NUMBER, expression :: NUMBER)", FLOAT.single()),
             element("pi", "()", FLOAT.single()),
-            element("degrees", "(expression)", FLOAT.single()),
-            element("radians", "(expression)", FLOAT.single()),
-            element("haversin", "(expression)", FLOAT.single())
+            element("degrees", "(expression :: NUMBER)", FLOAT.single()),
+            element("radians", "(expression :: NUMBER)", FLOAT.single()),
+            element("haversin", "(expression :: NUMBER)", FLOAT.single())
     );
     private static final List<CypherBuiltInFunctionElement> FUNCTIONS_STRING = Lists.newArrayList(
-            element("replace", "(original, search, replace)", STRING.single()),
-            element("substring", "(original, start, length = length(original))", STRING.single()),
-            element("left", "(original, length)", STRING.single()),
-            element("right", "(original, length)", STRING.single()),
-            element("ltrim", "(original)", STRING.single()),
-            element("rtrim", "(original)", STRING.single()),
-            element("trim", "(original)", STRING.single()),
-            element("lower", "(original)", STRING.single()),
-            element("upper", "(original)", STRING.single()),
-            element("split", "(original, splitPattern)", STRING.array()),
-            element("reverse", "(original)", STRING.single()),
-            element("toString", "(expression)", STRING.single())
+            element("replace", "(original :: STRING, search :: STRING, replace :: STRING)", STRING.single()),
+            element("substring", "(original :: STRING, start :: INTEGER, length = length(original) :: INTEGER)", STRING.single()),
+            element("left", "(original :: STRING, length :: INTEGER)", STRING.single()),
+            element("right", "(original :: STRING, length :: INTEGER)", STRING.single()),
+            element("ltrim", "(original :: STRING)", STRING.single()),
+            element("rtrim", "(original :: STRING)", STRING.single()),
+            element("trim", "(original :: STRING)", STRING.single()),
+            element("lower", "(original :: STRING)", STRING.single()),
+            element("upper", "(original :: STRING)", STRING.single()),
+            element("split", "(original :: STRING, splitPattern :: STRING)", STRING.array()),
+            element("reverse", "(original :: STRING)", STRING.single()),
+            element("toString", "(expression :: STRING)", STRING.single())
     );
 
     public static final List<CypherBuiltInFunctionElement> FUNCTIONS = new ArrayList<CypherBuiltInFunctionElement>() {{

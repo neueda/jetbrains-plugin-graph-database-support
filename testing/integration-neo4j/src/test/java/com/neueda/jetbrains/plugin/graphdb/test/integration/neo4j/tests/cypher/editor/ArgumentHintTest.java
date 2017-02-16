@@ -24,47 +24,47 @@ public class ArgumentHintTest extends BaseIntegrationTest {
 
     public void testSpecialAll() {
         doTest("RETURN ALL (x <caret>IN nodes(p) WHERE x.age > 30)",
-                "<html>(<b>variable IN list WHERE predicate</b>)</html>");
+                "<html>(<b>variable IN list WHERE predicate :: ANY</b>)</html>");
     }
 
     public void testSpecialAny() {
         doTest("RETURN ANY (x IN a.array WHERE x = 'one'<caret>)",
-                "<html>(<b>variable IN list WHERE predicate</b>)</html>");
+                "<html>(<b>variable IN list WHERE predicate :: ANY</b>)</html>");
     }
 
     public void testSpecialExists() {
         doTest("RETURN EXISTS(<caret>true)",
-                "<html>(<b>pattern</b>)</html>");
+                "<html>(<b>pattern :: ANY</b>)</html>");
     }
 
     public void testSpecialNone() {
         doTest("RETURN NONE (<caret>x IN nodes(p) WHERE x.age = 25)",
-                "<html>(<b>variable in list WHERE predicate</b>)</html>");
+                "<html>(<b>variable in list WHERE predicate :: ANY</b>)</html>");
     }
 
     public void testSpecialSingle() {
         doTest("RETURN SINGLE (<caret>var IN nodes(p) WHERE var.eyes = 'blue')",
-                "<html>(<b>variable in list WHERE predicate</b>)</html>");
+                "<html>(<b>variable in list WHERE predicate :: ANY</b>)</html>");
     }
 
     public void testSpecialFilter() {
         doTest("RETURN filter(<caret>x IN a.array WHERE size(x)= 3)",
-                "<html>(<b>variable IN list WHERE predicate</b>)</html>");
+                "<html>(<b>variable IN list WHERE predicate :: ANY</b>)</html>");
     }
 
     public void testSpecialExtract() {
         doTest("RETURN extract(<caret>n IN nodes(p)| n.age) AS extracted",
-                "<html>(<b>variable IN list | expression</b>)</html>");
+                "<html>(<b>variable IN list | expression :: ANY</b>)</html>");
     }
 
     public void testSpecialReduce() {
         doTest("RETURN reduce(<caret>totalAge = 0, n IN nodes(p)| totalAge + n.age) ",
-                "<html>(<b>accumulator = initial</b>, variable IN list | expression)</html>");
+                "<html>(<b>accumulator = initial :: ANY</b>, variable IN list | expression :: ANY)</html>");
     }
 
     public void testBuiltIn() {
         doTest("return toFloat(<caret>\"12\")",
-                "<html>(<b>expression</b>)</html>");
+                "<html>(<b>expression :: STRING</b>)</html>");
     }
 
     public void testProcedure() {
@@ -89,7 +89,7 @@ public class ArgumentHintTest extends BaseIntegrationTest {
 
     public void testSecondArgument() {
         doTest("RETURN reduce(totalAge = 0, n IN nodes(p)| totalAge + n.age<caret>)",
-                "<html>(accumulator = initial,<b> variable IN list | expression</b>)</html>");
+                "<html>(accumulator = initial :: ANY,<b> variable IN list | expression :: ANY</b>)</html>");
     }
 
     private void doTest(String query, String expectedHighlight) {

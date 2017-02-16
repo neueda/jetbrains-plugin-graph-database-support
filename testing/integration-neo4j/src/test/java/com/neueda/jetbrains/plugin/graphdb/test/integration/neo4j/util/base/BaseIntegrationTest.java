@@ -7,6 +7,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSo
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourcesComponentMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataContainer;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService;
 import com.neueda.jetbrains.plugin.graphdb.test.database.neo4j.common.Neo4jServer;
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.server.Neo4j30ServerLoader;
@@ -27,6 +28,8 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
     private DataSources dataSources;
     private Services services;
 
+    protected CypherMetadataContainer metadata;
+
     @Override
     public void setUp() throws Exception {
         super.setUp();
@@ -38,6 +41,8 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
         List<DataSourceApi> dataSources = new ArrayList<>(component().dataSources().getDataSourceContainer().getDataSources());
         component().dataSources().getDataSourceContainer().removeDataSources(dataSources);
         services().cypherMetadataProvider().wipeAll();
+
+        metadata = services().cypherMetadataProvider().getContainer("documentationTest");
     }
 
     public Services services() {
