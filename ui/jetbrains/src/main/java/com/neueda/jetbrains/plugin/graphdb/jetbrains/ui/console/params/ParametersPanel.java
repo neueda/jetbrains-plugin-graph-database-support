@@ -47,6 +47,9 @@ public class ParametersPanel implements ParametersProvider {
 
         messageBus.connect().subscribe(QueryParametersRetrievalErrorEvent.QUERY_PARAMETERS_RETRIEVAL_ERROR_EVENT_TOPIC,
                 (exception, editor) -> {
+                    if (editor == null) {
+                        return;
+                    }
                     String errorMessage;
                     if (exception.getMessage() != null) {
                         errorMessage = String.format("%s: %s", PARAMS_ERROR_COMMON_MSG, exception.getMessage());

@@ -12,6 +12,7 @@ import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.StatementResult;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,7 +48,7 @@ public class Neo4jBoltDatabase implements GraphDatabaseApi {
     @Override
     public GraphQueryResult execute(String query, Map<String, Object> statementParameters) {
         try (Driver driver = GraphDatabase.driver(url, auth);
-            Session session = driver.session()) {
+             Session session = driver.session()) {
 
             Neo4jBoltBuffer buffer = new Neo4jBoltBuffer();
 
@@ -60,6 +61,23 @@ public class Neo4jBoltDatabase implements GraphDatabaseApi {
                 buffer.addRow(record.asMap());
             }
             buffer.addResultSummary(statementResult.consume());
+            long endTime = System.currentTimeMillis();
+
+            return new Neo4jBoltQueryResult(endTime - startTime, buffer);
+        }
+    }
+
+    @Override
+    public GraphQueryResult executeBatch(List<String> queries, Map<String, Object> statementParameters) {
+        try (Driver driver = GraphDatabase.driver(url, auth);
+             Session session = driver.session()) {
+
+            Neo4jBoltBuffer buffer = new Neo4jBoltBuffer();
+
+            long startTime = System.currentTimeMillis();
+            for (String query : queries) {
+                session.run(query, statementParameters).consume();
+            }
             long endTime = System.currentTimeMillis();
 
             return new Neo4jBoltQueryResult(endTime - startTime, buffer);
