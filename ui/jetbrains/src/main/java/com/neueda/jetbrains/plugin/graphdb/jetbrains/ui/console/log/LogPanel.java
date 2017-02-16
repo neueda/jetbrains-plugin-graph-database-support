@@ -36,8 +36,13 @@ public class LogPanel implements Disposable {
         messageBus.connect().subscribe(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC, new QueryExecutionProcessEvent() {
             @Override
             public void executionStarted(ExecuteQueryPayload payload) {
-                info("Executing query: ");
-                userInput(payload.getContent());
+                if (payload.getFileName().isPresent()) {
+                    info("Executing all queries in a file: ");
+                    userInput(payload.getFileName().get());
+                } else {
+                    info("Executing query: ");
+                    userInput(payload.getQueries().get(0));
+                }
                 newLine();
                 if (!payload.getParameters().isEmpty()) {
                     info("With parameters: ");

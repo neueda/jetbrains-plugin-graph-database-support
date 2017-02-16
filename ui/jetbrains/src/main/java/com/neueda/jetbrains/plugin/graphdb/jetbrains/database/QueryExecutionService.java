@@ -11,6 +11,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryPlanEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Notifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Future;
 
@@ -53,10 +54,22 @@ public class QueryExecutionService {
         QueryExecutionProcessEvent event = messageBus.syncPublisher(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC);
         event.executionStarted(payload);
 
-        runningQuery = ApplicationManager.getApplication().executeOnPooledThread(() -> {
+        if (payload.getQueries().size() == 1) {
+            runningQuery = ApplicationManager.getApplication()
+                .executeOnPooledThread(executeQuery(dataSource, payload, event));
+        } else {
+            runningQuery = ApplicationManager.getApplication()
+                .executeOnPooledThread(executeBatch(dataSource, payload, event));
+        }
+    }
+
+    @NotNull
+    private Runnable executeQuery(DataSourceApi dataSource, ExecuteQueryPayload payload, QueryExecutionProcessEvent event) {
+        return () -> {
             try {
                 GraphDatabaseApi database = databaseManager.getDatabaseFor(dataSource);
-                GraphQueryResult result = database.execute(payload.getContent(), payload.getParameters());
+                String query = payload.getQueries().get(0);
+                GraphQueryResult result = database.execute(query, payload.getParameters());
 
                 ApplicationManager.getApplication().invokeLater(() -> {
                     event.resultReceived(payload, result);
@@ -65,7 +78,7 @@ public class QueryExecutionService {
 
                     if (result.hasPlan()) {
                         QueryPlanEvent queryPlanEvent = messageBus.syncPublisher(QueryPlanEvent.QUERY_PLAN_EVENT);
-                        queryPlanEvent.queryPlanReceived(payload.getContent(), result);
+                        queryPlanEvent.queryPlanReceived(query, result);
                     }
                 });
             } catch (Exception e) {
@@ -74,6 +87,23 @@ public class QueryExecutionService {
                     event.executionCompleted(payload);
                 });
             }
-        });
+        };
+    }
+
+    @NotNull
+    private Runnable executeBatch(DataSourceApi dataSource, ExecuteQueryPayload payload, QueryExecutionProcessEvent event) {
+        return () -> {
+            try {
+                GraphDatabaseApi database = databaseManager.getDatabaseFor(dataSource);
+                for (String query : payload.getQueries()) {
+                     database.execute(query, payload.getParameters());
+                }
+            } catch (Exception e) {
+                ApplicationManager.getApplication().invokeLater(() -> {
+                    event.handleError(payload, e);
+                    event.executionCompleted(payload);
+                });
+            }
+        };
     }
 }

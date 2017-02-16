@@ -215,5 +215,16 @@
                     description="Clean canvas">
             </action>
         </group>
+
+        <group id="GraphDatabaseFileActions"
+               text="Graph Database File Actions" description="Graph Database File Actions"
+               icon="/graphdb/icons/window/graph_13x13.png" popup="true">
+            <action id="GraphDatabaseFileActions.ExecuteAll"
+                    class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteAllAction"
+                    text="Execute All"
+                    icon="/general/run.png">
+            </action>
+            <add-to-group group-id="ProjectViewPopupMenu"/>
+        </group>
     </actions>
 </idea-plugin>
