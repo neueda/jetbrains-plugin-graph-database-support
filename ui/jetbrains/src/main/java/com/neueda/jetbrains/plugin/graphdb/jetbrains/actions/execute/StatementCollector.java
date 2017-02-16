@@ -18,7 +18,6 @@ public class StatementCollector extends PsiElementVisitor {
     private final ParametersService parameterService;
     private final MessageBus messageBus;
 
-    private boolean paramRetrievalExceptionSent = false; //TODO fixme. Avoid DoS'ing messageBus
     private boolean hasErrors;
     private List<String> queries = new ArrayList<>();
     private Map<String, Object> parameters = new HashMap<>();
@@ -64,13 +63,10 @@ public class StatementCollector extends PsiElementVisitor {
     }
 
     private void sendParametersRetrievalErrorEvent(Exception exception) {
-        if (!paramRetrievalExceptionSent) {
-            QueryParametersRetrievalErrorEvent event = messageBus
-                .syncPublisher(QueryParametersRetrievalErrorEvent.QUERY_PARAMETERS_RETRIEVAL_ERROR_EVENT_TOPIC);
-            event.handleError(exception, null);
-            exception.printStackTrace();
-            paramRetrievalExceptionSent = true;
-        }
+        QueryParametersRetrievalErrorEvent event = messageBus
+            .syncPublisher(QueryParametersRetrievalErrorEvent.QUERY_PARAMETERS_RETRIEVAL_ERROR_EVENT_TOPIC);
+        event.handleError(exception, null);
+        exception.printStackTrace();
     }
 
     private void fail() {

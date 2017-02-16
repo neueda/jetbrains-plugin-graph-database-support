@@ -13,6 +13,7 @@ import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.ConsoleToolWindow;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params.ParametersService;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Notifier;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.file.CypherFileType;
 
 public class ExecuteAllAction extends AnAction {
@@ -24,7 +25,6 @@ public class ExecuteAllAction extends AnAction {
             e.getPresentation().setEnabled(false);
         }
     }
-
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = getEventProject(e);
@@ -48,6 +48,9 @@ public class ExecuteAllAction extends AnAction {
                 false
             );
             popup.showInBestPositionFor(e.getDataContext());
+        } else {
+            System.out.println("NOTIFY");
+            Notifier.error("Query execution error", "File contains errors");
         }
     }
 }

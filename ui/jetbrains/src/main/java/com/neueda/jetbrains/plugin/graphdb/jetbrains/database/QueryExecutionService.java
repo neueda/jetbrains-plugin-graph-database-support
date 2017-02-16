@@ -66,8 +66,13 @@ public class QueryExecutionService {
     @NotNull
     private Runnable executeQuery(DataSourceApi dataSource, ExecuteQueryPayload payload, QueryExecutionProcessEvent event) {
         return () -> {
+            if (payload.getQueries().size() != 1) {
+                return;
+            }
+
             try {
                 GraphDatabaseApi database = databaseManager.getDatabaseFor(dataSource);
+
                 String query = payload.getQueries().get(0);
                 GraphQueryResult result = database.execute(query, payload.getParameters());
 

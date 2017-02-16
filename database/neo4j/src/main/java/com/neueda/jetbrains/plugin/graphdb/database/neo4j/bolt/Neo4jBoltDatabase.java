@@ -75,11 +75,9 @@ public class Neo4jBoltDatabase implements GraphDatabaseApi {
             Neo4jBoltBuffer buffer = new Neo4jBoltBuffer();
 
             long startTime = System.currentTimeMillis();
-            StatementResult statementResult = null;
             for (String query : queries) {
-                statementResult = session.run(query, statementParameters);
+                session.run(query, statementParameters).consume();
             }
-            buffer.addResultSummary(statementResult.consume());
             long endTime = System.currentTimeMillis();
 
             return new Neo4jBoltQueryResult(endTime - startTime, buffer);
