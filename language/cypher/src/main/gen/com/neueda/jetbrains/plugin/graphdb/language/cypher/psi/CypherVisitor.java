@@ -5,8 +5,20 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherMapYielding;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherListYielding;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherPathYielding;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherBooleanYielding;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherNamedElement;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherParenthesized;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherTypePropagator;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherNullYielding;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherAnyYielding;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherVariableElement;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherStringYielding;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherArgumentList;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherIntegerYielding;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherFloatYielding;
 
 public class CypherVisitor extends PsiElementVisitor {
 
@@ -23,7 +35,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitAllShortestPathsFunctionInvocation(@NotNull CypherAllShortestPathsFunctionInvocation o) {
-    visitPsiElement(o);
+    visitListYielding(o);
   }
 
   public void visitAnonymousPatternPart(@NotNull CypherAnonymousPatternPart o) {
@@ -39,7 +51,11 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitArray(@NotNull CypherArray o) {
-    visitPsiElement(o);
+    visitListYielding(o);
+  }
+
+  public void visitBooleanLiteral(@NotNull CypherBooleanLiteral o) {
+    visitBooleanYielding(o);
   }
 
   public void visitBulkImportQuery(@NotNull CypherBulkImportQuery o) {
@@ -55,7 +71,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitCaseExpression(@NotNull CypherCaseExpression o) {
-    visitPsiElement(o);
+    visitAnyYielding(o);
   }
 
   public void visitClause(@NotNull CypherClause o) {
@@ -71,7 +87,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitCountStar(@NotNull CypherCountStar o) {
-    visitPsiElement(o);
+    visitIntegerYielding(o);
   }
 
   public void visitCreate(@NotNull CypherCreate o) {
@@ -111,7 +127,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitDoubleLiteral(@NotNull CypherDoubleLiteral o) {
-    visitPsiElement(o);
+    visitFloatYielding(o);
   }
 
   public void visitDropIndex(@NotNull CypherDropIndex o) {
@@ -143,7 +159,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitExpression(@NotNull CypherExpression o) {
-    visitPsiElement(o);
+    visitTypePropagator(o);
   }
 
   public void visitExtractFunctionInvocation(@NotNull CypherExtractFunctionInvocation o) {
@@ -211,7 +227,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitListComprehension(@NotNull CypherListComprehension o) {
-    visitPsiElement(o);
+    visitListYielding(o);
   }
 
   public void visitLiteralEntry(@NotNull CypherLiteralEntry o) {
@@ -235,11 +251,11 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitMapLiteral(@NotNull CypherMapLiteral o) {
-    visitPsiElement(o);
+    visitMapYielding(o);
   }
 
   public void visitMapProjection(@NotNull CypherMapProjection o) {
-    visitPsiElement(o);
+    visitMapYielding(o);
   }
 
   public void visitMapProjectionVariants(@NotNull CypherMapProjectionVariants o) {
@@ -294,8 +310,12 @@ public class CypherVisitor extends PsiElementVisitor {
     visitInvocation(o);
   }
 
+  public void visitNullLiteral(@NotNull CypherNullLiteral o) {
+    visitNullYielding(o);
+  }
+
   public void visitNumberLiteral(@NotNull CypherNumberLiteral o) {
-    visitPsiElement(o);
+    visitTypePropagator(o);
   }
 
   public void visitOldParameter(@NotNull CypherOldParameter o) {
@@ -307,7 +327,11 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitParameter(@NotNull CypherParameter o) {
-    visitPsiElement(o);
+    visitAnyYielding(o);
+  }
+
+  public void visitParenthesizedExpression(@NotNull CypherParenthesizedExpression o) {
+    visitParenthesized(o);
   }
 
   public void visitPattern(@NotNull CypherPattern o) {
@@ -315,7 +339,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitPatternComprehension(@NotNull CypherPatternComprehension o) {
-    visitPsiElement(o);
+    visitListYielding(o);
   }
 
   public void visitPatternElement(@NotNull CypherPatternElement o) {
@@ -439,7 +463,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitRelationshipsPattern(@NotNull CypherRelationshipsPattern o) {
-    visitPsiElement(o);
+    visitPathYielding(o);
   }
 
   public void visitRemove(@NotNull CypherRemove o) {
@@ -479,11 +503,11 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitShortestPathFunctionInvocation(@NotNull CypherShortestPathFunctionInvocation o) {
-    visitPsiElement(o);
+    visitPathYielding(o);
   }
 
   public void visitShortestPathPattern(@NotNull CypherShortestPathPattern o) {
-    visitPsiElement(o);
+    visitTypePropagator(o);
   }
 
   public void visitSignedDecimalInteger(@NotNull CypherSignedDecimalInteger o) {
@@ -491,7 +515,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitSignedIntegerLiteral(@NotNull CypherSignedIntegerLiteral o) {
-    visitPsiElement(o);
+    visitIntegerYielding(o);
   }
 
   public void visitSimpleProcedureResult(@NotNull CypherSimpleProcedureResult o) {
@@ -531,7 +555,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitStringLiteral(@NotNull CypherStringLiteral o) {
-    visitPsiElement(o);
+    visitStringYielding(o);
   }
 
   public void visitSymbolicNameString(@NotNull CypherSymbolicNameString o) {
@@ -563,7 +587,7 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitVariable(@NotNull CypherVariable o) {
-    visitNamedElement(o);
+    visitVariableElement(o);
   }
 
   public void visitVariableSelector(@NotNull CypherVariableSelector o) {
@@ -582,7 +606,7 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitParenthesizedExpression(@NotNull CypherParenthesizedExpression o) {
+  public void visitAnyYielding(@NotNull CypherAnyYielding o) {
     visitPsiElement(o);
   }
 
@@ -590,11 +614,55 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitBooleanYielding(@NotNull CypherBooleanYielding o) {
+    visitPsiElement(o);
+  }
+
+  public void visitFloatYielding(@NotNull CypherFloatYielding o) {
+    visitPsiElement(o);
+  }
+
+  public void visitIntegerYielding(@NotNull CypherIntegerYielding o) {
+    visitPsiElement(o);
+  }
+
   public void visitInvocation(@NotNull CypherInvocation o) {
     visitPsiElement(o);
   }
 
+  public void visitListYielding(@NotNull CypherListYielding o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMapYielding(@NotNull CypherMapYielding o) {
+    visitPsiElement(o);
+  }
+
   public void visitNamedElement(@NotNull CypherNamedElement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNullYielding(@NotNull CypherNullYielding o) {
+    visitPsiElement(o);
+  }
+
+  public void visitParenthesized(@NotNull CypherParenthesized o) {
+    visitPsiElement(o);
+  }
+
+  public void visitPathYielding(@NotNull CypherPathYielding o) {
+    visitPsiElement(o);
+  }
+
+  public void visitStringYielding(@NotNull CypherStringYielding o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTypePropagator(@NotNull CypherTypePropagator o) {
+    visitPsiElement(o);
+  }
+
+  public void visitVariableElement(@NotNull CypherVariableElement o) {
     visitPsiElement(o);
   }
 

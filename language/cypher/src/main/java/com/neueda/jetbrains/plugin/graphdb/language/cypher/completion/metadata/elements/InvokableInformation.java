@@ -2,6 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.
 
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.Range;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherType;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,14 +16,18 @@ public final class InvokableInformation {
 
     public static class Argument {
         public final String name;
-        public final String type;
+        public final CypherType type;
+        public final String typeString;
+        public final boolean nullable;
         public final boolean optional;
         public final boolean varArgs;
 
         Argument(String definition) {
             String[] s = definition.trim().split("::");
             name = s[0].split("=")[0].split("\\.\\.\\.")[0].trim();
-            type = s.length > 1 ? s[1].trim() : "ANY";
+            typeString = s.length > 1 ? s[1].trim() : "ANY";
+            nullable = typeString.contains("?");
+            type = CypherType.parse(typeString);
             optional = s[0].contains("=");
             varArgs = s[0].contains("...");
         }
@@ -30,7 +35,9 @@ public final class InvokableInformation {
 
     private final String name;
     private final String signature;
-    private final String returnType;
+    private final String returnTypeString;
+    private final CypherType returnType;
+
     private final boolean hasParameters;
     private final List<Argument> arguments;
     private final Range<Integer> arity;
@@ -40,12 +47,14 @@ public final class InvokableInformation {
         Matcher m = CypherElementWithSignature.FULL_SIGNATURE_REGEXP.matcher(signatureWithoutName);
         if (m.find()) {
             signature = m.group(1);
-            returnType = m.group(2);
+            returnTypeString = m.group(2);
         } else {
             // should never happen, unless Neo4j changes signature syntax
             signature = fullSignature;
-            returnType = "<?>";
+            returnTypeString = "ANY?";
         }
+
+        returnType = CypherType.parse(returnTypeString);
 
         this.name = name;
         this.hasParameters = !this.signature.startsWith("()");
@@ -54,10 +63,12 @@ public final class InvokableInformation {
         this.arity = calculateArity();
     }
 
-    public InvokableInformation(String name, String signature, String returnType) {
+    public InvokableInformation(String name, String signature, CypherType returnType) {
         this.name = name;
         this.signature = signature;
         this.returnType = returnType;
+        this.returnTypeString = returnType.toString();
+
         this.hasParameters = !Objects.equals(signature, "()");
 
         this.arguments = parseArguments();
@@ -72,8 +83,12 @@ public final class InvokableInformation {
         return signature;
     }
 
-    public String getReturnType() {
+    public CypherType getReturnType() {
         return returnType;
+    }
+
+    public String getReturnTypeString() {
+        return returnTypeString;
     }
 
     public boolean hasParameters() {

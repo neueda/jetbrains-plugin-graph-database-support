@@ -322,10 +322,15 @@ Where ::= K_WHERE Expression
 Pattern ::= PatternPart ("," PatternPart)*
 PatternPart ::= (Variable "=" AnonymousPatternPart) | AnonymousPatternPart
 AnonymousPatternPart ::= ShortestPathPattern | PatternElement
-ShortestPathPattern ::= ShortestPathFunctionInvocation
-                      | AllShortestPathsFunctionInvocation
-ShortestPathFunctionInvocation ::= (K_SHORTESTPATH "(" PatternElement ")")
-AllShortestPathsFunctionInvocation ::= (K_ALLSHORTESTPATHS "(" PatternElement ")")
+ShortestPathPattern ::= ShortestPathFunctionInvocation | AllShortestPathsFunctionInvocation {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherTypePropagator"
+}
+ShortestPathFunctionInvocation ::= (K_SHORTESTPATH "(" PatternElement ")") {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherPathYielding"
+}
+AllShortestPathsFunctionInvocation ::= (K_ALLSHORTESTPATHS "(" PatternElement ")") {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherListYielding"
+}
 PatternElement ::= (NodePattern PatternElementChain*) | ("(" PatternElement ")")
 PatternElementChain ::= RelationshipPattern NodePattern {pin=1}
 
@@ -337,13 +342,17 @@ MaybeVariableLength ::= ("*" RangeLiteral?)?
 
 NodePattern ::= "(" Variable? NodeLabels? Properties? ")" {pin=1}
 
-RelationshipsPattern ::= NodePattern PatternElementChain+
+RelationshipsPattern ::= NodePattern PatternElementChain+ {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherPathYielding"
+}
 Properties ::= MapLiteral | Parameter
 
 /*************************
  * Expression
  */
-Expression ::= Expression12
+Expression ::= Expression12 {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherTypePropagator"
+}
 private Expression12 ::= Expression11 (K_OR Expression11)*
 private Expression11 ::= Expression10 (K_XOR Expression10)*
 private Expression10 ::= Expression9 (K_AND Expression9)*
@@ -375,9 +384,8 @@ private Expression2 ::= Expression1 (PropertyLookup | NodeLabels)*
 private Expression1 ::= NumberLiteral
               | StringLiteral
               | Parameter
-              | (K_TRUE)
-              | (K_FALSE)
-              | (K_NULL)
+              | BooleanLiteral
+              | NullLiteral
               | CaseExpression
               | MapLiteral
               | MapProjection
@@ -385,6 +393,7 @@ private Expression1 ::= NumberLiteral
               | ListComprehension
               | PatternComprehension
               | Array
+
               | FilterFunctionInvocation
               | ExtractFunctionInvocation
               | ReduceFunctionInvocation
@@ -393,18 +402,26 @@ private Expression1 ::= NumberLiteral
               | NoneFunctionInvocation
               | SingleFunctionInvocation
               | ExistsFunctionInvocation
+
               | ShortestPathPattern
               | RelationshipsPattern
-              | parenthesizedExpression
+              | ParenthesizedExpression
               | FunctionInvocation
               | Variable
 
-Array ::= ("[" Expression? ("," Expression)* "]")
+Array ::= ("[" Expression? ("," Expression)* "]") {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherListYielding"
+}
 PropertyLookup ::= "." PropertyKeyName
-ListComprehension ::= "[" FilterExpression ("|"  Expression)? "]"
+ListComprehension ::= "[" FilterExpression ("|"  Expression)? "]" {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherListYielding"
+}
 FilterExpression ::= IdInColl Where?
 IdInColl ::= Variable K_IN Expression
-parenthesizedExpression ::= "(" Expression ")" {pin=1}
+ParenthesizedExpression ::= "(" Expression ")" {
+    pin=1
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherParenthesized"
+}
 FunctionInvocation ::= (FunctionInvocationBody "(" "*" ")")
                      | (FunctionInvocationBody FunctionArguments) {
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation"
@@ -416,7 +433,9 @@ FunctionArguments ::= "(" K_DISTINCT? Expression? ("," Expression)* ")"{
 FunctionInvocationBody ::= Namespace FunctionName
 CaseExpression ::= ((K_CASE CaseAlternatives+) | (K_CASE Expression CaseAlternatives+))
                    (K_ELSE Expression)?
-                   K_END
+                   K_END {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherAnyYielding"
+}
 CaseAlternatives ::= K_WHEN Expression K_THEN Expression
 PropertyExpression ::= Expression1 (PropertyLookup)+
 
@@ -453,12 +472,16 @@ ExistsFunctionInvocation ::= K_EXISTS "(" Expression ")" {
     methods=[getFullName]
 }
 
-PatternComprehension ::= "[" RelationshipsPattern Where? "|" Expression "]"
+PatternComprehension ::= "[" RelationshipsPattern Where? "|" Expression "]" {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherListYielding"
+}
 
 /*************************
  * Literals
  */
-MapProjection ::= Variable "{" MapProjectionVariants? ("," MapProjectionVariants)* "}"
+MapProjection ::= Variable "{" MapProjectionVariants? ("," MapProjectionVariants)* "}" {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherMapYielding"
+}
 MapProjectionVariants ::= (LiteralEntry | PropertySelector | VariableSelector | AllPropertiesSelector)
 LiteralEntry ::= PropertyKeyName ":" Expression
 PropertySelector ::= "." Variable
@@ -469,20 +492,31 @@ AllPropertiesSelector ::= "." "*"
  * Literals
  */
 Variable ::= SymbolicNameString {
-    mixin="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherNamedElementImpl"
-    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherNamedElement"
+    mixin="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherVariableElementImpl"
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherVariableElement"
     methods=[getName setName getNameIdentifier getReferences]
 }
 FunctionName ::= UnescapedSymbolicNameString | EscapedSymbolicNameString | K_COUNT
 ProcedureName ::= SymbolicNameString
-CountStar ::= (K_COUNT "(" "*" ")")
+CountStar ::= (K_COUNT "(" "*" ")") {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherIntegerYielding"
+}
 Parameter ::= NewParameter | OldParameter {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherAnyYielding"
     methods=[getParameterName]
 }
 OldParameter ::= "{" (SymbolicNameString | UnsignedDecimalInteger) "}"
 NewParameter ::= "$" (SymbolicNameString | UnsignedDecimalInteger)
 NodeLabel ::= ":" LabelName
-StringLiteral ::= l_string
+StringLiteral ::= l_string {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherStringYielding"
+}
+BooleanLiteral ::= K_TRUE | K_FALSE {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherBooleanYielding"
+}
+NullLiteral ::= K_NULL {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherNullYielding"
+}
 LabelName ::= SymbolicNameString {
     mixin="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherNamedElementImpl"
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherNamedElement"
@@ -500,13 +534,21 @@ PropertyKeyName ::= SymbolicNameString {
     methods=[getName setName getNameIdentifier getReferences]
 }
 RangeLiteral ::= (UnsignedIntegerLiteral? ".." UnsignedIntegerLiteral?) | (UnsignedIntegerLiteral)
-MapLiteral ::= "{" (PropertyKeyName ":" Expression)? ("," PropertyKeyName ":" Expression)* "}"
+MapLiteral ::= "{" (PropertyKeyName ":" Expression)? ("," PropertyKeyName ":" Expression)* "}" {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherMapYielding"
+}
 NodeLabels ::= NodeLabel+
 //SignedIntegerLiteral ::= HexInteger | OctalInteger | DecimalInteger // todo: this is real implementation
-SignedIntegerLiteral ::= SignedDecimalInteger
+SignedIntegerLiteral ::= SignedDecimalInteger {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherIntegerYielding"
+}
 UnsignedIntegerLiteral ::= UnsignedDecimalInteger
-NumberLiteral ::= DoubleLiteral | SignedIntegerLiteral
-DoubleLiteral ::= l_decimal // todo: make real double here
+NumberLiteral ::= DoubleLiteral | SignedIntegerLiteral {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherTypePropagator"
+}
+DoubleLiteral ::= l_decimal {// todo: make real double here
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherFloatYielding"
+}
 
 /*************************
  * Base

@@ -24,7 +24,7 @@ public class CypherBuiltInFunctionElement implements CypherElement {
                 .bold()
                 .withIcon(GraphIcons.Nodes.FUNCTION)
                 .withTailText(invokable.getSignature())
-                .withTypeText(invokable.getReturnType())
+                .withTypeText(invokable.getReturnTypeString())
                 .withInsertHandler(ParenthesesInsertHandler.getInstance(invokable.hasParameters()));
     }
 }

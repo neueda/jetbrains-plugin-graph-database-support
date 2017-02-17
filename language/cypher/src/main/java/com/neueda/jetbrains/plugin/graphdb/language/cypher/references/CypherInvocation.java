@@ -6,20 +6,24 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherBuiltInFunctions;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherType;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherBuiltInFunctionElement;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.InvokableInformation;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherProcedureElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherUserFunctionElement;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.InvokableInformation;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherFunctionArguments;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherFunctionInvocation;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherProcedureInvocation;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherTyped;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public interface CypherInvocation extends PsiElement {
+import static com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherSimpleType.ANY;
+
+public interface CypherInvocation extends PsiElement, CypherTyped {
 
     default List<? extends PsiElement> arguments() {
         if (this instanceof CypherFunctionInvocation) {
@@ -64,6 +68,13 @@ public interface CypherInvocation extends PsiElement {
                 .map(Optional::of)
                 .orElseGet(() -> svc.findUserFunction(getFullName())
                         .map(CypherUserFunctionElement::getInvokableInformation));
+    }
+
+    @Override
+    default CypherType getType() {
+        return resolve()
+                .map(InvokableInformation::getReturnType)
+                .orElse(ANY);
     }
 
     String getFullName();

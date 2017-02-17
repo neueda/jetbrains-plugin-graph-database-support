@@ -46,6 +46,12 @@ public class CypherPropertyExpressionImpl extends ASTWrapperPsiElement implement
 
   @Override
   @Nullable
+  public CypherBooleanLiteral getBooleanLiteral() {
+    return findChildByClass(CypherBooleanLiteral.class);
+  }
+
+  @Override
+  @Nullable
   public CypherCaseExpression getCaseExpression() {
     return findChildByClass(CypherCaseExpression.class);
   }
@@ -106,6 +112,12 @@ public class CypherPropertyExpressionImpl extends ASTWrapperPsiElement implement
 
   @Override
   @Nullable
+  public CypherNullLiteral getNullLiteral() {
+    return findChildByClass(CypherNullLiteral.class);
+  }
+
+  @Override
+  @Nullable
   public CypherNumberLiteral getNumberLiteral() {
     return findChildByClass(CypherNumberLiteral.class);
   }
@@ -114,6 +126,12 @@ public class CypherPropertyExpressionImpl extends ASTWrapperPsiElement implement
   @Nullable
   public CypherParameter getParameter() {
     return findChildByClass(CypherParameter.class);
+  }
+
+  @Override
+  @Nullable
+  public CypherParenthesizedExpression getParenthesizedExpression() {
+    return findChildByClass(CypherParenthesizedExpression.class);
   }
 
   @Override
@@ -162,30 +180,6 @@ public class CypherPropertyExpressionImpl extends ASTWrapperPsiElement implement
   @Nullable
   public CypherVariable getVariable() {
     return findChildByClass(CypherVariable.class);
-  }
-
-  @Override
-  @Nullable
-  public CypherParenthesizedExpression getParenthesizedExpression() {
-    return findChildByClass(CypherParenthesizedExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getKFalse() {
-    return findChildByType(K_FALSE);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getKNull() {
-    return findChildByType(K_NULL);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getKTrue() {
-    return findChildByType(K_TRUE);
   }
 
 }

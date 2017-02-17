@@ -4,8 +4,9 @@ package com.neueda.jetbrains.plugin.graphdb.language.cypher.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherPathYielding;
 
-public interface CypherShortestPathFunctionInvocation extends PsiElement {
+public interface CypherShortestPathFunctionInvocation extends CypherPathYielding {
 
   @NotNull
   CypherPatternElement getPatternElement();

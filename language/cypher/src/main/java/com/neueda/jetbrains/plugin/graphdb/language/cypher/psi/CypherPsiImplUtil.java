@@ -50,13 +50,15 @@ public class CypherPsiImplUtil {
     }
 
     public static CypherRelTypeName setName(CypherRelTypeName element, String newName) {
-        CypherRelTypeName newRelTypeNameNode = CypherElementFactory.createRelTypeNameNode(element.getProject(), newName);
+        CypherRelTypeName newRelTypeNameNode = CypherElementFactory
+                .createRelTypeNameNode(element.getProject(), newName);
         safelyReplaceSymbolicName(element, newRelTypeNameNode);
         return element;
     }
 
     public static CypherPropertyKeyName setName(CypherPropertyKeyName element, String newName) {
-        CypherPropertyKeyName newRelTypeNameNode = CypherElementFactory.createPropertyKeyNameNode(element.getProject(), newName);
+        CypherPropertyKeyName newRelTypeNameNode = CypherElementFactory
+                .createPropertyKeyNameNode(element.getProject(), newName);
         safelyReplaceSymbolicName(element, newRelTypeNameNode);
         return element;
     }

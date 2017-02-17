@@ -10,28 +10,28 @@ public class CypherProcedureElementTest {
     public void testEmptySignatureAndVoidReturnType() throws Exception {
         CypherProcedureElement element = element("namespace.name", "namespace.name() :: VOID");
         assertThat(element.getInvokableInformation().getSignature()).isEqualTo("()");
-        assertThat(element.getInvokableInformation().getReturnType()).isEqualTo("VOID");
+        assertThat(element.getInvokableInformation().getReturnTypeString()).isEqualTo("VOID");
     }
 
     @Test
     public void testNonEmptySignatureAndVoidReturnType() throws Exception {
         CypherProcedureElement element = element("namespace.name", "namespace.name(node :: NODE?) :: VOID");
         assertThat(element.getInvokableInformation().getSignature()).isEqualTo("(node :: NODE?)");
-        assertThat(element.getInvokableInformation().getReturnType()).isEqualTo("VOID");
+        assertThat(element.getInvokableInformation().getReturnTypeString()).isEqualTo("VOID");
     }
 
     @Test
     public void testEmptySignatureAndValueReturnType() throws Exception {
         CypherProcedureElement element = element("namespace.name", "namespace.name() :: (value :: STRING?)");
         assertThat(element.getInvokableInformation().getSignature()).isEqualTo("()");
-        assertThat(element.getInvokableInformation().getReturnType()).isEqualTo("value :: STRING?");
+        assertThat(element.getInvokableInformation().getReturnTypeString()).isEqualTo("value :: STRING?");
     }
 
     @Test
     public void testNonSignatureAndValueReturnType() throws Exception {
         CypherProcedureElement element = element("namespace.name", "namespace.name(node :: NODE?) :: (value :: STRING?)");
         assertThat(element.getInvokableInformation().getSignature()).isEqualTo("(node :: NODE?)");
-        assertThat(element.getInvokableInformation().getReturnType()).isEqualTo("value :: STRING?");
+        assertThat(element.getInvokableInformation().getReturnTypeString()).isEqualTo("value :: STRING?");
     }
 
     private CypherProcedureElement element(String name, String signature) {

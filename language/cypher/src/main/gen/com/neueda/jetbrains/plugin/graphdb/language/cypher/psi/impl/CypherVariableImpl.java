@@ -8,11 +8,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes.*;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherNamedElementImpl;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherVariableElementImpl;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 import com.intellij.psi.PsiReference;
 
-public class CypherVariableImpl extends CypherNamedElementImpl implements CypherVariable {
+public class CypherVariableImpl extends CypherVariableElementImpl implements CypherVariable {
 
   public CypherVariableImpl(ASTNode node) {
     super(node);
