@@ -9,7 +9,7 @@ public interface CypherTypePropagator extends CypherTyped {
 
     @Override
     default CypherType getType() {
-        if (getChildren().length > 1) {
+        if (getChildren().length != 1) {
             return ANY;
         }
 

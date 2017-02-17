@@ -10,9 +10,14 @@ public interface CypherParenthesized extends CypherTyped {
 
     @Override
     default CypherType getType() {
-        PsiElement expression = getChildren()[1];
+        PsiElement[] children = getChildren();
+        if (children.length < 2) {
+            return ANY;
+        }
+
+        PsiElement expression = children[1];
         if (expression instanceof CypherTyped) {
-            return ((CypherTyped)expression).getType();
+            return ((CypherTyped) expression).getType();
         }
 
         return ANY;

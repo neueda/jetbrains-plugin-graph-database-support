@@ -2,7 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.
 
 import org.jetbrains.annotations.NotNull;
 
-public class CypherList implements CypherType {
+public final class CypherList implements CypherType {
 
     private final CypherSimpleType type;
 
@@ -16,8 +16,12 @@ public class CypherList implements CypherType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         CypherList that = (CypherList) o;
 
         return type == that.type;
