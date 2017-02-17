@@ -23,13 +23,26 @@ public class CypherFunctionCallInspectionTest extends BaseInspectionTest {
     public void setUp() throws Exception {
         super.setUp();
 
-        metadata.addProcedure("test.stringq", "(a :: STRING?)", null);
-        metadata.addProcedure("test.numq", "(a :: NUMBER?)", null);
-        metadata.addProcedure("test.intq", "(a :: INTEGER?)", null);
-        metadata.addProcedure("test.bool", "(a :: BOOLEAN)", null);
-        metadata.addProcedure("test.boolq", "(a :: BOOLEAN?)", null);
-        metadata.addProcedure("test.float", "(a :: FLOAT)", null);
-        metadata.addProcedure("test.floatq", "(a :: FLOAT?)", null);
+        metadata.addUserFunction("uany", "() :: (ANY)", null);
+        metadata.addUserFunction("ufint", "() :: (INTEGER)", null);
+        metadata.addUserFunction("uffloat", "() :: (FLOAT)", null);
+        metadata.addUserFunction("ufbool", "() :: (BOOLEAN)", null);
+        metadata.addUserFunction("ufstr", "() :: (STRING)", null);
+        metadata.addUserFunction("ufnode", "() :: (NODE)", null);
+        metadata.addUserFunction("ufpath", "() :: (PATH)", null);
+        metadata.addUserFunction("ufrel", "() :: (RELATIONSHIP)", null);
+
+        metadata.addUserFunction("ufrnode", "(a :: NODE) :: (NODE)", null);
+        metadata.addUserFunction("ufrpath", "(a :: PATH) :: (NODE)", null);
+        metadata.addUserFunction("ufrrel", "(a :: RELATIONSHIP) :: (NODE)", null);
+
+        metadata.addProcedure("test.stringq", "(a :: STRING?) :: VOID", null);
+        metadata.addProcedure("test.numq", "(a :: NUMBER?) :: VOID", null);
+        metadata.addProcedure("test.intq", "(a :: INTEGER?) :: VOID", null);
+        metadata.addProcedure("test.bool", "(a :: BOOLEAN) :: VOID", null);
+        metadata.addProcedure("test.boolq", "(a :: BOOLEAN?) :: VOID", null);
+        metadata.addProcedure("test.float", "(a :: FLOAT) :: VOID", null);
+        metadata.addProcedure("test.floatq", "(a :: FLOAT?) :: VOID", null);
 
     }
 
@@ -77,154 +90,101 @@ public class CypherFunctionCallInspectionTest extends BaseInspectionTest {
             Pair.pair("INTEGER", "1"),
             Pair.pair("INTEGER", "-1"),
             Pair.pair("INTEGER", "+1"),
-            Pair.pair("DOUBLE", "1.4"),
-            Pair.pair("DOUBLE", "-1.4"),
-            Pair.pair("DOUBLE", "+1.4"),
-            Pair.pair("TRUE", "true"),
-            Pair.pair("FALSE", "false"),
+            Pair.pair("INTEGER", "ufint()"),
+            Pair.pair("FLOAT", "1.4"),
+            Pair.pair("FLOAT", "-1.4"),
+            Pair.pair("FLOAT", "+1.4"),
+            Pair.pair("FLOAT", "uffloat()"),
+            Pair.pair("BOOLEAN", "true"),
+            Pair.pair("BOOLEAN", "false"),
+            Pair.pair("BOOLEAN", "ufbool()"),
             Pair.pair("NULL", "null"),
-            Pair.pair("STRING", "\"str\"")
+            Pair.pair("STRING", "\"str\""),
+            Pair.pair("STRING", "ufstr()"),
+            Pair.pair("NODE", "ufnode()"),
+            Pair.pair("NODE", "n"),
+            Pair.pair("PATH", "ufpath()"),
+            Pair.pair("PATH", "p"),
+            Pair.pair("RELATIONSHIP", "ufrel()"),
+            Pair.pair("RELATIONSHIP", "r"),
+            Pair.pair("ANY", "uany()")
     );
 
-    public void testStringTypeCheck() {
-        String call = "return ltrim(%s)";
-
+    private void generateTypeCompatibilityTests(String query, String expected, List<String> allowed) {
         TYPE_EXAMPLES.forEach(p -> {
-            if (Objects.equals(p.first, "STRING")) {
-                addDataSourceFileAndCheck(String.format(call, p.second));
+            if (Objects.equals(p.first, "ANY") || allowed.contains(p.first)) {
+                addDataSourceFileAndCheck(String.format(query, p.second));
             } else {
-                addDataSourceFileAndCheck(String.format(call,
-                        "<error descr=\"expected STRING, got " + p.first + "\">" + p.second + "</error>"));
+                addDataSourceFileAndCheck(String.format(query,
+                        "<error descr=\"expected " + expected + ", got " + p.first + "\">" + p.second + "</error>"));
 
             }
             deletFile();
         });
+    }
+
+    public void testStringTypeCheck() {
+        String query = "MATCH p=(n)-[r]-() RETURN ltrim(%s)";
+        generateTypeCompatibilityTests(query, "STRING", asList("STRING"));
     }
 
     public void testNullableStringTypeCheck() {
-        String call = "call test.stringq(%s)";
-
-        TYPE_EXAMPLES.forEach(p -> {
-            if (asList("STRING", "NULL").contains(p.first)) {
-                addDataSourceFileAndCheck(String.format(call, p.second));
-            } else {
-                addDataSourceFileAndCheck(String.format(call,
-                        "<error descr=\"expected STRING?, got " + p.first + "\">" + p.second + "</error>"));
-
-            }
-            deletFile();
-        });
+        String query = "MATCH p=(n)-[r]-() CALL test.stringq(%s)";
+        generateTypeCompatibilityTests(query, "STRING?", asList("STRING", "NULL"));
     }
 
     public void testNumberTypeCheck() {
-        String call = "return sin(%s)";
-
-        TYPE_EXAMPLES.forEach(p -> {
-            if (asList("INTEGER", "DOUBLE").contains(p.first)) {
-                addDataSourceFileAndCheck(String.format(call, p.second));
-            } else {
-                addDataSourceFileAndCheck(String.format(call,
-                        "<error descr=\"expected NUMBER, got " + p.first + "\">" + p.second + "</error>"));
-            }
-            deletFile();
-        });
+        String query = "MATCH p=(n)-[r]-() RETURN sin(%s)";
+        generateTypeCompatibilityTests(query, "NUMBER", asList("INTEGER", "FLOAT"));
     }
 
     public void testNullableNumberTypeCheck() {
-        String call = "call test.numq(%s)";
-
-        TYPE_EXAMPLES.forEach(p -> {
-            if (asList("INTEGER", "DOUBLE", "NULL").contains(p.first)) {
-                addDataSourceFileAndCheck(String.format(call, p.second));
-            } else {
-                addDataSourceFileAndCheck(String.format(call,
-                        "<error descr=\"expected NUMBER?, got " + p.first + "\">" + p.second + "</error>"));
-            }
-            deletFile();
-        });
+        String query = "MATCH p=(n)-[r]-() CALL test.numq(%s)";
+        generateTypeCompatibilityTests(query, "NUMBER?", asList("INTEGER", "FLOAT", "NULL"));
     }
 
     public void testIntegerTypeCheck() {
-        String call = "return substring(\"a\", %s)";
-
-        TYPE_EXAMPLES.forEach(p -> {
-            if (asList("INTEGER").contains(p.first)) {
-                addDataSourceFileAndCheck(String.format(call, p.second));
-            } else {
-                addDataSourceFileAndCheck(String.format(call,
-                        "<error descr=\"expected INTEGER, got " + p.first + "\">" + p.second + "</error>"));
-            }
-            deletFile();
-        });
+        String query = "MATCH p=(n)-[r]-() RETURN substring(\"a\", %s)";
+        generateTypeCompatibilityTests(query, "INTEGER", asList("INTEGER"));
     }
 
     public void testNullableIntegerTypeCheck() {
-        String call = "call test.intq(%s)";
-
-        TYPE_EXAMPLES.forEach(p -> {
-            if (asList("INTEGER", "NULL").contains(p.first)) {
-                addDataSourceFileAndCheck(String.format(call, p.second));
-            } else {
-                addDataSourceFileAndCheck(String.format(call,
-                        "<error descr=\"expected INTEGER?, got " + p.first + "\">" + p.second + "</error>"));
-            }
-            deletFile();
-        });
+        String query = "MATCH p=(n)-[r]-() CALL test.intq(%s)";
+        generateTypeCompatibilityTests(query, "INTEGER?", asList("INTEGER", "NULL"));
     }
 
     public void testBooleanTypeCheck() {
-        String call = "call test.bool(%s)";
-
-        TYPE_EXAMPLES.forEach(p -> {
-            if (asList("TRUE", "FALSE").contains(p.first)) {
-                addDataSourceFileAndCheck(String.format(call, p.second));
-            } else {
-                addDataSourceFileAndCheck(String.format(call,
-                        "<error descr=\"expected BOOLEAN, got " + p.first + "\">" + p.second + "</error>"));
-            }
-            deletFile();
-        });
+        String query = "MATCH p=(n)-[r]-() CALL test.bool(%s)";
+        generateTypeCompatibilityTests(query, "BOOLEAN", asList("BOOLEAN"));
     }
 
     public void testNullableBooleanTypeCheck() {
-        String call = "call test.boolq(%s)";
-
-        TYPE_EXAMPLES.forEach(p -> {
-            if (asList("NULL", "TRUE", "FALSE").contains(p.first)) {
-                addDataSourceFileAndCheck(String.format(call, p.second));
-            } else {
-                addDataSourceFileAndCheck(String.format(call,
-                        "<error descr=\"expected BOOLEAN?, got " + p.first + "\">" + p.second + "</error>"));
-            }
-            deletFile();
-        });
+        String query = "MATCH p=(n)-[r]-() CALL test.boolq(%s)";
+        generateTypeCompatibilityTests(query, "BOOLEAN?", asList("BOOLEAN", "NULL"));
     }
 
     public void testFloatTypeCheck() {
-        String call = "call test.float(%s)";
-
-        TYPE_EXAMPLES.forEach(p -> {
-            if (asList("DOUBLE").contains(p.first)) {
-                addDataSourceFileAndCheck(String.format(call, p.second));
-            } else {
-                addDataSourceFileAndCheck(String.format(call,
-                        "<error descr=\"expected FLOAT, got " + p.first + "\">" + p.second + "</error>"));
-            }
-            deletFile();
-        });
+        String query = "MATCH p=(n)-[r]-() CALL test.float(%s)";
+        generateTypeCompatibilityTests(query, "FLOAT", asList("INTEGER", "FLOAT"));
     }
 
     public void testNullableFloatTypeCheck() {
-        String call = "call test.floatq(%s)";
+        String query = "MATCH p=(n)-[r]-() CALL test.floatq(%s)";
+        generateTypeCompatibilityTests(query, "FLOAT?", asList("INTEGER", "FLOAT", "NULL"));
+    }
 
-        TYPE_EXAMPLES.forEach(p -> {
-            if (asList("NULL", "DOUBLE").contains(p.first)) {
-                addDataSourceFileAndCheck(String.format(call, p.second));
-            } else {
-                addDataSourceFileAndCheck(String.format(call,
-                        "<error descr=\"expected FLOAT?, got " + p.first + "\">" + p.second + "</error>"));
-            }
-            deletFile();
-        });
+    public void testPathTypeCheck() {
+        String query = "MATCH p=(n)-[r]-() RETURN ufrpath(%s)";
+        generateTypeCompatibilityTests(query, "PATH", asList("PATH"));
+    }
+
+    public void testNodeTypeCheck() {
+        String query = "MATCH p=(n)-[r]-() RETURN ufrnode(%s)";
+        generateTypeCompatibilityTests(query, "NODE", asList("NODE"));
+    }
+
+    public void testRelationshipTypeCheck() {
+        String query = "MATCH p=(n)-[r]-() RETURN ufrrel(%s)";
+        generateTypeCompatibilityTests(query, "RELATIONSHIP", asList("RELATIONSHIP"));
     }
 }

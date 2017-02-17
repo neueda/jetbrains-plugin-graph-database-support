@@ -7,8 +7,4 @@ public interface CypherElementWithSignature {
 
     InvokableInformation getInvokableInformation();
 
-    default InvokableInformation extractInformation(String fullSignature, String name) {
-        return new InvokableInformation(fullSignature, name);
-    }
-
 }

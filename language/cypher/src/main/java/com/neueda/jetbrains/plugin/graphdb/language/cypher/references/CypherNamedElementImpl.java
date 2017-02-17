@@ -10,8 +10,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author dmitry@vrublevsky.me
  */
-public abstract class CypherNamedElementImpl
-        extends ASTWrapperPsiElement
+public abstract class CypherNamedElementImpl extends ASTWrapperPsiElement
         implements CypherNamedElement, ContributedReferenceHost {
 
     public CypherNamedElementImpl(@NotNull ASTNode node) {

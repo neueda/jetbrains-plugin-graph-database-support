@@ -4,10 +4,10 @@ package com.neueda.jetbrains.plugin.graphdb.language.cypher.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherNamedElement;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherVariableElement;
 import com.intellij.psi.PsiReference;
 
-public interface CypherVariable extends CypherNamedElement {
+public interface CypherVariable extends CypherVariableElement {
 
   @NotNull
   CypherSymbolicNameString getSymbolicNameString();

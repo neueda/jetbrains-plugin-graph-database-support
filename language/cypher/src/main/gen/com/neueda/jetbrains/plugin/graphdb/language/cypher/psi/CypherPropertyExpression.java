@@ -17,6 +17,9 @@ public interface CypherPropertyExpression extends PsiElement {
   CypherArray getArray();
 
   @Nullable
+  CypherBooleanLiteral getBooleanLiteral();
+
+  @Nullable
   CypherCaseExpression getCaseExpression();
 
   @Nullable
@@ -47,10 +50,16 @@ public interface CypherPropertyExpression extends PsiElement {
   CypherNoneFunctionInvocation getNoneFunctionInvocation();
 
   @Nullable
+  CypherNullLiteral getNullLiteral();
+
+  @Nullable
   CypherNumberLiteral getNumberLiteral();
 
   @Nullable
   CypherParameter getParameter();
+
+  @Nullable
+  CypherParenthesizedExpression getParenthesizedExpression();
 
   @Nullable
   CypherPatternComprehension getPatternComprehension();
@@ -75,17 +84,5 @@ public interface CypherPropertyExpression extends PsiElement {
 
   @Nullable
   CypherVariable getVariable();
-
-  @Nullable
-  CypherParenthesizedExpression getParenthesizedExpression();
-
-  @Nullable
-  PsiElement getKFalse();
-
-  @Nullable
-  PsiElement getKNull();
-
-  @Nullable
-  PsiElement getKTrue();
 
 }

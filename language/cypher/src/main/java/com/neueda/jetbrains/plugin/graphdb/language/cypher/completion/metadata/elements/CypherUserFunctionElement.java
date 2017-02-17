@@ -20,7 +20,7 @@ public class CypherUserFunctionElement implements
     public CypherUserFunctionElement(String name, String signature, @Nullable String description) {
         this.name = name;
         this.description = description;
-        this.invokableInformation = extractInformation(signature, name);
+        this.invokableInformation = new InvokableInformation(signature, name);
     }
 
     public String getName() {
@@ -40,7 +40,7 @@ public class CypherUserFunctionElement implements
                     + "Arguments:<br>"
                     + "&nbsp;&nbsp;&nbsp;&nbsp;" + invokableInformation.getSignature() + "<br>"
                     + "Return:<br>"
-                    + "&nbsp;&nbsp;&nbsp;&nbsp;" + invokableInformation.getReturnType();
+                    + "&nbsp;&nbsp;&nbsp;&nbsp;" + invokableInformation.getReturnTypeString();
 
             if (description != null) {
                 documentation += "<br><br>"
@@ -57,7 +57,7 @@ public class CypherUserFunctionElement implements
                 .bold()
                 .withIcon(GraphIcons.Nodes.USER_FUNCTION)
                 .withTailText(invokableInformation.getSignature())
-                .withTypeText(invokableInformation.getReturnType())
+                .withTypeText(invokableInformation.getReturnTypeString())
                 .withInsertHandler(ParenthesesInsertHandler.getInstance(invokableInformation.hasParameters()));
     }
 }

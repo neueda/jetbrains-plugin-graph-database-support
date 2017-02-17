@@ -46,6 +46,12 @@ public class CypherExpressionImpl extends ASTWrapperPsiElement implements Cypher
 
   @Override
   @NotNull
+  public List<CypherBooleanLiteral> getBooleanLiteralList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherBooleanLiteral.class);
+  }
+
+  @Override
+  @NotNull
   public List<CypherCaseExpression> getCaseExpressionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherCaseExpression.class);
   }
@@ -118,6 +124,12 @@ public class CypherExpressionImpl extends ASTWrapperPsiElement implements Cypher
 
   @Override
   @NotNull
+  public List<CypherNullLiteral> getNullLiteralList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherNullLiteral.class);
+  }
+
+  @Override
+  @NotNull
   public List<CypherNumberLiteral> getNumberLiteralList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherNumberLiteral.class);
   }
@@ -126,6 +138,12 @@ public class CypherExpressionImpl extends ASTWrapperPsiElement implements Cypher
   @NotNull
   public List<CypherParameter> getParameterList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherParameter.class);
+  }
+
+  @Override
+  @NotNull
+  public List<CypherParenthesizedExpression> getParenthesizedExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherParenthesizedExpression.class);
   }
 
   @Override
@@ -174,12 +192,6 @@ public class CypherExpressionImpl extends ASTWrapperPsiElement implements Cypher
   @NotNull
   public List<CypherVariable> getVariableList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherVariable.class);
-  }
-
-  @Override
-  @NotNull
-  public List<CypherParenthesizedExpression> getParenthesizedExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherParenthesizedExpression.class);
   }
 
 }

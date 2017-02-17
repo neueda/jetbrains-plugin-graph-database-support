@@ -16,6 +16,7 @@ public interface CypherTypes {
   IElementType ANY_CYPHER_OPTION = new CypherElementType("ANY_CYPHER_OPTION");
   IElementType ANY_FUNCTION_INVOCATION = new CypherElementType("ANY_FUNCTION_INVOCATION");
   IElementType ARRAY = new CypherElementType("ARRAY");
+  IElementType BOOLEAN_LITERAL = new CypherElementType("BOOLEAN_LITERAL");
   IElementType BULK_IMPORT_QUERY = new CypherElementType("BULK_IMPORT_QUERY");
   IElementType CALL = new CypherElementType("CALL");
   IElementType CASE_ALTERNATIVES = new CypherElementType("CASE_ALTERNATIVES");
@@ -79,6 +80,7 @@ public interface CypherTypes {
   IElementType NODE_PATTERN = new CypherElementType("NODE_PATTERN");
   IElementType NODE_PROPERTY_EXISTENCE_CONSTRAINT_SYNTAX = new CypherElementType("NODE_PROPERTY_EXISTENCE_CONSTRAINT_SYNTAX");
   IElementType NONE_FUNCTION_INVOCATION = new CypherElementType("NONE_FUNCTION_INVOCATION");
+  IElementType NULL_LITERAL = new CypherElementType("NULL_LITERAL");
   IElementType NUMBER_LITERAL = new CypherElementType("NUMBER_LITERAL");
   IElementType OLD_PARAMETER = new CypherElementType("OLD_PARAMETER");
   IElementType ORDER = new CypherElementType("ORDER");
@@ -294,6 +296,9 @@ public interface CypherTypes {
       else if (type == ARRAY) {
         return new CypherArrayImpl(node);
       }
+      else if (type == BOOLEAN_LITERAL) {
+        return new CypherBooleanLiteralImpl(node);
+      }
       else if (type == BULK_IMPORT_QUERY) {
         return new CypherBulkImportQueryImpl(node);
       }
@@ -482,6 +487,9 @@ public interface CypherTypes {
       }
       else if (type == NONE_FUNCTION_INVOCATION) {
         return new CypherNoneFunctionInvocationImpl(node);
+      }
+      else if (type == NULL_LITERAL) {
+        return new CypherNullLiteralImpl(node);
       }
       else if (type == NUMBER_LITERAL) {
         return new CypherNumberLiteralImpl(node);

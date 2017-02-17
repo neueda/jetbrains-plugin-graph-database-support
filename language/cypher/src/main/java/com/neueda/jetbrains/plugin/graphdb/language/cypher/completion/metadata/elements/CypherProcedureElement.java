@@ -20,7 +20,7 @@ public class CypherProcedureElement implements
     public CypherProcedureElement(String name, String fullSignature, @Nullable String description) {
         this.name = name;
         this.description = description;
-        this.invokableInformation = extractInformation(fullSignature, name);
+        this.invokableInformation = new InvokableInformation(fullSignature, name);
     }
 
     public String getName() {
@@ -39,7 +39,7 @@ public class CypherProcedureElement implements
                     + "Arguments:<br>"
                     + "&nbsp;&nbsp;&nbsp;&nbsp;" + invokableInformation.getSignature() + "<br>"
                     + "Return:<br>"
-                    + "&nbsp;&nbsp;&nbsp;&nbsp;" + invokableInformation.getReturnType();
+                    + "&nbsp;&nbsp;&nbsp;&nbsp;" + invokableInformation.getReturnTypeString();
 
             if (description != null) {
                 documentation += "<br><br>"
@@ -56,7 +56,7 @@ public class CypherProcedureElement implements
                 .bold()
                 .withIcon(GraphIcons.Nodes.STORED_PROCEDURE)
                 .withTailText(invokableInformation.getSignature())
-                .withTypeText(invokableInformation.getReturnType())
+                .withTypeText(invokableInformation.getReturnTypeString())
                 .withInsertHandler(ParenthesesInsertHandler.getInstance(invokableInformation.hasParameters()));
     }
 }
