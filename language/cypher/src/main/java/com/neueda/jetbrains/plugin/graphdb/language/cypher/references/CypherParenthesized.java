@@ -1,6 +1,5 @@
 package com.neueda.jetbrains.plugin.graphdb.language.cypher.references;
 
-import com.intellij.psi.PsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherType;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherParenthesizedExpression;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherTypePropagator;
@@ -14,11 +13,8 @@ public interface CypherParenthesized extends CypherTyped {
 
     @Override
     default CypherType getType() {
-        if (this instanceof CypherParenthesizedExpression) {
-            return ANY;
-        }
-
         return Optional.of(this)
+                .filter(CypherParenthesizedExpression.class::isInstance)
                 .map(CypherParenthesizedExpression.class::cast)
                 .map(CypherParenthesizedExpression::getExpression)
                 .map(CypherTypePropagator::getType)
