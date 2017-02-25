@@ -94,7 +94,7 @@ public final class UiHelper {
                 return parent;
             }
         }
-        return new PatchedDefaultMutableTreeNode(new KeyValuePair(key, value.toString(), true));
+        return new PatchedDefaultMutableTreeNode(new KeyValuePair(key, String.valueOf(value), true));
     }
 
     public static PatchedDefaultMutableTreeNode listToTreeNode(String key, List list) {
