@@ -40,6 +40,8 @@
                     Autocompletion support for identifiers, labels, relationship types, properties and stored procedures.
                     Information gathered from existing queries and configured data sources.
                 </li>
+                <li>Code reformatting.</li>
+                <li>Inspections: database warnings, function checks, type system.</li>
                 <li>Auto-inject Cypher language for:
                     <a href="https://github.com/neo4j/neo4j">neo4j</a>,
                     <a href="https://github.com/neo4j/neo4j-ogm">neo4j-ogm</a>,
