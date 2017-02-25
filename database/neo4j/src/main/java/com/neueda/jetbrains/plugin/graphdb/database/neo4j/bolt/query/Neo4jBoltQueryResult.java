@@ -52,10 +52,10 @@ public class Neo4jBoltQueryResult implements GraphQueryResult {
         sb.append(format("Query type: %s.\n", summary.statementType()));
         if (counters.containsUpdates()) {
             if (counters.nodesCreated() > 0) {
-                sb.append(format("Node created: %s\n", counters.nodesCreated()));
+                sb.append(format("Nodes created: %s\n", counters.nodesCreated()));
             }
             if (counters.nodesDeleted() > 0) {
-                sb.append(format("Node deleted: %s\n", counters.nodesDeleted()));
+                sb.append(format("Nodes deleted: %s\n", counters.nodesDeleted()));
             }
             if (counters.labelsAdded() > 0) {
                 sb.append(format("Labels added: %s\n", counters.labelsAdded()));

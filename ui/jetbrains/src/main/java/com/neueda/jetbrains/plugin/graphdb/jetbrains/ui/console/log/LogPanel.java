@@ -38,14 +38,17 @@ public class LogPanel implements Disposable {
             public void executionStarted(ExecuteQueryPayload payload) {
                 if (payload.getFileName().isPresent()) {
                     info("Executing all queries in a file: ");
+                    newLine();
                     userInput(payload.getFileName().get());
                 } else {
                     info("Executing query: ");
+                    newLine();
                     userInput(payload.getQueries().get(0));
                 }
                 newLine();
                 if (!payload.getParameters().isEmpty()) {
                     info("With parameters: ");
+                    newLine();
                     printParametersMap(payload.getParameters());
                 }
             }
