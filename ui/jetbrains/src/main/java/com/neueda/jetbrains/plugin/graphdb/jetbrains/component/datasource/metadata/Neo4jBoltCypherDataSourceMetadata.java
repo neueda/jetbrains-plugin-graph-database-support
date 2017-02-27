@@ -11,6 +11,8 @@ import java.util.Map;
 
 public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
 
+    public static final String INDEXES = "indexes";
+    public static final String CONSTRAINTS = "constraints";
     public static final String PROPERTY_KEYS = "propertyKeys";
     public static final String STORED_PROCEDURES = "procedures";
     public static final String USER_FUNCTIONS = "functions";
@@ -93,5 +95,13 @@ public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
 
     public List<Neo4jRelationshipTypeMetadata> getRelationshipTypes() {
         return relationshipTypes;
+    }
+
+    public void addIndexes(GraphQueryResult indexesResult) {
+        addDataSourceMetadata(INDEXES, indexesResult);
+    }
+
+    public void addConstraints(GraphQueryResult constraintsResult) {
+        addDataSourceMetadata(CONSTRAINTS, constraintsResult);
     }
 }

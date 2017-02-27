@@ -3,6 +3,10 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree;
 public enum Neo4jTreeNodeType implements NodeType {
     ROOT,
     DATASOURCE,
+    INDEXES,
+    INDEX,
+    CONSTRAINTS,
+    CONSTRAINT,
     LABELS,
     LABEL,
     RELATIONSHIPS,

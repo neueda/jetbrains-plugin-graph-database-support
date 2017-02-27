@@ -50,6 +50,13 @@ public class DataSourceMetadataUiTest {
         HashMap<String, String> propertyKeys = new HashMap<>();
         propertyKeys.put("propertyKey", PROPERTY);
 
+        HashMap<String, String> indexes = new HashMap<>();
+        indexes.put("description", "index ON (:aaa)");
+        indexes.put("state", "ONLINE");
+
+        HashMap<String, String> constraints = new HashMap<>();
+        constraints.put("description", "constraint ON (:aaa) UNIQUE");
+
         HashMap<String, String> procedures = new HashMap<>();
         procedures.put("signature", "db.labels() :: (label :: STRING?)");
         procedures.put("name", "db.labels");
@@ -60,6 +67,8 @@ public class DataSourceMetadataUiTest {
         metadata.addDataSourceMetadata(PROPERTY_KEYS, singletonList(propertyKeys));
         metadata.addDataSourceMetadata(STORED_PROCEDURES, singletonList(procedures));
         metadata.addDataSourceMetadata(USER_FUNCTIONS, singletonList(new HashMap<>()));
+        metadata.addDataSourceMetadata(INDEXES, singletonList(indexes));
+        metadata.addDataSourceMetadata(CONSTRAINTS, singletonList(constraints));
 
         ui.updateNeo4jBoltCypherMetadataUi(datasource, metadata);
     }

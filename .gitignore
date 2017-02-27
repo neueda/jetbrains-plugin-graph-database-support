@@ -96,3 +96,5 @@ hs_err_pid*
 idea-flex.skeleton
 /book-dev
 /_book
+/.ideaDataSources
+/dataSources

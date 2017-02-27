@@ -23,6 +23,8 @@ public final class GraphIcons {
     }
 
     public static final class Nodes {
+        public static final Icon INDEX = AllIcons.Nodes.ResourceBundle;
+        public static final Icon CONSTRAINT = AllIcons.Nodes.C_protected;
         public static final Icon LABEL = AllIcons.Nodes.Class;
         public static final Icon RELATIONSHIP_TYPE = AllIcons.Vcs.Arrow_right;
         public static final Icon PROPERTY_KEY = AllIcons.Nodes.Property;
