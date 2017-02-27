@@ -33,10 +33,10 @@ public final class UiHelper {
 
     public static boolean canBeTree(Object object) {
         return object instanceof List
-                || object instanceof Map
-                || object instanceof GraphNode
-                || object instanceof GraphRelationship
-                || object instanceof GraphPath;
+            || object instanceof Map
+            || object instanceof GraphNode
+            || object instanceof GraphRelationship
+            || object instanceof GraphPath;
     }
 
     public static PatchedDefaultMutableTreeNode keyValueToTreeNode(String key, Object value, DataSourceApi dataSourceApi, Object rootObject) {
