@@ -112,7 +112,7 @@ public class DataSourcesView implements Disposable {
         dataSourceTree.setModel(treeModel);
         dataSourceTree.setRootVisible(false);
         dataSourceTree.setToggleClickCount(0);
-        dataSourceTree.addMouseListener(new DataSourcesTreeMouseAdapter());
+        dataSourceTree.addMouseListener(new TreeContextMenuMouseAdapter());
     }
 
     private void decorateDataSourceTree() {

@@ -2,6 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table;
 
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.intellij.ui.treeStructure.Tree;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.renderes.tree.PropertyTreeCellRenderer;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper;
 
@@ -17,13 +18,13 @@ public class ValueConverter {
         this.tablePanel = tablePanel;
     }
 
-    public Object convert(String columnName, Object object) {
+    public Object convert(String columnName, Object object, DataSourceApi dataSourceApi) {
         if (object == null) {
             return null;
         }
 
         if (UiHelper.canBeTree(object)) {
-            return createTree(UiHelper.keyValueToTreeNode(columnName, object));
+            return createTree(UiHelper.keyValueToTreeNode(columnName, object, dataSourceApi, object));
         } else {
             return objectToString(object);
         }

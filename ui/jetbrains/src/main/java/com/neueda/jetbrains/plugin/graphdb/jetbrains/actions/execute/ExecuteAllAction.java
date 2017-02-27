@@ -19,20 +19,31 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.file.CypherFileType;
 public class ExecuteAllAction extends AnAction {
     @Override
     public void update(AnActionEvent e) {
-        if (e.getDataContext().getData(PlatformDataKeys.PSI_FILE).getFileType() instanceof CypherFileType) {
+        PsiFile psiFile = e.getDataContext().getData(PlatformDataKeys.PSI_FILE);
+        if (psiFile != null && psiFile.getFileType() instanceof CypherFileType) {
             e.getPresentation().setEnabled(true);
         } else {
             e.getPresentation().setEnabled(false);
         }
     }
+
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = getEventProject(e);
+        if (project == null) {
+            Notifier.error("Query execution error", "No project present.");
+            return;
+        }
         MessageBus messageBus = project.getMessageBus();
         ParametersService parameterService = ServiceManager.getService(project, ParametersService.class);
         PsiFile psiFile = e.getData(CommonDataKeys.PSI_FILE);
 
         StatementCollector statementCollector = new StatementCollector(messageBus, parameterService);
+
+        // This should never happen
+        if (psiFile == null) {
+            Notifier.error("Internal error", "No PsiFile present.");
+        }
         psiFile.acceptChildren(statementCollector);
         if (!statementCollector.hasErrors()) {
             ExecuteQueryPayload executeQueryPayload =
