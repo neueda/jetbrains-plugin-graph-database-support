@@ -2,10 +2,10 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.renderes.tree;
 
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.KeyValuePair;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModelApi;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class PropertyTreeCellRenderer extends ColoredTreeCellRenderer {
@@ -14,14 +14,20 @@ public class PropertyTreeCellRenderer extends ColoredTreeCellRenderer {
     public void customizeCellRenderer(@NotNull JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
         Object userObject = ((DefaultMutableTreeNode) value).getUserObject();
 
-        if (userObject instanceof KeyValuePair) {
-            KeyValuePair pair = (KeyValuePair) userObject;
+        if (userObject instanceof TreeNodeModelApi) {
+            TreeNodeModelApi model = (TreeNodeModelApi) userObject;
 
-            append(pair.getKey() + ": ", SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES, true);
-            if (pair.isValueData()) {
-                append(pair.getValue().toString());
+            append(model.getText().get() + ": ", SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES, true);
+            if (model.getDescription().isPresent()) {
+                append(model.getDescription().get(), SimpleTextAttributes.GRAYED_SMALL_ATTRIBUTES);
             } else {
-                append(pair.getValue().toString(), SimpleTextAttributes.GRAYED_SMALL_ATTRIBUTES);
+                if (model.getValue().isPresent()) {
+                    append(model.getValue().get().toString());
+                } else {
+                    System.out.println("NULL HERE");
+                    System.out.println(model.getType());
+                    System.out.println(model.getText().get());
+                }
             }
         } else {
             append(userObject.toString());

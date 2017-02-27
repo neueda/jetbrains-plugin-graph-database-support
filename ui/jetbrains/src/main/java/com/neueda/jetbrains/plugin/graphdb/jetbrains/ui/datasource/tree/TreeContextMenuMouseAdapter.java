@@ -9,7 +9,7 @@ import javax.swing.tree.TreePath;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class DataSourcesTreeMouseAdapter extends MouseAdapter {
+public class TreeContextMenuMouseAdapter extends MouseAdapter {
 
     private ContextMenuService contextMenuService = new ContextMenuService();
 

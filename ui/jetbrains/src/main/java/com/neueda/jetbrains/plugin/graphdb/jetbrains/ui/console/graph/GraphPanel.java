@@ -15,8 +15,10 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeContextMenuMouseAdapter;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.renderes.tree.PropertyTreeCellRenderer;
 import com.neueda.jetbrains.plugin.graphdb.visualization.PrefuseVisualization;
@@ -29,8 +31,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Enumeration;
 
-import static com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil.getTooltipText;
-import static com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil.getTooltipTitle;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil.*;
 
 public class GraphPanel {
 
@@ -42,6 +43,7 @@ public class GraphPanel {
     private GraphPanelInteractions interactions;
     private Tree entityDetailsTree;
     private DefaultTreeModel entityDetailsTreeModel;
+    private DataSourceApi dataSource;
 
     public GraphPanel() {
         entityDetailsTreeModel = new DefaultTreeModel(null);
@@ -51,6 +53,7 @@ public class GraphPanel {
         MessageBus messageBus = project.getMessageBus();
         this.lookAndFeelService = graphConsoleView.getLookAndFeelService();
         this.entityDetailsTree = graphConsoleView.getEntityDetailsTree();
+        entityDetailsTree.addMouseListener(new TreeContextMenuMouseAdapter());
 
         // Bootstrap visualisation
         visualization = new PrefuseVisualization(lookAndFeelService);
@@ -61,7 +64,8 @@ public class GraphPanel {
         entityDetailsTree.setModel(entityDetailsTreeModel);
         messageBus.connect().subscribe(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC, new QueryExecutionProcessEvent() {
             @Override
-            public void executionStarted(ExecuteQueryPayload payload) {
+            public void executionStarted(DataSourceApi dataSource, ExecuteQueryPayload payload) {
+                GraphPanel.this.dataSource = dataSource;
                 entityDetailsTreeModel.setRoot(null);
             }
 
@@ -98,7 +102,7 @@ public class GraphPanel {
     }
 
     public void showNodeData(GraphNode node, VisualItem item, MouseEvent e) {
-        PatchedDefaultMutableTreeNode root = UiHelper.nodeToTreeNode(node.getRepresentation(), node);
+        PatchedDefaultMutableTreeNode root = UiHelper.nodeToTreeNode(node.getRepresentation(), node, dataSource);
         entityDetailsTreeModel.setRoot(root);
 
         Enumeration childs = root.children();
@@ -111,7 +115,7 @@ public class GraphPanel {
 
     public void showRelationshipData(GraphRelationship relationship, VisualItem item, MouseEvent e) {
         PatchedDefaultMutableTreeNode root = UiHelper.relationshipToTreeNode(
-                relationship.getRepresentation(), relationship);
+                relationship.getRepresentation(), relationship, dataSource);
         entityDetailsTreeModel.setRoot(root);
 
         Enumeration childs = root.children();
