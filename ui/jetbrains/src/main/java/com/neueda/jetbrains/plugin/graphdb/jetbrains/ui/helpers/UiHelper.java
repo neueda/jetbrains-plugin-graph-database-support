@@ -33,10 +33,10 @@ public final class UiHelper {
 
     public static boolean canBeTree(Object object) {
         return object instanceof List
-            || object instanceof Map
-            || object instanceof GraphNode
-            || object instanceof GraphRelationship
-            || object instanceof GraphPath;
+                || object instanceof Map
+                || object instanceof GraphNode
+                || object instanceof GraphRelationship
+                || object instanceof GraphPath;
     }
 
     public static PatchedDefaultMutableTreeNode keyValueToTreeNode(String key, Object value, DataSourceApi dataSourceApi, Object rootObject) {
@@ -144,7 +144,7 @@ public final class UiHelper {
             return new NodeModel((GraphNode) value, key, dataSourceApi);
         } else if (value instanceof GraphRelationship) {
             return new RelationshipModel((GraphRelationship) value, key, dataSourceApi);
-        } else if (value instanceof List){
+        } else if (value instanceof List) {
             return new ListModel(key, dataSourceApi);
         } else if (value instanceof Map) {
             return new MapModel(key, dataSourceApi);
