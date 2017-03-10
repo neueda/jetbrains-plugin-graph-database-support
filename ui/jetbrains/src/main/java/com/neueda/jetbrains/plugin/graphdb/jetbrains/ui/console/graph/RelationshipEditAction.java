@@ -5,6 +5,8 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DiffService;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.EditEntityDialog;
 
 import javax.swing.*;
 
@@ -22,7 +24,10 @@ public class RelationshipEditAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = getEventProject(e);
-        System.out.println("editing rel " + relationship.getRepresentation());
-        System.out.println("dataSource is present: " + dataSource);
+        EditEntityDialog dialog = new EditEntityDialog(project, relationship);
+        if (dialog.showAndGet()) {
+            DiffService diffService = new DiffService(project);
+            diffService.updateRelationShip(dataSource, relationship, dialog.getUpdatedEntity());
+        }
     }
 }
