@@ -123,7 +123,7 @@ public class DataSourcesComponentMetadata implements ProjectComponent {
         return labels
                 .stream()
                 .map(label -> "MATCH (n:" + label + ") RETURN count(n)")
-                .collect(Collectors.joining(" UNION "));
+                .collect(Collectors.joining(" UNION ALL "));
     }
 
     private void updateNeo4jBoltMetadata(DataSourceApi dataSource, Neo4jBoltCypherDataSourceMetadata metadata) {
