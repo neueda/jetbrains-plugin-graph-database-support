@@ -115,14 +115,14 @@ public class DataSourcesComponentMetadata implements ProjectComponent {
     private String queryRelationshipTypeCount(List<String> relationshipTypes) {
         return relationshipTypes
                 .stream()
-                .map(relationshipType -> "MATCH ()-[r:" + relationshipType + "]->() RETURN count(r)")
-                .collect(Collectors.joining(" UNION "));
+                .map(relationshipType -> "MATCH ()-[r:`" + relationshipType + "`]->() RETURN count(r)")
+                .collect(Collectors.joining(" UNION ALL"));
     }
 
     private String queryLabelCount(List<String> labels) {
         return labels
                 .stream()
-                .map(label -> "MATCH (n:" + label + ") RETURN count(n)")
+                .map(label -> "MATCH (n:`" + label + "`) RETURN count(n)")
                 .collect(Collectors.joining(" UNION ALL "));
     }
 
