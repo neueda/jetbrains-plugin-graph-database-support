@@ -12,13 +12,19 @@ import org.jetbrains.annotations.Nullable;
 
 public class EntityActionGroup extends ActionGroup {
 
-    private final AnAction[] actions = new AnAction[1];
+    private AnAction[] actions;
 
     public EntityActionGroup(DataSourceApi dataSourceApi, GraphEntity entity) {
         if (entity instanceof GraphNode) {
-            actions[0] = new NodeEditAction("Edit node", "", null, dataSourceApi, (GraphNode) entity);
+            actions = new AnAction[] {
+                    new NodeEditAction("Edit node", "", null, dataSourceApi, (GraphNode) entity),
+                    new NodeDeleteAction("Delete node", "", null, dataSourceApi, (GraphNode) entity),
+            };
         } else if (entity instanceof GraphRelationship) {
-            actions[0] = new RelationshipEditAction("Edit relationship", "", null, dataSourceApi, (GraphRelationship) entity);
+            actions = new AnAction[] {
+                    new RelationshipEditAction("Edit relationship", "", null, dataSourceApi, (GraphRelationship) entity),
+                    new RelationshipDeleteAction("Delete relationship", "", null, dataSourceApi, (GraphRelationship) entity)
+            };
         }
     }
 
