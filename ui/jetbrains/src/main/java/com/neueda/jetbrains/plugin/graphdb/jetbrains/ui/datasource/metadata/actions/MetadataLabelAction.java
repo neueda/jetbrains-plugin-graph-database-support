@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class MetadataLabelAction extends MetadataAction {
 
-    private static final String QUERY = "MATCH (n:%s) RETURN n LIMIT 25";
+    private static final String QUERY = "MATCH (n:`%s`) RETURN n LIMIT 25";
 
     MetadataLabelAction(String data, String dataSourceUuid, String title, String description, Icon icon) {
         super(data, dataSourceUuid, title, description, icon);
