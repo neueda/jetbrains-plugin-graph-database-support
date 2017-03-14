@@ -1,6 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata;
 
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourceMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourcesComponentMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
@@ -9,6 +10,10 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Metadata
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.RelationshipTypeTreeNodeModel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModelApi;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
+
+import javax.swing.tree.MutableTreeNode;
+import java.util.List;
+import java.util.Map;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.*;
 
@@ -19,6 +24,8 @@ public class DataSourceMetadataUi {
     private static final String LABELS_TITLE = "labels (%s)";
     private static final String STORED_PROCEDURES_TITLE = "stored procedures";
     private static final String USER_FUNCTIONS_TITLE = "user functions";
+    private static final String INDEXES_TITLE = "indexes (%s)";
+    private static final String CONSTRAINTS_TITLE = "constraints (%s)";
 
     private final DataSourcesComponentMetadata dataSourcesComponent;
 
@@ -45,6 +52,9 @@ public class DataSourceMetadataUi {
         dataSourceRootTreeNode.removeAllChildren();
         TreeNodeModelApi model = (TreeNodeModelApi) dataSourceRootTreeNode.getUserObject();
         DataSourceApi dataSourceApi = model.getDataSourceApi();
+
+        dataSourceRootTreeNode.add(createConstraintsNode(dataSourceMetadata, dataSourceApi));
+        dataSourceRootTreeNode.add(createIndexesNode(dataSourceMetadata, dataSourceApi));
 
         // Labels
         int labelCount = dataSourceMetadata.getLabels().size();
@@ -106,6 +116,35 @@ public class DataSourceMetadataUi {
         }
 
         return true;
+    }
+
+    private MutableTreeNode createIndexesNode(DataSourceMetadata dataSourceMetadata, DataSourceApi dataSourceApi) {
+        List<Map<String, String>> indexesMetadata =
+                dataSourceMetadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.INDEXES);
+        PatchedDefaultMutableTreeNode indexTreeNode = new PatchedDefaultMutableTreeNode(
+                new MetadataTreeNodeModel(INDEXES,
+                        dataSourceApi,
+                        String.format(INDEXES_TITLE, indexesMetadata.size()),
+                        GraphIcons.Nodes.INDEX));
+        indexesMetadata
+                .forEach(row -> indexTreeNode.add(of(new MetadataTreeNodeModel(INDEX, dataSourceApi,
+                        row.get("description").substring(6) + " " + row.get("state")))));
+
+        return indexTreeNode;
+    }
+
+    private MutableTreeNode createConstraintsNode(DataSourceMetadata dataSourceMetadata, DataSourceApi dataSourceApi) {
+        List<Map<String, String>> constraintsMetadata =
+                dataSourceMetadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.CONSTRAINTS);
+        PatchedDefaultMutableTreeNode indexTreeNode = new PatchedDefaultMutableTreeNode(
+                new MetadataTreeNodeModel(CONSTRAINTS, dataSourceApi,
+                        String.format(CONSTRAINTS_TITLE, constraintsMetadata.size()), GraphIcons.Nodes.CONSTRAINT));
+        constraintsMetadata
+                .forEach(row ->
+                        indexTreeNode.add(of(new MetadataTreeNodeModel(CONSTRAINT, dataSourceApi,
+                                row.get("description").substring(11)))));
+
+        return indexTreeNode;
     }
 
     private PatchedDefaultMutableTreeNode of(MetadataTreeNodeModel model) {
