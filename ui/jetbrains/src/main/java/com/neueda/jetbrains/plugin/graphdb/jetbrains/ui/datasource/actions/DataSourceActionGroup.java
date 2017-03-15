@@ -20,7 +20,8 @@ public class DataSourceActionGroup extends ActionGroup {
     public AnAction[] getChildren(@Nullable AnActionEvent e) {
         return new AnAction[]{
                 new DataSourceAction("Open editor", "", null, dataSourceApi),
-                new DataSourceOpenBrowserAction("Open in browser", "", null, dataSourceApi)
+                new DataSourceOpenBrowserAction("Open in browser", "", null, dataSourceApi),
+                new CreateNodeAction("Create new node", dataSourceApi)
         };
     }
 }

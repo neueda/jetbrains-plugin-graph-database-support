@@ -6,10 +6,12 @@ import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.editor.CompositeTableCellEditor;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.renderer.CompositeTableCellRenderer;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TableContextMenuMouseAdapter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,12 +38,16 @@ public class TablePanel {
         table.setDefaultRenderer(Object.class, new CompositeTableCellRenderer());
         table.setDefaultEditor(Object.class, new CompositeTableCellEditor());
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        table.addMouseListener(new TableContextMenuMouseAdapter());
 
         ColumnResizer cr = new ColumnResizer(table, MAX_WIDTH);
 
         messageBus.connect().subscribe(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC, new QueryExecutionProcessEvent() {
+            private DataSourceApi dataSourceApi;
+
             @Override
-            public void executionStarted(ExecuteQueryPayload payload) {
+            public void executionStarted(DataSourceApi dataSource, ExecuteQueryPayload payload) {
+                this.dataSourceApi = dataSource;
                 tableModel.setColumnCount(0);
                 tableModel.setRowCount(0);
             }
@@ -55,7 +61,7 @@ public class TablePanel {
                     List<Object> data = new ArrayList<>(columns.size());
 
                     columns.forEach((column) -> {
-                        data.add(valueConverter.convert(column.getName(), row.getValue(column)));
+                        data.add(valueConverter.convert(column.getName(), row.getValue(column), this.dataSourceApi));
                     });
 
                     tableModel.addRow(data.toArray());

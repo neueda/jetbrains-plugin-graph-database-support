@@ -11,11 +11,8 @@ import java.util.Optional;
 public class ExecuteQueryPayload {
 
     private final List<String> queries;
-
     private final Map<String, Object> parameters;
-
     private final Editor editor;
-
     private final String fileName;
 
     public ExecuteQueryPayload(String content) {

@@ -37,7 +37,7 @@ public class DataSourceTreeNodeModel implements TreeNodeModelApi {
     }
 
     @Override
-    public Optional<String> getValue() {
+    public Optional<Object> getValue() {
         return Optional.empty();
     }
 

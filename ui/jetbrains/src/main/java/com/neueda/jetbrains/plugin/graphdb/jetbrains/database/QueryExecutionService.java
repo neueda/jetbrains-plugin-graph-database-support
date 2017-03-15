@@ -52,7 +52,7 @@ public class QueryExecutionService {
 
     private synchronized void executeInBackground(DataSourceApi dataSource, ExecuteQueryPayload payload) {
         QueryExecutionProcessEvent event = messageBus.syncPublisher(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC);
-        event.executionStarted(payload);
+        event.executionStarted(dataSource, payload);
 
         if (payload.getQueries().size() == 1) {
             runningQuery = ApplicationManager.getApplication()

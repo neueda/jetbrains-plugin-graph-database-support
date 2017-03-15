@@ -9,7 +9,7 @@ public class UiHelperTest {
 
     @Test
     public void nullValueToTreeNode() throws Exception {
-        PatchedDefaultMutableTreeNode treeNode = UiHelper.keyValueToTreeNode("key", null);
+        PatchedDefaultMutableTreeNode treeNode = UiHelper.keyValueToTreeNode("key", "VALUE", null, null);
         assertThat(treeNode).isNotNull();
     }
 }
