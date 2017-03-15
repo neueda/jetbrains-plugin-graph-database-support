@@ -89,7 +89,9 @@
                 <preferred-size width="-1" height="200"/>
               </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <horizontalScrollBarPolicy value="31"/>
+            </properties>
             <border type="none"/>
             <children>
               <grid id="8f5e9" binding="propertyContainer" layout-manager="BorderLayout" hgap="0" vgap="0">

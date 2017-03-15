@@ -43,7 +43,7 @@ public class TablePanel {
         ColumnResizer cr = new ColumnResizer(table, MAX_WIDTH);
 
         messageBus.connect().subscribe(QueryExecutionProcessEvent.QUERY_EXECUTION_PROCESS_TOPIC, new QueryExecutionProcessEvent() {
-            private DataSourceApi dataSourceApi; // TODO init it from events
+            private DataSourceApi dataSourceApi;
 
             @Override
             public void executionStarted(DataSourceApi dataSource, ExecuteQueryPayload payload) {
@@ -61,7 +61,7 @@ public class TablePanel {
                     List<Object> data = new ArrayList<>(columns.size());
 
                     columns.forEach((column) -> {
-                        data.add(valueConverter.convert(column.getName(), row.getValue(column), this.dataSourceApi)); // TODO null?
+                        data.add(valueConverter.convert(column.getName(), row.getValue(column), this.dataSourceApi));
                     });
 
                     tableModel.addRow(data.toArray());

@@ -23,10 +23,6 @@ public class PropertyTreeCellRenderer extends ColoredTreeCellRenderer {
             } else {
                 if (model.getValue().isPresent()) {
                     append(model.getValue().get().toString());
-                } else {
-                    System.out.println("NULL HERE");
-                    System.out.println(model.getType());
-                    System.out.println(model.getText().get());
                 }
             }
         } else {

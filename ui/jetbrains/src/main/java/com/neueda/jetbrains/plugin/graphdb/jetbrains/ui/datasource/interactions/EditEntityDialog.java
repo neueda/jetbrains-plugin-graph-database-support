@@ -1,5 +1,8 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -11,17 +14,23 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 public class EditEntityDialog extends DialogWrapper {
+
+    private final ObjectMapper mapper = new ObjectMapper();
 
     private JLabel addLabel;
     private JLabel addProperty;
@@ -108,8 +117,17 @@ public class EditEntityDialog extends DialogWrapper {
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
         JTextField textField = new JTextField(initialData);
-        textField.setMaximumSize(new Dimension(500, 30));
+        textField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
         panel.add(textField);
+
+        container.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                textField.setPreferredSize(new Dimension(e.getComponent().getWidth() - 30, 30));
+                panel.revalidate();
+            }
+        });
 
         JLabel remove = new JLabel(AllIcons.Actions.Close);
         remove.setBorder(BorderFactory.createEmptyBorder());
@@ -133,12 +151,23 @@ public class EditEntityDialog extends DialogWrapper {
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
         JTextField keyTextField = new JTextField(key);
-        keyTextField.setMaximumSize(new Dimension(250, 30));
+        keyTextField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
         panel.add(keyTextField);
 
         JTextField valueTextField = new JTextField(value);
-        valueTextField.setMaximumSize(new Dimension(250, 30));
+        valueTextField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
         panel.add(valueTextField);
+
+        container.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                int width = (e.getComponent().getWidth() - 30) / 2;
+                keyTextField.setPreferredSize(new Dimension(width, 30));
+                valueTextField.setPreferredSize(new Dimension(width, 30));
+                panel.revalidate();
+            }
+        });
 
         JLabel remove = new JLabel(AllIcons.Actions.Close);
         remove.setBorder(BorderFactory.createEmptyBorder());
@@ -173,9 +202,10 @@ public class EditEntityDialog extends DialogWrapper {
             public GraphPropertyContainer getPropertyContainer() {
                 return () -> Stream.of(EditEntityDialog.this.propertyContainer.getComponents())
                         .map(Container.class::cast)
+                        .filter(c -> !Strings.isNullOrEmpty(((JTextField) c.getComponent(0)).getText()))
                         .map(cont -> new AbstractMap.SimpleEntry<>(
                                 ((JTextField) cont.getComponent(0)).getText(),
-                                ((JTextField) cont.getComponent(1)).getText()))
+                                readValue((JTextField) cont.getComponent(1))))
                         .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
             }
 
@@ -199,5 +229,36 @@ public class EditEntityDialog extends DialogWrapper {
                 return EditEntityDialog.this.node.isTypesSingle();
             }
         };
+    }
+
+    private Object readValue(JTextField field) {
+        String text = field.getText();
+
+        try {
+            JsonNode jsonNode = mapper.readTree(text);
+            return readValue(jsonNode);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            return text;
+        }
+    }
+
+    private Object readValue(JsonNode node) {
+        if (node.isFloatingPointNumber()) {
+            return node.asDouble();
+        } else if (node.isNumber()) {
+            return node.asLong();
+        } else if (node.isBoolean()) {
+            return node.asBoolean();
+        } else if (node.isTextual()) {
+            return node.asText();
+        } else if (node.isArray()) {
+            return StreamSupport.stream(node.spliterator(), false)
+                    .map(this::readValue)
+                    .collect(toList());
+        }
+
+        return node.toString();
     }
 }

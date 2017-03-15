@@ -60,7 +60,6 @@ public class ExecuteAllAction extends AnAction {
             );
             popup.showInBestPositionFor(e.getDataContext());
         } else {
-            System.out.println("NOTIFY");
             Notifier.error("Query execution error", "File contains errors");
         }
     }
