@@ -2,3 +2,34 @@ dependencies {
     compile project(':database:api')
     compile "org.neo4j.driver:neo4j-java-driver:$versionNeo4jJavaBoltDriver"
 }
+
+apply plugin: 'maven'
+apply plugin: 'osgi'
+
+configure(install.repositories.mavenInstaller) {
+    pom.project {
+        // groupId 'com.neueda.graphdb'
+        // artifactId 'graphdb-neo4j'
+        inceptionYear '2016'
+        packaging 'jar'
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+    }
+}
+
+jar {
+    manifest {
+        name = 'Database Neo4j'
+        symbolicName = "com.neueda.graphdb.database.${project.name}"
+        instruction 'Export-Package', "*;version=${version};-noimport:=true"
+        instruction 'Bundle-Vendor', 'neueda.lv'
+        instruction '-removeheaders', 'Tool, Bnd-LastModified'
+        instruction '-nouses', 'true'
+        // instruction '-snapshot', '${tstamp}'
+    }
+}
