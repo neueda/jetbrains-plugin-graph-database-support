@@ -72,6 +72,5 @@ Please report any bugs or feature request by creating [new issue on Github](http
 You can easily reach us in case you have any questions or just want to chat about graph databases:
 
 - Dmitry Vrublevsky (dmitry.vrublevsky@neueda.com, [@FylmTM](https://twitter.com/FylmTM))
-- Andrew Naydyonock (andrew.naydyonock@neueda.com, [@Cryptael](https://twitter.com/cryptael))
 - Neueda R&D ([@NeuedaDev](https://twitter.com/NeuedaDev))
 
