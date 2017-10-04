@@ -29,10 +29,8 @@ public abstract class BaseInspectionTest extends BaseIntegrationTest {
         addFileAndCheck(fileName, fileContent);
     }
 
-    protected void deletFile() {
-        ApplicationManager.getApplication().runWriteAction(() -> {
-                myFixture.getFile().delete();
-        });
+    protected void deleteFile() {
+        ApplicationManager.getApplication().runWriteAction(() -> myFixture.getFile().delete());
     }
 
     protected void addUnavailableDataSourceFileAndCheck(String fileContent) {

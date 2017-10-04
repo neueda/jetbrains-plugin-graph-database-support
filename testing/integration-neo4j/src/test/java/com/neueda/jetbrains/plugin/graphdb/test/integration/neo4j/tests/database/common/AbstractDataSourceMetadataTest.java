@@ -1,15 +1,17 @@
 package com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.tests.database.common;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourceMetadata;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.data.StoredProcedure;
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.base.BaseIntegrationTest;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.STORED_PROCEDURES;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractDataSourceMetadataTest extends BaseIntegrationTest {
@@ -22,14 +24,14 @@ public abstract class AbstractDataSourceMetadataTest extends BaseIntegrationTest
 
     public abstract DataSourceApi getDataSource();
 
-    public void testMetadataExists() throws Exception {
+    public void testMetadataExists() {
         Optional<DataSourceMetadata> metadata = component().dataSourcesMetadata().getMetadata(getDataSource());
         assertThat(metadata).isPresent();
     }
 
     public void testMetadataHaveRequiredProcedures() {
         DataSourceMetadata metadata = getMetadata();
-        List<Map<String, String>> storedProcedures = metadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.STORED_PROCEDURES);
+        List<Map<String, String>> storedProcedures = metadata.getMetadata(STORED_PROCEDURES);
 
         List<Map<String, String>> requiredProcedures = requiredProcedures().stream()
                    .map(StoredProcedure::asMap)

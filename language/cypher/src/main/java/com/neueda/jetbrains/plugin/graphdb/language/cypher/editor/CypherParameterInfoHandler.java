@@ -1,10 +1,16 @@
 package com.neueda.jetbrains.plugin.graphdb.language.cypher.editor;
 
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.lang.parameterInfo.*;
+import com.intellij.lang.parameterInfo.CreateParameterInfoContext;
+import com.intellij.lang.parameterInfo.ParameterInfoContext;
+import com.intellij.lang.parameterInfo.ParameterInfoHandlerWithTabActionSupport;
+import com.intellij.lang.parameterInfo.ParameterInfoUIContext;
+import com.intellij.lang.parameterInfo.ParameterInfoUtils;
+import com.intellij.lang.parameterInfo.UpdateParameterInfoContext;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.ui.JBColor;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.InvokableInformation;
@@ -133,10 +139,15 @@ public class CypherParameterInfoHandler
 
         int current = context.getCurrentParameterIndex();
 
-
-        if (signature == null || Objects.equals(signature, "()")) {
-            context.setUIComponentEnabled(false);
-            return null;
+        int start = 0;
+        int end = 0;
+        if (signature == null) {
+            String message = "unknown parameters";
+            return context.setupUIComponentPresentation(message, start, end, false, false, false, JBColor.RED);
+        }
+        if (Objects.equals(signature, "()")) {
+            String message = "no parameters";
+            return context.setupUIComponentPresentation(message, start, end, false, false, false, JBColor.RED);
         }
 
         String stripped = signature.substring(1, signature.length() - 1) + ",";

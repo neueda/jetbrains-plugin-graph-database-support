@@ -5,7 +5,7 @@ import org.junit.Test;
 public class CypherDocumentationTest {
 
     @Test
-    public void testBuiltInFunctionsLoadsCorrectly() throws Exception {
+    public void testBuiltInFunctionsLoadsCorrectly() {
         CypherDocumentation.BUILT_IN_FUNCTIONS.lookup("toString");
     }
 }

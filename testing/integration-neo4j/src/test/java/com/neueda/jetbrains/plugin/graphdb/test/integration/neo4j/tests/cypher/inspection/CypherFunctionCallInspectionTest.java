@@ -119,7 +119,7 @@ public class CypherFunctionCallInspectionTest extends BaseInspectionTest {
                         "<error descr=\"expected " + expected + ", got " + p.first + "\">" + p.second + "</error>"));
 
             }
-            deletFile();
+            deleteFile();
         });
     }
 
