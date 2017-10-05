@@ -79,12 +79,12 @@ public class ArgumentHintTest extends BaseIntegrationTest {
 
     public void testNoParams() {
         doTest("RETURN e(<caret>)",
-                null);
+                "<html>no parameters</html>");
     }
 
     public void testUnknownFunction() {
         doTest("return unknown(<caret>)",
-                null);
+            "<html>unknown parameters</html>");
     }
 
     public void testSecondArgument() {
