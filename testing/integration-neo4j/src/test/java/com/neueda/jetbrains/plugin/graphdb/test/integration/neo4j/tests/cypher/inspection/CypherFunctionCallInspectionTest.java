@@ -187,4 +187,13 @@ public class CypherFunctionCallInspectionTest extends BaseInspectionTest {
         String query = "MATCH p=(n)-[r]-() RETURN ufrrel(%s)";
         generateTypeCompatibilityTests(query, "RELATIONSHIP", asList("RELATIONSHIP"));
     }
+
+    public void testRelationshipSizeWithoutVariableLength() {
+        addDataSourceFileAndCheck("MATCH (a)-[c]->(b) WITH size(<error descr=\"expected LIST OF ANY, got RELATIONSHIP\">c</error>) as derp RETURN derp");
+    }
+
+    public void testRelationshipSizeWithVariableLength() {
+        addDataSourceFileAndCheck("MATCH (a)-[c*1..1]->(b) WITH size(c) as derp RETURN derp");
+    }
+
 }
