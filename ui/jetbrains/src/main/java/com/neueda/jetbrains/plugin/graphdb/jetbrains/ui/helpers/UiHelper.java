@@ -17,6 +17,9 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.model.Re
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import static java.lang.String.format;
 
 public final class UiHelper {
 
@@ -30,6 +33,9 @@ public final class UiHelper {
     public static final String PROPERTIES = "properties";
     public static final String LABELS = "labels";
     public static final String ID = "id";
+
+    private UiHelper() {
+    }
 
     public static boolean canBeTree(Object object) {
         return object instanceof List
@@ -103,14 +109,14 @@ public final class UiHelper {
         if (value instanceof String) {
             String string = (String) value;
             if (string.length() <= INLINE_TEXT_LENGTH) {
-                return new PatchedDefaultMutableTreeNode(modelOf(string, key, null, dataSourceApi, rootObject));
+                return new PatchedDefaultMutableTreeNode(modelOf(representUiString(string), key, null, dataSourceApi, rootObject));
             } else {
                 PatchedDefaultMutableTreeNode parent = new PatchedDefaultMutableTreeNode(modelOf(null, key, TEXT, dataSourceApi, rootObject));
                 parent.add(new PatchedDefaultMutableTreeNode(string));
                 return parent;
             }
         }
-        return new PatchedDefaultMutableTreeNode(modelOf(value.toString(), key, null, dataSourceApi, rootObject));
+        return new PatchedDefaultMutableTreeNode(modelOf(Objects.toString(value), key, null, dataSourceApi, rootObject));
     }
 
     private static PatchedDefaultMutableTreeNode listToTreeNode(String key, List list, DataSourceApi dataSourceApi, Object rootObject) {
@@ -135,7 +141,7 @@ public final class UiHelper {
             node = new PatchedDefaultMutableTreeNode(modelOf(null, key, MAP, dataSourceApi, rootObject));
         }
 
-        map.forEach((mapKey, mapVal) -> node.add(keyValueToTreeNode(mapKey.toString(), mapVal, dataSourceApi, rootObject)));
+        map.forEach((mapKey, mapValue) -> node.add(keyValueToTreeNode(mapKey.toString(), mapValue, dataSourceApi, rootObject)));
         return node;
     }
 
@@ -153,6 +159,7 @@ public final class UiHelper {
         }
     }
 
-    private UiHelper() {
+    public static String representUiString(String value) {
+            return format("\"%s\"", Objects.toString(value));
     }
 }
