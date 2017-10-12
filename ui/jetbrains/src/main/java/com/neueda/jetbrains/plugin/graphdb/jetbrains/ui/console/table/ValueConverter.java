@@ -11,7 +11,9 @@ import javax.swing.event.TreeExpansionListener;
 import javax.swing.tree.DefaultTreeModel;
 import java.util.Objects;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper.*;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper.canBeTree;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper.keyValueToTreeNode;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper.representUiString;
 
 public class ValueConverter {
 
