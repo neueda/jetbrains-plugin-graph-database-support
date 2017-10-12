@@ -5,11 +5,15 @@ import com.intellij.ui.treeStructure.Tree;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeContextMenuMouseAdapter;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.renderes.tree.PropertyTreeCellRenderer;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper;
 
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
 import javax.swing.tree.DefaultTreeModel;
+import java.util.Objects;
+
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper.canBeTree;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper.keyValueToTreeNode;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper.representUiString;
 
 public class ValueConverter {
 
@@ -19,20 +23,14 @@ public class ValueConverter {
         this.tablePanel = tablePanel;
     }
 
-    public Object convert(String columnName, Object object, DataSourceApi dataSourceApi) {
-        if (object == null) {
-            return null;
+    public Object convert(String columnName, Object value, DataSourceApi dataSourceApi) {
+        if (canBeTree(value)) {
+            return createTree(keyValueToTreeNode(columnName, value, dataSourceApi, value));
+        } else if (value instanceof String) {
+            return representUiString((String) value);
         }
 
-        if (UiHelper.canBeTree(object)) {
-            return createTree(UiHelper.keyValueToTreeNode(columnName, object, dataSourceApi, object));
-        } else {
-            return objectToString(object);
-        }
-    }
-
-    private Object objectToString(Object object) {
-        return object.toString();
+        return Objects.toString(value);
     }
 
     private Tree createTree(PatchedDefaultMutableTreeNode root) {
