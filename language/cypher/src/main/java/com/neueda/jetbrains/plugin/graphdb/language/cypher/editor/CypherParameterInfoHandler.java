@@ -133,7 +133,8 @@ public class CypherParameterInfoHandler
             return null;
         }
 
-        String signature = ci.resolve()
+        String signature = ci.resolve().stream()
+                .findFirst()
                 .map(InvokableInformation::getSignature)
                 .orElse(null);
 

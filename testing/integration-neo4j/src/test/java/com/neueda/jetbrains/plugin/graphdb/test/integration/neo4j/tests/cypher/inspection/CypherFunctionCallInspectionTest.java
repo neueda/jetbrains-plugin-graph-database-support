@@ -188,8 +188,21 @@ public class CypherFunctionCallInspectionTest extends BaseInspectionTest {
         generateTypeCompatibilityTests(query, "RELATIONSHIP", asList("RELATIONSHIP"));
     }
 
+    public void testSizeArray() {
+        addDataSourceFileAndCheck("RETURN size([])");
+    }
+
+    public void testSizePatternExpression() {
+        addDataSourceFileAndCheck("MATCH (a) RETURN size((a)-[]-())");
+    }
+
+    public void testSizeString() {
+        addDataSourceFileAndCheck("RETURN size('')");
+    }
+
     public void testRelationshipSizeWithoutVariableLength() {
-        addDataSourceFileAndCheck("MATCH (a)-[c]->(b) WITH size(<error descr=\"expected LIST OF ANY, got RELATIONSHIP\">c</error>) as derp RETURN derp");
+        addDataSourceFileAndCheck("MATCH (a)-[c]->(b) WITH size(<error descr=\"expected LIST OF ANY, " +
+            "got RELATIONSHIP\">c</error>) as derp RETURN derp");
     }
 
     public void testRelationshipSizeWithVariableLength() {

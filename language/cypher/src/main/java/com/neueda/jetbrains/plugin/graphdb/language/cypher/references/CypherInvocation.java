@@ -21,7 +21,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.atoms.CypherSimpleType.ANY;
+import static java.util.stream.Collectors.toList;
 
 public interface CypherInvocation extends PsiElement, CypherTyped {
 
@@ -51,30 +53,38 @@ public interface CypherInvocation extends PsiElement, CypherTyped {
 
     }
 
-    default Optional<InvokableInformation> resolve() {
+    default List<InvokableInformation> resolve() {
         CypherMetadataProviderService svc = ServiceManager.getService(
                 getProject(),
                 CypherMetadataProviderService.class);
+        final List<InvokableInformation> matchedInvocations = newArrayList();
 
         if (this instanceof CypherProcedureInvocation) {
-            return svc.findProcedure(getFullName())
-                    .map(CypherProcedureElement::getInvokableInformation);
+            svc.findProcedure(getFullName())
+                .map(CypherProcedureElement::getInvokableInformation)
+                .ifPresent(info -> matchedInvocations.add(info));
+            return matchedInvocations;
         }
 
-        return CypherBuiltInFunctions.FUNCTIONS.stream()
-                .filter(f -> Objects.equals(f.getInvokable().getName(), getFullName()))
-                .findFirst()
-                .map(CypherBuiltInFunctionElement::getInvokable)
-                .map(Optional::of)
-                .orElseGet(() -> svc.findUserFunction(getFullName())
-                        .map(CypherUserFunctionElement::getInvokableInformation));
+        matchedInvocations.addAll(CypherBuiltInFunctions.FUNCTIONS.stream()
+            .filter(func -> Objects.equals(func.getInvokable().getName(), getFullName()))
+            .map(CypherBuiltInFunctionElement::getInvokable)
+            .filter(Objects::nonNull)
+            .collect(toList()));
+        if (matchedInvocations.isEmpty()) {
+            svc.findUserFunction(getFullName())
+                .map(CypherUserFunctionElement::getInvokableInformation)
+                .ifPresent(info -> matchedInvocations.add(info));
+        }
+        return matchedInvocations;
     }
 
     @Override
     default CypherType getType() {
-        return resolve()
-                .map(InvokableInformation::getReturnType)
-                .orElse(ANY);
+        return resolve().stream()
+            .findFirst()  // TODO: potential could be many return types for similar method
+            .map(InvokableInformation::getReturnType)
+            .orElse(ANY);
     }
 
     String getFullName();
