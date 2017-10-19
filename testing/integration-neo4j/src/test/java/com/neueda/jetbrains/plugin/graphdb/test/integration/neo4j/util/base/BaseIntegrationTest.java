@@ -12,6 +12,8 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.C
 import com.neueda.jetbrains.plugin.graphdb.test.database.neo4j.common.Neo4jServer;
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.server.Neo4j30ServerLoader;
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.server.Neo4j31ServerLoader;
+import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.server.Neo4j32ServerLoader;
+import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.server.Neo4j33ServerLoader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +24,8 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
 
     private static final String NEO4J30 = "neo4j30";
     private static final String NEO4J31 = "neo4j31";
+    private static final String NEO4J32 = "neo4j32";
+    private static final String NEO4J33 = "neo4j33";
     private static final String UNAVAILABLE_DS = "unavailable";
 
     private Components components;
@@ -99,41 +103,41 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
     public final class DataSources {
         private DataSourceApi neo4j30DataSource;
         private DataSourceApi neo4j31DataSource;
-        private DataSourceApi unavalableDataSource;
+        private DataSourceApi neo4j32DataSource;
+        private DataSourceApi neo4j33DataSource;
+        private DataSourceApi unavailableDataSource;
 
         public DataSourceApi neo4j30() {
             if (neo4j30DataSource == null) {
-                neo4j30DataSource = component().dataSources()
-                           .getDataSourceContainer()
-                           .getDataSource(NEO4J30)
-                           .orElseGet(() -> {
-                               DataSourceApi dataSource = createDataSource(NEO4J30, Neo4j30ServerLoader.getInstance());
-                               component().dataSources().getDataSourceContainer().addDataSource(dataSource);
-                               component().dataSources().refreshAllMetadata();
-                               return dataSource;
-                           });
+                neo4j30DataSource = getNeo4jDataSource(NEO4J30, Neo4j30ServerLoader.getInstance());
             }
             return neo4j30DataSource;
         }
 
         public DataSourceApi neo4j31() {
             if (neo4j31DataSource == null) {
-                neo4j31DataSource = component().dataSources()
-                           .getDataSourceContainer()
-                           .getDataSource(NEO4J31)
-                           .orElseGet(() -> {
-                               DataSourceApi dataSource = createDataSource(NEO4J31, Neo4j31ServerLoader.getInstance());
-                               component().dataSources().getDataSourceContainer().addDataSource(dataSource);
-                               component().dataSources().refreshAllMetadata();
-                               return dataSource;
-                           });
+                neo4j31DataSource = getNeo4jDataSource(NEO4J31, Neo4j31ServerLoader.getInstance());
             }
             return neo4j31DataSource;
         }
 
+        public DataSourceApi neo4j32() {
+            if (neo4j32DataSource == null) {
+                neo4j32DataSource = getNeo4jDataSource(NEO4J32, Neo4j32ServerLoader.getInstance());
+            }
+            return neo4j32DataSource;
+        }
+
+        public DataSourceApi neo4j33() {
+            if (neo4j33DataSource == null) {
+                neo4j33DataSource = getNeo4jDataSource(NEO4J33, Neo4j33ServerLoader.getInstance());
+            }
+            return neo4j33DataSource;
+        }
+
         public DataSourceApi unavailable() {
-            if (unavalableDataSource == null) {
-                unavalableDataSource = component().dataSources()
+            if (unavailableDataSource == null) {
+                unavailableDataSource = component().dataSources()
                         .getDataSourceContainer()
                         .getDataSource(UNAVAILABLE_DS)
                         .orElseGet(() -> {
@@ -144,7 +148,19 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
                             return dataSource;
                         });
             }
-            return unavalableDataSource;
+            return unavailableDataSource;
         }
+    }
+
+    private DataSourceApi getNeo4jDataSource(String dataSourceName, Neo4jServer server) {
+        return component().dataSources()
+            .getDataSourceContainer()
+            .getDataSource(dataSourceName)
+            .orElseGet(() -> {
+                DataSourceApi dataSource = createDataSource(dataSourceName, server);
+                component().dataSources().getDataSourceContainer().addDataSource(dataSource);
+                component().dataSources().refreshAllMetadata();
+                return dataSource;
+            });
     }
 }

@@ -1,19 +1,20 @@
 package com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.server;
 
-import java.io.File;
-import java.util.List;
-import java.util.concurrent.*;
-import java.util.stream.Collectors;
-
+import com.google.common.base.Throwables;
+import com.intellij.openapi.util.io.FileUtil;
+import com.neueda.jetbrains.plugin.graphdb.test.database.neo4j.common.Neo4jServer;
 import org.neo4j.driver.v1.Config;
 import org.xeustechnologies.jcl.JarClassLoader;
 import org.xeustechnologies.jcl.JclObjectFactory;
 import org.xeustechnologies.jcl.proxy.CglibProxyProvider;
 import org.xeustechnologies.jcl.proxy.ProxyProviderFactory;
 
-import com.google.common.base.Throwables;
-import com.intellij.openapi.util.io.FileUtil;
-import com.neueda.jetbrains.plugin.graphdb.test.database.neo4j.common.Neo4jServer;
+import java.io.File;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 public abstract class Neo4jServerLoader implements Neo4jServer {
 
@@ -71,12 +72,11 @@ public abstract class Neo4jServerLoader implements Neo4jServer {
             try {
                 neo4jServer = neo4jServerFuture.get();
             } catch (Exception e) {
-                Throwables.propagate(e);
+                throw new RuntimeException(e);
             }
             if (neo4jServer == null) {
                 throw new IllegalStateException("Neo4j server should not be null");
             }
-
             cleanupNeo4jKnownHosts(this);
             return neo4jServer;
         }
