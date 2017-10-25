@@ -18,7 +18,7 @@ public final class PsiTraversalUtilities {
 
     public static final class Cypher {
         public static PsiElement getCypherStatementAtOffset(PsiFile psiFile, int offset) {
-            PsiElement elementAtCaret = psiFile.findElementAt(offset);
+            PsiElement elementAtCaret = psiFile.findElementAt(offset == 0 ? offset : offset - 1);
             return PsiTraversalUtilities.getParentOfType(elementAtCaret, CypherStatementItem.class);
         }
     }
