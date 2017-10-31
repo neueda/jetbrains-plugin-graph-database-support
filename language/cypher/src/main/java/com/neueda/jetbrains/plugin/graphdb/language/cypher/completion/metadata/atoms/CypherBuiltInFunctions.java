@@ -27,7 +27,8 @@ public final class CypherBuiltInFunctions {
     );
     private static final List<CypherBuiltInFunctionElement> FUNCTIONS_SCALAR = Lists.newArrayList(
             element("size", "(list :: LIST OF ANY)", INTEGER),
-            element("size", "(pattern :: ANY)", INTEGER),
+            element("size", "(pattern :: PATH)", INTEGER),
+            element("size", "(string :: STRING)", INTEGER),
             element("length", "(path :: ANY)", INTEGER),
             element("length", "(string :: STRING)", INTEGER),
             element("type", "(relationship :: RELATIONSHIP)", STRING),
@@ -87,6 +88,7 @@ public final class CypherBuiltInFunctions {
     );
     private static final List<CypherBuiltInFunctionElement> FUNCTIONS_STRING = Lists.newArrayList(
             element("replace", "(original :: STRING, search :: STRING, replace :: STRING)", STRING),
+            element("substring", "(original :: STRING, start :: INTEGER)", STRING),
             element("substring", "(original :: STRING, start :: INTEGER, length = length(original) :: INTEGER)", STRING),
             element("left", "(original :: STRING, length :: INTEGER)", STRING),
             element("right", "(original :: STRING, length :: INTEGER)", STRING),
