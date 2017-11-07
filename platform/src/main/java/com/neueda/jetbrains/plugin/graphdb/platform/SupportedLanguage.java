@@ -1,7 +1,8 @@
 package com.neueda.jetbrains.plugin.graphdb.platform;
 
+import java.util.stream.Stream;
+
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.util.stream.Stream.of;
 
 public enum SupportedLanguage {
     CYPHER("Cypher");
@@ -18,7 +19,7 @@ public enum SupportedLanguage {
 
     public static boolean isSupported(String languageId) {
         checkNotNull(languageId, "'languageId' is undefined");
-        return of(values())
+        return Stream.of(values())
                 .anyMatch(language -> language.getLanguageId().equals(languageId));
     }
 
