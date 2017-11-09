@@ -22,9 +22,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParam
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params.ParametersService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.NameUtil;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Notifier;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.PsiTraversalUtilities;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants;
-import com.neueda.jetbrains.plugin.graphdb.platform.GraphLanguages;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -32,13 +30,28 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.neueda.jetbrains.plugin.graphdb.language.cypher.util.PsiTraversalUtilities.Cypher.getCypherStatementAtOffset;
+import static com.neueda.jetbrains.plugin.graphdb.platform.SupportedLanguage.isSupported;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+
 public class ExecuteQueryAction extends AnAction {
+
+    private static final String QUERY_EXECUTION_ERROR_TITLE = "Query execution error";
+    private static final String NO_PROJECT_PRESENT_MESSAGE = "No project present.";
+    private static final String NO_EDITOR_PRESENT_MESSAGE = "No editor present.";
+    private static final String NO_QUERY_SELECTED_MESSAGE = "No query selected";
+
+    private static final String EXECUTE_WITH_SHORTCUT_ACTION = "executeWithShortcut";
+    private static final String EXECUTE_WITH_MOUSE_ACTION = "executeWithMouse";
+    private static final String CONTENT_FROM_SELECT_ACTION = "contentFromSelect";
+    private static final String CONTENT_FROM_CARET_ACTION = "contentFromCaret";
 
     @Override
     public void update(AnActionEvent e) {
         Editor editor = e.getData(CommonDataKeys.EDITOR_EVEN_IF_INACTIVE);
 
-        if (editor != null) {
+        if (nonNull(editor)) {
             e.getPresentation().setEnabled(true);
         } else {
             e.getPresentation().setEnabled(false);
@@ -47,19 +60,19 @@ public class ExecuteQueryAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        Analytics.event("query", e.getInputEvent() instanceof KeyEvent ? "executeWithShortcut" : "executeWithMouse");
+        Analytics.event("query", getQueryExecutionAction(e));
 
         Project project = getEventProject(e);
         Editor editor = e.getData(CommonDataKeys.EDITOR_EVEN_IF_INACTIVE);
         PsiFile psiFile = e.getData(CommonDataKeys.PSI_FILE);
         VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
 
-        if (project == null) {
-            Notifier.error("Query execution error", "No project present.");
+        if (isNull(project)) {
+            Notifier.error(QUERY_EXECUTION_ERROR_TITLE, NO_PROJECT_PRESENT_MESSAGE);
             return;
         }
-        if (editor == null) {
-            Notifier.error("Query execution error", "No editor present.");
+        if (isNull(editor)) {
+            Notifier.error(QUERY_EXECUTION_ERROR_TITLE, NO_EDITOR_PRESENT_MESSAGE);
             return;
         }
 
@@ -72,10 +85,11 @@ public class ExecuteQueryAction extends AnAction {
         Map<String, Object> parameters = Collections.emptyMap();
         if (caret.hasSelection()) {
             query = caret.getSelectedText();
-        } else if (psiFile != null) {
-            if (psiFile.getLanguage().getID().equals(GraphLanguages.CYPHER)) {
-                PsiElement cypherStatement = getCypherStatement(psiFile, caret);
-                if (cypherStatement != null) {
+        } else if (nonNull(psiFile)) {
+            String languageId = psiFile.getLanguage().getID();
+            if (isSupported(languageId)) {
+                PsiElement cypherStatement = getCypherStatementAtOffset(psiFile, caret.getOffset());
+                if (nonNull(cypherStatement)) {
                     query = cypherStatement.getText();
                     try { // support parameters for PsiElement only
                         ParametersService service = ServiceManager.getService(project, ParametersService.class);
@@ -88,10 +102,10 @@ public class ExecuteQueryAction extends AnAction {
             }
         }
 
-        Analytics.event("query-content", caret.hasSelection() ? "contentFromSelect" : "contentFromCaret");
+        Analytics.event("query-content", caret.hasSelection() ? CONTENT_FROM_SELECT_ACTION : CONTENT_FROM_CARET_ACTION);
 
-        if (query == null) {
-            Notifier.error("Query execution error", "No query selected");
+        if (isNull(query)) {
+            Notifier.error(QUERY_EXECUTION_ERROR_TITLE, NO_QUERY_SELECTED_MESSAGE);
             return;
         }
 
@@ -100,11 +114,11 @@ public class ExecuteQueryAction extends AnAction {
         ExecuteQueryPayload executeQueryPayload = new ExecuteQueryPayload(query, parameters, editor);
         ConsoleToolWindow.ensureOpen(project);
 
-        if (virtualFile != null) {
+        if (nonNull(virtualFile)) {
             String fileName = virtualFile.getName();
             if (fileName.startsWith(GraphConstants.BOUND_DATA_SOURCE_PREFIX)) {
                 Optional<? extends DataSourceApi> boundDataSource = dataSourcesComponent.getDataSourceContainer()
-                           .findDataSource(NameUtil.extractDataSourceUUID(fileName));
+                        .findDataSource(NameUtil.extractDataSourceUUID(fileName));
                 if (boundDataSource.isPresent()) {
                     executeQuery(messageBus, boundDataSource.get(), executeQueryPayload);
                     return;
@@ -128,17 +142,17 @@ public class ExecuteQueryAction extends AnAction {
         }
     }
 
-    public void executeQuery(MessageBus messageBus, DataSourceApi dataSource, ExecuteQueryPayload payload) {
+    private String getQueryExecutionAction(AnActionEvent e) {
+        return e.getInputEvent() instanceof KeyEvent ? EXECUTE_WITH_SHORTCUT_ACTION : EXECUTE_WITH_MOUSE_ACTION;
+    }
+
+    private void executeQuery(MessageBus messageBus, DataSourceApi dataSource, ExecuteQueryPayload payload) {
         ExecuteQueryEvent executeQueryEvent = messageBus.syncPublisher(ExecuteQueryEvent.EXECUTE_QUERY_TOPIC);
         executeQueryEvent.executeQuery(dataSource, payload);
     }
 
     protected String decorateQuery(String query) {
         return query;
-    }
-
-    private PsiElement getCypherStatement(PsiFile psiFile, Caret caret) {
-        return PsiTraversalUtilities.Cypher.getCypherStatementAtOffset(psiFile, caret.getOffset());
     }
 
     private void sendParametersRetrievalErrorEvent(MessageBus messageBus, Exception exception, Editor editor) {
