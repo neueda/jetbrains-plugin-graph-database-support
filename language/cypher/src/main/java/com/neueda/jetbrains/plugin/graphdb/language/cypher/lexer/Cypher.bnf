@@ -336,9 +336,9 @@ PatternElementChain ::= RelationshipPattern NodePattern {pin=1}
 
 RelationshipPattern ::= LeftArrowHead? Dash RelationshipDetail? Dash RightArrowHead? {pin=2}
 
-RelationshipDetail ::= "[" Variable? "?"? RelationshipTypes? MaybeVariableLength Properties? "]" {pin=1}
+RelationshipDetail ::= "[" Variable? "?"? RelationshipTypes? MaybeVariableLength? Properties? "]" {pin=1}
 RelationshipTypes ::= ":" RelTypeName ("|" ":"? RelTypeName)* {pin=1}
-MaybeVariableLength ::= ("*" RangeLiteral?)?
+MaybeVariableLength ::= ("*" RangeLiteral?)
 
 NodePattern ::= "(" Variable? NodeLabels? Properties? ")" {pin=1}
 

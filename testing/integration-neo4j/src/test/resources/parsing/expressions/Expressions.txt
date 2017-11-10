@@ -531,8 +531,6 @@ Cypher file: FILE(0,923)
                                 PsiElement(-)('-')(743,744)
                               CypherRelationshipDetailImpl(RELATIONSHIP_DETAIL)(744,746)
                                 PsiElement([)('[')(744,745)
-                                CypherMaybeVariableLengthImpl(MAYBE_VARIABLE_LENGTH)(745,745)
-                                  <empty list>
                                 PsiElement(])(']')(745,746)
                               CypherDashImpl(DASH)(746,747)
                                 PsiElement(-)('-')(746,747)

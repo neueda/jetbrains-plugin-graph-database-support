@@ -2599,29 +2599,21 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ("*" RangeLiteral?)?
+  // "*" RangeLiteral?
   public static boolean MaybeVariableLength(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MaybeVariableLength")) return false;
-    Marker m = enter_section_(b, l, _NONE_, MAYBE_VARIABLE_LENGTH, "<maybe variable length>");
-    MaybeVariableLength_0(b, l + 1);
-    exit_section_(b, l, m, true, false, null);
-    return true;
-  }
-
-  // "*" RangeLiteral?
-  private static boolean MaybeVariableLength_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MaybeVariableLength_0")) return false;
+    if (!nextTokenIs(b, OP_MUL)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, OP_MUL);
-    r = r && MaybeVariableLength_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
+    r = r && MaybeVariableLength_1(b, l + 1);
+    exit_section_(b, m, MAYBE_VARIABLE_LENGTH, r);
     return r;
   }
 
   // RangeLiteral?
-  private static boolean MaybeVariableLength_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MaybeVariableLength_0_1")) return false;
+  private static boolean MaybeVariableLength_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MaybeVariableLength_1")) return false;
     RangeLiteral(b, l + 1);
     return true;
   }
@@ -3628,7 +3620,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "[" Variable? "?"? RelationshipTypes? MaybeVariableLength Properties? "]"
+  // "[" Variable? "?"? RelationshipTypes? MaybeVariableLength? Properties? "]"
   public static boolean RelationshipDetail(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RelationshipDetail")) return false;
     if (!nextTokenIs(b, BRACKET_SQUAREOPEN)) return false;
@@ -3639,7 +3631,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
     r = r && report_error_(b, RelationshipDetail_1(b, l + 1));
     r = p && report_error_(b, RelationshipDetail_2(b, l + 1)) && r;
     r = p && report_error_(b, RelationshipDetail_3(b, l + 1)) && r;
-    r = p && report_error_(b, MaybeVariableLength(b, l + 1)) && r;
+    r = p && report_error_(b, RelationshipDetail_4(b, l + 1)) && r;
     r = p && report_error_(b, RelationshipDetail_5(b, l + 1)) && r;
     r = p && consumeToken(b, BRACKET_SQUARECLOSE) && r;
     exit_section_(b, l, m, r, p, null);
@@ -3664,6 +3656,13 @@ public class CypherParser implements PsiParser, LightPsiParser {
   private static boolean RelationshipDetail_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RelationshipDetail_3")) return false;
     RelationshipTypes(b, l + 1);
+    return true;
+  }
+
+  // MaybeVariableLength?
+  private static boolean RelationshipDetail_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RelationshipDetail_4")) return false;
+    MaybeVariableLength(b, l + 1);
     return true;
   }
 
