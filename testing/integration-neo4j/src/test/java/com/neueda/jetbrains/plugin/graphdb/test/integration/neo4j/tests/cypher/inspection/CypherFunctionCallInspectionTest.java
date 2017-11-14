@@ -209,4 +209,8 @@ public class CypherFunctionCallInspectionTest extends BaseInspectionTest {
         addDataSourceFileAndCheck("MATCH (a)-[c*1..1]->(b) WITH size(c) as derp RETURN derp");
     }
 
+    public void testRelationshipSizeWithStar() {
+        addDataSourceFileAndCheck("MATCH (a)-[c*]->(b) WITH size(c) as derp RETURN derp");
+    }
+
 }

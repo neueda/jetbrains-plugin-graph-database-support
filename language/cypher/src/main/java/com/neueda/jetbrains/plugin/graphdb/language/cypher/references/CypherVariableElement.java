@@ -47,6 +47,6 @@ public interface CypherVariableElement extends CypherNamedElement, CypherTyped {
 
     default CypherType resolveRelationshipType(CypherRelationshipDetail relationshipDetail) {
         CypherMaybeVariableLength maybeVariableLength = relationshipDetail.getMaybeVariableLength();
-        return nonNull(maybeVariableLength.getRangeLiteral()) ? CypherList.of(RELATIONSHIP) : RELATIONSHIP;
+        return nonNull(maybeVariableLength) ? CypherList.of(RELATIONSHIP) : RELATIONSHIP;
     }
 }
