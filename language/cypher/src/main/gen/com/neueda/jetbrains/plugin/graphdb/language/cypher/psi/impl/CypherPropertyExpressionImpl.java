@@ -178,6 +178,12 @@ public class CypherPropertyExpressionImpl extends ASTWrapperPsiElement implement
 
   @Override
   @Nullable
+  public CypherUnaryOperator getUnaryOperator() {
+    return findChildByClass(CypherUnaryOperator.class);
+  }
+
+  @Override
+  @Nullable
   public CypherVariable getVariable() {
     return findChildByClass(CypherVariable.class);
   }

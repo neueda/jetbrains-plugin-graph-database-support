@@ -11,4 +11,8 @@ public class PatternsParsingTest extends BaseParsingTest {
     public void testPatterns() {
         doTest(true);
     }
+
+    public void testPatternsWithErrors() {
+        doTest(true);
+    }
 }

@@ -34,8 +34,8 @@ public class CypherNumberLiteralImpl extends ASTWrapperPsiElement implements Cyp
 
   @Override
   @Nullable
-  public CypherSignedIntegerLiteral getSignedIntegerLiteral() {
-    return findChildByClass(CypherSignedIntegerLiteral.class);
+  public CypherIntegerLiteral getIntegerLiteral() {
+    return findChildByClass(CypherIntegerLiteral.class);
   }
 
 }

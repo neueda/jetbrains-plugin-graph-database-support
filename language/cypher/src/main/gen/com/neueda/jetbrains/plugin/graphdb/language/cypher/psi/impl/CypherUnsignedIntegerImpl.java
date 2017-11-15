@@ -11,14 +11,14 @@ import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherType
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
-public class CypherUnsignedDecimalIntegerImpl extends ASTWrapperPsiElement implements CypherUnsignedDecimalInteger {
+public class CypherUnsignedIntegerImpl extends ASTWrapperPsiElement implements CypherUnsignedInteger {
 
-  public CypherUnsignedDecimalIntegerImpl(ASTNode node) {
+  public CypherUnsignedIntegerImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CypherVisitor visitor) {
-    visitor.visitUnsignedDecimalInteger(this);
+    visitor.visitUnsignedInteger(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

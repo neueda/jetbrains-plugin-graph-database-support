@@ -11,14 +11,14 @@ import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherType
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
-public class CypherSignedIntegerLiteralImpl extends ASTWrapperPsiElement implements CypherSignedIntegerLiteral {
+public class CypherUnsignedDoubleImpl extends ASTWrapperPsiElement implements CypherUnsignedDouble {
 
-  public CypherSignedIntegerLiteralImpl(ASTNode node) {
+  public CypherUnsignedDoubleImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CypherVisitor visitor) {
-    visitor.visitSignedIntegerLiteral(this);
+    visitor.visitUnsignedDouble(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -28,8 +28,8 @@ public class CypherSignedIntegerLiteralImpl extends ASTWrapperPsiElement impleme
 
   @Override
   @NotNull
-  public CypherSignedDecimalInteger getSignedDecimalInteger() {
-    return findNotNullChildByClass(CypherSignedDecimalInteger.class);
+  public PsiElement getLDecimal() {
+    return findNotNullChildByType(L_DECIMAL);
   }
 
 }

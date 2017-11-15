@@ -28,8 +28,8 @@ public class CypherRangeLiteralImpl extends ASTWrapperPsiElement implements Cyph
 
   @Override
   @NotNull
-  public List<CypherUnsignedIntegerLiteral> getUnsignedIntegerLiteralList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherUnsignedIntegerLiteral.class);
+  public List<CypherIntegerLiteral> getIntegerLiteralList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherIntegerLiteral.class);
   }
 
 }

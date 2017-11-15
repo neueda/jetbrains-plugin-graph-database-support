@@ -12,6 +12,6 @@ public interface CypherNumberLiteral extends CypherTypePropagator {
   CypherDoubleLiteral getDoubleLiteral();
 
   @Nullable
-  CypherSignedIntegerLiteral getSignedIntegerLiteral();
+  CypherIntegerLiteral getIntegerLiteral();
 
 }

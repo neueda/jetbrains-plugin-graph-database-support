@@ -49,6 +49,11 @@ AND [expr, expr]
 AND (n)-[]-()
 AND (expr)
 AND func()
+AND func() -1
+AND func() - 1
+AND func() --1
+AND func(-1)
+AND func(1)
 AND func(var)
 AND func(var, var)
 AND func(DISTINCT var)
@@ -56,6 +61,8 @@ AND func(DISTINCT var, var)
 AND var
 AND 1.2
 AND 1
+AND -1.2
+AND -1
 AND 'str'
 AND "str"
 AND "str \n"

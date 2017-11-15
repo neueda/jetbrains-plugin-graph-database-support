@@ -9,6 +9,6 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.Cyph
 public interface CypherDoubleLiteral extends CypherFloatYielding {
 
   @NotNull
-  PsiElement getLDecimal();
+  CypherUnsignedDouble getUnsignedDouble();
 
 }

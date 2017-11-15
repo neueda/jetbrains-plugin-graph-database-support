@@ -28,8 +28,8 @@ public class CypherLiteralIdsImpl extends ASTWrapperPsiElement implements Cypher
 
   @Override
   @NotNull
-  public List<CypherUnsignedIntegerLiteral> getUnsignedIntegerLiteralList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherUnsignedIntegerLiteral.class);
+  public List<CypherIntegerLiteral> getIntegerLiteralList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherIntegerLiteral.class);
   }
 
 }

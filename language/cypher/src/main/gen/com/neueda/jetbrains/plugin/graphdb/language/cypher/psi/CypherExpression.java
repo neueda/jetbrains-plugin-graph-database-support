@@ -90,6 +90,9 @@ public interface CypherExpression extends CypherTypePropagator {
   List<CypherStringLiteral> getStringLiteralList();
 
   @NotNull
+  List<CypherUnaryOperator> getUnaryOperatorList();
+
+  @NotNull
   List<CypherVariable> getVariableList();
 
 }

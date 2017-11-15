@@ -33,7 +33,6 @@ public interface CypherTypes {
   IElementType CYPHER_OPTION = new CypherElementType("CYPHER_OPTION");
   IElementType DASH = new CypherElementType("DASH");
   IElementType DELETE = new CypherElementType("DELETE");
-  IElementType DIGIT_STRING = new CypherElementType("DIGIT_STRING");
   IElementType DOUBLE_LITERAL = new CypherElementType("DOUBLE_LITERAL");
   IElementType DROP_INDEX = new CypherElementType("DROP_INDEX");
   IElementType DROP_NODE_PROPERTY_EXISTENCE_CONSTRAINT = new CypherElementType("DROP_NODE_PROPERTY_EXISTENCE_CONSTRAINT");
@@ -56,6 +55,7 @@ public interface CypherTypes {
   IElementType ID_IN_COLL = new CypherElementType("ID_IN_COLL");
   IElementType ID_LOOKUP = new CypherElementType("ID_LOOKUP");
   IElementType INDEX_QUERY = new CypherElementType("INDEX_QUERY");
+  IElementType INTEGER_LITERAL = new CypherElementType("INTEGER_LITERAL");
   IElementType LABEL_NAME = new CypherElementType("LABEL_NAME");
   IElementType LEFT_ARROW_HEAD = new CypherElementType("LEFT_ARROW_HEAD");
   IElementType LIMIT = new CypherElementType("LIMIT");
@@ -130,8 +130,6 @@ public interface CypherTypes {
   IElementType SET_ITEM = new CypherElementType("SET_ITEM");
   IElementType SHORTEST_PATH_FUNCTION_INVOCATION = new CypherElementType("SHORTEST_PATH_FUNCTION_INVOCATION");
   IElementType SHORTEST_PATH_PATTERN = new CypherElementType("SHORTEST_PATH_PATTERN");
-  IElementType SIGNED_DECIMAL_INTEGER = new CypherElementType("SIGNED_DECIMAL_INTEGER");
-  IElementType SIGNED_INTEGER_LITERAL = new CypherElementType("SIGNED_INTEGER_LITERAL");
   IElementType SIMPLE_PROCEDURE_RESULT = new CypherElementType("SIMPLE_PROCEDURE_RESULT");
   IElementType SINGLE_FUNCTION_INVOCATION = new CypherElementType("SINGLE_FUNCTION_INVOCATION");
   IElementType SINGLE_QUERY = new CypherElementType("SINGLE_QUERY");
@@ -143,11 +141,12 @@ public interface CypherTypes {
   IElementType STATEMENT_ITEM = new CypherElementType("STATEMENT_ITEM");
   IElementType STRING_LITERAL = new CypherElementType("STRING_LITERAL");
   IElementType SYMBOLIC_NAME_STRING = new CypherElementType("SYMBOLIC_NAME_STRING");
+  IElementType UNARY_OPERATOR = new CypherElementType("UNARY_OPERATOR");
   IElementType UNESCAPED_SYMBOLIC_NAME_STRING = new CypherElementType("UNESCAPED_SYMBOLIC_NAME_STRING");
   IElementType UNION = new CypherElementType("UNION");
   IElementType UNIQUE_CONSTRAINT_SYNTAX = new CypherElementType("UNIQUE_CONSTRAINT_SYNTAX");
-  IElementType UNSIGNED_DECIMAL_INTEGER = new CypherElementType("UNSIGNED_DECIMAL_INTEGER");
-  IElementType UNSIGNED_INTEGER_LITERAL = new CypherElementType("UNSIGNED_INTEGER_LITERAL");
+  IElementType UNSIGNED_DOUBLE = new CypherElementType("UNSIGNED_DOUBLE");
+  IElementType UNSIGNED_INTEGER = new CypherElementType("UNSIGNED_INTEGER");
   IElementType UNWIND = new CypherElementType("UNWIND");
   IElementType VARIABLE = new CypherElementType("VARIABLE");
   IElementType VARIABLE_SELECTOR = new CypherElementType("VARIABLE_SELECTOR");
@@ -347,9 +346,6 @@ public interface CypherTypes {
       else if (type == DELETE) {
         return new CypherDeleteImpl(node);
       }
-      else if (type == DIGIT_STRING) {
-        return new CypherDigitStringImpl(node);
-      }
       else if (type == DOUBLE_LITERAL) {
         return new CypherDoubleLiteralImpl(node);
       }
@@ -415,6 +411,9 @@ public interface CypherTypes {
       }
       else if (type == INDEX_QUERY) {
         return new CypherIndexQueryImpl(node);
+      }
+      else if (type == INTEGER_LITERAL) {
+        return new CypherIntegerLiteralImpl(node);
       }
       else if (type == LABEL_NAME) {
         return new CypherLabelNameImpl(node);
@@ -638,12 +637,6 @@ public interface CypherTypes {
       else if (type == SHORTEST_PATH_PATTERN) {
         return new CypherShortestPathPatternImpl(node);
       }
-      else if (type == SIGNED_DECIMAL_INTEGER) {
-        return new CypherSignedDecimalIntegerImpl(node);
-      }
-      else if (type == SIGNED_INTEGER_LITERAL) {
-        return new CypherSignedIntegerLiteralImpl(node);
-      }
       else if (type == SIMPLE_PROCEDURE_RESULT) {
         return new CypherSimpleProcedureResultImpl(node);
       }
@@ -677,6 +670,9 @@ public interface CypherTypes {
       else if (type == SYMBOLIC_NAME_STRING) {
         return new CypherSymbolicNameStringImpl(node);
       }
+      else if (type == UNARY_OPERATOR) {
+        return new CypherUnaryOperatorImpl(node);
+      }
       else if (type == UNESCAPED_SYMBOLIC_NAME_STRING) {
         return new CypherUnescapedSymbolicNameStringImpl(node);
       }
@@ -686,11 +682,11 @@ public interface CypherTypes {
       else if (type == UNIQUE_CONSTRAINT_SYNTAX) {
         return new CypherUniqueConstraintSyntaxImpl(node);
       }
-      else if (type == UNSIGNED_DECIMAL_INTEGER) {
-        return new CypherUnsignedDecimalIntegerImpl(node);
+      else if (type == UNSIGNED_DOUBLE) {
+        return new CypherUnsignedDoubleImpl(node);
       }
-      else if (type == UNSIGNED_INTEGER_LITERAL) {
-        return new CypherUnsignedIntegerLiteralImpl(node);
+      else if (type == UNSIGNED_INTEGER) {
+        return new CypherUnsignedIntegerImpl(node);
       }
       else if (type == UNWIND) {
         return new CypherUnwindImpl(node);

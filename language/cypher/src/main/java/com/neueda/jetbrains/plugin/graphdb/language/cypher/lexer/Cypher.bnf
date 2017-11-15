@@ -97,8 +97,8 @@
     // literals
     l_identifier="regexp:[a-zA-Z_][a-zA-Z_$0-9]*"
     l_identifier_text="regexp:\`[^`]+\`"
-    l_decimal="regexp:[+-]?(([1-9]\d+)|([0-9]))\.\d+"
-    l_integer="regexp:[+-]?(([1-9]\d+)|([0-9]))"
+    l_decimal="regexp:(0|[1-9][0-9]*)\.[0-9]+"
+    l_integer="regexp:0|[1-9][0-9]*"
     l_string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
 
     // base
@@ -232,7 +232,7 @@ Clause ::= LoadCSV
 
 //-- BulkImportQuery
 BulkImportQuery ::= PeriodicCommitHint LoadCSVQuery
-PeriodicCommitHint ::= K_USING K_PERIODIC K_COMMIT SignedIntegerLiteral?
+PeriodicCommitHint ::= K_USING K_PERIODIC K_COMMIT IntegerLiteral?
 LoadCSVQuery ::= LoadCSV Clause*
 
 /*************************
@@ -252,7 +252,7 @@ RelationshipLookup ::= (K_RELATIONSHIP | K_REL) (IdentifiedIndexLookup | IndexQu
 IdentifiedIndexLookup ::= ":" SymbolicNameString "(" SymbolicNameString "=" (StringLiteral | Parameter) ")"
 IndexQuery ::= ":" SymbolicNameString "(" (StringLiteral | Parameter) ")"
 IdLookup ::= "(" (LiteralIds | Parameter | "*") ")"
-LiteralIds ::= UnsignedIntegerLiteral ("," UnsignedIntegerLiteral)*
+LiteralIds ::= IntegerLiteral ("," IntegerLiteral)*
 
 //-- Match
 Match ::= ((K_OPTIONAL K_MATCH) | K_MATCH) Pattern Hint* Where?
@@ -381,7 +381,8 @@ private Expression3 ::= Expression2 (
   | (K_IS K_NOT K_NULL)
 )*
 private Expression2 ::= Expression1 (PropertyLookup | NodeLabels)*
-private Expression1 ::= NumberLiteral
+private Expression1 ::= UnaryOperator
+              | NumberLiteral
               | StringLiteral
               | Parameter
               | BooleanLiteral
@@ -408,6 +409,11 @@ private Expression1 ::= NumberLiteral
               | ParenthesizedExpression
               | FunctionInvocation
               | Variable
+
+
+UnaryOperator ::= ("-" | "+") NumberLiteral {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherTypePropagator"
+}
 
 Array ::= ("[" Expression? ("," Expression)* "]") {
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherListYielding"
@@ -505,8 +511,8 @@ Parameter ::= NewParameter | OldParameter {
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherAnyYielding"
     methods=[getParameterName]
 }
-OldParameter ::= "{" (SymbolicNameString | UnsignedDecimalInteger) "}"
-NewParameter ::= "$" (SymbolicNameString | UnsignedDecimalInteger)
+OldParameter ::= "{" (SymbolicNameString | UnsignedInteger) "}"
+NewParameter ::= "$" (SymbolicNameString | UnsignedInteger)
 NodeLabel ::= ":" LabelName
 StringLiteral ::= l_string {
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherStringYielding"
@@ -533,21 +539,22 @@ PropertyKeyName ::= SymbolicNameString {
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherNamedElement"
     methods=[getName setName getNameIdentifier getReferences]
 }
-RangeLiteral ::= (UnsignedIntegerLiteral? ".." UnsignedIntegerLiteral?) | (UnsignedIntegerLiteral)
+RangeLiteral ::= (IntegerLiteral? ".." IntegerLiteral?) | (IntegerLiteral)
 MapLiteral ::= "{" (PropertyKeyName ":" Expression)? ("," PropertyKeyName ":" Expression)* "}" {
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherMapYielding"
 }
 NodeLabels ::= NodeLabel+
-//SignedIntegerLiteral ::= HexInteger | OctalInteger | DecimalInteger // todo: this is real implementation
-SignedIntegerLiteral ::= SignedDecimalInteger {
-    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherIntegerYielding"
-}
-UnsignedIntegerLiteral ::= UnsignedDecimalInteger
-NumberLiteral ::= DoubleLiteral | SignedIntegerLiteral {
+
+NumberLiteral ::= DoubleLiteral | IntegerLiteral {
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherTypePropagator"
 }
-DoubleLiteral ::= l_decimal {// todo: make real double here
+
+DoubleLiteral ::= UnsignedDouble {// todo: make real double here
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherFloatYielding"
+}
+
+IntegerLiteral ::= UnsignedInteger {
+    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherIntegerYielding"
 }
 
 /*************************
@@ -636,9 +643,8 @@ SymbolicNameString ::=  UnescapedSymbolicNameString
     | K_COUNT
 EscapedSymbolicNameString ::= l_identifier_text
 UnescapedSymbolicNameString ::= l_identifier
-UnsignedDecimalInteger ::= l_integer
-SignedDecimalInteger ::= l_integer
 Dash ::= "-" // todo: migrate all variants
 LeftArrowHead ::= "<" // todo: migrate all variants
 RightArrowHead ::= ">" // todo: migrate all variants
-DigitString ::= l_integer
+UnsignedDouble ::= l_decimal
+UnsignedInteger ::= l_integer

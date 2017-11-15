@@ -9,11 +9,12 @@ public interface CypherTypePropagator extends CypherTyped {
 
     @Override
     default CypherType getType() {
-        if (getChildren().length != 1) {
+        PsiElement[] children = getChildren();
+        if (children.length != 1) {
             return ANY;
         }
 
-        PsiElement child = getFirstChild();
+        PsiElement child = children[0];
         if (child instanceof CypherTyped) {
             return ((CypherTyped) child).getType();
         }

@@ -28,8 +28,8 @@ public class CypherPeriodicCommitHintImpl extends ASTWrapperPsiElement implement
 
   @Override
   @Nullable
-  public CypherSignedIntegerLiteral getSignedIntegerLiteral() {
-    return findChildByClass(CypherSignedIntegerLiteral.class);
+  public CypherIntegerLiteral getIntegerLiteral() {
+    return findChildByClass(CypherIntegerLiteral.class);
   }
 
   @Override

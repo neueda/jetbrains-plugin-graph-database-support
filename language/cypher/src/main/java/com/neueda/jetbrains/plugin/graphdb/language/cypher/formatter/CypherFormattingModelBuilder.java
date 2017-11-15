@@ -77,6 +77,8 @@ public class CypherFormattingModelBuilder implements FormattingModelBuilder {
                 .afterInside(NODE_LABEL, HINT).none()
                 .afterInside(OP_MUL, MAYBE_VARIABLE_LENGTH).none()
 
+                .betweenInside(OP_PLUS, NUMBER_LITERAL, UNARY_OPERATOR).none()
+                .betweenInside(OP_MINUS, NUMBER_LITERAL, UNARY_OPERATOR).none()
                 .around(OP_PLUS).spaces(1)
                 .around(OP_MINUS).spaces(1)
                 .around(OP_MUL).spaces(1)

@@ -34,8 +34,8 @@ public class CypherNewParameterImpl extends ASTWrapperPsiElement implements Cyph
 
   @Override
   @Nullable
-  public CypherUnsignedDecimalInteger getUnsignedDecimalInteger() {
-    return findChildByClass(CypherUnsignedDecimalInteger.class);
+  public CypherUnsignedInteger getUnsignedInteger() {
+    return findChildByClass(CypherUnsignedInteger.class);
   }
 
 }

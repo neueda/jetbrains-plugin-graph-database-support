@@ -11,6 +11,6 @@ public interface CypherOldParameter extends PsiElement {
   CypherSymbolicNameString getSymbolicNameString();
 
   @Nullable
-  CypherUnsignedDecimalInteger getUnsignedDecimalInteger();
+  CypherUnsignedInteger getUnsignedInteger();
 
 }
