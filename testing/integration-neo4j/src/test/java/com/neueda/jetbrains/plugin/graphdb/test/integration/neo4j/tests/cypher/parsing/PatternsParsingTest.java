@@ -12,7 +12,4 @@ public class PatternsParsingTest extends BaseParsingTest {
         doTest(true);
     }
 
-    public void testPatternsWithErrors() {
-        doTest(true);
-    }
 }
