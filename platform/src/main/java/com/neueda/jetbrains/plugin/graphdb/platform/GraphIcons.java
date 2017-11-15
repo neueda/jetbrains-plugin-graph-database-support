@@ -34,6 +34,10 @@ public final class GraphIcons {
         public static final Icon USER_FUNCTION = AllIcons.Nodes.Function;
     }
 
+    public static final class Gutter {
+        public static final Icon RUN = AllIcons.General.Run;
+    }
+
     private GraphIcons() {
     }
 }

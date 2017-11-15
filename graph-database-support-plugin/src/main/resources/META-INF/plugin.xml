@@ -164,6 +164,7 @@
                          implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.inspections.CypherFunctionCallInspection"/>
 
         <codeInsight.parameterInfo language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.editor.CypherParameterInfoHandler"/>
+        <codeInsight.lineMarkerProvider language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.jetbrains.linemarker.QueryLineMarkerProvider"/>
 
         <codeStyleSettingsProvider implementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.formatter.CypherCodeStyleSettingsProvider"/>
         <langCodeStyleSettingsProvider implementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.formatter.CypherLanguageCodeStyleSettingsProvider"/>
