@@ -23,7 +23,9 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params.Parameter
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.NameUtil;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Notifier;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants;
+import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Collections;
@@ -47,6 +49,13 @@ public class ExecuteQueryAction extends AnAction {
     private static final String CONTENT_FROM_SELECT_ACTION = "contentFromSelect";
     private static final String CONTENT_FROM_CARET_ACTION = "contentFromCaret";
 
+    public ExecuteQueryAction() {
+    }
+
+    public ExecuteQueryAction(@Nullable String text, @Nullable String description, @Nullable Icon icon) {
+        super(text, description, icon);
+    }
+
     @Override
     public void update(AnActionEvent e) {
         Editor editor = e.getData(CommonDataKeys.EDITOR_EVEN_IF_INACTIVE);
@@ -58,87 +67,123 @@ public class ExecuteQueryAction extends AnAction {
         }
     }
 
-    @Override
-    public void actionPerformed(AnActionEvent e) {
-        Analytics.event("query", getQueryExecutionAction(e));
-
-        Project project = getEventProject(e);
-        Editor editor = e.getData(CommonDataKeys.EDITOR_EVEN_IF_INACTIVE);
-        PsiFile psiFile = e.getData(CommonDataKeys.PSI_FILE);
-        VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
-
-        if (isNull(project)) {
-            Notifier.error(QUERY_EXECUTION_ERROR_TITLE, NO_PROJECT_PRESENT_MESSAGE);
-            return;
-        }
-        if (isNull(editor)) {
-            Notifier.error(QUERY_EXECUTION_ERROR_TITLE, NO_EDITOR_PRESENT_MESSAGE);
-            return;
-        }
-
-        MessageBus messageBus = project.getMessageBus();
-        DataSourcesComponent dataSourcesComponent = project.getComponent(DataSourcesComponent.class);
-
-        Caret caret = editor.getCaretModel().getPrimaryCaret();
-
+    ExecuteQueryPayload createQueryPayload(ActionState state) {
         String query = null;
         Map<String, Object> parameters = Collections.emptyMap();
-        if (caret.hasSelection()) {
-            query = caret.getSelectedText();
-        } else if (nonNull(psiFile)) {
-            String languageId = psiFile.getLanguage().getID();
+        if (state.getCaret().hasSelection()) {
+            query = state.getCaret().getSelectedText();
+        } else if (nonNull(state.getPsiFile())) {
+            String languageId = state.getPsiFile().getLanguage().getID();
             if (isSupported(languageId)) {
-                PsiElement cypherStatement = getCypherStatementAtOffset(psiFile, caret.getOffset());
+                PsiElement cypherStatement = getCypherStatementAtOffset(state.getPsiFile(), state.getCaret().getOffset());
                 if (nonNull(cypherStatement)) {
                     query = cypherStatement.getText();
                     try { // support parameters for PsiElement only
-                        ParametersService service = ServiceManager.getService(project, ParametersService.class);
+                        ParametersService service = ServiceManager.getService(state.getProject(), ParametersService.class);
                         parameters = service.getParameters(cypherStatement);
                     } catch (Exception exception) {
-                        sendParametersRetrievalErrorEvent(messageBus, exception, editor);
-                        return;
+                        sendParametersRetrievalErrorEvent(state.getMessageBus(), exception, state.getEditor());
                     }
                 }
             }
         }
 
-        Analytics.event("query-content", caret.hasSelection() ? CONTENT_FROM_SELECT_ACTION : CONTENT_FROM_CARET_ACTION);
+        Analytics.event("query-content", state.getCaret().hasSelection() ? CONTENT_FROM_SELECT_ACTION : CONTENT_FROM_CARET_ACTION);
 
         if (isNull(query)) {
             Notifier.error(QUERY_EXECUTION_ERROR_TITLE, NO_QUERY_SELECTED_MESSAGE);
+            return null;
+        }
+        query = decorateQuery(query);
+
+        return new ExecuteQueryPayload(query, parameters, state.getEditor());
+    }
+
+    class ActionState {
+
+        private final Project project;
+        private final Editor editor;
+        private final PsiFile psiFile;
+        private final VirtualFile virtualFile;
+
+        public ActionState(AnActionEvent e) {
+            this.project = getEventProject(e);
+            this.editor = e.getData(CommonDataKeys.EDITOR_EVEN_IF_INACTIVE);
+            this.psiFile = e.getData(CommonDataKeys.PSI_FILE);
+            this.virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
+        }
+
+        public PsiFile getPsiFile() {
+            return psiFile;
+        }
+
+        public VirtualFile getVirtualFile() {
+            return virtualFile;
+        }
+
+        public MessageBus getMessageBus() {
+            return project.getMessageBus();
+        }
+
+        public Caret getCaret() {
+            return editor.getCaretModel().getPrimaryCaret();
+        }
+
+        public Project getProject() {
+            return project;
+        }
+
+        public Editor getEditor() {
+            return editor;
+        }
+    }
+
+
+    @Override
+    public void actionPerformed(AnActionEvent e) {
+        Analytics.event("query", getQueryExecutionAction(e));
+        ActionState state = new ActionState(e);
+
+        if (isNull(state.getProject())) {
+            Notifier.error(QUERY_EXECUTION_ERROR_TITLE, NO_PROJECT_PRESENT_MESSAGE);
+            return;
+        }
+        if (isNull(state.getEditor())) {
+            Notifier.error(QUERY_EXECUTION_ERROR_TITLE, NO_EDITOR_PRESENT_MESSAGE);
             return;
         }
 
-        query = decorateQuery(query);
+        ExecuteQueryPayload executeQueryPayload = createQueryPayload(state);
+        if (nonNull(executeQueryPayload)) {
+            ConsoleToolWindow.ensureOpen(state.getProject());
 
-        ExecuteQueryPayload executeQueryPayload = new ExecuteQueryPayload(query, parameters, editor);
-        ConsoleToolWindow.ensureOpen(project);
-
-        if (nonNull(virtualFile)) {
-            String fileName = virtualFile.getName();
-            if (fileName.startsWith(GraphConstants.BOUND_DATA_SOURCE_PREFIX)) {
-                Optional<? extends DataSourceApi> boundDataSource = dataSourcesComponent.getDataSourceContainer()
-                        .findDataSource(NameUtil.extractDataSourceUUID(fileName));
-                if (boundDataSource.isPresent()) {
-                    executeQuery(messageBus, boundDataSource.get(), executeQueryPayload);
-                    return;
+            DataSourcesComponent dataSourcesComponent = state.getProject().getComponent(DataSourcesComponent.class);
+            if (nonNull(state.getVirtualFile())) {
+                String fileName = state.getVirtualFile().getName();
+                if (fileName.startsWith(GraphConstants.BOUND_DATA_SOURCE_PREFIX)) {
+                    Optional<? extends DataSourceApi> boundDataSource = dataSourcesComponent.getDataSourceContainer()
+                            .findDataSource(NameUtil.extractDataSourceUUID(fileName));
+                    if (boundDataSource.isPresent()) {
+                        executeQuery(state.getMessageBus(), boundDataSource.get(), executeQueryPayload);
+                        return;
+                    }
                 }
             }
-        }
 
-        ListPopup popup = JBPopupFactory.getInstance().createActionGroupPopup(
-                "Choose Data Source",
-                new ChooseDataSourceActionGroup(messageBus, dataSourcesComponent, executeQueryPayload),
-                e.getDataContext(),
-                JBPopupFactory.ActionSelectionAid.SPEEDSEARCH,
-                false
-        );
+            ListPopup popup = JBPopupFactory.getInstance().createActionGroupPopup(
+                    "Choose Data Source",
+                    new ChooseDataSourceActionGroup(state.getMessageBus(), dataSourcesComponent, executeQueryPayload),
+                    e.getDataContext(),
+                    JBPopupFactory.ActionSelectionAid.SPEEDSEARCH,
+                    false
+            );
 
-        Component eventComponent = e.getInputEvent().getComponent();
-        if (eventComponent instanceof ActionButtonComponent) {
-            popup.showUnderneathOf(eventComponent);
-        } else {
-            popup.showInBestPositionFor(e.getDataContext());
+            Component eventComponent = e.getInputEvent().getComponent();
+            if (eventComponent instanceof ActionButtonComponent) {
+                popup.showUnderneathOf(eventComponent);
+            } else {
+                popup.showInBestPositionFor(e.getDataContext());
+            }
         }
     }
 

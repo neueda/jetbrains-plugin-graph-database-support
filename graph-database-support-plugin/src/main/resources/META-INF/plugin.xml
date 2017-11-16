@@ -164,13 +164,17 @@
                          implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.inspections.CypherFunctionCallInspection"/>
 
         <codeInsight.parameterInfo language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.editor.CypherParameterInfoHandler"/>
-        <codeInsight.lineMarkerProvider language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.jetbrains.linemarker.QueryLineMarkerProvider"/>
 
         <codeStyleSettingsProvider implementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.formatter.CypherCodeStyleSettingsProvider"/>
         <langCodeStyleSettingsProvider implementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.formatter.CypherLanguageCodeStyleSettingsProvider"/>
 
         <lang.formatter language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.formatter.CypherFormattingModelBuilder"/>
         <preFormatProcessor implementation="com.neueda.jetbrains.plugin.graphdb.language.cypher.formatter.CypherPreFormatter" />
+
+        <runLineMarkerContributor
+                language="Cypher"
+                implementationClass="com.neueda.jetbrains.plugin.graphdb.jetbrains.linemarker.CypherQueryLineMarkerContributor"
+        />
     </extensions>
 
     <actions>
@@ -185,7 +189,7 @@
                     icon="/general/run.png"
                     description="Execute query">
                 <keyboard-shortcut first-keystroke="ctrl ENTER"
-                                   keymap="$default"/>
+                                   keymap="$default" />
             </action>
             <action id="GraphDatabaseActionGroup.ExplainQuery"
                     class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExplainQueryAction"
