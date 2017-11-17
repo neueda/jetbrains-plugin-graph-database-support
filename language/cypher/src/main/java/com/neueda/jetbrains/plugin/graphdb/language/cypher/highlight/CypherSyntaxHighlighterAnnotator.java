@@ -19,6 +19,8 @@ public class CypherSyntaxHighlighterAnnotator implements Annotator {
             setHighlighting(element, holder, CypherSyntaxColors.FUNCTION);
         } else if (element instanceof CypherLabelName) {
             setHighlighting(element, holder, CypherSyntaxColors.LABEL);
+        } else if (element instanceof CypherUnaryOperator) {
+            setHighlighting(element, holder, CypherSyntaxColors.NUMBER);
         } else if (element instanceof CypherRelTypeName) {
             setHighlighting(element, holder, CypherSyntaxColors.RELATIONSHIP_TYPE);
         } else if (element instanceof CypherParameter) {

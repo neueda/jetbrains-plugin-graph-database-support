@@ -6,18 +6,18 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherMapYielding;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherTypePropagator;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherListYielding;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherPathYielding;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherBooleanYielding;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherNamedElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherParenthesized;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherTypePropagator;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherNullYielding;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherAnyYielding;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherVariableElement;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherIntegerYielding;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherStringYielding;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherArgumentList;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherIntegerYielding;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherFloatYielding;
 
 public class CypherVisitor extends PsiElementVisitor {
@@ -122,10 +122,6 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitDigitString(@NotNull CypherDigitString o) {
-    visitPsiElement(o);
-  }
-
   public void visitDoubleLiteral(@NotNull CypherDoubleLiteral o) {
     visitFloatYielding(o);
   }
@@ -212,6 +208,10 @@ public class CypherVisitor extends PsiElementVisitor {
 
   public void visitIndexQuery(@NotNull CypherIndexQuery o) {
     visitPsiElement(o);
+  }
+
+  public void visitIntegerLiteral(@NotNull CypherIntegerLiteral o) {
+    visitIntegerYielding(o);
   }
 
   public void visitLabelName(@NotNull CypherLabelName o) {
@@ -510,14 +510,6 @@ public class CypherVisitor extends PsiElementVisitor {
     visitTypePropagator(o);
   }
 
-  public void visitSignedDecimalInteger(@NotNull CypherSignedDecimalInteger o) {
-    visitPsiElement(o);
-  }
-
-  public void visitSignedIntegerLiteral(@NotNull CypherSignedIntegerLiteral o) {
-    visitIntegerYielding(o);
-  }
-
   public void visitSimpleProcedureResult(@NotNull CypherSimpleProcedureResult o) {
     visitPsiElement(o);
   }
@@ -562,6 +554,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitUnaryOperator(@NotNull CypherUnaryOperator o) {
+    visitTypePropagator(o);
+  }
+
   public void visitUnescapedSymbolicNameString(@NotNull CypherUnescapedSymbolicNameString o) {
     visitPsiElement(o);
   }
@@ -574,11 +570,11 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitUnsignedDecimalInteger(@NotNull CypherUnsignedDecimalInteger o) {
+  public void visitUnsignedDouble(@NotNull CypherUnsignedDouble o) {
     visitPsiElement(o);
   }
 
-  public void visitUnsignedIntegerLiteral(@NotNull CypherUnsignedIntegerLiteral o) {
+  public void visitUnsignedInteger(@NotNull CypherUnsignedInteger o) {
     visitPsiElement(o);
   }
 

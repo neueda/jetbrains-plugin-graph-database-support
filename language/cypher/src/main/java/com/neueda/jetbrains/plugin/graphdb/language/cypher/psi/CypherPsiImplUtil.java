@@ -109,8 +109,8 @@ public class CypherPsiImplUtil {
             if (newParameter.getSymbolicNameString() != null) {
                 return newParameter.getSymbolicNameString().getUnescapedSymbolicNameString().getText();
             }
-            if (newParameter.getUnsignedDecimalInteger() != null) {
-                return newParameter.getUnsignedDecimalInteger().getLInteger().getText();
+            if (newParameter.getUnsignedInteger() != null) {
+                return newParameter.getUnsignedInteger().getText();
             }
         }
 
@@ -119,8 +119,8 @@ public class CypherPsiImplUtil {
             if (oldParameter.getSymbolicNameString() != null) {
                 return oldParameter.getSymbolicNameString().getUnescapedSymbolicNameString().getText();
             }
-            if (oldParameter.getUnsignedDecimalInteger() != null) {
-                return oldParameter.getUnsignedDecimalInteger().getLInteger().getText();
+            if (oldParameter.getUnsignedInteger() != null) {
+                return oldParameter.getUnsignedInteger().getText();
             }
         }
 

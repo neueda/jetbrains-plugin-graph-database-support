@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface CypherPeriodicCommitHint extends PsiElement {
 
   @Nullable
-  CypherSignedIntegerLiteral getSignedIntegerLiteral();
+  CypherIntegerLiteral getIntegerLiteral();
 
   @NotNull
   PsiElement getKCommit();

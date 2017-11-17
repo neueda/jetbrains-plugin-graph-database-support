@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface CypherRangeLiteral extends PsiElement {
 
   @NotNull
-  List<CypherUnsignedIntegerLiteral> getUnsignedIntegerLiteralList();
+  List<CypherIntegerLiteral> getIntegerLiteralList();
 
 }

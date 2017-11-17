@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface CypherLiteralIds extends PsiElement {
 
   @NotNull
-  List<CypherUnsignedIntegerLiteral> getUnsignedIntegerLiteralList();
+  List<CypherIntegerLiteral> getIntegerLiteralList();
 
 }

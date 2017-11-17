@@ -104,8 +104,8 @@ K_YIELD=(Y|y)(I|i)(E|e)(L|l)(D|d)
 K_COUNT=(C|c)(O|o)(U|u)(N|n)(T|t)
 L_IDENTIFIER=[a-zA-Z_][a-zA-Z_$0-9]*
 L_IDENTIFIER_TEXT=\`[^`]+\`
-L_DECIMAL=[+-]?(([1-9][0-9]+)|([0-9]))\.[0-9]+
-L_INTEGER=[+-]?(([1-9][0-9]+)|([0-9]))
+L_DECIMAL=(0|[1-9][0-9]*)\.[0-9]+
+L_INTEGER=0|[1-9][0-9]*
 L_STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 
 LINE_COMMENT = "//" [^\r\n]*

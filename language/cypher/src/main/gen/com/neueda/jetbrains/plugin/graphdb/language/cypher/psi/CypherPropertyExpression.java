@@ -83,6 +83,9 @@ public interface CypherPropertyExpression extends PsiElement {
   CypherStringLiteral getStringLiteral();
 
   @Nullable
+  CypherUnaryOperator getUnaryOperator();
+
+  @Nullable
   CypherVariable getVariable();
 
 }

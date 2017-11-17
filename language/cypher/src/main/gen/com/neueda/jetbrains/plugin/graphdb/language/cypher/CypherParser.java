@@ -98,9 +98,6 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == DELETE) {
       r = Delete(b, 0);
     }
-    else if (t == DIGIT_STRING) {
-      r = DigitString(b, 0);
-    }
     else if (t == DOUBLE_LITERAL) {
       r = DoubleLiteral(b, 0);
     }
@@ -166,6 +163,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     }
     else if (t == INDEX_QUERY) {
       r = IndexQuery(b, 0);
+    }
+    else if (t == INTEGER_LITERAL) {
+      r = IntegerLiteral(b, 0);
     }
     else if (t == LABEL_NAME) {
       r = LabelName(b, 0);
@@ -389,12 +389,6 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == SHORTEST_PATH_PATTERN) {
       r = ShortestPathPattern(b, 0);
     }
-    else if (t == SIGNED_DECIMAL_INTEGER) {
-      r = SignedDecimalInteger(b, 0);
-    }
-    else if (t == SIGNED_INTEGER_LITERAL) {
-      r = SignedIntegerLiteral(b, 0);
-    }
     else if (t == SIMPLE_PROCEDURE_RESULT) {
       r = SimpleProcedureResult(b, 0);
     }
@@ -428,6 +422,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == SYMBOLIC_NAME_STRING) {
       r = SymbolicNameString(b, 0);
     }
+    else if (t == UNARY_OPERATOR) {
+      r = UnaryOperator(b, 0);
+    }
     else if (t == UNESCAPED_SYMBOLIC_NAME_STRING) {
       r = UnescapedSymbolicNameString(b, 0);
     }
@@ -437,11 +434,11 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == UNIQUE_CONSTRAINT_SYNTAX) {
       r = UniqueConstraintSyntax(b, 0);
     }
-    else if (t == UNSIGNED_DECIMAL_INTEGER) {
-      r = UnsignedDecimalInteger(b, 0);
+    else if (t == UNSIGNED_DOUBLE) {
+      r = UnsignedDouble(b, 0);
     }
-    else if (t == UNSIGNED_INTEGER_LITERAL) {
-      r = UnsignedIntegerLiteral(b, 0);
+    else if (t == UNSIGNED_INTEGER) {
+      r = UnsignedInteger(b, 0);
     }
     else if (t == UNWIND) {
       r = Unwind(b, 0);
@@ -1077,25 +1074,13 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // l_integer
-  public static boolean DigitString(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "DigitString")) return false;
-    if (!nextTokenIs(b, L_INTEGER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, L_INTEGER);
-    exit_section_(b, m, DIGIT_STRING, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // l_decimal
+  // UnsignedDouble
   public static boolean DoubleLiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DoubleLiteral")) return false;
     if (!nextTokenIs(b, L_DECIMAL)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, L_DECIMAL);
+    r = UnsignedDouble(b, l + 1);
     exit_section_(b, m, DOUBLE_LITERAL, r);
     return r;
   }
@@ -1205,7 +1190,8 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // NumberLiteral
+  // UnaryOperator
+  //               | NumberLiteral
   //               | StringLiteral
   //               | Parameter
   //               | BooleanLiteral
@@ -1234,7 +1220,8 @@ public class CypherParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "Expression1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = NumberLiteral(b, l + 1);
+    r = UnaryOperator(b, l + 1);
+    if (!r) r = NumberLiteral(b, l + 1);
     if (!r) r = StringLiteral(b, l + 1);
     if (!r) r = Parameter(b, l + 1);
     if (!r) r = BooleanLiteral(b, l + 1);
@@ -2218,6 +2205,18 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // UnsignedInteger
+  public static boolean IntegerLiteral(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IntegerLiteral")) return false;
+    if (!nextTokenIs(b, L_INTEGER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = UnsignedInteger(b, l + 1);
+    exit_section_(b, m, INTEGER_LITERAL, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // SymbolicNameString
   public static boolean LabelName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LabelName")) return false;
@@ -2300,19 +2299,19 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // UnsignedIntegerLiteral ("," UnsignedIntegerLiteral)*
+  // IntegerLiteral ("," IntegerLiteral)*
   public static boolean LiteralIds(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralIds")) return false;
     if (!nextTokenIs(b, L_INTEGER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = UnsignedIntegerLiteral(b, l + 1);
+    r = IntegerLiteral(b, l + 1);
     r = r && LiteralIds_1(b, l + 1);
     exit_section_(b, m, LITERAL_IDS, r);
     return r;
   }
 
-  // ("," UnsignedIntegerLiteral)*
+  // ("," IntegerLiteral)*
   private static boolean LiteralIds_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralIds_1")) return false;
     int c = current_position_(b);
@@ -2324,13 +2323,13 @@ public class CypherParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // "," UnsignedIntegerLiteral
+  // "," IntegerLiteral
   private static boolean LiteralIds_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralIds_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, OP_COMMA);
-    r = r && UnsignedIntegerLiteral(b, l + 1);
+    r = r && IntegerLiteral(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -2707,7 +2706,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "$" (SymbolicNameString | UnsignedDecimalInteger)
+  // "$" (SymbolicNameString | UnsignedInteger)
   public static boolean NewParameter(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NewParameter")) return false;
     if (!nextTokenIs(b, DOLLAR)) return false;
@@ -2719,13 +2718,13 @@ public class CypherParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // SymbolicNameString | UnsignedDecimalInteger
+  // SymbolicNameString | UnsignedInteger
   private static boolean NewParameter_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NewParameter_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = SymbolicNameString(b, l + 1);
-    if (!r) r = UnsignedDecimalInteger(b, l + 1);
+    if (!r) r = UnsignedInteger(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -2868,20 +2867,20 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // DoubleLiteral | SignedIntegerLiteral
+  // DoubleLiteral | IntegerLiteral
   public static boolean NumberLiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NumberLiteral")) return false;
     if (!nextTokenIs(b, "<number literal>", L_DECIMAL, L_INTEGER)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, NUMBER_LITERAL, "<number literal>");
     r = DoubleLiteral(b, l + 1);
-    if (!r) r = SignedIntegerLiteral(b, l + 1);
+    if (!r) r = IntegerLiteral(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // "{" (SymbolicNameString | UnsignedDecimalInteger) "}"
+  // "{" (SymbolicNameString | UnsignedInteger) "}"
   public static boolean OldParameter(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "OldParameter")) return false;
     if (!nextTokenIs(b, BRACKET_CURLYOPEN)) return false;
@@ -2894,13 +2893,13 @@ public class CypherParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // SymbolicNameString | UnsignedDecimalInteger
+  // SymbolicNameString | UnsignedInteger
   private static boolean OldParameter_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "OldParameter_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = SymbolicNameString(b, l + 1);
-    if (!r) r = UnsignedDecimalInteger(b, l + 1);
+    if (!r) r = UnsignedInteger(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -3216,7 +3215,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // K_USING K_PERIODIC K_COMMIT SignedIntegerLiteral?
+  // K_USING K_PERIODIC K_COMMIT IntegerLiteral?
   public static boolean PeriodicCommitHint(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PeriodicCommitHint")) return false;
     if (!nextTokenIs(b, K_USING)) return false;
@@ -3228,10 +3227,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // SignedIntegerLiteral?
+  // IntegerLiteral?
   private static boolean PeriodicCommitHint_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PeriodicCommitHint_3")) return false;
-    SignedIntegerLiteral(b, l + 1);
+    IntegerLiteral(b, l + 1);
     return true;
   }
 
@@ -3503,7 +3502,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (UnsignedIntegerLiteral? ".." UnsignedIntegerLiteral?) | (UnsignedIntegerLiteral)
+  // (IntegerLiteral? ".." IntegerLiteral?) | (IntegerLiteral)
   public static boolean RangeLiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RangeLiteral")) return false;
     if (!nextTokenIs(b, "<range literal>", OP_RANGE, L_INTEGER)) return false;
@@ -3515,7 +3514,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // UnsignedIntegerLiteral? ".." UnsignedIntegerLiteral?
+  // IntegerLiteral? ".." IntegerLiteral?
   private static boolean RangeLiteral_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RangeLiteral_0")) return false;
     boolean r;
@@ -3527,26 +3526,26 @@ public class CypherParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // UnsignedIntegerLiteral?
+  // IntegerLiteral?
   private static boolean RangeLiteral_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RangeLiteral_0_0")) return false;
-    UnsignedIntegerLiteral(b, l + 1);
+    IntegerLiteral(b, l + 1);
     return true;
   }
 
-  // UnsignedIntegerLiteral?
+  // IntegerLiteral?
   private static boolean RangeLiteral_0_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RangeLiteral_0_2")) return false;
-    UnsignedIntegerLiteral(b, l + 1);
+    IntegerLiteral(b, l + 1);
     return true;
   }
 
-  // (UnsignedIntegerLiteral)
+  // (IntegerLiteral)
   private static boolean RangeLiteral_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RangeLiteral_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = UnsignedIntegerLiteral(b, l + 1);
+    r = IntegerLiteral(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -4280,30 +4279,6 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // l_integer
-  public static boolean SignedDecimalInteger(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SignedDecimalInteger")) return false;
-    if (!nextTokenIs(b, L_INTEGER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, L_INTEGER);
-    exit_section_(b, m, SIGNED_DECIMAL_INTEGER, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // SignedDecimalInteger
-  public static boolean SignedIntegerLiteral(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SignedIntegerLiteral")) return false;
-    if (!nextTokenIs(b, L_INTEGER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = SignedDecimalInteger(b, l + 1);
-    exit_section_(b, m, SIGNED_INTEGER_LITERAL, r);
-    return r;
-  }
-
-  /* ********************************************************** */
   // Variable
   public static boolean SimpleProcedureResult(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SimpleProcedureResult")) return false;
@@ -4752,6 +4727,30 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // ("-" | "+") NumberLiteral
+  public static boolean UnaryOperator(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnaryOperator")) return false;
+    if (!nextTokenIs(b, "<unary operator>", OP_PLUS, OP_MINUS)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, UNARY_OPERATOR, "<unary operator>");
+    r = UnaryOperator_0(b, l + 1);
+    r = r && NumberLiteral(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // "-" | "+"
+  private static boolean UnaryOperator_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnaryOperator_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, OP_MINUS);
+    if (!r) r = consumeToken(b, OP_PLUS);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // l_identifier
   public static boolean UnescapedSymbolicNameString(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UnescapedSymbolicNameString")) return false;
@@ -4815,26 +4814,26 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // l_integer
-  public static boolean UnsignedDecimalInteger(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "UnsignedDecimalInteger")) return false;
-    if (!nextTokenIs(b, L_INTEGER)) return false;
+  // l_decimal
+  public static boolean UnsignedDouble(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnsignedDouble")) return false;
+    if (!nextTokenIs(b, L_DECIMAL)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, L_INTEGER);
-    exit_section_(b, m, UNSIGNED_DECIMAL_INTEGER, r);
+    r = consumeToken(b, L_DECIMAL);
+    exit_section_(b, m, UNSIGNED_DOUBLE, r);
     return r;
   }
 
   /* ********************************************************** */
-  // UnsignedDecimalInteger
-  public static boolean UnsignedIntegerLiteral(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "UnsignedIntegerLiteral")) return false;
+  // l_integer
+  public static boolean UnsignedInteger(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnsignedInteger")) return false;
     if (!nextTokenIs(b, L_INTEGER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = UnsignedDecimalInteger(b, l + 1);
-    exit_section_(b, m, UNSIGNED_INTEGER_LITERAL, r);
+    r = consumeToken(b, L_INTEGER);
+    exit_section_(b, m, UNSIGNED_INTEGER, r);
     return r;
   }
 

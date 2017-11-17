@@ -190,6 +190,12 @@ public class CypherExpressionImpl extends ASTWrapperPsiElement implements Cypher
 
   @Override
   @NotNull
+  public List<CypherUnaryOperator> getUnaryOperatorList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherUnaryOperator.class);
+  }
+
+  @Override
+  @NotNull
   public List<CypherVariable> getVariableList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherVariable.class);
   }

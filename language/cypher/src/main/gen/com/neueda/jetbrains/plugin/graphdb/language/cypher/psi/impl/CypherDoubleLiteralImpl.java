@@ -28,8 +28,8 @@ public class CypherDoubleLiteralImpl extends ASTWrapperPsiElement implements Cyp
 
   @Override
   @NotNull
-  public PsiElement getLDecimal() {
-    return findNotNullChildByType(L_DECIMAL);
+  public CypherUnsignedDouble getUnsignedDouble() {
+    return findNotNullChildByClass(CypherUnsignedDouble.class);
   }
 
 }
