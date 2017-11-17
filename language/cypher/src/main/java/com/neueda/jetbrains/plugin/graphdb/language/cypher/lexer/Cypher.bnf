@@ -340,7 +340,7 @@ RelationshipDetail ::= "[" Variable? "?"? RelationshipTypes? MaybeVariableLength
 RelationshipTypes ::= ":" RelTypeName ("|" ":"? RelTypeName)* {pin=1}
 MaybeVariableLength ::= ("*" RangeLiteral?)
 
-NodePattern ::= "(" Variable? NodeLabels? Properties? ")" {pin=1}
+NodePattern ::= "(" Variable? NodeLabels? Properties? ")"
 
 RelationshipsPattern ::= NodePattern PatternElementChain+ {
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherPathYielding"
