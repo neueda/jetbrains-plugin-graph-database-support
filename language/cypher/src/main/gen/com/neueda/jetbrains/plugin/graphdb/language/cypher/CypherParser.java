@@ -2790,15 +2790,16 @@ public class CypherParser implements PsiParser, LightPsiParser {
   public static boolean NodePattern(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NodePattern")) return false;
     if (!nextTokenIs(b, PARENTHESE_OPEN)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, NODE_PATTERN, null);
     r = consumeToken(b, PARENTHESE_OPEN);
-    r = r && NodePattern_1(b, l + 1);
-    r = r && NodePattern_2(b, l + 1);
-    r = r && NodePattern_3(b, l + 1);
-    r = r && consumeToken(b, PARENTHESE_CLOSE);
-    exit_section_(b, m, NODE_PATTERN, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, NodePattern_1(b, l + 1));
+    r = p && report_error_(b, NodePattern_2(b, l + 1)) && r;
+    r = p && report_error_(b, NodePattern_3(b, l + 1)) && r;
+    r = p && consumeToken(b, PARENTHESE_CLOSE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // Variable?

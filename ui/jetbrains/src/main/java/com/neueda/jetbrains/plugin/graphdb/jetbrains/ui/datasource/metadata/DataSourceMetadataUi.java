@@ -5,13 +5,14 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metada
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourcesComponentMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.LabelTreeNodeModel;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.MetadataTreeNodeModel;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.RelationshipTypeTreeNodeModel;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModelApi;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.tree.MutableTreeNodeProducers;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.tree.Root;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.tree.TreeNodeDirectory;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.*;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
 
 import javax.swing.tree.MutableTreeNode;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -87,15 +88,13 @@ public class DataSourceMetadataUi {
 
         // Stored procedures
         PatchedDefaultMutableTreeNode storedProceduresTreeNode = new PatchedDefaultMutableTreeNode(
-            new MetadataTreeNodeModel(STORED_PROCEDURES, dataSourceApi, STORED_PROCEDURES_TITLE, GraphIcons.Nodes.STORED_PROCEDURE));
-        dataSourceMetadata
-            .getMetadata(Neo4jBoltCypherDataSourceMetadata.STORED_PROCEDURES)
-            .forEach((row) -> {
-                PatchedDefaultMutableTreeNode nameNode = of(new MetadataTreeNodeModel(STORED_PROCEDURE, dataSourceApi, row.get("name")));
-                PatchedDefaultMutableTreeNode descriptionNode = of(new MetadataTreeNodeModel(STORED_PROCEDURE, dataSourceApi, row.get("signature")));
-                nameNode.add(descriptionNode);
-                storedProceduresTreeNode.add(nameNode);
-            });
+                new MetadataTreeNodeModel(STORED_PROCEDURES, dataSourceApi, STORED_PROCEDURES_TITLE, GraphIcons.Nodes.STORED_PROCEDURE));
+
+        List<Map<String, String>> storedProcedures = dataSourceMetadata
+                .getMetadata(Neo4jBoltCypherDataSourceMetadata.STORED_PROCEDURES);
+
+        createTreeFromMetadata(storedProcedures, storedProceduresTreeNode, STORED_PROCEDURE, dataSourceApi);
+
         dataSourceRootTreeNode.add(storedProceduresTreeNode);
 
         // User Functions
@@ -103,19 +102,45 @@ public class DataSourceMetadataUi {
             PatchedDefaultMutableTreeNode userFunctionTreeNode = new PatchedDefaultMutableTreeNode(
                 new MetadataTreeNodeModel(USER_FUNCTIONS, dataSourceApi, USER_FUNCTIONS_TITLE, GraphIcons.Nodes.USER_FUNCTION));
 
-            dataSourceMetadata
-                .getMetadata(Neo4jBoltCypherDataSourceMetadata.USER_FUNCTIONS)
-                .forEach((row) -> {
-                    PatchedDefaultMutableTreeNode nameNode = of(new MetadataTreeNodeModel(USER_FUNCTION, dataSourceApi, row.get("name")));
-                    PatchedDefaultMutableTreeNode descriptionNode = of(new MetadataTreeNodeModel(USER_FUNCTION, dataSourceApi, row.get("signature")));
-                    nameNode.add(descriptionNode);
-                    userFunctionTreeNode.add(nameNode);
-                });
+            List<Map<String, String>> storedFunctions = dataSourceMetadata
+                    .getMetadata(Neo4jBoltCypherDataSourceMetadata.USER_FUNCTIONS);
+
+            createTreeFromMetadata(storedFunctions, userFunctionTreeNode, USER_FUNCTION, dataSourceApi);
 
             dataSourceRootTreeNode.add(userFunctionTreeNode);
         }
 
         return true;
+    }
+
+    private void createTreeFromMetadata(List<Map<String, String>> metadata,
+                                        PatchedDefaultMutableTreeNode treeRoot,
+                                        Neo4jTreeNodeType type,
+                                        DataSourceApi dataSourceApi) {
+        TreeNodeDirectory treeNodeRoot = new Root(
+                treeRoot,
+                MutableTreeNodeProducers.directory(type, dataSourceApi),
+                MutableTreeNodeProducers.function(type, dataSourceApi)
+        );
+
+        metadata.forEach(data -> {
+            String[] nameParts = data.getOrDefault("name", "").split("\\.");
+            nameParts[nameParts.length - 1] = data.get("signature");
+            createBranch(treeNodeRoot, Arrays.asList(nameParts));
+        });
+
+        treeNodeRoot.getMutableTreeNode();
+    }
+
+    private void createBranch(TreeNodeDirectory directory, List<String> names) {
+        TreeNodeDirectory currentDirectory = directory;
+        for (int i = 0; i < names.size(); i++) {
+            if (i < names.size() - 1) {
+                currentDirectory = currentDirectory.getDirectory(names.get(i));
+            } else {
+                currentDirectory.addLeaf(names.get(i));
+            }
+        }
     }
 
     private MutableTreeNode createIndexesNode(DataSourceMetadata dataSourceMetadata, DataSourceApi dataSourceApi) {
