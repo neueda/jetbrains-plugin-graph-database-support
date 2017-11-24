@@ -4,8 +4,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 public interface TreeNode {
 
-    public String getName();
+    String getName();
 
-    public DefaultMutableTreeNode getMutableTreeNode();
+    DefaultMutableTreeNode getMutableTreeNode();
 
 }

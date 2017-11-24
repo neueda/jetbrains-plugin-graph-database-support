@@ -2,8 +2,8 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.tre
 
 public interface TreeNodeDirectory extends TreeNode {
 
-    public void addLeaf(String name);
+    void addLeaf(String name);
 
-    public TreeNodeDirectory getDirectory(String name);
+    TreeNodeDirectory getDirectory(String name);
 
 }

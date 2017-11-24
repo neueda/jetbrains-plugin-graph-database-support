@@ -11,6 +11,9 @@ import java.util.function.Function;
 
 public final class MutableTreeNodeProducers {
 
+    private MutableTreeNodeProducers() {
+    }
+
     public static Function<TreeNode, DefaultMutableTreeNode> function(Neo4jTreeNodeType type, DataSourceApi dataSourceApi) {
         return treeNode -> new PatchedDefaultMutableTreeNode(
                 new MetadataTreeNodeModel(type, dataSourceApi, treeNode.getName(), AllIcons.Nodes.Function)
@@ -23,6 +26,4 @@ public final class MutableTreeNodeProducers {
         );
     }
 
-    private MutableTreeNodeProducers() {
-    }
 }

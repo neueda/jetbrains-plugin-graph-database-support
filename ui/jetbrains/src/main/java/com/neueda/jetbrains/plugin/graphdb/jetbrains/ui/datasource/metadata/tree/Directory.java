@@ -14,7 +14,7 @@ class Directory implements TreeNode, TreeNodeDirectory {
     private final Function<TreeNode, DefaultMutableTreeNode> directoryProducer;
     private final Function<TreeNode, DefaultMutableTreeNode> functionProducer;
 
-    public Directory(
+    Directory(
             String name,
             Function<TreeNode, DefaultMutableTreeNode> directoryProducer,
             Function<TreeNode, DefaultMutableTreeNode> functionProducer
@@ -30,7 +30,7 @@ class Directory implements TreeNode, TreeNodeDirectory {
     public Directory getDirectory(String name) {
         return directories.computeIfAbsent(
                 name,
-                (k) -> new Directory(k, directoryProducer, functionProducer)
+                (newName) -> new Directory(newName, directoryProducer, functionProducer)
         );
     }
 

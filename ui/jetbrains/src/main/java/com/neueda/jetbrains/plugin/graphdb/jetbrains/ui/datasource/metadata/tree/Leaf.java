@@ -5,9 +5,9 @@ import java.util.function.Function;
 
 class Leaf implements TreeNode {
     private final String name;
-    private Function<TreeNode, DefaultMutableTreeNode> mutableTreeNodeProducer;
+    private final Function<TreeNode, DefaultMutableTreeNode> mutableTreeNodeProducer;
 
-    public Leaf(String name, Function<TreeNode, DefaultMutableTreeNode> mutableTreeNodeProducer) {
+    Leaf(String name, Function<TreeNode, DefaultMutableTreeNode> mutableTreeNodeProducer) {
         this.name = name;
         this.mutableTreeNodeProducer = mutableTreeNodeProducer;
     }

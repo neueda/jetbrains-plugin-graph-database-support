@@ -31,7 +31,7 @@ public class Root implements TreeNode, TreeNodeDirectory {
     public Directory getDirectory(String name) {
         return directories.computeIfAbsent(
                 name,
-                (k) -> new Directory(k, directoryProducer, functionProducer)
+                (newName) -> new Directory(newName, directoryProducer, functionProducer)
         );
     }
 

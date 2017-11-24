@@ -8,7 +8,11 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.tree.MutableTreeNodeProducers;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.tree.Root;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.tree.TreeNodeDirectory;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.*;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.LabelTreeNodeModel;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.MetadataTreeNodeModel;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.RelationshipTypeTreeNodeModel;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModelApi;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
 
 import javax.swing.tree.MutableTreeNode;
@@ -16,7 +20,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.*;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.CONSTRAINT;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.CONSTRAINTS;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.INDEX;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.INDEXES;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.LABEL;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.LABELS;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.PROPERTY_KEY;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.PROPERTY_KEYS;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.RELATIONSHIP;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.RELATIONSHIPS;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.STORED_PROCEDURE;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.STORED_PROCEDURES;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.USER_FUNCTION;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.USER_FUNCTIONS;
 
 public class DataSourceMetadataUi {
 
