@@ -17,20 +17,19 @@ public class CypherQueryLineMarkerContributor extends RunLineMarkerContributor {
         if (CypherTypes.SINGLE_QUERY.equals(extractElementType(element))) {
             return new Info(
                     AllIcons.RunConfigurations.TestState.Run,
-                    (e) -> "Execute query",
+                    (action) -> "Execute query",
                     createExecutionAction(element)
             );
         }
+
         return null;
     }
-
-
 
     private GutterQueryExecutionAction createExecutionAction(PsiElement element) {
         return new GutterQueryExecutionAction("Execute query",
                 null,
                 null,
-                element.getText());
+                element);
     }
 
     private IElementType extractElementType(PsiElement element) {

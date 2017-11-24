@@ -1,21 +1,27 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute;
 
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-import java.util.Collections;
+import javax.swing.Icon;
 
-public class GutterQueryExecutionAction extends ExecuteQueryAction {
+public class GutterQueryExecutionAction extends AnAction {
 
-    private final String query;
+    private final PsiElement element;
+    private final ExecuteQueryService executionProvider;
 
-    public GutterQueryExecutionAction(@Nullable String text, @Nullable String description, @Nullable Icon icon, String query) {
+    public GutterQueryExecutionAction(@Nullable String text, @Nullable String description, @Nullable Icon icon, PsiElement element) {
         super(text, description, icon);
-        this.query = query;
+        this.element = element;
+        this.executionProvider = ExecuteQueryService.getInstance();
     }
 
     @Override
-    protected ExecuteQueryPayload createQueryPayload(ActionState state) {
-        return new ExecuteQueryPayload(query, Collections.emptyMap(), state.getEditor());
+    public void actionPerformed(AnActionEvent e) {
+        QueryActionWrapper actionWrapper = new QueryActionWrapper(e);
+        executionProvider.executeQuery(actionWrapper, element);
     }
+
 }

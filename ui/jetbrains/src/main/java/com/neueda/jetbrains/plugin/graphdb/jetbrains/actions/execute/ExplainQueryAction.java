@@ -4,6 +4,7 @@ public class ExplainQueryAction extends ExecuteQueryAction {
 
     @Override
     protected String decorateQuery(String query) {
-        return "EXPLAIN " + super.decorateQuery(query);
+        return "EXPLAIN " + query;
     }
+
 }
