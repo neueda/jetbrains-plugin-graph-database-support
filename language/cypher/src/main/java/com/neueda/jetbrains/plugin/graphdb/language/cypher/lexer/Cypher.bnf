@@ -191,8 +191,8 @@ Command ::= CreateIndex
           | CreateRelationshipPropertyExistenceConstraint
           | DropRelationshipPropertyExistenceConstraint
 
-CreateIndex ::= K_CREATE K_INDEX K_ON NodeLabel "(" PropertyKeyName ")"
-DropIndex ::= K_DROP K_INDEX K_ON NodeLabel "(" PropertyKeyName ")"
+CreateIndex ::= K_CREATE K_INDEX K_ON NodeLabel "(" PropertyKeyNames ")"
+DropIndex ::= K_DROP K_INDEX K_ON NodeLabel "(" PropertyKeyNames ")"
 CreateUniqueConstraint ::= K_CREATE UniqueConstraintSyntax
 DropUniqueConstraint ::= K_DROP UniqueConstraintSyntax
 CreateNodePropertyExistenceConstraint ::= K_CREATE NodePropertyExistenceConstraintSyntax
@@ -539,6 +539,8 @@ PropertyKeyName ::= SymbolicNameString {
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherNamedElement"
     methods=[getName setName getNameIdentifier getReferences]
 }
+PropertyKeyNames ::= PropertyKeyName ("," PropertyKeyName)*
+
 RangeLiteral ::= (IntegerLiteral? ".." IntegerLiteral?) | (IntegerLiteral)
 MapLiteral ::= "{" (PropertyKeyName ":" Expression)? ("," PropertyKeyName ":" Expression)* "}" {
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherMapYielding"

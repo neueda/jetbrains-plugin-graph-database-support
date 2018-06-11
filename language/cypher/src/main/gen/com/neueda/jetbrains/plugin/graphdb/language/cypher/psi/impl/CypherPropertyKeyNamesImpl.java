@@ -11,14 +11,14 @@ import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherType
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
-public class CypherCreateIndexImpl extends ASTWrapperPsiElement implements CypherCreateIndex {
+public class CypherPropertyKeyNamesImpl extends ASTWrapperPsiElement implements CypherPropertyKeyNames {
 
-  public CypherCreateIndexImpl(ASTNode node) {
+  public CypherPropertyKeyNamesImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CypherVisitor visitor) {
-    visitor.visitCreateIndex(this);
+    visitor.visitPropertyKeyNames(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -28,32 +28,8 @@ public class CypherCreateIndexImpl extends ASTWrapperPsiElement implements Cyphe
 
   @Override
   @NotNull
-  public CypherNodeLabel getNodeLabel() {
-    return findNotNullChildByClass(CypherNodeLabel.class);
-  }
-
-  @Override
-  @NotNull
-  public CypherPropertyKeyNames getPropertyKeyNames() {
-    return findNotNullChildByClass(CypherPropertyKeyNames.class);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getKCreate() {
-    return findNotNullChildByType(K_CREATE);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getKIndex() {
-    return findNotNullChildByType(K_INDEX);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getKOn() {
-    return findNotNullChildByType(K_ON);
+  public List<CypherPropertyKeyName> getPropertyKeyNameList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherPropertyKeyName.class);
   }
 
 }

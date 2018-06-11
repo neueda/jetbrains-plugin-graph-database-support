@@ -34,8 +34,8 @@ public class CypherDropIndexImpl extends ASTWrapperPsiElement implements CypherD
 
   @Override
   @NotNull
-  public CypherPropertyKeyName getPropertyKeyName() {
-    return findNotNullChildByClass(CypherPropertyKeyName.class);
+  public CypherPropertyKeyNames getPropertyKeyNames() {
+    return findNotNullChildByClass(CypherPropertyKeyNames.class);
   }
 
   @Override
