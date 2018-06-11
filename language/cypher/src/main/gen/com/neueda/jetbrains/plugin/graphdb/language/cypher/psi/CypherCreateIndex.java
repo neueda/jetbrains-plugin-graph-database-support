@@ -11,7 +11,7 @@ public interface CypherCreateIndex extends PsiElement {
   CypherNodeLabel getNodeLabel();
 
   @NotNull
-  CypherPropertyKeyName getPropertyKeyName();
+  CypherPropertyKeyNames getPropertyKeyNames();
 
   @NotNull
   PsiElement getKCreate();

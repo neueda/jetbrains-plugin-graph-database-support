@@ -308,6 +308,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == PROPERTY_KEY_NAME) {
       r = PropertyKeyName(b, 0);
     }
+    else if (t == PROPERTY_KEY_NAMES) {
+      r = PropertyKeyNames(b, 0);
+    }
     else if (t == PROPERTY_LOOKUP) {
       r = PropertyLookup(b, 0);
     }
@@ -585,11 +588,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("," Expression)*
   private static boolean Array_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Array_2")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Array_2_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Array_2", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -711,11 +713,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = CaseAlternatives(b, l + 1);
-    int c = current_position_(b);
     while (r) {
+      int c = current_position_(b);
       if (!CaseAlternatives(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "CaseExpression_0_0_1", c)) break;
-      c = current_position_(b);
     }
     exit_section_(b, m, null, r);
     return r;
@@ -739,11 +740,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = CaseAlternatives(b, l + 1);
-    int c = current_position_(b);
     while (r) {
+      int c = current_position_(b);
       if (!CaseAlternatives(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "CaseExpression_0_1_2", c)) break;
-      c = current_position_(b);
     }
     exit_section_(b, m, null, r);
     return r;
@@ -890,7 +890,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // K_CREATE K_INDEX K_ON NodeLabel "(" PropertyKeyName ")"
+  // K_CREATE K_INDEX K_ON NodeLabel "(" PropertyKeyNames ")"
   public static boolean CreateIndex(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CreateIndex")) return false;
     if (!nextTokenIs(b, K_CREATE)) return false;
@@ -899,7 +899,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
     r = consumeTokens(b, 0, K_CREATE, K_INDEX, K_ON);
     r = r && NodeLabel(b, l + 1);
     r = r && consumeToken(b, PARENTHESE_OPEN);
-    r = r && PropertyKeyName(b, l + 1);
+    r = r && PropertyKeyNames(b, l + 1);
     r = r && consumeToken(b, PARENTHESE_CLOSE);
     exit_section_(b, m, CREATE_INDEX, r);
     return r;
@@ -968,11 +968,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ConfigurationOption*
   private static boolean CypherOption_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CypherOption_2")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!ConfigurationOption(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "CypherOption_2", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -1018,11 +1017,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("," Expression)*
   private static boolean Delete_0_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Delete_0_2")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Delete_0_2_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Delete_0_2", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -1053,11 +1051,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("," Expression)*
   private static boolean Delete_1_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Delete_1_3")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Delete_1_3_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Delete_1_3", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -1086,7 +1083,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // K_DROP K_INDEX K_ON NodeLabel "(" PropertyKeyName ")"
+  // K_DROP K_INDEX K_ON NodeLabel "(" PropertyKeyNames ")"
   public static boolean DropIndex(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "DropIndex")) return false;
     if (!nextTokenIs(b, K_DROP)) return false;
@@ -1095,7 +1092,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
     r = consumeTokens(b, 0, K_DROP, K_INDEX, K_ON);
     r = r && NodeLabel(b, l + 1);
     r = r && consumeToken(b, PARENTHESE_OPEN);
-    r = r && PropertyKeyName(b, l + 1);
+    r = r && PropertyKeyNames(b, l + 1);
     r = r && consumeToken(b, PARENTHESE_CLOSE);
     exit_section_(b, m, DROP_INDEX, r);
     return r;
@@ -1219,7 +1216,6 @@ public class CypherParser implements PsiParser, LightPsiParser {
   static boolean Expression1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Expression1")) return false;
     boolean r;
-    Marker m = enter_section_(b);
     r = UnaryOperator(b, l + 1);
     if (!r) r = NumberLiteral(b, l + 1);
     if (!r) r = StringLiteral(b, l + 1);
@@ -1246,7 +1242,6 @@ public class CypherParser implements PsiParser, LightPsiParser {
     if (!r) r = ParenthesizedExpression(b, l + 1);
     if (!r) r = FunctionInvocation(b, l + 1);
     if (!r) r = Variable(b, l + 1);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -1265,11 +1260,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // (K_AND Expression9)*
   private static boolean Expression10_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Expression10_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Expression10_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Expression10_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -1300,11 +1294,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // (K_XOR Expression10)*
   private static boolean Expression11_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Expression11_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Expression11_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Expression11_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -1335,11 +1328,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // (K_OR Expression11)*
   private static boolean Expression12_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Expression12_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Expression12_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Expression12_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -1370,11 +1362,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // (PropertyLookup | NodeLabels)*
   private static boolean Expression2_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Expression2_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Expression2_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Expression2_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -1383,10 +1374,8 @@ public class CypherParser implements PsiParser, LightPsiParser {
   private static boolean Expression2_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Expression2_1_0")) return false;
     boolean r;
-    Marker m = enter_section_(b);
     r = PropertyLookup(b, l + 1);
     if (!r) r = NodeLabels(b, l + 1);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -1425,11 +1414,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // )*
   private static boolean Expression3_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Expression3_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Expression3_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Expression3_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -1625,11 +1613,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("^" Expression4)*
   private static boolean Expression5_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Expression5_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Expression5_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Expression5_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -1660,11 +1647,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // (("*" Expression5) | ("/" Expression5) | ("%" Expression5))*
   private static boolean Expression6_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Expression6_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Expression6_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Expression6_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -1729,11 +1715,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // (("-" Expression6) | ("+" Expression6))*
   private static boolean Expression7_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Expression7_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Expression7_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Expression7_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -1786,11 +1771,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // PartialComparisonExpression*
   private static boolean Expression8_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Expression8_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!PartialComparisonExpression(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Expression8_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -1908,11 +1892,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = Clause(b, l + 1);
-    int c = current_position_(b);
     while (r) {
+      int c = current_position_(b);
       if (!Clause(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Foreach_6", c)) break;
-      c = current_position_(b);
     }
     exit_section_(b, m, null, r);
     return r;
@@ -1951,11 +1934,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("," Expression)*
   private static boolean FunctionArguments_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionArguments_3")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!FunctionArguments_3_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "FunctionArguments_3", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -2077,11 +2059,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("," Variable)*
   private static boolean Hint_1_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Hint_1_4")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Hint_1_4_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Hint_1_4", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -2170,10 +2151,8 @@ public class CypherParser implements PsiParser, LightPsiParser {
   private static boolean IdentifiedIndexLookup_5(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IdentifiedIndexLookup_5")) return false;
     boolean r;
-    Marker m = enter_section_(b);
     r = StringLiteral(b, l + 1);
     if (!r) r = Parameter(b, l + 1);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -2197,10 +2176,8 @@ public class CypherParser implements PsiParser, LightPsiParser {
   private static boolean IndexQuery_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IndexQuery_3")) return false;
     boolean r;
-    Marker m = enter_section_(b);
     r = StringLiteral(b, l + 1);
     if (!r) r = Parameter(b, l + 1);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -2314,11 +2291,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("," IntegerLiteral)*
   private static boolean LiteralIds_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralIds_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!LiteralIds_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "LiteralIds_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -2403,11 +2379,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // Clause*
   private static boolean LoadCSVQuery_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LoadCSVQuery_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Clause(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "LoadCSVQuery_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -2461,11 +2436,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("," PropertyKeyName ":" Expression)*
   private static boolean MapLiteral_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MapLiteral_2")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!MapLiteral_2_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "MapLiteral_2", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -2508,11 +2482,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("," MapProjectionVariants)*
   private static boolean MapProjection_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MapProjection_3")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!MapProjection_3_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "MapProjection_3", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -2581,11 +2554,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // Hint*
   private static boolean Match_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Match_2")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Hint(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Match_2", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -2634,11 +2606,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // MergeAction*
   private static boolean Merge_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Merge_2")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!MergeAction(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Merge_2", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -2684,11 +2655,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   public static boolean Namespace(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Namespace")) return false;
     Marker m = enter_section_(b, l, _NONE_, NAMESPACE, "<namespace>");
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Namespace_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Namespace", c)) break;
-      c = current_position_(b);
     }
     exit_section_(b, l, m, true, false, null);
     return true;
@@ -2722,10 +2692,8 @@ public class CypherParser implements PsiParser, LightPsiParser {
   private static boolean NewParameter_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NewParameter_1")) return false;
     boolean r;
-    Marker m = enter_section_(b);
     r = SymbolicNameString(b, l + 1);
     if (!r) r = UnsignedInteger(b, l + 1);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -2750,11 +2718,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = NodeLabel(b, l + 1);
-    int c = current_position_(b);
     while (r) {
+      int c = current_position_(b);
       if (!NodeLabel(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "NodeLabels", c)) break;
-      c = current_position_(b);
     }
     exit_section_(b, m, NODE_LABELS, r);
     return r;
@@ -2777,11 +2744,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
   private static boolean NodeLookup_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NodeLookup_1")) return false;
     boolean r;
-    Marker m = enter_section_(b);
     r = IdentifiedIndexLookup(b, l + 1);
     if (!r) r = IndexQuery(b, l + 1);
     if (!r) r = IdLookup(b, l + 1);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -2897,10 +2862,8 @@ public class CypherParser implements PsiParser, LightPsiParser {
   private static boolean OldParameter_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "OldParameter_1")) return false;
     boolean r;
-    Marker m = enter_section_(b);
     r = SymbolicNameString(b, l + 1);
     if (!r) r = UnsignedInteger(b, l + 1);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -2921,11 +2884,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("," SortItem)*
   private static boolean Order_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Order_3")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Order_3_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Order_3", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -3084,11 +3046,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("," PatternPart)*
   private static boolean Pattern_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Pattern_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Pattern_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Pattern_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -3155,11 +3116,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // PatternElementChain*
   private static boolean PatternElement_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PatternElement_0_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!PatternElementChain(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "PatternElement_0_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -3259,11 +3219,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("," Expression)*
   private static boolean ProcedureArguments_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ProcedureArguments_2")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!ProcedureArguments_2_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "ProcedureArguments_2", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -3354,11 +3313,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("," ProcedureResult)*
   private static boolean ProcedureResults_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ProcedureResults_2")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!ProcedureResults_2_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "ProcedureResults_2", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -3417,11 +3375,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = PropertyExpression_1_0(b, l + 1);
-    int c = current_position_(b);
     while (r) {
+      int c = current_position_(b);
       if (!PropertyExpression_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "PropertyExpression_1", c)) break;
-      c = current_position_(b);
     }
     exit_section_(b, m, null, r);
     return r;
@@ -3445,6 +3402,40 @@ public class CypherParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, PROPERTY_KEY_NAME, "<property key name>");
     r = SymbolicNameString(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // PropertyKeyName ("," PropertyKeyName)*
+  public static boolean PropertyKeyNames(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PropertyKeyNames")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, PROPERTY_KEY_NAMES, "<property key names>");
+    r = PropertyKeyName(b, l + 1);
+    r = r && PropertyKeyNames_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // ("," PropertyKeyName)*
+  private static boolean PropertyKeyNames_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PropertyKeyNames_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!PropertyKeyNames_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "PropertyKeyNames_1", c)) break;
+    }
+    return true;
+  }
+
+  // "," PropertyKeyName
+  private static boolean PropertyKeyNames_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PropertyKeyNames_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, OP_COMMA);
+    r = r && PropertyKeyName(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -3491,11 +3482,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   public static boolean QueryOptions(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "QueryOptions")) return false;
     Marker m = enter_section_(b, l, _NONE_, QUERY_OPTIONS, "<query options>");
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!AnyCypherOption(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "QueryOptions", c)) break;
-      c = current_position_(b);
     }
     exit_section_(b, l, m, true, false, null);
     return true;
@@ -3585,11 +3575,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // Union*
   private static boolean RegularQuery_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RegularQuery_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Union(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "RegularQuery_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -3689,10 +3678,8 @@ public class CypherParser implements PsiParser, LightPsiParser {
   private static boolean RelationshipLookup_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RelationshipLookup_0")) return false;
     boolean r;
-    Marker m = enter_section_(b);
     r = consumeToken(b, K_RELATIONSHIP);
     if (!r) r = consumeToken(b, K_REL);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -3700,11 +3687,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
   private static boolean RelationshipLookup_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RelationshipLookup_1")) return false;
     boolean r;
-    Marker m = enter_section_(b);
     r = IdentifiedIndexLookup(b, l + 1);
     if (!r) r = IndexQuery(b, l + 1);
     if (!r) r = IdLookup(b, l + 1);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -3835,11 +3820,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("|" ":"? RelTypeName)*
   private static boolean RelationshipTypes_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RelationshipTypes_2")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!RelationshipTypes_2_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "RelationshipTypes_2", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -3882,11 +3866,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = PatternElementChain(b, l + 1);
-    int c = current_position_(b);
     while (r) {
+      int c = current_position_(b);
       if (!PatternElementChain(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "RelationshipsPattern_1", c)) break;
-      c = current_position_(b);
     }
     exit_section_(b, m, null, r);
     return r;
@@ -3909,11 +3892,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("," RemoveItem)*
   private static boolean Remove_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Remove_2")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Remove_2_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Remove_2", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -4084,11 +4066,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("," ReturnItem)*
   private static boolean ReturnItems_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ReturnItems_0_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!ReturnItems_0_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "ReturnItems_0_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -4118,11 +4099,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("," ReturnItem)*
   private static boolean ReturnItems_1_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ReturnItems_1_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!ReturnItems_1_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "ReturnItems_1_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -4167,11 +4147,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("," SetItem)*
   private static boolean SetClause_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SetClause_2")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!SetClause_2_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "SetClause_2", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -4310,11 +4289,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, SINGLE_QUERY, "<single query>");
     r = Clause(b, l + 1);
-    int c = current_position_(b);
     while (r) {
+      int c = current_position_(b);
       if (!Clause(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "SingleQuery", c)) break;
-      c = current_position_(b);
     }
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -4361,10 +4339,8 @@ public class CypherParser implements PsiParser, LightPsiParser {
   private static boolean SortItem_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SortItem_0_1")) return false;
     boolean r;
-    Marker m = enter_section_(b);
     r = consumeToken(b, K_DESCENDING);
     if (!r) r = consumeToken(b, K_DESC);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -4390,10 +4366,8 @@ public class CypherParser implements PsiParser, LightPsiParser {
   private static boolean SortItem_1_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SortItem_1_1_0")) return false;
     boolean r;
-    Marker m = enter_section_(b);
     r = consumeToken(b, K_ASCENDING);
     if (!r) r = consumeToken(b, K_ASC);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -4432,11 +4406,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("," StartPoint)*
   private static boolean Start_1_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Start_1_0_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!Start_1_0_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Start_1_0_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -4507,10 +4480,8 @@ public class CypherParser implements PsiParser, LightPsiParser {
   private static boolean Statement_2_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Statement_2_1")) return false;
     boolean r;
-    Marker m = enter_section_(b);
     r = Command(b, l + 1);
     if (!r) r = Query(b, l + 1);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -4955,11 +4926,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // StatementItem *
   static boolean cypher(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "cypher")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!StatementItem(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "cypher", c)) break;
-      c = current_position_(b);
     }
     return true;
   }

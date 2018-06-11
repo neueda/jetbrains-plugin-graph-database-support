@@ -103,6 +103,7 @@ public interface CypherTypes {
   IElementType PROPERTIES = new CypherElementType("PROPERTIES");
   IElementType PROPERTY_EXPRESSION = new CypherElementType("PROPERTY_EXPRESSION");
   IElementType PROPERTY_KEY_NAME = new CypherElementType("PROPERTY_KEY_NAME");
+  IElementType PROPERTY_KEY_NAMES = new CypherElementType("PROPERTY_KEY_NAMES");
   IElementType PROPERTY_LOOKUP = new CypherElementType("PROPERTY_LOOKUP");
   IElementType PROPERTY_SELECTOR = new CypherElementType("PROPERTY_SELECTOR");
   IElementType QUERY = new CypherElementType("QUERY");
@@ -555,6 +556,9 @@ public interface CypherTypes {
       }
       else if (type == PROPERTY_KEY_NAME) {
         return new CypherPropertyKeyNameImpl(node);
+      }
+      else if (type == PROPERTY_KEY_NAMES) {
+        return new CypherPropertyKeyNamesImpl(node);
       }
       else if (type == PROPERTY_LOOKUP) {
         return new CypherPropertyLookupImpl(node);

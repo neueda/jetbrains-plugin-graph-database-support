@@ -10,7 +10,9 @@ import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.exceptions.ClientException;
 
+import java.nio.channels.UnresolvedAddressException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +66,8 @@ public class Neo4jBoltDatabase implements GraphDatabaseApi {
             long endTime = System.currentTimeMillis();
 
             return new Neo4jBoltQueryResult(endTime - startTime, buffer);
+        } catch (UnresolvedAddressException e) {
+            throw new ClientException(e.getMessage());
         }
     }
 

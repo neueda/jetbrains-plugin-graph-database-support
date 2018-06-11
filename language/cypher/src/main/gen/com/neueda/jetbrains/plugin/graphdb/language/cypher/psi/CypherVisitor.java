@@ -402,6 +402,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitNamedElement(o);
   }
 
+  public void visitPropertyKeyNames(@NotNull CypherPropertyKeyNames o) {
+    visitPsiElement(o);
+  }
+
   public void visitPropertyLookup(@NotNull CypherPropertyLookup o) {
     visitPsiElement(o);
   }
