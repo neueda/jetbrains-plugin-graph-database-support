@@ -44,6 +44,10 @@ public class GraphDbEditorsConsoleRootType extends ConsoleRootType {
     }
 
     private Optional<? extends DataSourceApi> getDataSource(@NotNull Project project, @NotNull VirtualFile file) {
+        if (file.isDirectory()) {
+            return Optional.empty();
+        }
+
         DataSourcesComponent component = project.getComponent(DataSourcesComponent.class);
         return component.getDataSourceContainer()
                    .findDataSource(NameUtil.extractDataSourceUUID(file.getName()));
