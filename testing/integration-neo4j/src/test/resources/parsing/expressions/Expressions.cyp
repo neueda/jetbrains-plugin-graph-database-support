@@ -40,8 +40,8 @@ AND CASE var WHEN expr THEN expr END
 AND CASE WHEN expr THEN expr END
 AND CASE WHEN expr THEN expr END
 AND var.prop.prop.prop
-AND {key: "val"}
-AND {key: "val", key: "val"}
+AND {ref: "val"}
+AND {ref: "val", ref: "val"}
 AND [var IN expr]
 AND [var in expr | expr ]
 AND []

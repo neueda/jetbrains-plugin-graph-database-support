@@ -1,9 +1,9 @@
 CYPHER RETURN n;
 CYPHER 2.3 RETURN n;
-CYPHER key=val RETURN n;
-CYPHER key1=val1 key2=val2 RETURN n;
-CYPHER 2.3 key=val RETURN n;
-CYPHER 2.3 key1=val2 key2=val2 RETURN n;
+CYPHER ref=val RETURN n;
+CYPHER ref1=val1 ref2=val2 RETURN n;
+CYPHER 2.3 ref=val RETURN n;
+CYPHER 2.3 ref1=val2 ref2=val2 RETURN n;
 EXPLAIN RETURN n;
 PROFILE RETURN n;
-CYPHER 2.3 key1=val2 key2=val2 EXPLAIN PROFILE RETURN n;
+CYPHER 2.3 ref1=val2 ref2=val2 EXPLAIN PROFILE RETURN n;

@@ -100,6 +100,7 @@
     K_SCALAR="regexp:[Ss][Cc][Aa][Ll][Aa][Rr]"
     K_OF="regexp:[Oo][Ff]"
     K_ADD="regexp:[Aa][Dd][Dd]"
+    K_KEY="regexp:(K|k)(E|e)(Y|y)"
 
     // literals
     l_identifier="regexp:[a-zA-Z_][a-zA-Z_$0-9]*"
@@ -197,6 +198,8 @@ Command ::= CreateIndex
           | DropNodePropertyExistenceConstraint
           | CreateRelationshipPropertyExistenceConstraint
           | DropRelationshipPropertyExistenceConstraint
+          | CreateNodeKeyConstraint
+          | DropNodeKeyConstraint
 
 CreateIndex ::= K_CREATE IndexSyntax
 DropIndex ::= K_DROP IndexSyntax
@@ -210,13 +213,16 @@ CreateNodePropertyExistenceConstraint ::= K_CREATE NodePropertyExistenceConstrai
 DropNodePropertyExistenceConstraint ::= K_DROP NodePropertyExistenceConstraintSyntax
 NodePropertyExistenceConstraintSyntax ::= K_CONSTRAINT K_ON "(" Variable NodeLabel ")" K_ASSERT K_EXISTS "(" PropertyExpression ")"
 
+CreateNodeKeyConstraint ::= K_CREATE NodeKeySyntax
+DropNodeKeyConstraint ::= K_DROP NodeKeySyntax
+NodeKeySyntax ::= K_CONSTRAINT K_ON "(" Variable NodeLabel ")" K_ASSERT "(" PropertyExpression ("," PropertyExpression)* ")" K_IS K_NODE K_KEY
+
 CreateRelationshipPropertyExistenceConstraint ::= K_CREATE RelationshipPropertyExistenceConstraintSyntax
 DropRelationshipPropertyExistenceConstraint ::= K_DROP RelationshipPropertyExistenceConstraintSyntax
 RelationshipPropertyExistenceConstraintSyntax ::= K_CONSTRAINT K_ON RelationshipPatternSyntax K_ASSERT K_EXISTS "(" PropertyExpression ")"
 RelationshipPatternSyntax ::= ("(" ")" "-" "[" Variable RelType "]" "-" "(" ")")
       | ("(" ")" "-" "[" Variable RelType "]" "-" ">" "(" ")")
       | ("(" ")" "<" "-" "[" Variable RelType "]" "-" "(" ")")
-
 /*************************
  * Query
  */
@@ -662,6 +668,7 @@ ReservedWord ::= K_MATCH
                 | K_ALLSHORTESTPATHS
                 | K_ALL
                 | K_ADD
+                | K_KEY
 
 EscapedSymbolicNameString ::= l_identifier_text
 UnescapedSymbolicNameString ::= l_identifier

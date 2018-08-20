@@ -112,6 +112,7 @@ K_MANDATORY=[Mm][Aa][Nn][Dd][Aa][Tt][Oo][Rr][Yy]
 K_SCALAR=[Ss][Cc][Aa][Ll][Aa][Rr]
 K_OF=[Oo][Ff]
 K_ADD=[Aa][Dd][Dd]
+K_KEY=(K|k)(E|e)(Y|y)
 L_IDENTIFIER=[a-zA-Z_][a-zA-Z_$0-9]*
 L_IDENTIFIER_TEXT=\`[^`]+\`
 L_DECIMAL=(0|[1-9][0-9]*)\.[0-9]+
@@ -244,6 +245,7 @@ BLOCK_COMMENT = "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
   {K_SCALAR}                { return K_SCALAR; }
   {K_OF}                    { return K_OF; }
   {K_ADD}                   { return K_ADD; }
+  {K_KEY}                   { return K_KEY; }
   {L_IDENTIFIER}            { return L_IDENTIFIER; }
   {L_IDENTIFIER_TEXT}       { return L_IDENTIFIER_TEXT; }
   {L_DECIMAL}               { return L_DECIMAL; }

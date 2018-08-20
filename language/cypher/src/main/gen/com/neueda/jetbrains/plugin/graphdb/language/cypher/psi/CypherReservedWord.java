@@ -140,6 +140,9 @@ public interface CypherReservedWord extends PsiElement {
   PsiElement getKJoin();
 
   @Nullable
+  PsiElement getKKey();
+
+  @Nullable
   PsiElement getKLimit();
 
   @Nullable

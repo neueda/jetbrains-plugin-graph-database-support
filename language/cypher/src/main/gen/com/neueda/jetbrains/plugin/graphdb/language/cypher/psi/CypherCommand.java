@@ -11,6 +11,9 @@ public interface CypherCommand extends PsiElement {
   CypherCreateIndex getCreateIndex();
 
   @Nullable
+  CypherCreateNodeKeyConstraint getCreateNodeKeyConstraint();
+
+  @Nullable
   CypherCreateNodePropertyExistenceConstraint getCreateNodePropertyExistenceConstraint();
 
   @Nullable
@@ -21,6 +24,9 @@ public interface CypherCommand extends PsiElement {
 
   @Nullable
   CypherDropIndex getDropIndex();
+
+  @Nullable
+  CypherDropNodeKeyConstraint getDropNodeKeyConstraint();
 
   @Nullable
   CypherDropNodePropertyExistenceConstraint getDropNodePropertyExistenceConstraint();
