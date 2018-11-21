@@ -1,11 +1,10 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.listener;
 
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.FileEditorManagerAdapter;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.project.ProjectManagerAdapter;
+import com.intellij.openapi.project.ProjectManagerListener;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analytics;
 import org.jetbrains.annotations.NotNull;
@@ -26,10 +25,10 @@ public class AnalyticsListener {
     }
 
     private static void projectManagerListener() {
-        ProjectManagerAdapter listener = new ProjectManagerAdapter() {
+        ProjectManagerListener listener = new ProjectManagerListener() {
             @Override
             public void projectOpened(Project project) {
-                project.getMessageBus().connect().subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, new FileEditorManagerAdapter() {
+                project.getMessageBus().connect().subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, new FileEditorManagerListener() {
                     @Override
                     public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
                         if (EXTENSIONS.contains(file.getExtension())) {

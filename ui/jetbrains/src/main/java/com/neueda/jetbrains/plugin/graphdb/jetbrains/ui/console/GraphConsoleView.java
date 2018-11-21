@@ -14,7 +14,6 @@ import com.intellij.openapi.util.ActionCallback;
 import com.intellij.openapi.wm.StatusBar;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.JBTabsPaneImpl;
 import com.intellij.ui.border.CustomLineBorder;
@@ -26,6 +25,7 @@ import com.intellij.ui.table.JBTable;
 import com.intellij.ui.tabs.TabInfo;
 import com.intellij.ui.tabs.impl.JBTabsImpl;
 import com.intellij.ui.treeStructure.Tree;
+import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analytics;
@@ -173,11 +173,11 @@ public class GraphConsoleView implements Disposable {
     }
 
     private void updateLookAndFeel() {
-        tableScrollPane.setBorder(IdeBorderFactory.createEmptyBorder());
-        entityDetailsScrollPane.setBorder(IdeBorderFactory.createEmptyBorder());
-        logTab.setBorder(IdeBorderFactory.createEmptyBorder());
-        graphTab.setBorder(IdeBorderFactory.createEmptyBorder());
-        parametersTab.setBorder(IdeBorderFactory.createEmptyBorder());
+        tableScrollPane.setBorder(JBUI.Borders.empty());
+        entityDetailsScrollPane.setBorder(JBUI.Borders.empty());
+        logTab.setBorder(JBUI.Borders.empty());
+        graphTab.setBorder(JBUI.Borders.empty());
+        parametersTab.setBorder(JBUI.Borders.empty());
     }
 
     private void initializeUiComponents(Project project) {

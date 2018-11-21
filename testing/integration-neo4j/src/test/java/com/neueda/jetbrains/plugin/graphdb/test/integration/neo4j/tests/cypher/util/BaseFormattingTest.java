@@ -12,14 +12,11 @@ public abstract class BaseFormattingTest extends BaseIntegrationTest {
         PsiFile file = myFixture.addFileToProject("test.cypher", actual);
         myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
 
-        new WriteCommandAction.Simple(getProject()) {
-            @Override
-            protected void run() throws Throwable {
-                PsiFile f = myFixture.getFile();
-                CodeStyleManager.getInstance(getProject())
-                        .reformatText(f, singletonList(f.getTextRange()));
-            }
-        }.execute();
+        WriteCommandAction.runWriteCommandAction(getProject(), () -> {
+            PsiFile f = myFixture.getFile();
+            CodeStyleManager.getInstance(getProject())
+                    .reformatText(f, singletonList(f.getTextRange()));
+        });
 
         myFixture.checkResult(expected);
     }
