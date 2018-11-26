@@ -96,7 +96,8 @@ public class ArgumentHintTest extends BaseIntegrationTest {
         myFixture.configureByText("test.cyp", query);
         Object[] itemsToShow = getItemsToShow();
         int paramIdx = getHighlightedItem();
-        String presentation = getPresentation(itemsToShow, paramIdx);
+        String presentation = getPresentation(itemsToShow, paramIdx)
+                .replaceAll("<b +([^>]*)>","<b>");
 
         assertEquals(1, itemsToShow.length);
         assertEquals(expectedHighlight, presentation);
