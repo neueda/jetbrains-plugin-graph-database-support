@@ -23,5 +23,9 @@ public final class PsiTraversalUtilities {
             return PsiTraversalUtilities.getParentOfType(elementAtCaret, CypherStatementItem.class);
         }
 
+        public static PsiElement getCypherStatement(PsiElement element) {
+            return PsiTraversalUtilities.getParentOfType(element, CypherStatementItem.class);
+        }
+
     }
 }
