@@ -46,6 +46,16 @@ public class ExecuteQueryAction extends AnAction {
     private static final String EXECUTE_WITH_MOUSE_ACTION = "executeWithMouse";
     private static final String CONTENT_FROM_SELECT_ACTION = "contentFromSelect";
     private static final String CONTENT_FROM_CARET_ACTION = "contentFromCaret";
+    private static final String CONTENT_FROM_LINE_MARKER_ACTION = "contentFromLineMarker";
+
+    public ExecuteQueryAction() {
+    }
+
+    private String preSetQuery;
+
+    public ExecuteQueryAction(String element) {
+        preSetQuery = element;
+    }
 
     @Override
     public void update(AnActionEvent e) {
@@ -79,30 +89,39 @@ public class ExecuteQueryAction extends AnAction {
         MessageBus messageBus = project.getMessageBus();
         DataSourcesComponent dataSourcesComponent = project.getComponent(DataSourcesComponent.class);
 
-        Caret caret = editor.getCaretModel().getPrimaryCaret();
-
         String query = null;
+        String analyticsEvent;
         Map<String, Object> parameters = Collections.emptyMap();
-        if (caret.hasSelection()) {
-            query = caret.getSelectedText();
-        } else if (nonNull(psiFile)) {
-            String languageId = psiFile.getLanguage().getID();
-            if (isSupported(languageId)) {
-                PsiElement cypherStatement = getCypherStatementAtOffset(psiFile, caret.getOffset());
-                if (nonNull(cypherStatement)) {
-                    query = cypherStatement.getText();
-                    try { // support parameters for PsiElement only
-                        ParametersService service = ServiceManager.getService(project, ParametersService.class);
-                        parameters = service.getParameters(cypherStatement);
-                    } catch (Exception exception) {
-                        sendParametersRetrievalErrorEvent(messageBus, exception, editor);
-                        return;
+        if (preSetQuery == null) {
+            Caret caret = editor.getCaretModel().getPrimaryCaret();
+            analyticsEvent = caret.hasSelection() ? CONTENT_FROM_SELECT_ACTION : CONTENT_FROM_CARET_ACTION;
+
+            if (caret.hasSelection()) {
+                query = caret.getSelectedText();
+            } else if (nonNull(psiFile)) {
+                String languageId = psiFile.getLanguage().getID();
+                if (isSupported(languageId)) {
+                    PsiElement cypherStatement = getCypherStatementAtOffset(psiFile, caret.getOffset());
+                    if (nonNull(cypherStatement)) {
+                        query = cypherStatement.getText();
+                        try { // support parameters for PsiElement only
+                            ParametersService service = ServiceManager.getService(project, ParametersService.class);
+                            parameters = service.getParameters(cypherStatement);
+                        } catch (Exception exception) {
+                            sendParametersRetrievalErrorEvent(messageBus, exception, editor);
+                            return;
+                        }
                     }
                 }
             }
+
+
+        } else {
+            query = preSetQuery;
+            analyticsEvent = CONTENT_FROM_LINE_MARKER_ACTION;
         }
 
-        Analytics.event("query-content", caret.hasSelection() ? CONTENT_FROM_SELECT_ACTION : CONTENT_FROM_CARET_ACTION);
+        Analytics.event("query-content", analyticsEvent);
 
         if (isNull(query)) {
             Notifier.error(QUERY_EXECUTION_ERROR_TITLE, NO_QUERY_SELECTED_MESSAGE);
