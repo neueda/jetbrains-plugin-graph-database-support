@@ -96,7 +96,8 @@ public abstract class Neo4jServerLoader implements Neo4jServer {
                 FileUtil.writeToFile(hostsFile, String.join(System.lineSeparator(), updatedLines) + System.lineSeparator());
             }
         } catch (Exception e) {
-            Throwables.propagate(e);
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
         }
     }
 }

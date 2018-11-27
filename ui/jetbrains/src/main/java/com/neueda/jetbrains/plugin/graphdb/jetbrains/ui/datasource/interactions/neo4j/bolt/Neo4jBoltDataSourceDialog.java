@@ -6,10 +6,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.util.Disposer;
-import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.JBPasswordField;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.JBTextField;
+import com.intellij.util.ui.JBUI;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.Neo4jBoltConfiguration;
@@ -67,7 +67,7 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
 
         testConnectionButton.addActionListener(e -> {
             JPanel popupPanel = new JPanel(new BorderLayout());
-            popupPanel.setBorder(IdeBorderFactory.createEmptyBorder(THICKNESS));
+            popupPanel.setBorder(JBUI.Borders.empty(THICKNESS));
 
             ValidationInfo validationInfo = doValidate();
             if (validationInfo != null) {

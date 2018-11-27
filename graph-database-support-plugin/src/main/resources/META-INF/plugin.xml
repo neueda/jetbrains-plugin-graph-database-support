@@ -170,6 +170,7 @@
 
         <lang.formatter language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.formatter.CypherFormattingModelBuilder"/>
         <preFormatProcessor implementation="com.neueda.jetbrains.plugin.graphdb.language.cypher.formatter.CypherPreFormatter" />
+        <codeInsight.lineMarkerProvider language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.jetbrains.component.linemarker.CypherLineMarkerProvider"/>
     </extensions>
 
     <actions>

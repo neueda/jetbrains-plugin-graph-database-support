@@ -25,7 +25,7 @@ public class PropertyTreeCellRenderer extends ColoredTreeCellRenderer {
                     append(model.getValue().get().toString());
                 }
             }
-        } else {
+        } else if (userObject != null) {
             append(userObject.toString());
         }
     }
