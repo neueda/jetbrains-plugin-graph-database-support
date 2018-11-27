@@ -48,6 +48,7 @@ Temporary Items
 .idea
 *.ipr
 *.iml
+local.properties
 
 ## File-based project format:
 *.iws
