@@ -70,7 +70,8 @@ public class ParametersPanel implements ParametersProvider {
                 setInitialContent(document);
                 initializeUi();
             } catch (Throwable e) {
-                throw Throwables.propagate(e);
+                Throwables.throwIfUnchecked(e);
+                throw new RuntimeException(e);
             }
         });
     }
