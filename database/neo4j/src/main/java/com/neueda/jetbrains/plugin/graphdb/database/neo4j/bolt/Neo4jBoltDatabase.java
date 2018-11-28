@@ -49,23 +49,29 @@ public class Neo4jBoltDatabase implements GraphDatabaseApi {
 
     @Override
     public GraphQueryResult execute(String query, Map<String, Object> statementParameters) {
-        try (Driver driver = GraphDatabase.driver(url, auth);
-             Session session = driver.session()) {
+        try {
+            Driver driver = GraphDatabase.driver(url, auth);
+            try {
+                try (Session session = driver.session()) {
 
-            Neo4jBoltBuffer buffer = new Neo4jBoltBuffer();
+                    Neo4jBoltBuffer buffer = new Neo4jBoltBuffer();
 
-            long startTime = System.currentTimeMillis();
-            StatementResult statementResult = session.run(query, statementParameters);
-            buffer.addColumns(statementResult.keys());
+                    long startTime = System.currentTimeMillis();
+                    StatementResult statementResult = session.run(query, statementParameters);
+                    buffer.addColumns(statementResult.keys());
 
-            for (Record record : statementResult.list()) {
-                // Add row
-                buffer.addRow(record.asMap());
+                    for (Record record : statementResult.list()) {
+                        // Add row
+                        buffer.addRow(record.asMap());
+                    }
+                    buffer.addResultSummary(statementResult.consume());
+                    long endTime = System.currentTimeMillis();
+
+                    return new Neo4jBoltQueryResult(endTime - startTime, buffer);
+                }
+            } finally {
+                driver.closeAsync();
             }
-            buffer.addResultSummary(statementResult.consume());
-            long endTime = System.currentTimeMillis();
-
-            return new Neo4jBoltQueryResult(endTime - startTime, buffer);
         } catch (UnresolvedAddressException e) {
             throw new ClientException(e.getMessage());
         }
