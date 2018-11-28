@@ -1,6 +1,7 @@
 Release should be done manually & carefully.
 
 Be sure to check that plugin works before releasing!
+To be executed straight on neueda/jetbrains-plugin-graph-database-support repository master branch.
 
 Commands:
 
@@ -14,4 +15,9 @@ git checkout <new-release-tag>
 ./gradlew clean
 
 4) Publish plugin to Jetbrains Plugin Registry
-./gradlew publishPlugin
+Ensure {HOME}/.gradle/gradle.properties file contains intellij credentials
+intellijUsername=
+intellijPassword=
+Execute
+./gradlew buildPlugin
+./gradlew :graph-database-support-plugin:publishPlugin
