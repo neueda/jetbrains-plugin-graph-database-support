@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    compile 'org.neo4j.test:neo4j-harness:3.3.0'
+    compile 'org.neo4j.test:neo4j-harness:3.3.9'
     compile project(":testing:database:neo4j-common")
 }
 
