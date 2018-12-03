@@ -2,3 +2,11 @@ sudo: false
 language: java
 jdk:
   - oraclejdk8
+deploy:
+  provider: script
+  script: bash release-and-publish.sh
+  on:
+    branch: master
+    tags: true
+script:
+  - ./gradlew clean test
