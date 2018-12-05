@@ -160,6 +160,7 @@ public interface CypherTypes {
   IElementType BRACKET_SQUARECLOSE = new CypherTokenType("]");
   IElementType BRACKET_SQUAREOPEN = new CypherTokenType("[");
   IElementType DOLLAR = new CypherTokenType("$");
+  IElementType K_ADD = new CypherTokenType("K_ADD");
   IElementType K_ALL = new CypherTokenType("K_ALL");
   IElementType K_ALLSHORTESTPATHS = new CypherTokenType("K_ALLSHORTESTPATHS");
   IElementType K_AND = new CypherTokenType("K_AND");
@@ -184,6 +185,7 @@ public interface CypherTypes {
   IElementType K_DESCENDING = new CypherTokenType("K_DESCENDING");
   IElementType K_DETACH = new CypherTokenType("K_DETACH");
   IElementType K_DISTINCT = new CypherTokenType("K_DISTINCT");
+  IElementType K_DO = new CypherTokenType("K_DO");
   IElementType K_DROP = new CypherTokenType("K_DROP");
   IElementType K_ELSE = new CypherTokenType("K_ELSE");
   IElementType K_END = new CypherTokenType("K_END");
@@ -194,6 +196,7 @@ public interface CypherTypes {
   IElementType K_FALSE = new CypherTokenType("K_FALSE");
   IElementType K_FIELDTERMINATOR = new CypherTokenType("K_FIELDTERMINATOR");
   IElementType K_FILTER = new CypherTokenType("K_FILTER");
+  IElementType K_FOR = new CypherTokenType("K_FOR");
   IElementType K_FOREACH = new CypherTokenType("K_FOREACH");
   IElementType K_FROM = new CypherTokenType("K_FROM");
   IElementType K_HEADERS = new CypherTokenType("K_HEADERS");
@@ -203,12 +206,14 @@ public interface CypherTypes {
   IElementType K_JOIN = new CypherTokenType("K_JOIN");
   IElementType K_LIMIT = new CypherTokenType("K_LIMIT");
   IElementType K_LOAD = new CypherTokenType("K_LOAD");
+  IElementType K_MANDATORY = new CypherTokenType("K_MANDATORY");
   IElementType K_MATCH = new CypherTokenType("K_MATCH");
   IElementType K_MERGE = new CypherTokenType("K_MERGE");
   IElementType K_NODE = new CypherTokenType("K_NODE");
   IElementType K_NONE = new CypherTokenType("K_NONE");
   IElementType K_NOT = new CypherTokenType("K_NOT");
   IElementType K_NULL = new CypherTokenType("K_NULL");
+  IElementType K_OF = new CypherTokenType("K_OF");
   IElementType K_ON = new CypherTokenType("K_ON");
   IElementType K_OPTIONAL = new CypherTokenType("K_OPTIONAL");
   IElementType K_OR = new CypherTokenType("K_OR");
@@ -219,7 +224,9 @@ public interface CypherTypes {
   IElementType K_REL = new CypherTokenType("K_REL");
   IElementType K_RELATIONSHIP = new CypherTokenType("K_RELATIONSHIP");
   IElementType K_REMOVE = new CypherTokenType("K_REMOVE");
+  IElementType K_REQUIRE = new CypherTokenType("K_REQUIRE");
   IElementType K_RETURN = new CypherTokenType("K_RETURN");
+  IElementType K_SCALAR = new CypherTokenType("K_SCALAR");
   IElementType K_SCAN = new CypherTokenType("K_SCAN");
   IElementType K_SET = new CypherTokenType("K_SET");
   IElementType K_SHORTESTPATH = new CypherTokenType("K_SHORTESTPATH");
