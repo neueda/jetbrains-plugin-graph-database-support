@@ -210,6 +210,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitIndexSyntax(@NotNull CypherIndexSyntax o) {
+    visitPsiElement(o);
+  }
+
   public void visitIntegerLiteral(@NotNull CypherIntegerLiteral o) {
     visitIntegerYielding(o);
   }

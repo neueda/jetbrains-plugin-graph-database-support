@@ -5,12 +5,18 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CypherCreateIndex extends PsiElement {
+public interface CypherIndexSyntax extends PsiElement {
 
   @NotNull
-  CypherIndexSyntax getIndexSyntax();
+  CypherNodeLabel getNodeLabel();
 
   @NotNull
-  PsiElement getKCreate();
+  CypherPropertyKeyNames getPropertyKeyNames();
+
+  @NotNull
+  PsiElement getKIndex();
+
+  @NotNull
+  PsiElement getKOn();
 
 }

@@ -55,6 +55,7 @@ public interface CypherTypes {
   IElementType ID_IN_COLL = new CypherElementType("ID_IN_COLL");
   IElementType ID_LOOKUP = new CypherElementType("ID_LOOKUP");
   IElementType INDEX_QUERY = new CypherElementType("INDEX_QUERY");
+  IElementType INDEX_SYNTAX = new CypherElementType("INDEX_SYNTAX");
   IElementType INTEGER_LITERAL = new CypherElementType("INTEGER_LITERAL");
   IElementType LABEL_NAME = new CypherElementType("LABEL_NAME");
   IElementType LEFT_ARROW_HEAD = new CypherElementType("LEFT_ARROW_HEAD");
@@ -419,6 +420,9 @@ public interface CypherTypes {
       }
       else if (type == INDEX_QUERY) {
         return new CypherIndexQueryImpl(node);
+      }
+      else if (type == INDEX_SYNTAX) {
+        return new CypherIndexSyntaxImpl(node);
       }
       else if (type == INTEGER_LITERAL) {
         return new CypherIntegerLiteralImpl(node);

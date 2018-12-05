@@ -11,14 +11,14 @@ import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherType
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
-public class CypherCreateIndexImpl extends ASTWrapperPsiElement implements CypherCreateIndex {
+public class CypherIndexSyntaxImpl extends ASTWrapperPsiElement implements CypherIndexSyntax {
 
-  public CypherCreateIndexImpl(@NotNull ASTNode node) {
+  public CypherIndexSyntaxImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CypherVisitor visitor) {
-    visitor.visitCreateIndex(this);
+    visitor.visitIndexSyntax(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -28,14 +28,26 @@ public class CypherCreateIndexImpl extends ASTWrapperPsiElement implements Cyphe
 
   @Override
   @NotNull
-  public CypherIndexSyntax getIndexSyntax() {
-    return findNotNullChildByClass(CypherIndexSyntax.class);
+  public CypherNodeLabel getNodeLabel() {
+    return findNotNullChildByClass(CypherNodeLabel.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getKCreate() {
-    return findNotNullChildByType(K_CREATE);
+  public CypherPropertyKeyNames getPropertyKeyNames() {
+    return findNotNullChildByClass(CypherPropertyKeyNames.class);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getKIndex() {
+    return findNotNullChildByType(K_INDEX);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getKOn() {
+    return findNotNullChildByType(K_ON);
   }
 
 }

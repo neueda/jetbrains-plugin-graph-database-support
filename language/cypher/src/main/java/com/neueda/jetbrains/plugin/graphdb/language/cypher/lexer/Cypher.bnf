@@ -198,17 +198,20 @@ Command ::= CreateIndex
           | CreateRelationshipPropertyExistenceConstraint
           | DropRelationshipPropertyExistenceConstraint
 
-CreateIndex ::= K_CREATE K_INDEX K_ON NodeLabel "(" PropertyKeyNames ")"
-DropIndex ::= K_DROP K_INDEX K_ON NodeLabel "(" PropertyKeyNames ")"
+CreateIndex ::= K_CREATE IndexSyntax
+DropIndex ::= K_DROP IndexSyntax
+IndexSyntax ::= K_INDEX K_ON NodeLabel "(" PropertyKeyNames ")"
+
 CreateUniqueConstraint ::= K_CREATE UniqueConstraintSyntax
 DropUniqueConstraint ::= K_DROP UniqueConstraintSyntax
+UniqueConstraintSyntax ::= K_CONSTRAINT K_ON "(" Variable NodeLabel ")" K_ASSERT PropertyExpression K_IS K_UNIQUE
+
 CreateNodePropertyExistenceConstraint ::= K_CREATE NodePropertyExistenceConstraintSyntax
 DropNodePropertyExistenceConstraint ::= K_DROP NodePropertyExistenceConstraintSyntax
+NodePropertyExistenceConstraintSyntax ::= K_CONSTRAINT K_ON "(" Variable NodeLabel ")" K_ASSERT K_EXISTS "(" PropertyExpression ")"
+
 CreateRelationshipPropertyExistenceConstraint ::= K_CREATE RelationshipPropertyExistenceConstraintSyntax
 DropRelationshipPropertyExistenceConstraint ::= K_DROP RelationshipPropertyExistenceConstraintSyntax
-
-UniqueConstraintSyntax ::= K_CONSTRAINT K_ON "(" Variable NodeLabel ")" K_ASSERT PropertyExpression K_IS K_UNIQUE
-NodePropertyExistenceConstraintSyntax ::= K_CONSTRAINT K_ON "(" Variable NodeLabel ")" K_ASSERT K_EXISTS "(" PropertyExpression ")"
 RelationshipPropertyExistenceConstraintSyntax ::= K_CONSTRAINT K_ON RelationshipPatternSyntax K_ASSERT K_EXISTS "(" PropertyExpression ")"
 RelationshipPatternSyntax ::= ("(" ")" "-" "[" Variable RelType "]" "-" "(" ")")
       | ("(" ")" "-" "[" Variable RelType "]" "-" ">" "(" ")")
@@ -221,7 +224,7 @@ Query ::= RegularQuery | BulkImportQuery
 
 //-- RegularQuery
 RegularQuery ::= SingleQuery Union*
-Union ::= ((K_UNION K_ALL) | K_UNION) SingleQuery
+Union ::= K_UNION K_ALL? SingleQuery
 SingleQuery ::= Clause+
 Clause ::= LoadCSV
     | Start
@@ -262,15 +265,14 @@ IdLookup ::= "(" (LiteralIds | Parameter | "*") ")"
 LiteralIds ::= IntegerLiteral ("," IntegerLiteral)*
 
 //-- Match
-Match ::= ((K_OPTIONAL K_MATCH) | K_MATCH) Pattern Hint* Where?
-Hint ::= (K_USING K_INDEX Variable NodeLabel "(" PropertyKeyName ")")
-       | (K_USING K_JOIN K_ON Variable ("," Variable)*)
-       | (K_USING K_SCAN Variable NodeLabel)
+Match ::= K_OPTIONAL? K_MATCH Pattern Hint* Where?
+Hint ::= K_USING ((K_INDEX Variable NodeLabel "(" PropertyKeyName ")")
+       | (K_JOIN K_ON Variable ("," Variable)*)
+       | (K_SCAN Variable NodeLabel))
 
 //-- Merge
 Merge ::= K_MERGE PatternPart MergeAction*
-MergeAction ::= (K_ON K_MATCH SetClause)
-              | (K_ON K_CREATE SetClause)
+MergeAction ::= K_ON (K_MATCH | K_CREATE) SetClause
 
 //-- SetClause
 SetClause ::= K_SET SetItem ("," SetItem)*
@@ -284,17 +286,13 @@ Remove ::= K_REMOVE RemoveItem ("," RemoveItem)*
 RemoveItem ::= (Variable NodeLabels) | PropertyExpression
 
 //-- Return
-With ::= (K_WITH K_DISTINCT ReturnBody Where?)
-       | (K_WITH ReturnBody Where?)
-Return ::= (K_RETURN K_DISTINCT ReturnBody)
-         | (K_RETURN ReturnBody)
+With ::= K_WITH K_DISTINCT? ReturnBody Where?
+Return ::= K_RETURN K_DISTINCT? ReturnBody
 ReturnBody ::= ReturnItems Order? Skip? Limit?
-ReturnItems ::= ("*" ("," ReturnItem)*)
-              | (ReturnItem ("," ReturnItem)*)
+ReturnItems ::= ("*" | ReturnItem) ("," ReturnItem)*
 ReturnItem ::= (Expression K_AS Variable) | (Expression)
 Order ::= K_ORDER K_BY SortItem ("," SortItem)*
-SortItem ::= (Expression (K_DESCENDING | K_DESC))
-           | (Expression (K_ASCENDING | K_ASC)?)
+SortItem ::= Expression (K_DESCENDING | K_DESC | K_ASCENDING | K_ASC)?
 Skip ::= K_SKIP Expression
 Limit ::= K_LIMIT Expression
 
@@ -315,10 +313,8 @@ SimpleProcedureResult ::= Variable
 ProcedureOutput ::= SymbolicNameString
 
 //-- Other
-Create ::= (K_CREATE K_UNIQUE Pattern)
-         | (K_CREATE Pattern)
-Delete ::= (K_DELETE Expression ("," Expression)*)
-         | (K_DETACH K_DELETE Expression ("," Expression)*)
+Create ::= K_CREATE K_UNIQUE? Pattern
+Delete ::= K_DETACH? K_DELETE Expression ("," Expression)*
 Unwind ::= K_UNWIND Expression K_AS Variable
 Foreach ::= K_FOREACH "(" Variable K_IN Expression "|" Clause+ ")"
 Where ::= K_WHERE Expression
@@ -327,7 +323,7 @@ Where ::= K_WHERE Expression
  * Patterns
  */
 Pattern ::= PatternPart ("," PatternPart)*
-PatternPart ::= (Variable "=" AnonymousPatternPart) | AnonymousPatternPart
+PatternPart ::= (Variable "=")? AnonymousPatternPart
 AnonymousPatternPart ::= ShortestPathPattern | PatternElement
 ShortestPathPattern ::= ShortestPathFunctionInvocation | AllShortestPathsFunctionInvocation {
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherTypePropagator"
@@ -435,16 +431,15 @@ ParenthesizedExpression ::= "(" Expression ")" {
     pin=1
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherParenthesized"
 }
-FunctionInvocation ::= (FunctionInvocationBody "(" "*" ")")
-                     | (FunctionInvocationBody FunctionArguments) {
+FunctionInvocation ::= FunctionInvocationBody (("(" "*" ")") | FunctionArguments) {
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation"
     methods=[getFullName]
 }
-FunctionArguments ::= "(" K_DISTINCT? Expression? ("," Expression)* ")"{
+FunctionArguments ::= "(" K_DISTINCT? Expression? ("," Expression)* ")" {
    implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherArgumentList"
 }
 FunctionInvocationBody ::= Namespace FunctionName
-CaseExpression ::= ((K_CASE CaseAlternatives+) | (K_CASE Expression CaseAlternatives+))
+CaseExpression ::= K_CASE ((CaseAlternatives+) | (Expression CaseAlternatives+))
                    (K_ELSE Expression)?
                    K_END {
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherAnyYielding"
