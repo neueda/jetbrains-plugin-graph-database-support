@@ -13,7 +13,7 @@ deploy:
   provider: script
   script: bash release-and-publish.sh
   on:
-#    repo: neueda/jetbrains-plugin-graph-database-support
+    repo: neueda/jetbrains-plugin-graph-database-support
     branch: master
     tags: true
 script:
