@@ -368,4 +368,8 @@ public class CypherFormattingTest extends BaseFormattingTest {
                 "RETURN 'I\'m escaping \\n to the new \"line\"'");
     }
 
+    public void testAssertFormatting() {
+        doTest("CALL apoc.schema.assert({}, {});",
+                "CALL apoc.schema.assert({}, {});");
+    }
 }

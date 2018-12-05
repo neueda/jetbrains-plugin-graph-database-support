@@ -49,7 +49,8 @@ public class KeywordCaseConverter extends AbstractCypherConverter {
                         CypherTypes.REL_TYPE_NAME,
                         CypherTypes.PROPERTY_KEY_NAME,
                         CypherTypes.NAMESPACE,
-                        CypherTypes.PARAMETER)) != null) {
+                        CypherTypes.PARAMETER,
+                        CypherTypes.PROCEDURE_NAME)) != null) {
                     return null;
                 }
 
