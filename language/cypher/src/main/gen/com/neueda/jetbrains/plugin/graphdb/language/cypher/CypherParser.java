@@ -368,6 +368,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == REMOVE_ITEM) {
       r = RemoveItem(b, 0);
     }
+    else if (t == RESERVED_WORD) {
+      r = ReservedWord(b, 0);
+    }
     else if (t == RETURN) {
       r = Return(b, 0);
     }
@@ -3875,6 +3878,185 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // K_MATCH
+  //                 | K_YIELD
+  //                 | K_XOR
+  //                 | K_WITH
+  //                 | K_WHERE
+  //                 | K_WHEN
+  //                 | K_USING
+  //                 | K_UNWIND
+  //                 | K_UNIQUE
+  //                 | K_UNION
+  //                 | K_TRUE
+  //                 | K_THEN
+  //                 | K_STARTS
+  //                 | K_START
+  //                 | K_SKIP
+  //                 | K_SINGLE
+  //                 | K_SHORTESTPATH
+  //                 | K_SET
+  //                 | K_SCAN
+  //                 | K_SCALAR
+  //                 | K_RETURN
+  //                 | K_REQUIRE
+  //                 | K_REMOVE
+  //                 | K_RELATIONSHIP
+  //                 | K_REL
+  //                 | K_REDUCE
+  //                 | K_PROFILE
+  //                 | K_PERIODIC
+  //                 | K_ORDER
+  //                 | K_OR
+  //                 | K_OPTIONAL
+  //                 | K_ON
+  //                 | K_OF
+  //                 | K_NULL
+  //                 | K_NOT
+  //                 | K_NONE
+  //                 | K_NODE
+  //                 | K_MERGE
+  //                 | K_MANDATORY
+  //                 | K_LOAD
+  //                 | K_LIMIT
+  //                 | K_JOIN
+  //                 | K_IS
+  //                 | K_INDEX
+  //                 | K_IN
+  //                 | K_HEADERS
+  //                 | K_FROM
+  //                 | K_FOREACH
+  //                 | K_FOR
+  //                 | K_FILTER
+  //                 | K_FIELDTERMINATOR
+  //                 | K_FALSE
+  //                 | K_EXTRACT
+  //                 | K_EXPLAIN
+  //                 | K_EXISTS
+  //                 | K_ENDS
+  //                 | K_END
+  //                 | K_ELSE
+  //                 | K_DROP
+  //                 | K_DO
+  //                 | K_DISTINCT
+  //                 | K_DETACH
+  //                 | K_DESCENDING
+  //                 | K_DESC
+  //                 | K_DELETE
+  //                 | K_CYPHER
+  //                 | K_CSV
+  //                 | K_CREATE
+  //                 | K_COUNT
+  //                 | K_CONTAINS
+  //                 | K_CONSTRAINT
+  //                 | K_COMMIT
+  //                 | K_CASE
+  //                 | K_CALL
+  //                 | K_BY
+  //                 | K_BEGIN
+  //                 | K_ASSERT
+  //                 | K_ASCENDING
+  //                 | K_ASC
+  //                 | K_AS
+  //                 | K_ANY
+  //                 | K_AND
+  //                 | K_ALLSHORTESTPATHS
+  //                 | K_ALL
+  //                 | K_ADD
+  public static boolean ReservedWord(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ReservedWord")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, RESERVED_WORD, "<reserved word>");
+    r = consumeToken(b, K_MATCH);
+    if (!r) r = consumeToken(b, K_YIELD);
+    if (!r) r = consumeToken(b, K_XOR);
+    if (!r) r = consumeToken(b, K_WITH);
+    if (!r) r = consumeToken(b, K_WHERE);
+    if (!r) r = consumeToken(b, K_WHEN);
+    if (!r) r = consumeToken(b, K_USING);
+    if (!r) r = consumeToken(b, K_UNWIND);
+    if (!r) r = consumeToken(b, K_UNIQUE);
+    if (!r) r = consumeToken(b, K_UNION);
+    if (!r) r = consumeToken(b, K_TRUE);
+    if (!r) r = consumeToken(b, K_THEN);
+    if (!r) r = consumeToken(b, K_STARTS);
+    if (!r) r = consumeToken(b, K_START);
+    if (!r) r = consumeToken(b, K_SKIP);
+    if (!r) r = consumeToken(b, K_SINGLE);
+    if (!r) r = consumeToken(b, K_SHORTESTPATH);
+    if (!r) r = consumeToken(b, K_SET);
+    if (!r) r = consumeToken(b, K_SCAN);
+    if (!r) r = consumeToken(b, K_SCALAR);
+    if (!r) r = consumeToken(b, K_RETURN);
+    if (!r) r = consumeToken(b, K_REQUIRE);
+    if (!r) r = consumeToken(b, K_REMOVE);
+    if (!r) r = consumeToken(b, K_RELATIONSHIP);
+    if (!r) r = consumeToken(b, K_REL);
+    if (!r) r = consumeToken(b, K_REDUCE);
+    if (!r) r = consumeToken(b, K_PROFILE);
+    if (!r) r = consumeToken(b, K_PERIODIC);
+    if (!r) r = consumeToken(b, K_ORDER);
+    if (!r) r = consumeToken(b, K_OR);
+    if (!r) r = consumeToken(b, K_OPTIONAL);
+    if (!r) r = consumeToken(b, K_ON);
+    if (!r) r = consumeToken(b, K_OF);
+    if (!r) r = consumeToken(b, K_NULL);
+    if (!r) r = consumeToken(b, K_NOT);
+    if (!r) r = consumeToken(b, K_NONE);
+    if (!r) r = consumeToken(b, K_NODE);
+    if (!r) r = consumeToken(b, K_MERGE);
+    if (!r) r = consumeToken(b, K_MANDATORY);
+    if (!r) r = consumeToken(b, K_LOAD);
+    if (!r) r = consumeToken(b, K_LIMIT);
+    if (!r) r = consumeToken(b, K_JOIN);
+    if (!r) r = consumeToken(b, K_IS);
+    if (!r) r = consumeToken(b, K_INDEX);
+    if (!r) r = consumeToken(b, K_IN);
+    if (!r) r = consumeToken(b, K_HEADERS);
+    if (!r) r = consumeToken(b, K_FROM);
+    if (!r) r = consumeToken(b, K_FOREACH);
+    if (!r) r = consumeToken(b, K_FOR);
+    if (!r) r = consumeToken(b, K_FILTER);
+    if (!r) r = consumeToken(b, K_FIELDTERMINATOR);
+    if (!r) r = consumeToken(b, K_FALSE);
+    if (!r) r = consumeToken(b, K_EXTRACT);
+    if (!r) r = consumeToken(b, K_EXPLAIN);
+    if (!r) r = consumeToken(b, K_EXISTS);
+    if (!r) r = consumeToken(b, K_ENDS);
+    if (!r) r = consumeToken(b, K_END);
+    if (!r) r = consumeToken(b, K_ELSE);
+    if (!r) r = consumeToken(b, K_DROP);
+    if (!r) r = consumeToken(b, K_DO);
+    if (!r) r = consumeToken(b, K_DISTINCT);
+    if (!r) r = consumeToken(b, K_DETACH);
+    if (!r) r = consumeToken(b, K_DESCENDING);
+    if (!r) r = consumeToken(b, K_DESC);
+    if (!r) r = consumeToken(b, K_DELETE);
+    if (!r) r = consumeToken(b, K_CYPHER);
+    if (!r) r = consumeToken(b, K_CSV);
+    if (!r) r = consumeToken(b, K_CREATE);
+    if (!r) r = consumeToken(b, K_COUNT);
+    if (!r) r = consumeToken(b, K_CONTAINS);
+    if (!r) r = consumeToken(b, K_CONSTRAINT);
+    if (!r) r = consumeToken(b, K_COMMIT);
+    if (!r) r = consumeToken(b, K_CASE);
+    if (!r) r = consumeToken(b, K_CALL);
+    if (!r) r = consumeToken(b, K_BY);
+    if (!r) r = consumeToken(b, K_BEGIN);
+    if (!r) r = consumeToken(b, K_ASSERT);
+    if (!r) r = consumeToken(b, K_ASCENDING);
+    if (!r) r = consumeToken(b, K_ASC);
+    if (!r) r = consumeToken(b, K_AS);
+    if (!r) r = consumeToken(b, K_ANY);
+    if (!r) r = consumeToken(b, K_AND);
+    if (!r) r = consumeToken(b, K_ALLSHORTESTPATHS);
+    if (!r) r = consumeToken(b, K_ALL);
+    if (!r) r = consumeToken(b, K_ADD);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
   // K_RETURN K_DISTINCT? ReturnBody
   public static boolean Return(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Return")) return false;
@@ -4392,168 +4574,14 @@ public class CypherParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // UnescapedSymbolicNameString
   //     | EscapedSymbolicNameString
-  //     | K_MATCH
-  //     | K_RETURN
-  //     | K_DISTINCT
-  //     | K_UNION
-  //     | K_ALL
-  //     | K_LOAD
-  //     | K_CSV
-  //     | K_WITH
-  //     | K_HEADERS
-  //     | K_FROM
-  //     | K_AS
-  //     | K_FIELDTERMINATOR
-  //     | K_CREATE
-  //     | K_CONSTRAINT
-  //     | K_ON
-  //     | K_ASSERT
-  //     | K_IS
-  //     | K_UNIQUE
-  //     | K_EXISTS
-  //     | K_INDEX
-  //     | K_DROP
-  //     | K_START
-  //     | K_WHERE
-  //     | K_NODE
-  //     | K_RELATIONSHIP
-  //     | K_REL
-  //     | K_OPTIONAL
-  //     | K_USING
-  //     | K_JOIN
-  //     | K_SCAN
-  //     | K_SHORTESTPATH
-  //     | K_ALLSHORTESTPATHS
-  //     | K_UNWIND
-  //     | K_MERGE
-  //     | K_SET
-  //     | K_DELETE
-  //     | K_DETACH
-  //     | K_REMOVE
-  //     | K_FOREACH
-  //     | K_IN
-  //     | K_ORDER
-  //     | K_BY
-  //     | K_DESCENDING
-  //     | K_DESC
-  //     | K_ASCENDING
-  //     | K_ASC
-  //     | K_SKIP
-  //     | K_LIMIT
-  //     | K_PERIODIC
-  //     | K_BEGIN
-  //     | K_COMMIT
-  //     | K_XOR
-  //     | K_OR
-  //     | K_AND
-  //     | K_NOT
-  //     | K_STARTS
-  //     | K_ENDS
-  //     | K_CONTAINS
-  //     | K_NULL
-  //     | K_TRUE
-  //     | K_FALSE
-  //     | K_FILTER
-  //     | K_EXTRACT
-  //     | K_REDUCE
-  //     | K_ANY
-  //     | K_NONE
-  //     | K_SINGLE
-  //     | K_CASE
-  //     | K_ELSE
-  //     | K_END
-  //     | K_WHEN
-  //     | K_THEN
-  //     | K_PROFILE
-  //     | K_EXPLAIN
-  //     | K_CYPHER
-  //     | K_CALL
-  //     | K_YIELD
-  //     | K_COUNT
+  //     | ReservedWord
   public static boolean SymbolicNameString(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SymbolicNameString")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, SYMBOLIC_NAME_STRING, "<symbolic name string>");
     r = UnescapedSymbolicNameString(b, l + 1);
     if (!r) r = EscapedSymbolicNameString(b, l + 1);
-    if (!r) r = consumeToken(b, K_MATCH);
-    if (!r) r = consumeToken(b, K_RETURN);
-    if (!r) r = consumeToken(b, K_DISTINCT);
-    if (!r) r = consumeToken(b, K_UNION);
-    if (!r) r = consumeToken(b, K_ALL);
-    if (!r) r = consumeToken(b, K_LOAD);
-    if (!r) r = consumeToken(b, K_CSV);
-    if (!r) r = consumeToken(b, K_WITH);
-    if (!r) r = consumeToken(b, K_HEADERS);
-    if (!r) r = consumeToken(b, K_FROM);
-    if (!r) r = consumeToken(b, K_AS);
-    if (!r) r = consumeToken(b, K_FIELDTERMINATOR);
-    if (!r) r = consumeToken(b, K_CREATE);
-    if (!r) r = consumeToken(b, K_CONSTRAINT);
-    if (!r) r = consumeToken(b, K_ON);
-    if (!r) r = consumeToken(b, K_ASSERT);
-    if (!r) r = consumeToken(b, K_IS);
-    if (!r) r = consumeToken(b, K_UNIQUE);
-    if (!r) r = consumeToken(b, K_EXISTS);
-    if (!r) r = consumeToken(b, K_INDEX);
-    if (!r) r = consumeToken(b, K_DROP);
-    if (!r) r = consumeToken(b, K_START);
-    if (!r) r = consumeToken(b, K_WHERE);
-    if (!r) r = consumeToken(b, K_NODE);
-    if (!r) r = consumeToken(b, K_RELATIONSHIP);
-    if (!r) r = consumeToken(b, K_REL);
-    if (!r) r = consumeToken(b, K_OPTIONAL);
-    if (!r) r = consumeToken(b, K_USING);
-    if (!r) r = consumeToken(b, K_JOIN);
-    if (!r) r = consumeToken(b, K_SCAN);
-    if (!r) r = consumeToken(b, K_SHORTESTPATH);
-    if (!r) r = consumeToken(b, K_ALLSHORTESTPATHS);
-    if (!r) r = consumeToken(b, K_UNWIND);
-    if (!r) r = consumeToken(b, K_MERGE);
-    if (!r) r = consumeToken(b, K_SET);
-    if (!r) r = consumeToken(b, K_DELETE);
-    if (!r) r = consumeToken(b, K_DETACH);
-    if (!r) r = consumeToken(b, K_REMOVE);
-    if (!r) r = consumeToken(b, K_FOREACH);
-    if (!r) r = consumeToken(b, K_IN);
-    if (!r) r = consumeToken(b, K_ORDER);
-    if (!r) r = consumeToken(b, K_BY);
-    if (!r) r = consumeToken(b, K_DESCENDING);
-    if (!r) r = consumeToken(b, K_DESC);
-    if (!r) r = consumeToken(b, K_ASCENDING);
-    if (!r) r = consumeToken(b, K_ASC);
-    if (!r) r = consumeToken(b, K_SKIP);
-    if (!r) r = consumeToken(b, K_LIMIT);
-    if (!r) r = consumeToken(b, K_PERIODIC);
-    if (!r) r = consumeToken(b, K_BEGIN);
-    if (!r) r = consumeToken(b, K_COMMIT);
-    if (!r) r = consumeToken(b, K_XOR);
-    if (!r) r = consumeToken(b, K_OR);
-    if (!r) r = consumeToken(b, K_AND);
-    if (!r) r = consumeToken(b, K_NOT);
-    if (!r) r = consumeToken(b, K_STARTS);
-    if (!r) r = consumeToken(b, K_ENDS);
-    if (!r) r = consumeToken(b, K_CONTAINS);
-    if (!r) r = consumeToken(b, K_NULL);
-    if (!r) r = consumeToken(b, K_TRUE);
-    if (!r) r = consumeToken(b, K_FALSE);
-    if (!r) r = consumeToken(b, K_FILTER);
-    if (!r) r = consumeToken(b, K_EXTRACT);
-    if (!r) r = consumeToken(b, K_REDUCE);
-    if (!r) r = consumeToken(b, K_ANY);
-    if (!r) r = consumeToken(b, K_NONE);
-    if (!r) r = consumeToken(b, K_SINGLE);
-    if (!r) r = consumeToken(b, K_CASE);
-    if (!r) r = consumeToken(b, K_ELSE);
-    if (!r) r = consumeToken(b, K_END);
-    if (!r) r = consumeToken(b, K_WHEN);
-    if (!r) r = consumeToken(b, K_THEN);
-    if (!r) r = consumeToken(b, K_PROFILE);
-    if (!r) r = consumeToken(b, K_EXPLAIN);
-    if (!r) r = consumeToken(b, K_CYPHER);
-    if (!r) r = consumeToken(b, K_CALL);
-    if (!r) r = consumeToken(b, K_YIELD);
-    if (!r) r = consumeToken(b, K_COUNT);
+    if (!r) r = ReservedWord(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }

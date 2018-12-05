@@ -123,6 +123,7 @@ public interface CypherTypes {
   IElementType REL_TYPE_NAME = new CypherElementType("REL_TYPE_NAME");
   IElementType REMOVE = new CypherElementType("REMOVE");
   IElementType REMOVE_ITEM = new CypherElementType("REMOVE_ITEM");
+  IElementType RESERVED_WORD = new CypherElementType("RESERVED_WORD");
   IElementType RETURN = new CypherElementType("RETURN");
   IElementType RETURN_BODY = new CypherElementType("RETURN_BODY");
   IElementType RETURN_ITEM = new CypherElementType("RETURN_ITEM");
@@ -624,6 +625,9 @@ public interface CypherTypes {
       }
       else if (type == REMOVE_ITEM) {
         return new CypherRemoveItemImpl(node);
+      }
+      else if (type == RESERVED_WORD) {
+        return new CypherReservedWordImpl(node);
       }
       else if (type == RETURN) {
         return new CypherReturnImpl(node);

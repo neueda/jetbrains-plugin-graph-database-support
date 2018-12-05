@@ -482,6 +482,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitReservedWord(@NotNull CypherReservedWord o) {
+    visitPsiElement(o);
+  }
+
   public void visitReturn(@NotNull CypherReturn o) {
     visitPsiElement(o);
   }
