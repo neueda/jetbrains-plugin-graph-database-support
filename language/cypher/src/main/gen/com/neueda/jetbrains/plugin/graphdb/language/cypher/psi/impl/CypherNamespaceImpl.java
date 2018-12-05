@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherNamespaceImpl extends ASTWrapperPsiElement implements CypherNamespace {
 
-  public CypherNamespaceImpl(ASTNode node) {
+  public CypherNamespaceImpl(@NotNull ASTNode node) {
     super(node);
   }
 

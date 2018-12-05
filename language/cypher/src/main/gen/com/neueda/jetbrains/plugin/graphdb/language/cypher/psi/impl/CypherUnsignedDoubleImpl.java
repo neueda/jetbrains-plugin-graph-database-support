@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherUnsignedDoubleImpl extends ASTWrapperPsiElement implements CypherUnsignedDouble {
 
-  public CypherUnsignedDoubleImpl(ASTNode node) {
+  public CypherUnsignedDoubleImpl(@NotNull ASTNode node) {
     super(node);
   }
 

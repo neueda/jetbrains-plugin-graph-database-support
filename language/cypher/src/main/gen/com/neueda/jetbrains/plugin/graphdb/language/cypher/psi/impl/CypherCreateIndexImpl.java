@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherCreateIndexImpl extends ASTWrapperPsiElement implements CypherCreateIndex {
 
-  public CypherCreateIndexImpl(ASTNode node) {
+  public CypherCreateIndexImpl(@NotNull ASTNode node) {
     super(node);
   }
 

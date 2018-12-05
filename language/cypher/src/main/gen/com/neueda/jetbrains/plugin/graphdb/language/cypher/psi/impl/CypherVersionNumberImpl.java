@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherVersionNumberImpl extends ASTWrapperPsiElement implements CypherVersionNumber {
 
-  public CypherVersionNumberImpl(ASTNode node) {
+  public CypherVersionNumberImpl(@NotNull ASTNode node) {
     super(node);
   }
 

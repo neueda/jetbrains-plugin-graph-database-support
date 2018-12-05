@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherDropIndexImpl extends ASTWrapperPsiElement implements CypherDropIndex {
 
-  public CypherDropIndexImpl(ASTNode node) {
+  public CypherDropIndexImpl(@NotNull ASTNode node) {
     super(node);
   }
 

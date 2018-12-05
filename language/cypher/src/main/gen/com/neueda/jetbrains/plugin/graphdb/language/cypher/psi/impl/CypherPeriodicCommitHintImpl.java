@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherPeriodicCommitHintImpl extends ASTWrapperPsiElement implements CypherPeriodicCommitHint {
 
-  public CypherPeriodicCommitHintImpl(ASTNode node) {
+  public CypherPeriodicCommitHintImpl(@NotNull ASTNode node) {
     super(node);
   }
 

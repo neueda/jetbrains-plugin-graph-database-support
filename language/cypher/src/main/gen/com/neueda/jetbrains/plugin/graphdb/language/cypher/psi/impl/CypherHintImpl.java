@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherHintImpl extends ASTWrapperPsiElement implements CypherHint {
 
-  public CypherHintImpl(ASTNode node) {
+  public CypherHintImpl(@NotNull ASTNode node) {
     super(node);
   }
 

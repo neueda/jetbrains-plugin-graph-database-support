@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherAliasedProcedureResultImpl extends ASTWrapperPsiElement implements CypherAliasedProcedureResult {
 
-  public CypherAliasedProcedureResultImpl(ASTNode node) {
+  public CypherAliasedProcedureResultImpl(@NotNull ASTNode node) {
     super(node);
   }
 

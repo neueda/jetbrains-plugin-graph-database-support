@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherParenthesizedExpressionImpl extends ASTWrapperPsiElement implements CypherParenthesizedExpression {
 
-  public CypherParenthesizedExpressionImpl(ASTNode node) {
+  public CypherParenthesizedExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 

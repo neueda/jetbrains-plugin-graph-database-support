@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherRemoveImpl extends ASTWrapperPsiElement implements CypherRemove {
 
-  public CypherRemoveImpl(ASTNode node) {
+  public CypherRemoveImpl(@NotNull ASTNode node) {
     super(node);
   }
 

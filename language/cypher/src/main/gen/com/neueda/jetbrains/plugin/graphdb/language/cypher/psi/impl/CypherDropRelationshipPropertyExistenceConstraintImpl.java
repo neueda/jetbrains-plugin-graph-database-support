@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherDropRelationshipPropertyExistenceConstraintImpl extends ASTWrapperPsiElement implements CypherDropRelationshipPropertyExistenceConstraint {
 
-  public CypherDropRelationshipPropertyExistenceConstraintImpl(ASTNode node) {
+  public CypherDropRelationshipPropertyExistenceConstraintImpl(@NotNull ASTNode node) {
     super(node);
   }
 

@@ -1,9 +1,12 @@
 package com.neueda.jetbrains.plugin.graphdb.language.cypher.lexer;
 
-import com.intellij.lexer.*;
+import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
-import static com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.CypherParserDefinition.LINE_COMMENT;
-import static com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.CypherParserDefinition.BLOCK_COMMENT;
+
+import static com.intellij.psi.TokenType.BAD_CHARACTER;
+import static com.intellij.psi.TokenType.WHITE_SPACE;
+import static com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherParserDefinition.LINE_COMMENT;
+import static com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherParserDefinition.BLOCK_COMMENT;
 import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes.*;
 
 %%
@@ -22,7 +25,7 @@ import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherType
 %unicode
 
 EOL=\R
-WHITE_SPACE=\s
+WHITE_SPACE=\s+
 
 K_MATCH=(M|m)(A|a)(T|t)(C|c)(H|h)
 K_RETURN=(R|r)(E|e)(T|t)(U|u)(R|r)(N|n)
@@ -113,7 +116,7 @@ BLOCK_COMMENT = "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
 
 %%
 <YYINITIAL> {
-  {WHITE_SPACE}             { return com.intellij.psi.TokenType.WHITE_SPACE; }
+  {WHITE_SPACE}             { return WHITE_SPACE; }
 
   {LINE_COMMENT}            { return LINE_COMMENT; }
   {BLOCK_COMMENT}           { return BLOCK_COMMENT; }
@@ -234,4 +237,4 @@ BLOCK_COMMENT = "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
   {L_STRING}                { return L_STRING; }
 }
 
-[^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }
+[^] { return BAD_CHARACTER; }

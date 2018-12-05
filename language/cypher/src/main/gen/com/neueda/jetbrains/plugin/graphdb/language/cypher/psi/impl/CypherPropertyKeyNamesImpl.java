@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherPropertyKeyNamesImpl extends ASTWrapperPsiElement implements CypherPropertyKeyNames {
 
-  public CypherPropertyKeyNamesImpl(ASTNode node) {
+  public CypherPropertyKeyNamesImpl(@NotNull ASTNode node) {
     super(node);
   }
 

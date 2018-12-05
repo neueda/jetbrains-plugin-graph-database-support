@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherUnwindImpl extends ASTWrapperPsiElement implements CypherUnwind {
 
-  public CypherUnwindImpl(ASTNode node) {
+  public CypherUnwindImpl(@NotNull ASTNode node) {
     super(node);
   }
 

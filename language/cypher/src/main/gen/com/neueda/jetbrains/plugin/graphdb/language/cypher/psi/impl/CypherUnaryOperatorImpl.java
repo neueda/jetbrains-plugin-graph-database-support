@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherUnaryOperatorImpl extends ASTWrapperPsiElement implements CypherUnaryOperator {
 
-  public CypherUnaryOperatorImpl(ASTNode node) {
+  public CypherUnaryOperatorImpl(@NotNull ASTNode node) {
     super(node);
   }
 

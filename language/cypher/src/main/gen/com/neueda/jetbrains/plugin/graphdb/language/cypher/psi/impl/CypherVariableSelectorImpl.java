@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherVariableSelectorImpl extends ASTWrapperPsiElement implements CypherVariableSelector {
 
-  public CypherVariableSelectorImpl(ASTNode node) {
+  public CypherVariableSelectorImpl(@NotNull ASTNode node) {
     super(node);
   }
 

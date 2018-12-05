@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherAnonymousPatternPartImpl extends ASTWrapperPsiElement implements CypherAnonymousPatternPart {
 
-  public CypherAnonymousPatternPartImpl(ASTNode node) {
+  public CypherAnonymousPatternPartImpl(@NotNull ASTNode node) {
     super(node);
   }
 

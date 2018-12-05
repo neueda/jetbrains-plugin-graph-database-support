@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherShortestPathPatternImpl extends ASTWrapperPsiElement implements CypherShortestPathPattern {
 
-  public CypherShortestPathPatternImpl(ASTNode node) {
+  public CypherShortestPathPatternImpl(@NotNull ASTNode node) {
     super(node);
   }
 

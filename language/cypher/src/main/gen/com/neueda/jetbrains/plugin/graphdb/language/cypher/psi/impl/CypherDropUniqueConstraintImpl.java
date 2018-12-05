@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherDropUniqueConstraintImpl extends ASTWrapperPsiElement implements CypherDropUniqueConstraint {
 
-  public CypherDropUniqueConstraintImpl(ASTNode node) {
+  public CypherDropUniqueConstraintImpl(@NotNull ASTNode node) {
     super(node);
   }
 

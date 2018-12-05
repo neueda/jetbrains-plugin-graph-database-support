@@ -14,7 +14,7 @@ import com.intellij.psi.PsiReference;
 
 public class CypherRelTypeNameImpl extends CypherNamedElementImpl implements CypherRelTypeName {
 
-  public CypherRelTypeNameImpl(ASTNode node) {
+  public CypherRelTypeNameImpl(@NotNull ASTNode node) {
     super(node);
   }
 

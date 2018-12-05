@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherRelationshipLookupImpl extends ASTWrapperPsiElement implements CypherRelationshipLookup {
 
-  public CypherRelationshipLookupImpl(ASTNode node) {
+  public CypherRelationshipLookupImpl(@NotNull ASTNode node) {
     super(node);
   }
 

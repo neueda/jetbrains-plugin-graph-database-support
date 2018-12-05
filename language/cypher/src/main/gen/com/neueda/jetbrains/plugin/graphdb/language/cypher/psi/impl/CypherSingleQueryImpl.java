@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherSingleQueryImpl extends ASTWrapperPsiElement implements CypherSingleQuery {
 
-  public CypherSingleQueryImpl(ASTNode node) {
+  public CypherSingleQueryImpl(@NotNull ASTNode node) {
     super(node);
   }
 

@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherRelTypeImpl extends ASTWrapperPsiElement implements CypherRelType {
 
-  public CypherRelTypeImpl(ASTNode node) {
+  public CypherRelTypeImpl(@NotNull ASTNode node) {
     super(node);
   }
 

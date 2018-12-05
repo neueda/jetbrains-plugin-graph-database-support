@@ -272,7 +272,7 @@ public interface CypherTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-       if (type == ALIASED_PROCEDURE_RESULT) {
+      if (type == ALIASED_PROCEDURE_RESULT) {
         return new CypherAliasedProcedureResultImpl(node);
       }
       else if (type == ALL_FUNCTION_INVOCATION) {

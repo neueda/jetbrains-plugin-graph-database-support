@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherLimitImpl extends ASTWrapperPsiElement implements CypherLimit {
 
-  public CypherLimitImpl(ASTNode node) {
+  public CypherLimitImpl(@NotNull ASTNode node) {
     super(node);
   }
 

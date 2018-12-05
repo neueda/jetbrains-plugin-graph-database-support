@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherLoadCSVQueryImpl extends ASTWrapperPsiElement implements CypherLoadCSVQuery {
 
-  public CypherLoadCSVQueryImpl(ASTNode node) {
+  public CypherLoadCSVQueryImpl(@NotNull ASTNode node) {
     super(node);
   }
 

@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherReduceFunctionInvocationImpl extends ASTWrapperPsiElement implements CypherReduceFunctionInvocation {
 
-  public CypherReduceFunctionInvocationImpl(ASTNode node) {
+  public CypherReduceFunctionInvocationImpl(@NotNull ASTNode node) {
     super(node);
   }
 

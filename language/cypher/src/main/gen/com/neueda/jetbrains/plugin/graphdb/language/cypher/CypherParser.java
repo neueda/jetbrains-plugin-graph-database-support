@@ -2907,7 +2907,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // NewParameter | OldParameter
   public static boolean Parameter(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Parameter")) return false;
-    if (!nextTokenIs(b, "<parameter>", DOLLAR, BRACKET_CURLYOPEN)) return false;
+    if (!nextTokenIs(b, "<parameter>", BRACKET_CURLYOPEN, DOLLAR)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, PARAMETER, "<parameter>");
     r = NewParameter(b, l + 1);
@@ -3140,7 +3140,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // RelationshipPattern NodePattern
   public static boolean PatternElementChain(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PatternElementChain")) return false;
-    if (!nextTokenIs(b, "<pattern element chain>", OP_MINUS, OP_LESSTHEN)) return false;
+    if (!nextTokenIs(b, "<pattern element chain>", OP_LESSTHEN, OP_MINUS)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, PATTERN_ELEMENT_CHAIN, "<pattern element chain>");
     r = RelationshipPattern(b, l + 1);
@@ -3348,7 +3348,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // MapLiteral | Parameter
   public static boolean Properties(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Properties")) return false;
-    if (!nextTokenIs(b, "<properties>", DOLLAR, BRACKET_CURLYOPEN)) return false;
+    if (!nextTokenIs(b, "<properties>", BRACKET_CURLYOPEN, DOLLAR)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, PROPERTIES, "<properties>");
     r = MapLiteral(b, l + 1);
@@ -3495,7 +3495,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // (IntegerLiteral? ".." IntegerLiteral?) | (IntegerLiteral)
   public static boolean RangeLiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RangeLiteral")) return false;
-    if (!nextTokenIs(b, "<range literal>", OP_RANGE, L_INTEGER)) return false;
+    if (!nextTokenIs(b, "<range literal>", L_INTEGER, OP_RANGE)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, RANGE_LITERAL, "<range literal>");
     r = RangeLiteral_0(b, l + 1);
@@ -3697,7 +3697,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // LeftArrowHead? Dash RelationshipDetail? Dash RightArrowHead?
   public static boolean RelationshipPattern(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RelationshipPattern")) return false;
-    if (!nextTokenIs(b, "<relationship pattern>", OP_MINUS, OP_LESSTHEN)) return false;
+    if (!nextTokenIs(b, "<relationship pattern>", OP_LESSTHEN, OP_MINUS)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, RELATIONSHIP_PATTERN, "<relationship pattern>");
     r = RelationshipPattern_0(b, l + 1);
@@ -4701,7 +4701,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   // ("-" | "+") NumberLiteral
   public static boolean UnaryOperator(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UnaryOperator")) return false;
-    if (!nextTokenIs(b, "<unary operator>", OP_PLUS, OP_MINUS)) return false;
+    if (!nextTokenIs(b, "<unary operator>", OP_MINUS, OP_PLUS)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, UNARY_OPERATOR, "<unary operator>");
     r = UnaryOperator_0(b, l + 1);
@@ -5024,7 +5024,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  final static Parser statement_recover_parser_ = new Parser() {
+  static final Parser statement_recover_parser_ = new Parser() {
     public boolean parse(PsiBuilder b, int l) {
       return statement_recover(b, l + 1);
     }
