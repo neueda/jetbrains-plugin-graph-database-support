@@ -2994,7 +2994,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (NodePattern PatternElementChain*) | ("(" PatternElement ")")
+  // ("(" PatternElement ")") | (NodePattern PatternElementChain*)
   public static boolean PatternElement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PatternElement")) return false;
     if (!nextTokenIs(b, PARENTHESE_OPEN)) return false;
@@ -3006,31 +3006,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // NodePattern PatternElementChain*
+  // "(" PatternElement ")"
   private static boolean PatternElement_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PatternElement_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = NodePattern(b, l + 1);
-    r = r && PatternElement_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // PatternElementChain*
-  private static boolean PatternElement_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PatternElement_0_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!PatternElementChain(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "PatternElement_0_1", c)) break;
-    }
-    return true;
-  }
-
-  // "(" PatternElement ")"
-  private static boolean PatternElement_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PatternElement_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, PARENTHESE_OPEN);
@@ -3038,6 +3016,28 @@ public class CypherParser implements PsiParser, LightPsiParser {
     r = r && consumeToken(b, PARENTHESE_CLOSE);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // NodePattern PatternElementChain*
+  private static boolean PatternElement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PatternElement_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = NodePattern(b, l + 1);
+    r = r && PatternElement_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // PatternElementChain*
+  private static boolean PatternElement_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PatternElement_1_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!PatternElementChain(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "PatternElement_1_1", c)) break;
+    }
+    return true;
   }
 
   /* ********************************************************** */

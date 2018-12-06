@@ -335,7 +335,7 @@ ShortestPathFunctionInvocation ::= (K_SHORTESTPATH "(" PatternElement ")") {
 AllShortestPathsFunctionInvocation ::= (K_ALLSHORTESTPATHS "(" PatternElement ")") {
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.types.CypherListYielding"
 }
-PatternElement ::= (NodePattern PatternElementChain*) | ("(" PatternElement ")")
+PatternElement ::= ("(" PatternElement ")") | (NodePattern PatternElementChain*)
 PatternElementChain ::= RelationshipPattern NodePattern {pin=1}
 
 RelationshipPattern ::= LeftArrowHead? Dash RelationshipDetail? Dash RightArrowHead? {pin=2}
