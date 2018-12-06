@@ -17,4 +17,7 @@ deploy:
     branch: master
     tags: true
 script:
+  - cat /proc/meminfo
+  - free -m
+  - jps -lvm
   - ./gradlew clean test --stacktrace --info
