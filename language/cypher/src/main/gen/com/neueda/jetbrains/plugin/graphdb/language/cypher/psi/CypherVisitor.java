@@ -542,6 +542,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitStandaloneCall(@NotNull CypherStandaloneCall o) {
+    visitPsiElement(o);
+  }
+
   public void visitStart(@NotNull CypherStart o) {
     visitPsiElement(o);
   }

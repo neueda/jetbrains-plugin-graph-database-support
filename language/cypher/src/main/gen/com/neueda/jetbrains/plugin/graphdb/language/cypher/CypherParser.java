@@ -413,6 +413,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == SORT_ITEM) {
       r = SortItem(b, 0);
     }
+    else if (t == STANDALONE_CALL) {
+      r = StandaloneCall(b, 0);
+    }
     else if (t == START) {
       r = Start(b, 0);
     }
@@ -3373,12 +3376,13 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // BulkImportQuery | RegularQuery
+  // StandaloneCall | BulkImportQuery | RegularQuery
   public static boolean Query(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Query")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, QUERY, "<query>");
-    r = BulkImportQuery(b, l + 1);
+    r = StandaloneCall(b, l + 1);
+    if (!r) r = BulkImportQuery(b, l + 1);
     if (!r) r = RegularQuery(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -4405,6 +4409,37 @@ public class CypherParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, K_DESC);
     if (!r) r = consumeToken(b, K_ASCENDING);
     if (!r) r = consumeToken(b, K_ASC);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // Call (Where Return)?
+  public static boolean StandaloneCall(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "StandaloneCall")) return false;
+    if (!nextTokenIs(b, K_CALL)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Call(b, l + 1);
+    r = r && StandaloneCall_1(b, l + 1);
+    exit_section_(b, m, STANDALONE_CALL, r);
+    return r;
+  }
+
+  // (Where Return)?
+  private static boolean StandaloneCall_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "StandaloneCall_1")) return false;
+    StandaloneCall_1_0(b, l + 1);
+    return true;
+  }
+
+  // Where Return
+  private static boolean StandaloneCall_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "StandaloneCall_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Where(b, l + 1);
+    r = r && Return(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 

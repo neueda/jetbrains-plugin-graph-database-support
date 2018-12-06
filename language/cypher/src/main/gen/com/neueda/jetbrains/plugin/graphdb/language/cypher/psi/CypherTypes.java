@@ -138,6 +138,7 @@ public interface CypherTypes {
   IElementType SINGLE_QUERY = new CypherElementType("SINGLE_QUERY");
   IElementType SKIP = new CypherElementType("SKIP");
   IElementType SORT_ITEM = new CypherElementType("SORT_ITEM");
+  IElementType STANDALONE_CALL = new CypherElementType("STANDALONE_CALL");
   IElementType START = new CypherElementType("START");
   IElementType START_POINT = new CypherElementType("START_POINT");
   IElementType STATEMENT = new CypherElementType("STATEMENT");
@@ -671,6 +672,9 @@ public interface CypherTypes {
       }
       else if (type == SORT_ITEM) {
         return new CypherSortItemImpl(node);
+      }
+      else if (type == STANDALONE_CALL) {
+        return new CypherStandaloneCallImpl(node);
       }
       else if (type == START) {
         return new CypherStartImpl(node);

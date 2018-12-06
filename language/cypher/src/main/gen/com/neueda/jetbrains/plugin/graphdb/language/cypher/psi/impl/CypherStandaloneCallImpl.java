@@ -11,14 +11,14 @@ import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherType
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
-public class CypherQueryImpl extends ASTWrapperPsiElement implements CypherQuery {
+public class CypherStandaloneCallImpl extends ASTWrapperPsiElement implements CypherStandaloneCall {
 
-  public CypherQueryImpl(@NotNull ASTNode node) {
+  public CypherStandaloneCallImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CypherVisitor visitor) {
-    visitor.visitQuery(this);
+    visitor.visitStandaloneCall(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -27,21 +27,21 @@ public class CypherQueryImpl extends ASTWrapperPsiElement implements CypherQuery
   }
 
   @Override
-  @Nullable
-  public CypherBulkImportQuery getBulkImportQuery() {
-    return findChildByClass(CypherBulkImportQuery.class);
+  @NotNull
+  public CypherCall getCall() {
+    return findNotNullChildByClass(CypherCall.class);
   }
 
   @Override
   @Nullable
-  public CypherRegularQuery getRegularQuery() {
-    return findChildByClass(CypherRegularQuery.class);
+  public CypherReturn getReturn() {
+    return findChildByClass(CypherReturn.class);
   }
 
   @Override
   @Nullable
-  public CypherStandaloneCall getStandaloneCall() {
-    return findChildByClass(CypherStandaloneCall.class);
+  public CypherWhere getWhere() {
+    return findChildByClass(CypherWhere.class);
   }
 
 }

@@ -5,15 +5,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CypherQuery extends PsiElement {
+public interface CypherStandaloneCall extends PsiElement {
+
+  @NotNull
+  CypherCall getCall();
 
   @Nullable
-  CypherBulkImportQuery getBulkImportQuery();
+  CypherReturn getReturn();
 
   @Nullable
-  CypherRegularQuery getRegularQuery();
-
-  @Nullable
-  CypherStandaloneCall getStandaloneCall();
+  CypherWhere getWhere();
 
 }

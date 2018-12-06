@@ -220,7 +220,7 @@ RelationshipPatternSyntax ::= ("(" ")" "-" "[" Variable RelType "]" "-" "(" ")")
 /*************************
  * Query
  */
-Query ::=  BulkImportQuery | RegularQuery
+Query ::= StandaloneCall | BulkImportQuery | RegularQuery
 
 //-- RegularQuery
 RegularQuery ::= SingleQuery Union*
@@ -298,6 +298,7 @@ Limit ::= K_LIMIT Expression
 
 //-- Call
 Call ::= K_CALL ProcedureInvocation ProcedureResults?
+StandaloneCall ::= Call (Where Return)?
 ProcedureInvocation ::= ProcedureInvocationBody ProcedureArguments {
     implements="com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherInvocation"
     methods=[getFullName]
