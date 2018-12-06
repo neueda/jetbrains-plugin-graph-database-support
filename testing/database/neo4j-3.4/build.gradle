@@ -3,13 +3,13 @@ plugins {
 }
 
 dependencies {
-    compile 'org.neo4j.test:neo4j-harness:3.2.13'
+    compile 'org.neo4j.test:neo4j-harness:3.4.10'
     compile project(":testing:database:neo4j-common")
 }
 
 shadowJar {
     mergeServiceFiles()
-    baseName = 'neo4j32-shadow'
+    baseName = 'neo4j34-shadow'
     classifier = null
     version = null
 }

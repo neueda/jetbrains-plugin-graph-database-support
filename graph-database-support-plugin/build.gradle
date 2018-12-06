@@ -12,13 +12,10 @@ intellij {
     updateSinceUntilBuild false
     sameSinceUntilBuild false
 
-    publish {
-        if (project.hasProperty('intellijUsername')) {
-            username intellijUsername
-        }
-        if (project.hasProperty('intellijPassword')) {
-            password intellijPassword
-        }
+    publishPlugin {
+        username System.getenv("INTELLIJ_USERNAME")
+        password System.getenv("INTELLIJ_PASSWORD")
+        channels 'experimental'
     }
 
     if (System.getenv("CI_SERVER") == "yes") {
