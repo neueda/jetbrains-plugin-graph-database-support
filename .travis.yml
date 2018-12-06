@@ -18,6 +18,7 @@ deploy:
     tags: true
 script:
   - cat /proc/meminfo
+  - ./gradlew clean test --stacktrace --info
+  - cat /proc/meminfo
   - free -m
   - jps -lvm
-  - ./gradlew clean test --stacktrace --info
