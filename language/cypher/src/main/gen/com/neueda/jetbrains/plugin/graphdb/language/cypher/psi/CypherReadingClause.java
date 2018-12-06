@@ -5,19 +5,10 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CypherClause extends PsiElement {
+public interface CypherReadingClause extends PsiElement {
 
   @Nullable
   CypherCall getCall();
-
-  @Nullable
-  CypherCreate getCreate();
-
-  @Nullable
-  CypherDelete getDelete();
-
-  @Nullable
-  CypherForeach getForeach();
 
   @Nullable
   CypherLoadCSV getLoadCSV();
@@ -26,24 +17,9 @@ public interface CypherClause extends PsiElement {
   CypherMatch getMatch();
 
   @Nullable
-  CypherMerge getMerge();
-
-  @Nullable
-  CypherRemove getRemove();
-
-  @Nullable
-  CypherReturn getReturn();
-
-  @Nullable
-  CypherSetClause getSetClause();
-
-  @Nullable
   CypherStart getStart();
 
   @Nullable
   CypherUnwind getUnwind();
-
-  @Nullable
-  CypherWith getWith();
 
 }

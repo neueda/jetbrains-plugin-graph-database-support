@@ -1,1 +1,1 @@
-FOREACH (var IN list | MATCH (n));
+FOREACH (var IN list | CREATE (n));

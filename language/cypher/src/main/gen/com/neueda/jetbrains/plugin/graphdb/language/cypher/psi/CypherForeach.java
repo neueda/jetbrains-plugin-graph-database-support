@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 public interface CypherForeach extends PsiElement {
 
   @NotNull
-  List<CypherClause> getClauseList();
+  CypherExpression getExpression();
 
   @NotNull
-  CypherExpression getExpression();
+  List<CypherUpdatingClause> getUpdatingClauseList();
 
   @NotNull
   CypherVariable getVariable();

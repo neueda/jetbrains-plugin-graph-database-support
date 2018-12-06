@@ -11,14 +11,14 @@ import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherType
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
-public class CypherLoadCSVQueryImpl extends ASTWrapperPsiElement implements CypherLoadCSVQuery {
+public class CypherReadingClauseImpl extends ASTWrapperPsiElement implements CypherReadingClause {
 
-  public CypherLoadCSVQueryImpl(@NotNull ASTNode node) {
+  public CypherReadingClauseImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CypherVisitor visitor) {
-    visitor.visitLoadCSVQuery(this);
+    visitor.visitReadingClause(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -27,15 +27,33 @@ public class CypherLoadCSVQueryImpl extends ASTWrapperPsiElement implements Cyph
   }
 
   @Override
-  @NotNull
-  public CypherLoadCSV getLoadCSV() {
-    return findNotNullChildByClass(CypherLoadCSV.class);
+  @Nullable
+  public CypherCall getCall() {
+    return findChildByClass(CypherCall.class);
   }
 
   @Override
   @Nullable
-  public CypherSingleQuery getSingleQuery() {
-    return findChildByClass(CypherSingleQuery.class);
+  public CypherLoadCSV getLoadCSV() {
+    return findChildByClass(CypherLoadCSV.class);
+  }
+
+  @Override
+  @Nullable
+  public CypherMatch getMatch() {
+    return findChildByClass(CypherMatch.class);
+  }
+
+  @Override
+  @Nullable
+  public CypherStart getStart() {
+    return findChildByClass(CypherStart.class);
+  }
+
+  @Override
+  @Nullable
+  public CypherUnwind getUnwind() {
+    return findChildByClass(CypherUnwind.class);
   }
 
 }

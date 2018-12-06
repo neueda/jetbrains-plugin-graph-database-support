@@ -21,7 +21,6 @@ public interface CypherTypes {
   IElementType CALL = new CypherElementType("CALL");
   IElementType CASE_ALTERNATIVES = new CypherElementType("CASE_ALTERNATIVES");
   IElementType CASE_EXPRESSION = new CypherElementType("CASE_EXPRESSION");
-  IElementType CLAUSE = new CypherElementType("CLAUSE");
   IElementType COMMAND = new CypherElementType("COMMAND");
   IElementType CONFIGURATION_OPTION = new CypherElementType("CONFIGURATION_OPTION");
   IElementType COUNT_STAR = new CypherElementType("COUNT_STAR");
@@ -110,6 +109,7 @@ public interface CypherTypes {
   IElementType QUERY = new CypherElementType("QUERY");
   IElementType QUERY_OPTIONS = new CypherElementType("QUERY_OPTIONS");
   IElementType RANGE_LITERAL = new CypherElementType("RANGE_LITERAL");
+  IElementType READING_CLAUSE = new CypherElementType("READING_CLAUSE");
   IElementType REDUCE_FUNCTION_INVOCATION = new CypherElementType("REDUCE_FUNCTION_INVOCATION");
   IElementType REGULAR_QUERY = new CypherElementType("REGULAR_QUERY");
   IElementType RELATIONSHIPS_PATTERN = new CypherElementType("RELATIONSHIPS_PATTERN");
@@ -151,6 +151,7 @@ public interface CypherTypes {
   IElementType UNSIGNED_DOUBLE = new CypherElementType("UNSIGNED_DOUBLE");
   IElementType UNSIGNED_INTEGER = new CypherElementType("UNSIGNED_INTEGER");
   IElementType UNWIND = new CypherElementType("UNWIND");
+  IElementType UPDATING_CLAUSE = new CypherElementType("UPDATING_CLAUSE");
   IElementType VARIABLE = new CypherElementType("VARIABLE");
   IElementType VARIABLE_SELECTOR = new CypherElementType("VARIABLE_SELECTOR");
   IElementType VERSION_NUMBER = new CypherElementType("VERSION_NUMBER");
@@ -319,9 +320,6 @@ public interface CypherTypes {
       }
       else if (type == CASE_EXPRESSION) {
         return new CypherCaseExpressionImpl(node);
-      }
-      else if (type == CLAUSE) {
-        return new CypherClauseImpl(node);
       }
       else if (type == COMMAND) {
         return new CypherCommandImpl(node);
@@ -587,6 +585,9 @@ public interface CypherTypes {
       else if (type == RANGE_LITERAL) {
         return new CypherRangeLiteralImpl(node);
       }
+      else if (type == READING_CLAUSE) {
+        return new CypherReadingClauseImpl(node);
+      }
       else if (type == REDUCE_FUNCTION_INVOCATION) {
         return new CypherReduceFunctionInvocationImpl(node);
       }
@@ -709,6 +710,9 @@ public interface CypherTypes {
       }
       else if (type == UNWIND) {
         return new CypherUnwindImpl(node);
+      }
+      else if (type == UPDATING_CLAUSE) {
+        return new CypherUpdatingClauseImpl(node);
       }
       else if (type == VARIABLE) {
         return new CypherVariableImpl(node);

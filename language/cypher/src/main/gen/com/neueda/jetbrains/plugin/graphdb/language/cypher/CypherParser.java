@@ -62,9 +62,6 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == CASE_EXPRESSION) {
       r = CaseExpression(b, 0);
     }
-    else if (t == CLAUSE) {
-      r = Clause(b, 0);
-    }
     else if (t == COMMAND) {
       r = Command(b, 0);
     }
@@ -329,6 +326,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == RANGE_LITERAL) {
       r = RangeLiteral(b, 0);
     }
+    else if (t == READING_CLAUSE) {
+      r = ReadingClause(b, 0);
+    }
     else if (t == REDUCE_FUNCTION_INVOCATION) {
       r = ReduceFunctionInvocation(b, 0);
     }
@@ -451,6 +451,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     }
     else if (t == UNWIND) {
       r = Unwind(b, 0);
+    }
+    else if (t == UPDATING_CLAUSE) {
+      r = UpdatingClause(b, 0);
     }
     else if (t == VARIABLE) {
       r = Variable(b, 0);
@@ -759,41 +762,6 @@ public class CypherParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, K_ELSE);
     r = r && Expression(b, l + 1);
     exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // LoadCSV
-  //     | Start
-  //     | Match
-  //     | Unwind
-  //     | Merge
-  //     | Create
-  //     | SetClause
-  //     | Delete
-  //     | Remove
-  //     | Foreach
-  //     | With
-  //     | Return
-  //     | Call
-  public static boolean Clause(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Clause")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, CLAUSE, "<clause>");
-    r = LoadCSV(b, l + 1);
-    if (!r) r = Start(b, l + 1);
-    if (!r) r = Match(b, l + 1);
-    if (!r) r = Unwind(b, l + 1);
-    if (!r) r = Merge(b, l + 1);
-    if (!r) r = Create(b, l + 1);
-    if (!r) r = SetClause(b, l + 1);
-    if (!r) r = Delete(b, l + 1);
-    if (!r) r = Remove(b, l + 1);
-    if (!r) r = Foreach(b, l + 1);
-    if (!r) r = With(b, l + 1);
-    if (!r) r = Return(b, l + 1);
-    if (!r) r = Call(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -1805,7 +1773,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // K_FOREACH "(" Variable K_IN Expression "|" Clause+ ")"
+  // K_FOREACH "(" Variable K_IN Expression "|" UpdatingClause+ ")"
   public static boolean Foreach(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Foreach")) return false;
     if (!nextTokenIs(b, K_FOREACH)) return false;
@@ -1822,15 +1790,15 @@ public class CypherParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // Clause+
+  // UpdatingClause+
   private static boolean Foreach_6(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Foreach_6")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Clause(b, l + 1);
+    r = UpdatingClause(b, l + 1);
     while (r) {
       int c = current_position_(b);
-      if (!Clause(b, l + 1)) break;
+      if (!UpdatingClause(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Foreach_6", c)) break;
     }
     exit_section_(b, m, null, r);
@@ -2327,7 +2295,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LoadCSV Clause*
+  // LoadCSV SingleQuery?
   public static boolean LoadCSVQuery(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LoadCSVQuery")) return false;
     if (!nextTokenIs(b, K_LOAD)) return false;
@@ -2339,14 +2307,10 @@ public class CypherParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // Clause*
+  // SingleQuery?
   private static boolean LoadCSVQuery_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LoadCSVQuery_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!Clause(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "LoadCSVQuery_1", c)) break;
-    }
+    SingleQuery(b, l + 1);
     return true;
   }
 
@@ -3409,13 +3373,13 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // RegularQuery | BulkImportQuery
+  // BulkImportQuery | RegularQuery
   public static boolean Query(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Query")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, QUERY, "<query>");
-    r = RegularQuery(b, l + 1);
-    if (!r) r = BulkImportQuery(b, l + 1);
+    r = BulkImportQuery(b, l + 1);
+    if (!r) r = RegularQuery(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -3480,6 +3444,25 @@ public class CypherParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = IntegerLiteral(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LoadCSV
+  //               | Start
+  //               | Match
+  //               | Unwind
+  //               | Call
+  public static boolean ReadingClause(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ReadingClause")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, READING_CLAUSE, "<reading clause>");
+    r = LoadCSV(b, l + 1);
+    if (!r) r = Start(b, l + 1);
+    if (!r) r = Match(b, l + 1);
+    if (!r) r = Unwind(b, l + 1);
+    if (!r) r = Call(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -4356,18 +4339,29 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Clause+
+  // (ReadingClause | UpdatingClause | With | Return)+
   public static boolean SingleQuery(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SingleQuery")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, SINGLE_QUERY, "<single query>");
-    r = Clause(b, l + 1);
+    r = SingleQuery_0(b, l + 1);
     while (r) {
       int c = current_position_(b);
-      if (!Clause(b, l + 1)) break;
+      if (!SingleQuery_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "SingleQuery", c)) break;
     }
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // ReadingClause | UpdatingClause | With | Return
+  private static boolean SingleQuery_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SingleQuery_0")) return false;
+    boolean r;
+    r = ReadingClause(b, l + 1);
+    if (!r) r = UpdatingClause(b, l + 1);
+    if (!r) r = With(b, l + 1);
+    if (!r) r = Return(b, l + 1);
     return r;
   }
 
@@ -4696,6 +4690,27 @@ public class CypherParser implements PsiParser, LightPsiParser {
     r = r && consumeToken(b, K_AS);
     r = r && Variable(b, l + 1);
     exit_section_(b, m, UNWIND, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // Create
+  //                | Merge
+  //                | Foreach
+  //                | Delete
+  //                | SetClause
+  //                | Remove
+  public static boolean UpdatingClause(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UpdatingClause")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, UPDATING_CLAUSE, "<updating clause>");
+    r = Create(b, l + 1);
+    if (!r) r = Merge(b, l + 1);
+    if (!r) r = Foreach(b, l + 1);
+    if (!r) r = Delete(b, l + 1);
+    if (!r) r = SetClause(b, l + 1);
+    if (!r) r = Remove(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 

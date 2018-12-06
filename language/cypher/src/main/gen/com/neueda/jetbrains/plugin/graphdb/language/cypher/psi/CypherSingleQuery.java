@@ -8,6 +8,15 @@ import com.intellij.psi.PsiElement;
 public interface CypherSingleQuery extends PsiElement {
 
   @NotNull
-  List<CypherClause> getClauseList();
+  List<CypherReadingClause> getReadingClauseList();
+
+  @NotNull
+  List<CypherReturn> getReturnList();
+
+  @NotNull
+  List<CypherUpdatingClause> getUpdatingClauseList();
+
+  @NotNull
+  List<CypherWith> getWithList();
 
 }

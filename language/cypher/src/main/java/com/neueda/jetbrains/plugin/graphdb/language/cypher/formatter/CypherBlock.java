@@ -123,10 +123,11 @@ public class CypherBlock implements ASTBlock {
         IElementType parentType = this.node.getElementType();
         IElementType type = node.getElementType();
 
-        if (parentType == CypherTypes.SINGLE_QUERY && type == CypherTypes.CLAUSE) {
+        if (parentType == CypherTypes.SINGLE_QUERY
+                && (type == CypherTypes.READING_CLAUSE || type == CypherTypes.UPDATING_CLAUSE)) {
             return Indent.getNoneIndent();
         }
-        if (type == CypherTypes.CLAUSE) {
+        if (type == CypherTypes.READING_CLAUSE || type == CypherTypes.UPDATING_CLAUSE) {
             return Indent.getNormalIndent();
         }
         if (type == CypherTypes.MERGE_ACTION) {
@@ -163,7 +164,8 @@ public class CypherBlock implements ASTBlock {
     private Wrap calcWrap(@NotNull ASTNode node) {
         IElementType type = node.getElementType();
 
-        if (type == CypherTypes.CLAUSE) {
+        if (type == CypherTypes.READING_CLAUSE || type == CypherTypes.UPDATING_CLAUSE
+                || type == CypherTypes.RETURN || type == CypherTypes.WITH) {
             return Wrap.createWrap(WrapType.ALWAYS, true);
         }
         if (type == CypherTypes.K_USING) {

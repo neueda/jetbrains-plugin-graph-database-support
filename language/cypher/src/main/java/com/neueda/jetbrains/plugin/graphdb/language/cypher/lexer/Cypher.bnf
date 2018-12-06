@@ -220,30 +220,30 @@ RelationshipPatternSyntax ::= ("(" ")" "-" "[" Variable RelType "]" "-" "(" ")")
 /*************************
  * Query
  */
-Query ::= RegularQuery | BulkImportQuery
+Query ::=  BulkImportQuery | RegularQuery
 
 //-- RegularQuery
 RegularQuery ::= SingleQuery Union*
 Union ::= K_UNION K_ALL? SingleQuery
-SingleQuery ::= Clause+
-Clause ::= LoadCSV
-    | Start
-    | Match
-    | Unwind
-    | Merge
-    | Create
-    | SetClause
-    | Delete
-    | Remove
-    | Foreach
-    | With
-    | Return
-    | Call
+SingleQuery ::= (ReadingClause | UpdatingClause | With | Return)+
+
+UpdatingClause ::= Create
+               | Merge
+               | Foreach
+               | Delete
+               | SetClause
+               | Remove
+
+ReadingClause ::= LoadCSV
+              | Start
+              | Match
+              | Unwind
+              | Call
 
 //-- BulkImportQuery
 BulkImportQuery ::= PeriodicCommitHint LoadCSVQuery
 PeriodicCommitHint ::= K_USING K_PERIODIC K_COMMIT IntegerLiteral?
-LoadCSVQuery ::= LoadCSV Clause*
+LoadCSVQuery ::= LoadCSV SingleQuery?
 
 /*************************
  * Clauses
@@ -316,7 +316,7 @@ ProcedureOutput ::= SymbolicNameString
 Create ::= K_CREATE K_UNIQUE? Pattern
 Delete ::= K_DETACH? K_DELETE Expression ("," Expression)*
 Unwind ::= K_UNWIND Expression K_AS Variable
-Foreach ::= K_FOREACH "(" Variable K_IN Expression "|" Clause+ ")"
+Foreach ::= K_FOREACH "(" Variable K_IN Expression "|" UpdatingClause+ ")"
 Where ::= K_WHERE Expression
 
 /*************************
