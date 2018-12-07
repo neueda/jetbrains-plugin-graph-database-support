@@ -26,6 +26,9 @@ intellij {
 
     def homePath = System.properties['user.home']
     sandboxDirectory "${homePath}/.intellij/graphdb"
+}
+
+runIde {
     systemProperty 'graphDatabaseSupportDevelopment', 'true'
 }
 
