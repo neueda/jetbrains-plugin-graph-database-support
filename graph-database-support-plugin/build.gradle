@@ -15,7 +15,6 @@ intellij {
     publishPlugin {
         username System.getenv("INTELLIJ_USERNAME")
         password System.getenv("INTELLIJ_PASSWORD")
-        channels 'experimental'
     }
 
     if (System.getenv("CI_SERVER") == "yes") {
