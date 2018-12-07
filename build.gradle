@@ -45,6 +45,10 @@ allprojects {
     }
 }
 
+test {
+    systemProperty 'graphDatabaseSupportDevelopment', 'true'
+}
+
 release {
     failOnCommitNeeded = true
     failOnPublishNeeded = true
@@ -57,9 +61,9 @@ release {
 
     tagTemplate = '${version}'
     preCommitText = '[release]'
-    preTagCommitMessage = ' Pre tag commit: '
+    preTagCommitMessage = ' [skip ci] Pre tag commit: '
     tagCommitMessage = ' Creating tag: '
-    newVersionCommitMessage = ' New version commit: '
+    newVersionCommitMessage = ' [skip ci] New version commit: '
 
     git {
         requireBranch = 'master'
