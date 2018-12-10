@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherSingleQueryImpl extends ASTWrapperPsiElement implements CypherSingleQuery {
 
-  public CypherSingleQueryImpl(ASTNode node) {
+  public CypherSingleQueryImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -28,8 +28,26 @@ public class CypherSingleQueryImpl extends ASTWrapperPsiElement implements Cyphe
 
   @Override
   @NotNull
-  public List<CypherClause> getClauseList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherClause.class);
+  public List<CypherReadingClause> getReadingClauseList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherReadingClause.class);
+  }
+
+  @Override
+  @NotNull
+  public List<CypherReturn> getReturnList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherReturn.class);
+  }
+
+  @Override
+  @NotNull
+  public List<CypherUpdatingClause> getUpdatingClauseList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherUpdatingClause.class);
+  }
+
+  @Override
+  @NotNull
+  public List<CypherWith> getWithList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherWith.class);
   }
 
 }

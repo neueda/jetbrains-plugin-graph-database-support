@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherForeachImpl extends ASTWrapperPsiElement implements CypherForeach {
 
-  public CypherForeachImpl(ASTNode node) {
+  public CypherForeachImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -28,14 +28,14 @@ public class CypherForeachImpl extends ASTWrapperPsiElement implements CypherFor
 
   @Override
   @NotNull
-  public List<CypherClause> getClauseList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherClause.class);
+  public CypherExpression getExpression() {
+    return findNotNullChildByClass(CypherExpression.class);
   }
 
   @Override
   @NotNull
-  public CypherExpression getExpression() {
-    return findNotNullChildByClass(CypherExpression.class);
+  public List<CypherUpdatingClause> getUpdatingClauseList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherUpdatingClause.class);
   }
 
   @Override

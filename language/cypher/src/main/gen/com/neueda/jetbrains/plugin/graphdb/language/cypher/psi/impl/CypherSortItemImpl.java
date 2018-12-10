@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherSortItemImpl extends ASTWrapperPsiElement implements CypherSortItem {
 
-  public CypherSortItemImpl(ASTNode node) {
+  public CypherSortItemImpl(@NotNull ASTNode node) {
     super(node);
   }
 

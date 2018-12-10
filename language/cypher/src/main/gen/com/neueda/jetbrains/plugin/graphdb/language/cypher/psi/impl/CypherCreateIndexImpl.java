@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherCreateIndexImpl extends ASTWrapperPsiElement implements CypherCreateIndex {
 
-  public CypherCreateIndexImpl(ASTNode node) {
+  public CypherCreateIndexImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -28,32 +28,14 @@ public class CypherCreateIndexImpl extends ASTWrapperPsiElement implements Cyphe
 
   @Override
   @NotNull
-  public CypherNodeLabel getNodeLabel() {
-    return findNotNullChildByClass(CypherNodeLabel.class);
-  }
-
-  @Override
-  @NotNull
-  public CypherPropertyKeyNames getPropertyKeyNames() {
-    return findNotNullChildByClass(CypherPropertyKeyNames.class);
+  public CypherIndexSyntax getIndexSyntax() {
+    return findNotNullChildByClass(CypherIndexSyntax.class);
   }
 
   @Override
   @NotNull
   public PsiElement getKCreate() {
     return findNotNullChildByType(K_CREATE);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getKIndex() {
-    return findNotNullChildByType(K_INDEX);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getKOn() {
-    return findNotNullChildByType(K_ON);
   }
 
 }

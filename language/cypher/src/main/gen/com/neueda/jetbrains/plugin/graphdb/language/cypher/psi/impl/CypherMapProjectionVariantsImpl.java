@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherMapProjectionVariantsImpl extends ASTWrapperPsiElement implements CypherMapProjectionVariants {
 
-  public CypherMapProjectionVariantsImpl(ASTNode node) {
+  public CypherMapProjectionVariantsImpl(@NotNull ASTNode node) {
     super(node);
   }
 

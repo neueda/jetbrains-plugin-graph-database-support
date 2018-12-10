@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherCountStarImpl extends ASTWrapperPsiElement implements CypherCountStar {
 
-  public CypherCountStarImpl(ASTNode node) {
+  public CypherCountStarImpl(@NotNull ASTNode node) {
     super(node);
   }
 

@@ -13,4 +13,7 @@ public interface CypherQuery extends PsiElement {
   @Nullable
   CypherRegularQuery getRegularQuery();
 
+  @Nullable
+  CypherStandaloneCall getStandaloneCall();
+
 }

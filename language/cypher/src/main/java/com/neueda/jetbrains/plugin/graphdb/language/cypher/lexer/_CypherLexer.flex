@@ -1,9 +1,12 @@
 package com.neueda.jetbrains.plugin.graphdb.language.cypher.lexer;
 
-import com.intellij.lexer.*;
+import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
-import static com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.CypherParserDefinition.LINE_COMMENT;
-import static com.neueda.jetbrains.plugin.graphdb.language.cypher.parser.CypherParserDefinition.BLOCK_COMMENT;
+
+import static com.intellij.psi.TokenType.BAD_CHARACTER;
+import static com.intellij.psi.TokenType.WHITE_SPACE;
+import static com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherParserDefinition.LINE_COMMENT;
+import static com.neueda.jetbrains.plugin.graphdb.language.cypher.CypherParserDefinition.BLOCK_COMMENT;
 import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes.*;
 
 %%
@@ -22,86 +25,93 @@ import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherType
 %unicode
 
 EOL=\R
-WHITE_SPACE=\s
+WHITE_SPACE=\s+
 
-K_MATCH=(M|m)(A|a)(T|t)(C|c)(H|h)
-K_RETURN=(R|r)(E|e)(T|t)(U|u)(R|r)(N|n)
-K_DISTINCT=(D|d)(I|i)(S|s)(T|t)(I|i)(N|n)(C|c)(T|t)
-K_UNION=(U|u)(N|n)(I|i)(O|o)(N|n)
-K_ALL=(A|a)(L|l)(L|l)
-K_LOAD=(L|l)(O|o)(A|a)(D|d)
-K_CSV=(C|c)(S|s)(V|v)
-K_WITH=(W|w)(I|i)(T|t)(H|h)
-K_HEADERS=(H|h)(E|e)(A|a)(D|d)(E|e)(R|r)(S|s)
-K_FROM=(F|f)(R|r)(O|o)(M|m)
-K_AS=(A|a)(S|s)
-K_FIELDTERMINATOR=(F|f)(I|i)(E|e)(L|l)(D|d)(T|t)(E|e)(R|r)(M|m)(I|i)(N|n)(A|a)(T|t)(O|o)(R|r)
-K_CREATE=(C|c)(R|r)(E|e)(A|a)(T|t)(E|e)
-K_CONSTRAINT=(C|c)(O|o)(N|n)(S|s)(T|t)(R|r)(A|a)(I|i)(N|n)(T|t)
-K_ON=(O|o)(N|n)
-K_ASSERT=(A|a)(S|s)(S|s)(E|e)(R|r)(T|t)
-K_IS=(I|i)(S|s)
-K_UNIQUE=(U|u)(N|n)(I|i)(Q|q)(U|u)(E|e)
-K_EXISTS=(E|e)(X|x)(I|i)(S|s)(T|t)(S|s)
-K_INDEX=(I|i)(N|n)(D|d)(E|e)(X|x)
-K_DROP=(D|d)(R|r)(O|o)(P|p)
-K_START=(S|s)(T|t)(A|a)(R|r)(T|t)
-K_WHERE=(W|w)(H|h)(E|e)(R|r)(E|e)
-K_NODE=(N|n)(O|o)(D|d)(E|e)
-K_RELATIONSHIP=(R|r)(E|e)(L|l)(A|a)(T|t)(I|i)(O|o)(N|n)(S|s)(H|h)(I|i)(P|p)
-K_REL=(R|r)(E|e)(L|l)
-K_OPTIONAL=(O|o)(P|p)(T|t)(I|i)(O|o)(N|n)(A|a)(L|l)
-K_USING=(U|u)(S|s)(I|i)(N|n)(G|g)
-K_JOIN=(J|j)(O|o)(I|i)(N|n)
-K_SCAN=(S|s)(C|c)(A|a)(N|n)
-K_SHORTESTPATH=(S|s)(H|h)(O|o)(R|r)(T|t)(E|e)(S|s)(T|t)(P|p)(A|a)(T|t)(H|h)
-K_ALLSHORTESTPATHS=(A|a)(L|l)(L|l)(S|s)(H|h)(O|o)(R|r)(T|t)(E|e)(S|s)(T|t)(P|p)(A|a)(T|t)(H|h)(S|s)
-K_UNWIND=(U|u)(N|n)(W|w)(I|i)(N|n)(D|d)
-K_MERGE=(M|m)(E|e)(R|r)(G|g)(E|e)
-K_SET=(S|s)(E|e)(T|t)
-K_DELETE=(D|d)(E|e)(L|l)(E|e)(T|t)(E|e)
-K_DETACH=(D|d)(E|e)(T|t)(A|a)(C|c)(H|h)
-K_REMOVE=(R|r)(E|e)(M|m)(O|o)(V|v)(E|e)
-K_FOREACH=(F|f)(O|o)(R|r)(E|e)(A|a)(C|c)(H|h)
-K_IN=(I|i)(N|n)
-K_ORDER=(O|o)(R|r)(D|d)(E|e)(R|r)
-K_BY=(B|b)(Y|y)
-K_DESCENDING=(D|d)(E|e)(S|s)(C|c)(E|e)(N|n)(D|d)(I|i)(N|n)(G|g)
-K_DESC=(D|d)(E|e)(S|s)(C|c)
-K_ASCENDING=(A|a)(S|s)(C|c)(E|e)(N|n)(D|d)(I|i)(N|n)(G|g)
-K_ASC=(A|a)(S|s)(C|c)
-K_SKIP=(S|s)(K|k)(I|i)(P|p)
-K_LIMIT=(L|l)(I|i)(M|m)(I|i)(T|t)
-K_PERIODIC=(P|p)(E|e)(R|r)(I|i)(O|o)(D|d)(I|i)(C|c)
-K_BEGIN=(B|b)(E|e)(G|g)(I|i)(N|n)
-K_COMMIT=(C|c)(O|o)(M|m)(M|m)(I|i)(T|t)
-K_XOR=(X|x)(O|o)(R|r)
-K_OR=(O|o)(R|r)
-K_AND=(A|a)(N|n)(D|d)
-K_NOT=(N|n)(O|o)(T|t)
-K_STARTS=(S|s)(T|t)(A|a)(R|r)(T|t)(S|s)
-K_ENDS=(E|e)(N|n)(D|d)(S|s)
-K_CONTAINS=(C|c)(O|o)(N|n)(T|t)(A|a)(I|i)(N|n)(S|s)
-K_NULL=(N|n)(U|u)(L|l)(L|l)
-K_TRUE=(T|t)(R|r)(U|u)(E|e)
-K_FALSE=(F|f)(A|a)(L|l)(S|s)(E|e)
-K_FILTER=(F|f)(I|i)(L|l)(T|t)(E|e)(R|r)
-K_EXTRACT=(E|e)(X|x)(T|t)(R|r)(A|a)(C|c)(T|t)
-K_REDUCE=(R|r)(E|e)(D|d)(U|u)(C|c)(E|e)
-K_ANY=(A|a)(N|n)(Y|y)
-K_NONE=(N|n)(O|o)(N|n)(E|e)
-K_SINGLE=(S|s)(I|i)(N|n)(G|g)(L|l)(E|e)
-K_CASE=(C|c)(A|a)(S|s)(E|e)
-K_ELSE=(E|e)(L|l)(S|s)(E|e)
-K_END=(E|e)(N|n)(D|d)
-K_WHEN=(W|w)(H|h)(E|e)(N|n)
-K_THEN=(T|t)(H|h)(E|e)(N|n)
-K_PROFILE=(P|p)(R|r)(O|o)(F|f)(I|i)(L|l)(E|e)
-K_EXPLAIN=(E|e)(X|x)(P|p)(L|l)(A|a)(I|i)(N|n)
-K_CYPHER=(C|c)(Y|y)(P|p)(H|h)(E|e)(R|r)
-K_CALL=(C|c)(A|a)(L|l)(L|l)
-K_YIELD=(Y|y)(I|i)(E|e)(L|l)(D|d)
-K_COUNT=(C|c)(O|o)(U|u)(N|n)(T|t)
+K_MATCH=[Mm][Aa][Tt][Cc][Hh]
+K_RETURN=[Rr][Ee][Tt][Uu][Rr][Nn]
+K_DISTINCT=[Dd][Ii][Ss][Tt][Ii][Nn][Cc][Tt]
+K_UNION=[Uu][Nn][Ii][Oo][Nn]
+K_ALL=[Aa][Ll][Ll]
+K_LOAD=[Ll][Oo][Aa][Dd]
+K_CSV=[Cc][Ss][Vv]
+K_WITH=[Ww][Ii][Tt][Hh]
+K_HEADERS=[Hh][Ee][Aa][Dd][Ee][Rr][Ss]
+K_FROM=[Ff][Rr][Oo][Mm]
+K_AS=[Aa][Ss]
+K_FIELDTERMINATOR=[Ff][Ii][Ee][Ll][Dd][Tt][Ee][Rr][Mm][Ii][Nn][Aa][Tt][Oo][Rr]
+K_CREATE=[Cc][Rr][Ee][Aa][Tt][Ee]
+K_CONSTRAINT=[Cc][Oo][Nn][Ss][Tt][Rr][Aa][Ii][Nn][Tt]
+K_ON=[Oo][Nn]
+K_ASSERT=[Aa][Ss][Ss][Ee][Rr][Tt]
+K_IS=[Ii][Ss]
+K_UNIQUE=[Uu][Nn][Ii][Qq][Uu][Ee]
+K_EXISTS=[Ee][Xx][Ii][Ss][Tt][Ss]
+K_INDEX=[Ii][Nn][Dd][Ee][Xx]
+K_DROP=[Dd][Rr][Oo][Pp]
+K_START=[Ss][Tt][Aa][Rr][Tt]
+K_WHERE=[Ww][Hh][Ee][Rr][Ee]
+K_NODE=[Nn][Oo][Dd][Ee]
+K_RELATIONSHIP=[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp]
+K_REL=[Rr][Ee][Ll]
+K_OPTIONAL=[Oo][Pp][Tt][Ii][Oo][Nn][Aa][Ll]
+K_USING=[Uu][Ss][Ii][Nn][Gg]
+K_JOIN=[Jj][Oo][Ii][Nn]
+K_SCAN=[Ss][Cc][Aa][Nn]
+K_SHORTESTPATH=[Ss][Hh][Oo][Rr][Tt][Ee][Ss][Tt][Pp][Aa][Tt][Hh]
+K_ALLSHORTESTPATHS=[Aa][Ll][Ll][Ss][Hh][Oo][Rr][Tt][Ee][Ss][Tt][Pp][Aa][Tt][Hh][Ss]
+K_UNWIND=[Uu][Nn][Ww][Ii][Nn][Dd]
+K_MERGE=[Mm][Ee][Rr][Gg][Ee]
+K_SET=[Ss][Ee][Tt]
+K_DELETE=[Dd][Ee][Ll][Ee][Tt][Ee]
+K_DETACH=[Dd][Ee][Tt][Aa][Cc][Hh]
+K_REMOVE=[Rr][Ee][Mm][Oo][Vv][Ee]
+K_FOREACH=[Ff][Oo][Rr][Ee][Aa][Cc][Hh]
+K_IN=[Ii][Nn]
+K_ORDER=[Oo][Rr][Dd][Ee][Rr]
+K_BY=[Bb][Yy]
+K_DESCENDING=[Dd][Ee][Ss][Cc][Ee][Nn][Dd][Ii][Nn][Gg]
+K_DESC=[Dd][Ee][Ss][Cc]
+K_ASCENDING=[Aa][Ss][Cc][Ee][Nn][Dd][Ii][Nn][Gg]
+K_ASC=[Aa][Ss][Cc]
+K_SKIP=[Ss][Kk][Ii][Pp]
+K_LIMIT=[Ll][Ii][Mm][Ii][Tt]
+K_PERIODIC=[Pp][Ee][Rr][Ii][Oo][Dd][Ii][Cc]
+K_BEGIN=[Bb][Ee][Gg][Ii][Nn]
+K_COMMIT=[Cc][Oo][Mm][Mm][Ii][Tt]
+K_XOR=[Xx][Oo][Rr]
+K_OR=[Oo][Rr]
+K_AND=[Aa][Nn][Dd]
+K_NOT=[Nn][Oo][Tt]
+K_STARTS=[Ss][Tt][Aa][Rr][Tt][Ss]
+K_ENDS=[Ee][Nn][Dd][Ss]
+K_CONTAINS=[Cc][Oo][Nn][Tt][Aa][Ii][Nn][Ss]
+K_NULL=[Nn][Uu][Ll][Ll]
+K_TRUE=[Tt][Rr][Uu][Ee]
+K_FALSE=[Ff][Aa][Ll][Ss][Ee]
+K_FILTER=[Ff][Ii][Ll][Tt][Ee][Rr]
+K_EXTRACT=[Ee][Xx][Tt][Rr][Aa][Cc][Tt]
+K_REDUCE=[Rr][Ee][Dd][Uu][Cc][Ee]
+K_ANY=[Aa][Nn][Yy]
+K_NONE=[Nn][Oo][Nn][Ee]
+K_SINGLE=[Ss][Ii][Nn][Gg][Ll][Ee]
+K_CASE=[Cc][Aa][Ss][Ee]
+K_ELSE=[Ee][Ll][Ss][Ee]
+K_END=[Ee][Nn][Dd]
+K_WHEN=[Ww][Hh][Ee][Nn]
+K_THEN=[Tt][Hh][Ee][Nn]
+K_PROFILE=[Pp][Rr][Oo][Ff][Ii][Ll][Ee]
+K_EXPLAIN=[Ee][Xx][Pp][Ll][Aa][Ii][Nn]
+K_CYPHER=[Cc][Yy][Pp][Hh][Ee][Rr]
+K_CALL=[Cc][Aa][Ll][Ll]
+K_YIELD=[Yy][Ii][Ee][Ll][Dd]
+K_COUNT=[Cc][Oo][Uu][Nn][Tt]
+K_DO=[Dd][Oo]
+K_FOR=[Ff][Oo][Rr]
+K_REQUIRE=[Rr][Ee][Qq][Uu][Ii][Rr][Ee]
+K_MANDATORY=[Mm][Aa][Nn][Dd][Aa][Tt][Oo][Rr][Yy]
+K_SCALAR=[Ss][Cc][Aa][Ll][Aa][Rr]
+K_OF=[Oo][Ff]
+K_ADD=[Aa][Dd][Dd]
 L_IDENTIFIER=[a-zA-Z_][a-zA-Z_$0-9]*
 L_IDENTIFIER_TEXT=\`[^`]+\`
 L_DECIMAL=(0|[1-9][0-9]*)\.[0-9]+
@@ -113,7 +123,7 @@ BLOCK_COMMENT = "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
 
 %%
 <YYINITIAL> {
-  {WHITE_SPACE}             { return com.intellij.psi.TokenType.WHITE_SPACE; }
+  {WHITE_SPACE}             { return WHITE_SPACE; }
 
   {LINE_COMMENT}            { return LINE_COMMENT; }
   {BLOCK_COMMENT}           { return BLOCK_COMMENT; }
@@ -227,11 +237,19 @@ BLOCK_COMMENT = "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
   {K_CALL}                  { return K_CALL; }
   {K_YIELD}                 { return K_YIELD; }
   {K_COUNT}                 { return K_COUNT; }
+  {K_DO}                    { return K_DO; }
+  {K_FOR}                   { return K_FOR; }
+  {K_REQUIRE}               { return K_REQUIRE; }
+  {K_MANDATORY}             { return K_MANDATORY; }
+  {K_SCALAR}                { return K_SCALAR; }
+  {K_OF}                    { return K_OF; }
+  {K_ADD}                   { return K_ADD; }
   {L_IDENTIFIER}            { return L_IDENTIFIER; }
   {L_IDENTIFIER_TEXT}       { return L_IDENTIFIER_TEXT; }
   {L_DECIMAL}               { return L_DECIMAL; }
   {L_INTEGER}               { return L_INTEGER; }
   {L_STRING}                { return L_STRING; }
+
 }
 
-[^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }
+[^] { return BAD_CHARACTER; }

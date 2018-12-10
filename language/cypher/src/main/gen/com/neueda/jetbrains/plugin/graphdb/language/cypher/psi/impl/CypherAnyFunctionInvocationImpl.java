@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherAnyFunctionInvocationImpl extends ASTWrapperPsiElement implements CypherAnyFunctionInvocation {
 
-  public CypherAnyFunctionInvocationImpl(ASTNode node) {
+  public CypherAnyFunctionInvocationImpl(@NotNull ASTNode node) {
     super(node);
   }
 

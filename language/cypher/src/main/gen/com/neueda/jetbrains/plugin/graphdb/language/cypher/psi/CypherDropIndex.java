@@ -8,18 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface CypherDropIndex extends PsiElement {
 
   @NotNull
-  CypherNodeLabel getNodeLabel();
-
-  @NotNull
-  CypherPropertyKeyNames getPropertyKeyNames();
+  CypherIndexSyntax getIndexSyntax();
 
   @NotNull
   PsiElement getKDrop();
-
-  @NotNull
-  PsiElement getKIndex();
-
-  @NotNull
-  PsiElement getKOn();
 
 }

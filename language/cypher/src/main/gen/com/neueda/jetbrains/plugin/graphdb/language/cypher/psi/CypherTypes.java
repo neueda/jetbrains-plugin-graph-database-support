@@ -21,7 +21,6 @@ public interface CypherTypes {
   IElementType CALL = new CypherElementType("CALL");
   IElementType CASE_ALTERNATIVES = new CypherElementType("CASE_ALTERNATIVES");
   IElementType CASE_EXPRESSION = new CypherElementType("CASE_EXPRESSION");
-  IElementType CLAUSE = new CypherElementType("CLAUSE");
   IElementType COMMAND = new CypherElementType("COMMAND");
   IElementType CONFIGURATION_OPTION = new CypherElementType("CONFIGURATION_OPTION");
   IElementType COUNT_STAR = new CypherElementType("COUNT_STAR");
@@ -55,6 +54,7 @@ public interface CypherTypes {
   IElementType ID_IN_COLL = new CypherElementType("ID_IN_COLL");
   IElementType ID_LOOKUP = new CypherElementType("ID_LOOKUP");
   IElementType INDEX_QUERY = new CypherElementType("INDEX_QUERY");
+  IElementType INDEX_SYNTAX = new CypherElementType("INDEX_SYNTAX");
   IElementType INTEGER_LITERAL = new CypherElementType("INTEGER_LITERAL");
   IElementType LABEL_NAME = new CypherElementType("LABEL_NAME");
   IElementType LEFT_ARROW_HEAD = new CypherElementType("LEFT_ARROW_HEAD");
@@ -109,6 +109,7 @@ public interface CypherTypes {
   IElementType QUERY = new CypherElementType("QUERY");
   IElementType QUERY_OPTIONS = new CypherElementType("QUERY_OPTIONS");
   IElementType RANGE_LITERAL = new CypherElementType("RANGE_LITERAL");
+  IElementType READING_CLAUSE = new CypherElementType("READING_CLAUSE");
   IElementType REDUCE_FUNCTION_INVOCATION = new CypherElementType("REDUCE_FUNCTION_INVOCATION");
   IElementType REGULAR_QUERY = new CypherElementType("REGULAR_QUERY");
   IElementType RELATIONSHIPS_PATTERN = new CypherElementType("RELATIONSHIPS_PATTERN");
@@ -122,6 +123,7 @@ public interface CypherTypes {
   IElementType REL_TYPE_NAME = new CypherElementType("REL_TYPE_NAME");
   IElementType REMOVE = new CypherElementType("REMOVE");
   IElementType REMOVE_ITEM = new CypherElementType("REMOVE_ITEM");
+  IElementType RESERVED_WORD = new CypherElementType("RESERVED_WORD");
   IElementType RETURN = new CypherElementType("RETURN");
   IElementType RETURN_BODY = new CypherElementType("RETURN_BODY");
   IElementType RETURN_ITEM = new CypherElementType("RETURN_ITEM");
@@ -136,6 +138,7 @@ public interface CypherTypes {
   IElementType SINGLE_QUERY = new CypherElementType("SINGLE_QUERY");
   IElementType SKIP = new CypherElementType("SKIP");
   IElementType SORT_ITEM = new CypherElementType("SORT_ITEM");
+  IElementType STANDALONE_CALL = new CypherElementType("STANDALONE_CALL");
   IElementType START = new CypherElementType("START");
   IElementType START_POINT = new CypherElementType("START_POINT");
   IElementType STATEMENT = new CypherElementType("STATEMENT");
@@ -149,6 +152,7 @@ public interface CypherTypes {
   IElementType UNSIGNED_DOUBLE = new CypherElementType("UNSIGNED_DOUBLE");
   IElementType UNSIGNED_INTEGER = new CypherElementType("UNSIGNED_INTEGER");
   IElementType UNWIND = new CypherElementType("UNWIND");
+  IElementType UPDATING_CLAUSE = new CypherElementType("UPDATING_CLAUSE");
   IElementType VARIABLE = new CypherElementType("VARIABLE");
   IElementType VARIABLE_SELECTOR = new CypherElementType("VARIABLE_SELECTOR");
   IElementType VERSION_NUMBER = new CypherElementType("VERSION_NUMBER");
@@ -160,6 +164,7 @@ public interface CypherTypes {
   IElementType BRACKET_SQUARECLOSE = new CypherTokenType("]");
   IElementType BRACKET_SQUAREOPEN = new CypherTokenType("[");
   IElementType DOLLAR = new CypherTokenType("$");
+  IElementType K_ADD = new CypherTokenType("K_ADD");
   IElementType K_ALL = new CypherTokenType("K_ALL");
   IElementType K_ALLSHORTESTPATHS = new CypherTokenType("K_ALLSHORTESTPATHS");
   IElementType K_AND = new CypherTokenType("K_AND");
@@ -184,6 +189,7 @@ public interface CypherTypes {
   IElementType K_DESCENDING = new CypherTokenType("K_DESCENDING");
   IElementType K_DETACH = new CypherTokenType("K_DETACH");
   IElementType K_DISTINCT = new CypherTokenType("K_DISTINCT");
+  IElementType K_DO = new CypherTokenType("K_DO");
   IElementType K_DROP = new CypherTokenType("K_DROP");
   IElementType K_ELSE = new CypherTokenType("K_ELSE");
   IElementType K_END = new CypherTokenType("K_END");
@@ -194,6 +200,7 @@ public interface CypherTypes {
   IElementType K_FALSE = new CypherTokenType("K_FALSE");
   IElementType K_FIELDTERMINATOR = new CypherTokenType("K_FIELDTERMINATOR");
   IElementType K_FILTER = new CypherTokenType("K_FILTER");
+  IElementType K_FOR = new CypherTokenType("K_FOR");
   IElementType K_FOREACH = new CypherTokenType("K_FOREACH");
   IElementType K_FROM = new CypherTokenType("K_FROM");
   IElementType K_HEADERS = new CypherTokenType("K_HEADERS");
@@ -203,12 +210,14 @@ public interface CypherTypes {
   IElementType K_JOIN = new CypherTokenType("K_JOIN");
   IElementType K_LIMIT = new CypherTokenType("K_LIMIT");
   IElementType K_LOAD = new CypherTokenType("K_LOAD");
+  IElementType K_MANDATORY = new CypherTokenType("K_MANDATORY");
   IElementType K_MATCH = new CypherTokenType("K_MATCH");
   IElementType K_MERGE = new CypherTokenType("K_MERGE");
   IElementType K_NODE = new CypherTokenType("K_NODE");
   IElementType K_NONE = new CypherTokenType("K_NONE");
   IElementType K_NOT = new CypherTokenType("K_NOT");
   IElementType K_NULL = new CypherTokenType("K_NULL");
+  IElementType K_OF = new CypherTokenType("K_OF");
   IElementType K_ON = new CypherTokenType("K_ON");
   IElementType K_OPTIONAL = new CypherTokenType("K_OPTIONAL");
   IElementType K_OR = new CypherTokenType("K_OR");
@@ -219,7 +228,9 @@ public interface CypherTypes {
   IElementType K_REL = new CypherTokenType("K_REL");
   IElementType K_RELATIONSHIP = new CypherTokenType("K_RELATIONSHIP");
   IElementType K_REMOVE = new CypherTokenType("K_REMOVE");
+  IElementType K_REQUIRE = new CypherTokenType("K_REQUIRE");
   IElementType K_RETURN = new CypherTokenType("K_RETURN");
+  IElementType K_SCALAR = new CypherTokenType("K_SCALAR");
   IElementType K_SCAN = new CypherTokenType("K_SCAN");
   IElementType K_SET = new CypherTokenType("K_SET");
   IElementType K_SHORTESTPATH = new CypherTokenType("K_SHORTESTPATH");
@@ -272,7 +283,7 @@ public interface CypherTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-       if (type == ALIASED_PROCEDURE_RESULT) {
+      if (type == ALIASED_PROCEDURE_RESULT) {
         return new CypherAliasedProcedureResultImpl(node);
       }
       else if (type == ALL_FUNCTION_INVOCATION) {
@@ -310,9 +321,6 @@ public interface CypherTypes {
       }
       else if (type == CASE_EXPRESSION) {
         return new CypherCaseExpressionImpl(node);
-      }
-      else if (type == CLAUSE) {
-        return new CypherClauseImpl(node);
       }
       else if (type == COMMAND) {
         return new CypherCommandImpl(node);
@@ -412,6 +420,9 @@ public interface CypherTypes {
       }
       else if (type == INDEX_QUERY) {
         return new CypherIndexQueryImpl(node);
+      }
+      else if (type == INDEX_SYNTAX) {
+        return new CypherIndexSyntaxImpl(node);
       }
       else if (type == INTEGER_LITERAL) {
         return new CypherIntegerLiteralImpl(node);
@@ -575,6 +586,9 @@ public interface CypherTypes {
       else if (type == RANGE_LITERAL) {
         return new CypherRangeLiteralImpl(node);
       }
+      else if (type == READING_CLAUSE) {
+        return new CypherReadingClauseImpl(node);
+      }
       else if (type == REDUCE_FUNCTION_INVOCATION) {
         return new CypherReduceFunctionInvocationImpl(node);
       }
@@ -613,6 +627,9 @@ public interface CypherTypes {
       }
       else if (type == REMOVE_ITEM) {
         return new CypherRemoveItemImpl(node);
+      }
+      else if (type == RESERVED_WORD) {
+        return new CypherReservedWordImpl(node);
       }
       else if (type == RETURN) {
         return new CypherReturnImpl(node);
@@ -656,6 +673,9 @@ public interface CypherTypes {
       else if (type == SORT_ITEM) {
         return new CypherSortItemImpl(node);
       }
+      else if (type == STANDALONE_CALL) {
+        return new CypherStandaloneCallImpl(node);
+      }
       else if (type == START) {
         return new CypherStartImpl(node);
       }
@@ -694,6 +714,9 @@ public interface CypherTypes {
       }
       else if (type == UNWIND) {
         return new CypherUnwindImpl(node);
+      }
+      else if (type == UPDATING_CLAUSE) {
+        return new CypherUpdatingClauseImpl(node);
       }
       else if (type == VARIABLE) {
         return new CypherVariableImpl(node);

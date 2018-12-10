@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherLoadCSVQueryImpl extends ASTWrapperPsiElement implements CypherLoadCSVQuery {
 
-  public CypherLoadCSVQueryImpl(ASTNode node) {
+  public CypherLoadCSVQueryImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -28,14 +28,14 @@ public class CypherLoadCSVQueryImpl extends ASTWrapperPsiElement implements Cyph
 
   @Override
   @NotNull
-  public List<CypherClause> getClauseList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherClause.class);
+  public CypherLoadCSV getLoadCSV() {
+    return findNotNullChildByClass(CypherLoadCSV.class);
   }
 
   @Override
-  @NotNull
-  public CypherLoadCSV getLoadCSV() {
-    return findNotNullChildByClass(CypherLoadCSV.class);
+  @Nullable
+  public CypherSingleQuery getSingleQuery() {
+    return findChildByClass(CypherSingleQuery.class);
   }
 
 }

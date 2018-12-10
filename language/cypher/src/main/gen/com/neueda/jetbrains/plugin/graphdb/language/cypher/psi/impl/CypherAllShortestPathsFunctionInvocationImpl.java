@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherAllShortestPathsFunctionInvocationImpl extends ASTWrapperPsiElement implements CypherAllShortestPathsFunctionInvocation {
 
-  public CypherAllShortestPathsFunctionInvocationImpl(ASTNode node) {
+  public CypherAllShortestPathsFunctionInvocationImpl(@NotNull ASTNode node) {
     super(node);
   }
 

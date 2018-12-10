@@ -14,7 +14,7 @@ import com.intellij.psi.PsiReference;
 
 public class CypherLabelNameImpl extends CypherNamedElementImpl implements CypherLabelName {
 
-  public CypherLabelNameImpl(ASTNode node) {
+  public CypherLabelNameImpl(@NotNull ASTNode node) {
     super(node);
   }
 

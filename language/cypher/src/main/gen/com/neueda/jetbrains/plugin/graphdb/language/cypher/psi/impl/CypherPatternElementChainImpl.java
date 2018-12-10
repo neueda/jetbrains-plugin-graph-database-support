@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherPatternElementChainImpl extends ASTWrapperPsiElement implements CypherPatternElementChain {
 
-  public CypherPatternElementChainImpl(ASTNode node) {
+  public CypherPatternElementChainImpl(@NotNull ASTNode node) {
     super(node);
   }
 

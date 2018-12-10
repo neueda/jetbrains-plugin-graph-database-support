@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherSkipImpl extends ASTWrapperPsiElement implements CypherSkip {
 
-  public CypherSkipImpl(ASTNode node) {
+  public CypherSkipImpl(@NotNull ASTNode node) {
     super(node);
   }
 

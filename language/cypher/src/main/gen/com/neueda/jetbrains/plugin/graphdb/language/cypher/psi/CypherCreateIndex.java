@@ -8,18 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface CypherCreateIndex extends PsiElement {
 
   @NotNull
-  CypherNodeLabel getNodeLabel();
-
-  @NotNull
-  CypherPropertyKeyNames getPropertyKeyNames();
+  CypherIndexSyntax getIndexSyntax();
 
   @NotNull
   PsiElement getKCreate();
-
-  @NotNull
-  PsiElement getKIndex();
-
-  @NotNull
-  PsiElement getKOn();
 
 }

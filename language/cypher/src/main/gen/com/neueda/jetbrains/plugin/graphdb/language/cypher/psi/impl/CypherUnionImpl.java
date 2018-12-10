@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherUnionImpl extends ASTWrapperPsiElement implements CypherUnion {
 
-  public CypherUnionImpl(ASTNode node) {
+  public CypherUnionImpl(@NotNull ASTNode node) {
     super(node);
   }
 

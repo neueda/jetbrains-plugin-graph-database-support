@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherMaybeVariableLengthImpl extends ASTWrapperPsiElement implements CypherMaybeVariableLength {
 
-  public CypherMaybeVariableLengthImpl(ASTNode node) {
+  public CypherMaybeVariableLengthImpl(@NotNull ASTNode node) {
     super(node);
   }
 

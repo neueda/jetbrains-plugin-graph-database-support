@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherLiteralEntryImpl extends ASTWrapperPsiElement implements CypherLiteralEntry {
 
-  public CypherLiteralEntryImpl(ASTNode node) {
+  public CypherLiteralEntryImpl(@NotNull ASTNode node) {
     super(node);
   }
 

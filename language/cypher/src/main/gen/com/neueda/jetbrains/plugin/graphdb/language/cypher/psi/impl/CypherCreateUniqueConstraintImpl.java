@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherCreateUniqueConstraintImpl extends ASTWrapperPsiElement implements CypherCreateUniqueConstraint {
 
-  public CypherCreateUniqueConstraintImpl(ASTNode node) {
+  public CypherCreateUniqueConstraintImpl(@NotNull ASTNode node) {
     super(node);
   }
 

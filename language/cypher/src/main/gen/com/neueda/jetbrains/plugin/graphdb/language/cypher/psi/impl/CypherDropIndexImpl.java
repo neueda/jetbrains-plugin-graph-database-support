@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherDropIndexImpl extends ASTWrapperPsiElement implements CypherDropIndex {
 
-  public CypherDropIndexImpl(ASTNode node) {
+  public CypherDropIndexImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -28,32 +28,14 @@ public class CypherDropIndexImpl extends ASTWrapperPsiElement implements CypherD
 
   @Override
   @NotNull
-  public CypherNodeLabel getNodeLabel() {
-    return findNotNullChildByClass(CypherNodeLabel.class);
-  }
-
-  @Override
-  @NotNull
-  public CypherPropertyKeyNames getPropertyKeyNames() {
-    return findNotNullChildByClass(CypherPropertyKeyNames.class);
+  public CypherIndexSyntax getIndexSyntax() {
+    return findNotNullChildByClass(CypherIndexSyntax.class);
   }
 
   @Override
   @NotNull
   public PsiElement getKDrop() {
     return findNotNullChildByType(K_DROP);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getKIndex() {
-    return findNotNullChildByType(K_INDEX);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getKOn() {
-    return findNotNullChildByType(K_ON);
   }
 
 }

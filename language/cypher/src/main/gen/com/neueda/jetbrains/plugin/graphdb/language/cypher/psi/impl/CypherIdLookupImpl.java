@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherIdLookupImpl extends ASTWrapperPsiElement implements CypherIdLookup {
 
-  public CypherIdLookupImpl(ASTNode node) {
+  public CypherIdLookupImpl(@NotNull ASTNode node) {
     super(node);
   }
 

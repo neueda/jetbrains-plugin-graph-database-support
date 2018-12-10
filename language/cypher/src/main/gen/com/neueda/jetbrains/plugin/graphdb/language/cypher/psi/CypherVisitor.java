@@ -74,10 +74,6 @@ public class CypherVisitor extends PsiElementVisitor {
     visitAnyYielding(o);
   }
 
-  public void visitClause(@NotNull CypherClause o) {
-    visitPsiElement(o);
-  }
-
   public void visitCommand(@NotNull CypherCommand o) {
     visitPsiElement(o);
   }
@@ -207,6 +203,10 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitIndexQuery(@NotNull CypherIndexQuery o) {
+    visitPsiElement(o);
+  }
+
+  public void visitIndexSyntax(@NotNull CypherIndexSyntax o) {
     visitPsiElement(o);
   }
 
@@ -426,6 +426,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitReadingClause(@NotNull CypherReadingClause o) {
+    visitPsiElement(o);
+  }
+
   public void visitReduceFunctionInvocation(@NotNull CypherReduceFunctionInvocation o) {
     visitInvocation(o);
   }
@@ -475,6 +479,10 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitRemoveItem(@NotNull CypherRemoveItem o) {
+    visitPsiElement(o);
+  }
+
+  public void visitReservedWord(@NotNull CypherReservedWord o) {
     visitPsiElement(o);
   }
 
@@ -534,6 +542,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitStandaloneCall(@NotNull CypherStandaloneCall o) {
+    visitPsiElement(o);
+  }
+
   public void visitStart(@NotNull CypherStart o) {
     visitPsiElement(o);
   }
@@ -583,6 +595,10 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitUnwind(@NotNull CypherUnwind o) {
+    visitPsiElement(o);
+  }
+
+  public void visitUpdatingClause(@NotNull CypherUpdatingClause o) {
     visitPsiElement(o);
   }
 

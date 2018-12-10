@@ -14,7 +14,7 @@ import com.intellij.psi.PsiReference;
 
 public class CypherPropertyKeyNameImpl extends CypherNamedElementImpl implements CypherPropertyKeyName {
 
-  public CypherPropertyKeyNameImpl(ASTNode node) {
+  public CypherPropertyKeyNameImpl(@NotNull ASTNode node) {
     super(node);
   }
 

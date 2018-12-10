@@ -11,25 +11,19 @@ import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherType
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
-public class CypherClauseImpl extends ASTWrapperPsiElement implements CypherClause {
+public class CypherUpdatingClauseImpl extends ASTWrapperPsiElement implements CypherUpdatingClause {
 
-  public CypherClauseImpl(ASTNode node) {
+  public CypherUpdatingClauseImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CypherVisitor visitor) {
-    visitor.visitClause(this);
+    visitor.visitUpdatingClause(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof CypherVisitor) accept((CypherVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public CypherCall getCall() {
-    return findChildByClass(CypherCall.class);
   }
 
   @Override
@@ -52,18 +46,6 @@ public class CypherClauseImpl extends ASTWrapperPsiElement implements CypherClau
 
   @Override
   @Nullable
-  public CypherLoadCSV getLoadCSV() {
-    return findChildByClass(CypherLoadCSV.class);
-  }
-
-  @Override
-  @Nullable
-  public CypherMatch getMatch() {
-    return findChildByClass(CypherMatch.class);
-  }
-
-  @Override
-  @Nullable
   public CypherMerge getMerge() {
     return findChildByClass(CypherMerge.class);
   }
@@ -76,32 +58,8 @@ public class CypherClauseImpl extends ASTWrapperPsiElement implements CypherClau
 
   @Override
   @Nullable
-  public CypherReturn getReturn() {
-    return findChildByClass(CypherReturn.class);
-  }
-
-  @Override
-  @Nullable
   public CypherSetClause getSetClause() {
     return findChildByClass(CypherSetClause.class);
-  }
-
-  @Override
-  @Nullable
-  public CypherStart getStart() {
-    return findChildByClass(CypherStart.class);
-  }
-
-  @Override
-  @Nullable
-  public CypherUnwind getUnwind() {
-    return findChildByClass(CypherUnwind.class);
-  }
-
-  @Override
-  @Nullable
-  public CypherWith getWith() {
-    return findChildByClass(CypherWith.class);
   }
 
 }

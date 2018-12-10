@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherUnescapedSymbolicNameStringImpl extends ASTWrapperPsiElement implements CypherUnescapedSymbolicNameString {
 
-  public CypherUnescapedSymbolicNameStringImpl(ASTNode node) {
+  public CypherUnescapedSymbolicNameStringImpl(@NotNull ASTNode node) {
     super(node);
   }
 

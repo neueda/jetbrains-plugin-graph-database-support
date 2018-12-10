@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface CypherLoadCSVQuery extends PsiElement {
 
   @NotNull
-  List<CypherClause> getClauseList();
-
-  @NotNull
   CypherLoadCSV getLoadCSV();
+
+  @Nullable
+  CypherSingleQuery getSingleQuery();
 
 }

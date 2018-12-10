@@ -14,7 +14,7 @@ import com.intellij.psi.PsiReference;
 
 public class CypherVariableImpl extends CypherVariableElementImpl implements CypherVariable {
 
-  public CypherVariableImpl(ASTNode node) {
+  public CypherVariableImpl(@NotNull ASTNode node) {
     super(node);
   }
 

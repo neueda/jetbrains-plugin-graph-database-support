@@ -13,7 +13,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
 public class CypherUniqueConstraintSyntaxImpl extends ASTWrapperPsiElement implements CypherUniqueConstraintSyntax {
 
-  public CypherUniqueConstraintSyntaxImpl(ASTNode node) {
+  public CypherUniqueConstraintSyntaxImpl(@NotNull ASTNode node) {
     super(node);
   }
 
