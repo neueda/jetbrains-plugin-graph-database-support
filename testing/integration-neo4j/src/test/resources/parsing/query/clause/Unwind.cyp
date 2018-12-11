@@ -1,1 +1,1 @@
-UNWIND expr AS var;
+UNWIND expr AS var RETURN *;

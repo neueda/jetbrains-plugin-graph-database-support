@@ -29,3 +29,4 @@ MATCH (n)-[var:Type*2..2]-(n);
 MATCH (n)-[var {param}]-(n);
 MATCH (n)-[var {key: "value"}]-(n);
 MATCH (n)-[var {key: "value", key: "value"}]-(n);
+MATCH (n) - [:Type] -> (m)

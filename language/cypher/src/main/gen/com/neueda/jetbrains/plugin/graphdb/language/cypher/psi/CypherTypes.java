@@ -72,6 +72,7 @@ public interface CypherTypes {
   IElementType MAYBE_VARIABLE_LENGTH = new CypherElementType("MAYBE_VARIABLE_LENGTH");
   IElementType MERGE = new CypherElementType("MERGE");
   IElementType MERGE_ACTION = new CypherElementType("MERGE_ACTION");
+  IElementType MULTI_PART_QUERY = new CypherElementType("MULTI_PART_QUERY");
   IElementType NAMESPACE = new CypherElementType("NAMESPACE");
   IElementType NEW_PARAMETER = new CypherElementType("NEW_PARAMETER");
   IElementType NODE_LABEL = new CypherElementType("NODE_LABEL");
@@ -135,6 +136,7 @@ public interface CypherTypes {
   IElementType SHORTEST_PATH_PATTERN = new CypherElementType("SHORTEST_PATH_PATTERN");
   IElementType SIMPLE_PROCEDURE_RESULT = new CypherElementType("SIMPLE_PROCEDURE_RESULT");
   IElementType SINGLE_FUNCTION_INVOCATION = new CypherElementType("SINGLE_FUNCTION_INVOCATION");
+  IElementType SINGLE_PART_QUERY = new CypherElementType("SINGLE_PART_QUERY");
   IElementType SINGLE_QUERY = new CypherElementType("SINGLE_QUERY");
   IElementType SKIP = new CypherElementType("SKIP");
   IElementType SORT_ITEM = new CypherElementType("SORT_ITEM");
@@ -475,6 +477,9 @@ public interface CypherTypes {
       else if (type == MERGE_ACTION) {
         return new CypherMergeActionImpl(node);
       }
+      else if (type == MULTI_PART_QUERY) {
+        return new CypherMultiPartQueryImpl(node);
+      }
       else if (type == NAMESPACE) {
         return new CypherNamespaceImpl(node);
       }
@@ -663,6 +668,9 @@ public interface CypherTypes {
       }
       else if (type == SINGLE_FUNCTION_INVOCATION) {
         return new CypherSingleFunctionInvocationImpl(node);
+      }
+      else if (type == SINGLE_PART_QUERY) {
+        return new CypherSinglePartQueryImpl(node);
       }
       else if (type == SINGLE_QUERY) {
         return new CypherSingleQueryImpl(node);

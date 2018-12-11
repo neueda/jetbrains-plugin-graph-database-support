@@ -1,3 +1,4 @@
+MATCH (n)
 WITH n
 OR n
 XOR n
@@ -67,3 +68,4 @@ AND 'str'
 AND "str"
 AND "str \n"
 AND "str \""
+RETURN n

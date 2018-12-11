@@ -123,7 +123,7 @@ public class CypherBlock implements ASTBlock {
         IElementType parentType = this.node.getElementType();
         IElementType type = node.getElementType();
 
-        if (parentType == CypherTypes.SINGLE_QUERY
+        if ((parentType == CypherTypes.SINGLE_PART_QUERY || parentType == CypherTypes.MULTI_PART_QUERY)
                 && (type == CypherTypes.READING_CLAUSE || type == CypherTypes.UPDATING_CLAUSE)) {
             return Indent.getNoneIndent();
         }

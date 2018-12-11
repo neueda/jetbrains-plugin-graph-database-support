@@ -278,6 +278,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitMultiPartQuery(@NotNull CypherMultiPartQuery o) {
+    visitPsiElement(o);
+  }
+
   public void visitNamespace(@NotNull CypherNamespace o) {
     visitPsiElement(o);
   }
@@ -528,6 +532,10 @@ public class CypherVisitor extends PsiElementVisitor {
 
   public void visitSingleFunctionInvocation(@NotNull CypherSingleFunctionInvocation o) {
     visitInvocation(o);
+  }
+
+  public void visitSinglePartQuery(@NotNull CypherSinglePartQuery o) {
+    visitPsiElement(o);
   }
 
   public void visitSingleQuery(@NotNull CypherSingleQuery o) {
