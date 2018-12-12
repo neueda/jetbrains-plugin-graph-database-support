@@ -129,7 +129,7 @@ public class CypherFunctionCallInspectionTest extends BaseInspectionTest {
     }
 
     public void testNullableStringTypeCheck() {
-        String query = "MATCH p=(n)-[r]-() CALL test.stringq(%s)";
+        String query = "MATCH p=(n)-[r]-() CALL test.stringq(%s) RETURN p";
         generateTypeCompatibilityTests(query, "STRING?", asList("STRING", "NULL"));
     }
 
@@ -139,7 +139,7 @@ public class CypherFunctionCallInspectionTest extends BaseInspectionTest {
     }
 
     public void testNullableNumberTypeCheck() {
-        String query = "MATCH p=(n)-[r]-() CALL test.numq(%s)";
+        String query = "MATCH p=(n)-[r]-() CALL test.numq(%s) RETURN p";
         generateTypeCompatibilityTests(query, "NUMBER?", asList("INTEGER", "FLOAT", "NULL"));
     }
 
@@ -149,27 +149,27 @@ public class CypherFunctionCallInspectionTest extends BaseInspectionTest {
     }
 
     public void testNullableIntegerTypeCheck() {
-        String query = "MATCH p=(n)-[r]-() CALL test.intq(%s)";
+        String query = "MATCH p=(n)-[r]-() CALL test.intq(%s) RETURN p";
         generateTypeCompatibilityTests(query, "INTEGER?", asList("INTEGER", "NULL"));
     }
 
     public void testBooleanTypeCheck() {
-        String query = "MATCH p=(n)-[r]-() CALL test.bool(%s)";
+        String query = "MATCH p=(n)-[r]-() CALL test.bool(%s) RETURN p";
         generateTypeCompatibilityTests(query, "BOOLEAN", asList("BOOLEAN"));
     }
 
     public void testNullableBooleanTypeCheck() {
-        String query = "MATCH p=(n)-[r]-() CALL test.boolq(%s)";
+        String query = "MATCH p=(n)-[r]-() CALL test.boolq(%s) RETURN p";
         generateTypeCompatibilityTests(query, "BOOLEAN?", asList("BOOLEAN", "NULL"));
     }
 
     public void testFloatTypeCheck() {
-        String query = "MATCH p=(n)-[r]-() CALL test.float(%s)";
+        String query = "MATCH p=(n)-[r]-() CALL test.float(%s) RETURN p";
         generateTypeCompatibilityTests(query, "FLOAT", asList("INTEGER", "FLOAT"));
     }
 
     public void testNullableFloatTypeCheck() {
-        String query = "MATCH p=(n)-[r]-() CALL test.floatq(%s)";
+        String query = "MATCH p=(n)-[r]-() CALL test.floatq(%s) RETURN p";
         generateTypeCompatibilityTests(query, "FLOAT?", asList("INTEGER", "FLOAT", "NULL"));
     }
 
