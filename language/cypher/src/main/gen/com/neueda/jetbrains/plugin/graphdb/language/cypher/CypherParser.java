@@ -4489,13 +4489,13 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SinglePartQuery | MultiPartQuery
+  // MultiPartQuery | SinglePartQuery
   public static boolean SingleQuery(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SingleQuery")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, SINGLE_QUERY, "<single query>");
-    r = SinglePartQuery(b, l + 1);
-    if (!r) r = MultiPartQuery(b, l + 1);
+    r = MultiPartQuery(b, l + 1);
+    if (!r) r = SinglePartQuery(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
