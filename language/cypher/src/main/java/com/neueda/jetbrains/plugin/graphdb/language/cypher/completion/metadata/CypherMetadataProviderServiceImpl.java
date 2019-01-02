@@ -36,10 +36,13 @@ public class CypherMetadataProviderServiceImpl implements CypherMetadataProvider
 
     @Override
     public List<CypherLabelElement> getLabels() {
-        return sourceData.entrySet().stream()
+        List<CypherLabelElement> collect = sourceData.entrySet().stream()
                 .map(Map.Entry::getValue)
                 .flatMap((container) -> container.getLabels().stream())
                 .collect(Collectors.toList());
+//        collect.add(new CypherLabelElement("Testlabel"));
+//        collect.add(new CypherLabelElement("Testlabel2"));
+        return collect;
     }
 
     @Override
