@@ -4,4 +4,6 @@ public interface ParametersProvider {
 
     String getParametersJson();
 
+    String getLocalParametersJson();
+
 }

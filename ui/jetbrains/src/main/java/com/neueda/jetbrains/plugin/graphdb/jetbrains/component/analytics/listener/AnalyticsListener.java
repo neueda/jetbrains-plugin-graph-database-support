@@ -7,18 +7,10 @@ import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.project.ProjectManagerListener;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analytics;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.FileTypeExtensionUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class AnalyticsListener {
-
-    private static final List<String> EXTENSIONS = new ArrayList<String>() {{
-        add("cyp");
-        add("cql");
-        add("cypher");
-    }};
 
     public static void init() {
         projectManagerListener();
@@ -31,14 +23,14 @@ public class AnalyticsListener {
                 project.getMessageBus().connect().subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, new FileEditorManagerListener() {
                     @Override
                     public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
-                        if (EXTENSIONS.contains(file.getExtension())) {
+                        if (FileTypeExtensionUtil.EXTENSIONS.contains(file.getExtension())) {
                             Analytics.event("file[" + file.getExtension() + "]", "opened");
                         }
                     }
 
                     @Override
                     public void fileClosed(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
-                        if (EXTENSIONS.contains(file.getExtension())) {
+                        if (FileTypeExtensionUtil.EXTENSIONS.contains(file.getExtension())) {
                             Analytics.event("file[" + file.getExtension() + "]", "closed");
                         }
                     }

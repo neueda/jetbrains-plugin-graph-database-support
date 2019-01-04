@@ -8,41 +8,53 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.FileUtil;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.FileTypeExtensionUtil;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.*;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.PARAMS_ERROR_COMMON_MSG;
 
 public class ParametersPanel implements ParametersProvider {
 
     private static final FileDocumentManager FILE_DOCUMENT_MANAGER = FileDocumentManager.getInstance();
 
-    private Editor editor;
+    private Editor editor, localParamsEditor;
     private GraphConsoleView graphConsoleView;
     private MessageBus messageBus;
     private ParametersService service;
+    private Project project;
 
     public void initialize(GraphConsoleView graphConsoleView, Project project) {
         this.graphConsoleView = graphConsoleView;
         this.messageBus = project.getMessageBus();
         this.service = ServiceManager.getService(project, ParametersService.class);
+        this.project = project;
         setupEditor(project);
+        FileEditor selectedEditor = FileEditorManager.getInstance(project).getSelectedEditor();
+        if (selectedEditor != null) {
+            setupLocalParamEditor(project, selectedEditor.getFile());
+        }
     }
 
     public String getParametersJson() {
         return editor.getDocument().getText();
     }
 
+    public String getLocalParametersJson() {
+        return localParamsEditor != null? localParamsEditor.getDocument().getText() : null;
+    }
+
     private void initializeUi() {
-        graphConsoleView.getParametersTab().add(editor.getComponent(), BorderLayout.CENTER);
+        graphConsoleView.getGlobalParametersTab().add(editor.getComponent(), BorderLayout.CENTER);
         service.registerParametersProvider(this);
 
         messageBus.connect().subscribe(QueryParametersRetrievalErrorEvent.QUERY_PARAMETERS_RETRIEVAL_ERROR_EVENT_TOPIC,
@@ -58,6 +70,18 @@ public class ParametersPanel implements ParametersProvider {
                     }
                     HintManager.getInstance().showErrorHint(editor, errorMessage);
                 });
+
+        messageBus.connect().subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, new FileEditorManagerListener() {
+            // If file opened, fileOpenedSync->selectionChanged->fileOpened are called
+            @Override
+            public void selectionChanged(@NotNull FileEditorManagerEvent event) {
+                releaseLocalEditor();
+                VirtualFile newFile = event.getNewFile();
+                if (newFile != null && FileTypeExtensionUtil.isCypherFileTypeExtension(newFile.getExtension())) {
+                    setupLocalParamEditor(project, newFile);
+                }
+            }
+        });
     }
 
     private void setupEditor(Project project) {
@@ -68,12 +92,42 @@ public class ParametersPanel implements ParametersProvider {
                 editor = createEditor(project, document);
                 editor.setHeaderComponent(new JLabel("Provide query parameters in JSON format here:"));
                 setInitialContent(document);
+
                 initializeUi();
             } catch (Throwable e) {
                 Throwables.throwIfUnchecked(e);
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    private void releaseLocalEditor() {
+        if (localParamsEditor != null) {
+            graphConsoleView.getLocalParametersTab().remove(localParamsEditor.getComponent());
+            if (!localParamsEditor.isDisposed()) {
+                EditorFactory.getInstance().releaseEditor(localParamsEditor);
+            }
+        }
+        localParamsEditor = null;
+    }
+
+    private void setupLocalParamEditor(Project project, VirtualFile file) {
+        if (project == null || file == null) return;
+        // TODO: create temp file for each cql file, handle changes/file closing
+//        ApplicationManager.getApplication().runWriteAction(() -> {                // TODO: remove runWriteAction?
+            // https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000129030-ApplicationManager-getApplication-runWriteAction-vs-WriteCommandAction-runWriteCommandAction-
+            try {
+                VirtualFile localParamFile = FileUtil.getScratchFile(project, file.getPresentableName() + ".json");
+                Document localParamDocument = FILE_DOCUMENT_MANAGER.getDocument(localParamFile);
+                localParamsEditor = createEditor(project, localParamDocument);
+                localParamsEditor.setHeaderComponent(new JLabel("Provide query parameters specific to " + file.getPresentableName() + " in JSON format here:"));
+                setInitialContent(localParamDocument);
+                graphConsoleView.getLocalParametersTab().add(localParamsEditor.getComponent(), BorderLayout.CENTER);
+            } catch (Throwable e) {
+                Throwables.throwIfUnchecked(e);
+                throw new RuntimeException(e);
+            }
+//        });
     }
 
     private void setInitialContent(Document document) {

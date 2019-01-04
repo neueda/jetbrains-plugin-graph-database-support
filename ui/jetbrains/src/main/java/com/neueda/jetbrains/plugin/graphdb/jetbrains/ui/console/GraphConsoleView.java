@@ -76,6 +76,9 @@ public class GraphConsoleView implements Disposable {
     private JPanel parametersTab;
     private JBTabbedPane defaultTabContainer;
     private JBSplitter graphSplitter;
+    private JPanel globalParametersTab;
+    private JPanel localParametersTab;
+    private JBSplitter paramSplitter;
 
     private LookAndFeelService lookAndFeelService;
 
@@ -250,5 +253,13 @@ public class GraphConsoleView implements Disposable {
 
     @Override
     public void dispose() {
+    }
+
+    public JPanel getGlobalParametersTab() {
+        return globalParametersTab;
+    }
+
+    public JPanel getLocalParametersTab() {
+        return localParametersTab;
     }
 }
