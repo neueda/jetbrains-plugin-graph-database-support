@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
 import com.intellij.psi.PsiElement;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.settings.SettingsComponent;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherParameter;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.TraverseUtil;
@@ -43,18 +44,31 @@ public class ParametersService {
     }
 
     public Map<String, Object> getParameters(PsiElement element) throws Exception {
-        if (isEmptyParametersMap(parametersProvider.getLocalParametersJson())) {
+        if (SettingsComponent.getInstance().areFileSpecificParamsUsed()) {
+            if (isEmptyParametersMap(parametersProvider.getLocalParametersJson())) {
+                if (isValidParametersMap(parametersProvider.getParametersJson())) {
+                    Map<String, Object> allParameters = MAPPER
+                            .readValue(parametersProvider.getParametersJson(), new TypeReference<Map<String, Object>>() {
+                            });
+                    return extractQueryParameters(element, allParameters);
+                } else {
+                    return Collections.emptyMap();
+                }
+            } else {
+                Map<String, Object> allParameters = MAPPER
+                        .readValue(parametersProvider.getLocalParametersJson(), new TypeReference<Map<String, Object>>() {
+                        });
+                return extractQueryParameters(element, allParameters);
+            }
+        } else {
             if (isValidParametersMap(parametersProvider.getParametersJson())) {
                 Map<String, Object> allParameters = MAPPER
-                        .readValue(parametersProvider.getParametersJson(), new TypeReference<Map<String, Object>>() { });
+                        .readValue(parametersProvider.getParametersJson(), new TypeReference<Map<String, Object>>() {
+                        });
                 return extractQueryParameters(element, allParameters);
             } else {
                 return Collections.emptyMap();
             }
-        } else {
-            Map<String, Object> allParameters = MAPPER
-                    .readValue(parametersProvider.getLocalParametersJson(), new TypeReference<Map<String, Object>>() { });
-            return extractQueryParameters(element, allParameters);
         }
     }
 

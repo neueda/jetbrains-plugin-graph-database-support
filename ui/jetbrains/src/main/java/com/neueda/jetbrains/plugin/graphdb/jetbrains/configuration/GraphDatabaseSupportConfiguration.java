@@ -15,7 +15,7 @@ import java.awt.FlowLayout;
 public class GraphDatabaseSupportConfiguration implements Configurable {
 
     private boolean isModified = false;
-    private JBCheckBox analyticsCheckBox;
+    private JBCheckBox analyticsCheckBox, globalParametersCheckbox;
     private AnalyticsApplicationComponent analytics;
 
     @Nls
@@ -42,6 +42,12 @@ public class GraphDatabaseSupportConfiguration implements Configurable {
 
         JPanel rootPane = new JPanel(new FlowLayout(FlowLayout.LEFT));
         rootPane.add(analyticsCheckBox);
+
+        globalParametersCheckbox = new JBCheckBox("Use custom parameters for each Cypher file separately",
+                SettingsComponent.getInstance().areFileSpecificParamsUsed());
+        globalParametersCheckbox.addActionListener(e -> isModified = true);
+        rootPane.add(globalParametersCheckbox);
+
         return rootPane;
     }
 
@@ -53,12 +59,15 @@ public class GraphDatabaseSupportConfiguration implements Configurable {
     @Override
     public void apply() throws ConfigurationException {
         SettingsComponent.getInstance().enableAnalytics(analyticsCheckBox.isSelected());
+        SettingsComponent.getInstance().enableFileSpecificParams(globalParametersCheckbox.isSelected());
+
         isModified = false;
     }
 
     @Override
     public void reset() {
         analyticsCheckBox.setSelected(SettingsComponent.getInstance().isAnalyticEnabled());
+        globalParametersCheckbox.setSelected(SettingsComponent.getInstance().areFileSpecificParamsUsed());
         isModified = false;
     }
 

@@ -9,6 +9,7 @@ import java.util.UUID;
 public class SettingsComponentImpl implements SettingsComponent {
 
     private static final String ANALYTICS_ENABLED_KEY = "GraphDbSupport.AnalyticsEnabled";
+    private static final String USE_FILE_SPECIFIC_PARAMS_KEY = "GraphDbSupport.UseFileSpecificParams";
     private static final String USER_ID = "GraphDbSupport.UserId";
     private static final String KNOWN_PLUGIN_VERSION = "GraphDbSupport.KnownPluginVersion";
 
@@ -41,9 +42,19 @@ public class SettingsComponentImpl implements SettingsComponent {
     }
 
     @Override
+    public boolean areFileSpecificParamsUsed() {
+        return properties().getBoolean(USE_FILE_SPECIFIC_PARAMS_KEY, false);
+    }
+
+    @Override
     public void enableAnalytics(boolean state) {
         Analytics.forceEvent("settings", state ? "enableAnalytics" : "disableAnalytics");
         properties().setValue(ANALYTICS_ENABLED_KEY, state, true);
+    }
+
+    @Override
+    public void enableFileSpecificParams(boolean isFileSpecific) {
+        properties().setValue(USE_FILE_SPECIFIC_PARAMS_KEY, isFileSpecific, true);
     }
 
     @Override

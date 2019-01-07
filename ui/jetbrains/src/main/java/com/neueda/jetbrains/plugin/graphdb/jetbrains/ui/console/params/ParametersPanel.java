@@ -94,7 +94,7 @@ public class ParametersPanel implements ParametersProvider {
                 VirtualFile file = FileUtil.getScratchFile(project, "Neo4jGraphDbConsoleParametersPanel.json");
                 Document document = FILE_DOCUMENT_MANAGER.getDocument(file);
                 editor = createEditor(project, document);
-                editor.setHeaderComponent(new JLabel("Provide query parameters in JSON format here:"));
+                editor.setHeaderComponent(new JLabel("<html>Provide <b>global</b> query parameters in JSON format here:</html>"));
                 setInitialContent(document);
 
                 initializeUi();
@@ -117,7 +117,6 @@ public class ParametersPanel implements ParametersProvider {
 
     private void setupLocalParamEditor(Project project, VirtualFile file) {
         if (project == null || file == null) return;
-        // TODO: create temp file for each cql file, handle changes/file closing
 //        ApplicationManager.getApplication().runWriteAction(() -> {                // TODO: remove runWriteAction?
             // https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000129030-ApplicationManager-getApplication-runWriteAction-vs-WriteCommandAction-runWriteCommandAction-
             try {
@@ -127,7 +126,7 @@ public class ParametersPanel implements ParametersProvider {
                 Window window = WindowManagerEx.getInstanceEx().getMostRecentFocusedWindow();
                 EditorWindow editorWindow = FileEditorManagerEx.getInstanceEx(project).getSplittersFor(window).getCurrentWindow();
                 String tabTitle = EditorTabPresentationUtil.getEditorTabTitle(project, file, editorWindow);
-                localParamsEditor.setHeaderComponent(new JLabel("<html>Provide query parameters specific to <b>" + tabTitle + "</b> in JSON format here:</html>"));
+                localParamsEditor.setHeaderComponent(new JLabel("<html>Provide query parameters specific to <b>" + tabTitle + "</b> file in JSON format here:</html>"));
                 setInitialContent(localParamDocument);
                 graphConsoleView.getLocalParametersTab().add(localParamsEditor.getComponent(), BorderLayout.CENTER);
             } catch (Throwable e) {
