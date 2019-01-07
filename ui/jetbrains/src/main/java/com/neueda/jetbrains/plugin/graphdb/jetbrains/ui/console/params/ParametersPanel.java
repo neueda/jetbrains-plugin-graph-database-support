@@ -9,8 +9,12 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.fileEditor.*;
+import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
+import com.intellij.openapi.fileEditor.impl.EditorTabPresentationUtil;
+import com.intellij.openapi.fileEditor.impl.EditorWindow;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.wm.ex.WindowManagerEx;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent;
@@ -120,7 +124,10 @@ public class ParametersPanel implements ParametersProvider {
                 VirtualFile localParamFile = FileUtil.getScratchFile(project, file.getPresentableName() + ".json");
                 Document localParamDocument = FILE_DOCUMENT_MANAGER.getDocument(localParamFile);
                 localParamsEditor = createEditor(project, localParamDocument);
-                localParamsEditor.setHeaderComponent(new JLabel("Provide query parameters specific to " + file.getPresentableName() + " in JSON format here:"));
+                Window window = WindowManagerEx.getInstanceEx().getMostRecentFocusedWindow();
+                EditorWindow editorWindow = FileEditorManagerEx.getInstanceEx(project).getSplittersFor(window).getCurrentWindow();
+                String tabTitle = EditorTabPresentationUtil.getEditorTabTitle(project, file, editorWindow);
+                localParamsEditor.setHeaderComponent(new JLabel("<html>Provide query parameters specific to <b>" + tabTitle + "</b> in JSON format here:</html>"));
                 setInitialContent(localParamDocument);
                 graphConsoleView.getLocalParametersTab().add(localParamsEditor.getComponent(), BorderLayout.CENTER);
             } catch (Throwable e) {
