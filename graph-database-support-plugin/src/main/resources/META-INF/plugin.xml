@@ -217,8 +217,8 @@
                     icon="/actions/refresh.png"
                     description="Clean canvas">
             </action>
-            <action id="GraphDatabaseConsoleToolWindowActions.SwitchParametersTypeUsed"
-                    class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.SwitchParametersTypeUsedAction"
+            <action id="GraphDatabaseConsoleToolWindowActions.ToggleFileSpecificParametersUsed"
+                    class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.ui.console.ToggleFileSpecificParametersUsedAction"
                     text="Using global parameters"
                     icon="/actions/edit.svg"
                     description="Toggle global or file-specific query parameters">

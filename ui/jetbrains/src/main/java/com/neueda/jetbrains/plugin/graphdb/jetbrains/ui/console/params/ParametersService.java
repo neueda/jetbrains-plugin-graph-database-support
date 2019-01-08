@@ -93,7 +93,7 @@ public class ParametersService {
 
     private static boolean isEmptyParametersMap(String parametersJson) {
         try {
-            return parametersJson == null || StringUtils.isBlank(parametersJson);   // TODO: check if equals "{}"?
+            return parametersJson == null || StringUtils.isBlank(parametersJson);
         } catch (Exception e) {
             Throwables.throwIfUnchecked(e);
             throw new RuntimeException(e);

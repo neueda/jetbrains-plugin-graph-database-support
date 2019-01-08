@@ -16,6 +16,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ex.WindowManagerEx;
 import com.intellij.util.messages.MessageBus;
+import com.intellij.util.messages.MessageBusConnection;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.ui.console.ToggleFileSpecificParametersEvent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.settings.SettingsComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.FileUtil;
@@ -60,8 +63,8 @@ public class ParametersPanel implements ParametersProvider {
     private void initializeUi() {
         graphConsoleView.getGlobalParametersTab().add(editor.getComponent(), BorderLayout.CENTER);
         service.registerParametersProvider(this);
-
-        messageBus.connect().subscribe(QueryParametersRetrievalErrorEvent.QUERY_PARAMETERS_RETRIEVAL_ERROR_EVENT_TOPIC,
+        MessageBusConnection mbConnection = messageBus.connect();
+        mbConnection.subscribe(QueryParametersRetrievalErrorEvent.QUERY_PARAMETERS_RETRIEVAL_ERROR_EVENT_TOPIC,
                 (exception, editor) -> {
                     if (editor == null) {
                         return;
@@ -75,7 +78,7 @@ public class ParametersPanel implements ParametersProvider {
                     HintManager.getInstance().showErrorHint(editor, errorMessage);
                 });
 
-        messageBus.connect().subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, new FileEditorManagerListener() {
+        mbConnection.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, new FileEditorManagerListener() {
             // If file opened, fileOpenedSync->selectionChanged->fileOpened are called
             @Override
             public void selectionChanged(@NotNull FileEditorManagerEvent event) {
@@ -85,6 +88,11 @@ public class ParametersPanel implements ParametersProvider {
                     setupLocalParamEditor(project, newFile);
                 }
             }
+        });
+        mbConnection.subscribe(ToggleFileSpecificParametersEvent.TOGGLE_FILE_SPECIFIC_PARAMETERS_EVENT_TOPIC,
+                (setToUseFileSpecificParams) -> {
+            editor.getContentComponent().setEnabled(!setToUseFileSpecificParams);
+            if (localParamsEditor != null) localParamsEditor.getContentComponent().setEnabled(setToUseFileSpecificParams);
         });
     }
 
@@ -117,8 +125,6 @@ public class ParametersPanel implements ParametersProvider {
 
     private void setupLocalParamEditor(Project project, VirtualFile file) {
         if (project == null || file == null) return;
-//        ApplicationManager.getApplication().runWriteAction(() -> {                // TODO: remove runWriteAction?
-            // https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000129030-ApplicationManager-getApplication-runWriteAction-vs-WriteCommandAction-runWriteCommandAction-
             try {
                 VirtualFile localParamFile = FileUtil.getScratchFile(project, file.getPresentableName() + ".json");
                 Document localParamDocument = FILE_DOCUMENT_MANAGER.getDocument(localParamFile);
@@ -129,11 +135,11 @@ public class ParametersPanel implements ParametersProvider {
                 localParamsEditor.setHeaderComponent(new JLabel("<html>Provide query parameters specific to <b>" + tabTitle + "</b> file in JSON format here:</html>"));
                 setInitialContent(localParamDocument);
                 graphConsoleView.getLocalParametersTab().add(localParamsEditor.getComponent(), BorderLayout.CENTER);
+                localParamsEditor.getContentComponent().setEnabled(SettingsComponent.getInstance().areFileSpecificParamsUsed());
             } catch (Throwable e) {
                 Throwables.throwIfUnchecked(e);
                 throw new RuntimeException(e);
             }
-//        });
     }
 
     private void setInitialContent(Document document) {

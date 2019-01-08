@@ -54,7 +54,7 @@ public class SettingsComponentImpl implements SettingsComponent {
 
     @Override
     public void enableFileSpecificParams(boolean isFileSpecific) {
-        properties().setValue(USE_FILE_SPECIFIC_PARAMS_KEY, isFileSpecific, true);
+        properties().setValue(USE_FILE_SPECIFIC_PARAMS_KEY, isFileSpecific, false);
     }
 
     @Override
