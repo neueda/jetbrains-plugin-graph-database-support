@@ -45,26 +45,19 @@ public class ParametersService {
 
     public Map<String, Object> getParameters(PsiElement element) throws Exception {
         if (SettingsComponent.getInstance().areFileSpecificParamsUsed()) {
-            if (isEmptyParametersMap(parametersProvider.getLocalParametersJson())) {
-                if (isValidParametersMap(parametersProvider.getParametersJson())) {
-                    Map<String, Object> allParameters = MAPPER
-                            .readValue(parametersProvider.getParametersJson(), new TypeReference<Map<String, Object>>() {
-                            });
-                    return extractQueryParameters(element, allParameters);
-                } else {
-                    return Collections.emptyMap();
-                }
-            } else {
+            if (isValidParametersMap(parametersProvider.getLocalParametersJson())) {
                 Map<String, Object> allParameters = MAPPER
-                        .readValue(parametersProvider.getLocalParametersJson(), new TypeReference<Map<String, Object>>() {
-                        });
+                    .readValue(parametersProvider.getLocalParametersJson(), new TypeReference<Map<String, Object>>() {
+                });
                 return extractQueryParameters(element, allParameters);
+            } else {
+                return Collections.emptyMap();
             }
         } else {
             if (isValidParametersMap(parametersProvider.getParametersJson())) {
                 Map<String, Object> allParameters = MAPPER
-                        .readValue(parametersProvider.getParametersJson(), new TypeReference<Map<String, Object>>() {
-                        });
+                    .readValue(parametersProvider.getParametersJson(), new TypeReference<Map<String, Object>>() {
+                });
                 return extractQueryParameters(element, allParameters);
             } else {
                 return Collections.emptyMap();

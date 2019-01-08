@@ -4,6 +4,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.StatementCollector;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params.ParametersProvider;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params.ParametersService;
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.tests.cypher.util.BaseGenericTest;
 import org.mockito.Mockito;
@@ -33,7 +34,17 @@ public class StatementCollectorTest extends BaseGenericTest {
     }
 
     public void testSingleQuery() {
-        parametersService.registerParametersProvider(() -> EMPTY_PARAMETERS);
+        parametersService.registerParametersProvider(new ParametersProvider() {
+            @Override
+            public String getParametersJson() {
+                return EMPTY_PARAMETERS;
+            }
+
+            @Override
+            public String getLocalParametersJson() {
+                return EMPTY_PARAMETERS;
+            }
+        });
         PsiFile psiFile = myFixture.configureByText("test.cyp", "MATCH (n) RETURN n;");
         psiFile.accept(statementCollector);
 
@@ -48,7 +59,17 @@ public class StatementCollectorTest extends BaseGenericTest {
     }
 
     public void testMultipleQueriesInOneLine() {
-        parametersService.registerParametersProvider(() -> EMPTY_PARAMETERS);
+        parametersService.registerParametersProvider(new ParametersProvider() {
+            @Override
+            public String getParametersJson() {
+                return EMPTY_PARAMETERS;
+            }
+
+            @Override
+            public String getLocalParametersJson() {
+                return EMPTY_PARAMETERS;
+            }
+        });
         PsiFile psiFile = myFixture.configureByText("test.cyp", "MATCH (n) RETURN n;MATCH (m) RETURN m;");
         psiFile.acceptChildren(statementCollector);
 
@@ -63,7 +84,17 @@ public class StatementCollectorTest extends BaseGenericTest {
     }
 
     public void testOneQueryWithError() {
-        parametersService.registerParametersProvider(() -> EMPTY_PARAMETERS);
+        parametersService.registerParametersProvider(new ParametersProvider() {
+            @Override
+            public String getParametersJson() {
+                return EMPTY_PARAMETERS;
+            }
+
+            @Override
+            public String getLocalParametersJson() {
+                return EMPTY_PARAMETERS;
+            }
+        });
         PsiFile psiFile = myFixture.configureByText("test.cyp", "MATCH () ETURN n;");
         psiFile.accept(statementCollector);
 
@@ -78,7 +109,17 @@ public class StatementCollectorTest extends BaseGenericTest {
     }
 
     public void testMultipleQueriesInDifferentLinesWithError() {
-        parametersService.registerParametersProvider(() -> EMPTY_PARAMETERS);
+        parametersService.registerParametersProvider(new ParametersProvider() {
+            @Override
+            public String getParametersJson() {
+                return EMPTY_PARAMETERS;
+            }
+
+            @Override
+            public String getLocalParametersJson() {
+                return EMPTY_PARAMETERS;
+            }
+        });
         PsiFile psiFile = myFixture.configureByText("test.cyp", "MATCH (n) RETURN *;\nMATCH () ETURN n;");
         psiFile.accept(statementCollector);
 
@@ -93,7 +134,17 @@ public class StatementCollectorTest extends BaseGenericTest {
     }
 
     public void testMultipleCorrectQueriesInDifferentLines() {
-        parametersService.registerParametersProvider(() -> EMPTY_PARAMETERS);
+        parametersService.registerParametersProvider(new ParametersProvider() {
+            @Override
+            public String getParametersJson() {
+                return EMPTY_PARAMETERS;
+            }
+
+            @Override
+            public String getLocalParametersJson() {
+                return EMPTY_PARAMETERS;
+            }
+        });
         PsiFile psiFile = myFixture.configureByText("test.cyp", "MATCH (n) RETURN *;\nMATCH (m) RETURN m;");
         psiFile.accept(statementCollector);
 
@@ -108,7 +159,17 @@ public class StatementCollectorTest extends BaseGenericTest {
     }
 
     public void testMultipleCorrectQueriesInDifferentLinesWithParameters() {
-        parametersService.registerParametersProvider(() -> PARAMETERS);
+        parametersService.registerParametersProvider(new ParametersProvider() {
+            @Override
+            public String getParametersJson() {
+                return PARAMETERS;
+            }
+
+            @Override
+            public String getLocalParametersJson() {
+                return PARAMETERS;
+            }
+        });
         PsiFile psiFile = myFixture.configureByText("test.cyp", "CREATE (n {name: $name});\nMATCH (m) RETURN m;");
         psiFile.accept(statementCollector);
 
@@ -123,7 +184,17 @@ public class StatementCollectorTest extends BaseGenericTest {
     }
 
     public void testParameterExtractionErrorOccurs() {
-        parametersService.registerParametersProvider(() -> WRONG_PARAMETERS);
+        parametersService.registerParametersProvider(new ParametersProvider() {
+            @Override
+            public String getParametersJson() {
+                return WRONG_PARAMETERS;
+            }
+
+            @Override
+            public String getLocalParametersJson() {
+                return WRONG_PARAMETERS;
+            }
+        });
         PsiFile psiFile = myFixture.configureByText("test.cyp", "CREATE (n {name: $name});\nMATCH (m) RETURN m;");
         psiFile.accept(statementCollector);
 

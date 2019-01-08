@@ -12,6 +12,7 @@ public class SettingsComponentImpl implements SettingsComponent {
     private static final String USE_FILE_SPECIFIC_PARAMS_KEY = "GraphDbSupport.UseFileSpecificParams";
     private static final String USER_ID = "GraphDbSupport.UserId";
     private static final String KNOWN_PLUGIN_VERSION = "GraphDbSupport.KnownPluginVersion";
+    public static final boolean USE_FILE_SPECIFIC_PARAMS_DEFAULT = false;
 
     @NotNull
     @Override
@@ -43,7 +44,7 @@ public class SettingsComponentImpl implements SettingsComponent {
 
     @Override
     public boolean areFileSpecificParamsUsed() {
-        return properties().getBoolean(USE_FILE_SPECIFIC_PARAMS_KEY, false);
+        return properties().getBoolean(USE_FILE_SPECIFIC_PARAMS_KEY, USE_FILE_SPECIFIC_PARAMS_DEFAULT);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class SettingsComponentImpl implements SettingsComponent {
 
     @Override
     public void enableFileSpecificParams(boolean isFileSpecific) {
-        properties().setValue(USE_FILE_SPECIFIC_PARAMS_KEY, isFileSpecific, false);
+        properties().setValue(USE_FILE_SPECIFIC_PARAMS_KEY, isFileSpecific, USE_FILE_SPECIFIC_PARAMS_DEFAULT);
     }
 
     @Override
