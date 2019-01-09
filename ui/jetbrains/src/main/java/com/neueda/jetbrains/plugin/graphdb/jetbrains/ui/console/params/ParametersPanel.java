@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.UUID;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.PARAMS_ERROR_COMMON_MSG;
 
@@ -139,13 +140,14 @@ public class ParametersPanel implements ParametersProvider {
     private void setupLocalParamEditor(Project project, VirtualFile file) {
         if (project == null || file == null) return;
             try {
-                VirtualFile localParamFile = FileUtil.getScratchFile(project, file.getPresentableName() + ".json");
+                VirtualFile localParamFile = FileUtil.getScratchFile(project,  UUID.nameUUIDFromBytes(file.getPath().getBytes()).toString() + ".json");
                 Document localParamDocument = FILE_DOCUMENT_MANAGER.getDocument(localParamFile);
                 localParamsEditor = createEditor(project, localParamDocument);
                 Window window = WindowManagerEx.getInstanceEx().getMostRecentFocusedWindow();
                 EditorWindow editorWindow = FileEditorManagerEx.getInstanceEx(project).getSplittersFor(window).getCurrentWindow();
                 String tabTitle = EditorTabPresentationUtil.getEditorTabTitle(project, file, editorWindow);
-                localParamsEditor.setHeaderComponent(new JLabel("<html>Provide query parameters specific to <b>" + tabTitle + "</b> file in JSON format here:</html>"));
+                localParamsEditor.setHeaderComponent(new JLabel("<html>Provide query parameters specific to <b>" +
+                        tabTitle + "</b> file in JSON format here:</html>"));
                 setInitialContent(localParamDocument);
                 graphConsoleView.getLocalParametersTab().add(localParamsEditor.getComponent(), BorderLayout.CENTER);
             } catch (Throwable e) {
