@@ -47,8 +47,12 @@ public class ParametersPanel implements ParametersProvider {
         this.project = project;
         setupEditor(project);
         FileEditor selectedEditor = FileEditorManager.getInstance(project).getSelectedEditor();
-        if (selectedEditor != null) {
+        if (selectedEditor != null && selectedEditor.getFile() != null &&
+                FileTypeExtensionUtil.isCypherFileTypeExtension(selectedEditor.getFile().getExtension())) {
             setupLocalParamEditor(project, selectedEditor.getFile());
+            reEnableEditors(SettingsComponent.getInstance().areFileSpecificParamsUsed());
+        } else {
+            editor.getContentComponent().setEnabled(true);
         }
     }
 
@@ -86,14 +90,14 @@ public class ParametersPanel implements ParametersProvider {
                 VirtualFile newFile = event.getNewFile();
                 if (newFile != null && FileTypeExtensionUtil.isCypherFileTypeExtension(newFile.getExtension())) {
                     setupLocalParamEditor(project, newFile);
+                    reEnableEditors(SettingsComponent.getInstance().areFileSpecificParamsUsed());
+                } else {
+                    editor.getContentComponent().setEnabled(true);
                 }
             }
         });
         mbConnection.subscribe(ToggleFileSpecificParametersEvent.TOGGLE_FILE_SPECIFIC_PARAMETERS_EVENT_TOPIC,
-                (setToUseFileSpecificParams) -> {
-            editor.getContentComponent().setEnabled(!setToUseFileSpecificParams);
-            if (localParamsEditor != null) localParamsEditor.getContentComponent().setEnabled(setToUseFileSpecificParams);
-        });
+                this::reEnableEditors);
     }
 
     private void setupEditor(Project project) {
@@ -123,6 +127,15 @@ public class ParametersPanel implements ParametersProvider {
         localParamsEditor = null;
     }
 
+    private void reEnableEditors(boolean setToUseFileSpecificParams) {
+        if (localParamsEditor != null) {
+            localParamsEditor.getContentComponent().setEnabled(setToUseFileSpecificParams);
+            editor.getContentComponent().setEnabled(!setToUseFileSpecificParams);
+        } else {
+            editor.getContentComponent().setEnabled(true);
+        }
+    }
+
     private void setupLocalParamEditor(Project project, VirtualFile file) {
         if (project == null || file == null) return;
             try {
@@ -135,7 +148,6 @@ public class ParametersPanel implements ParametersProvider {
                 localParamsEditor.setHeaderComponent(new JLabel("<html>Provide query parameters specific to <b>" + tabTitle + "</b> file in JSON format here:</html>"));
                 setInitialContent(localParamDocument);
                 graphConsoleView.getLocalParametersTab().add(localParamsEditor.getComponent(), BorderLayout.CENTER);
-                localParamsEditor.getContentComponent().setEnabled(SettingsComponent.getInstance().areFileSpecificParamsUsed());
             } catch (Throwable e) {
                 Throwables.throwIfUnchecked(e);
                 throw new RuntimeException(e);

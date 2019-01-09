@@ -2,12 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console;
 
 import com.intellij.ide.IdeEventQueue;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionPlaces;
-import com.intellij.openapi.actionSystem.ActionToolbar;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.ActionCallback;
@@ -28,7 +23,9 @@ import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.ui.console.ToggleFileSpecificParametersUsedAction;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analytics;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.settings.SettingsComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryPlanEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.graph.GraphPanel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.log.LogPanel;
@@ -148,7 +145,11 @@ public class GraphConsoleView implements Disposable {
             consoleToolbarPanel.add(consoleToolbar.getComponent(), BorderLayout.CENTER);
             consoleToolbarPanel.setBorder(new CustomLineBorder(0, 0, 0, 1));
             consoleToolbarPanel.validate();
-
+            ToggleFileSpecificParametersUsedAction fileSpecificParamToggleButton =
+                    (ToggleFileSpecificParametersUsedAction) ActionManager.getInstance().getAction(
+                            "GraphDatabaseConsoleToolWindowActions.ToggleFileSpecificParametersUsed");
+            fileSpecificParamToggleButton.syncIconAndText(SettingsComponent.getInstance().areFileSpecificParamsUsed(),
+                    fileSpecificParamToggleButton.getTemplatePresentation());
             initialized = true;
         }
     }
