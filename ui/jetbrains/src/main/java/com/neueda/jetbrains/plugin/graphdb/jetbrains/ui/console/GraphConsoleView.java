@@ -23,9 +23,7 @@ import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.ui.console.ToggleFileSpecificParametersUsedAction;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analytics;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.settings.SettingsComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryPlanEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.graph.GraphPanel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.log.LogPanel;
@@ -145,11 +143,6 @@ public class GraphConsoleView implements Disposable {
             consoleToolbarPanel.add(consoleToolbar.getComponent(), BorderLayout.CENTER);
             consoleToolbarPanel.setBorder(new CustomLineBorder(0, 0, 0, 1));
             consoleToolbarPanel.validate();
-            ToggleFileSpecificParametersUsedAction fileSpecificParamToggleButton =
-                    (ToggleFileSpecificParametersUsedAction) ActionManager.getInstance().getAction(
-                            "GraphDatabaseConsoleToolWindowActions.ToggleFileSpecificParametersUsed");
-            fileSpecificParamToggleButton.syncIconAndText(SettingsComponent.getInstance().areFileSpecificParamsUsed(),
-                    fileSpecificParamToggleButton.getTemplatePresentation());
             initialized = true;
         }
     }

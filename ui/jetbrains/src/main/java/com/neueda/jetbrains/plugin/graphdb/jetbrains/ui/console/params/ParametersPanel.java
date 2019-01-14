@@ -51,13 +51,10 @@ public class ParametersPanel implements ParametersProvider {
         if (selectedEditor != null && selectedEditor.getFile() != null &&
                 FileTypeExtensionUtil.isCypherFileTypeExtension(selectedEditor.getFile().getExtension())) {
             setupLocalParamEditor(project, selectedEditor.getFile());
-            reEnableEditors(SettingsComponent.getInstance().areFileSpecificParamsUsed());
-        } else {
-            editor.getContentComponent().setEnabled(true);
         }
     }
 
-    public String getParametersJson() {
+    public String getGlobalParametersJson() {
         return editor.getDocument().getText();
     }
 
@@ -91,14 +88,9 @@ public class ParametersPanel implements ParametersProvider {
                 VirtualFile newFile = event.getNewFile();
                 if (newFile != null && FileTypeExtensionUtil.isCypherFileTypeExtension(newFile.getExtension())) {
                     setupLocalParamEditor(project, newFile);
-                    reEnableEditors(SettingsComponent.getInstance().areFileSpecificParamsUsed());
-                } else {
-                    editor.getContentComponent().setEnabled(true);
                 }
             }
         });
-        mbConnection.subscribe(ToggleFileSpecificParametersEvent.TOGGLE_FILE_SPECIFIC_PARAMETERS_EVENT_TOPIC,
-                this::reEnableEditors);
     }
 
     private void setupEditor(Project project) {
@@ -126,15 +118,6 @@ public class ParametersPanel implements ParametersProvider {
             }
         }
         localParamsEditor = null;
-    }
-
-    private void reEnableEditors(boolean setToUseFileSpecificParams) {
-        if (localParamsEditor != null) {
-            localParamsEditor.getContentComponent().setEnabled(setToUseFileSpecificParams);
-            editor.getContentComponent().setEnabled(!setToUseFileSpecificParams);
-        } else {
-            editor.getContentComponent().setEnabled(true);
-        }
     }
 
     private void setupLocalParamEditor(Project project, VirtualFile file) {

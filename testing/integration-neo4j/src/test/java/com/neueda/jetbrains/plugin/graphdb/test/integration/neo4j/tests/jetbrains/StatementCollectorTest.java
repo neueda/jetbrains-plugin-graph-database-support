@@ -33,7 +33,7 @@ public class StatementCollectorTest extends BaseGenericTest {
         parametersService = new ParametersService();
         emptyParametersProvider = new ParametersProvider() {
             @Override
-            public String getParametersJson() {
+            public String getGlobalParametersJson() {
                 return EMPTY_PARAMETERS;
             }
 
@@ -44,7 +44,7 @@ public class StatementCollectorTest extends BaseGenericTest {
         };
         validParametersProvider = new ParametersProvider() {
             @Override
-            public String getParametersJson() {
+            public String getGlobalParametersJson() {
                 return VALID_PARAMETERS;
             }
 
@@ -55,7 +55,7 @@ public class StatementCollectorTest extends BaseGenericTest {
         };
         wrongParametersProvider = new ParametersProvider() {
             @Override
-            public String getParametersJson() {
+            public String getGlobalParametersJson() {
                 return WRONG_PARAMETERS;
             }
 

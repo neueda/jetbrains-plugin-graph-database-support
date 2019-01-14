@@ -7,16 +7,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
 import com.intellij.psi.PsiElement;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.settings.SettingsComponent;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherParameter;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.TraverseUtil;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ParametersService {
@@ -44,25 +40,19 @@ public class ParametersService {
     }
 
     public Map<String, Object> getParameters(PsiElement element) throws Exception {
-        if (SettingsComponent.getInstance().areFileSpecificParamsUsed()) {
-            if (isValidParametersMap(parametersProvider.getFileSpecificParametersJson())) {
-                Map<String, Object> allParameters = MAPPER
-                    .readValue(parametersProvider.getFileSpecificParametersJson(), new TypeReference<Map<String, Object>>() {
-                });
-                return extractQueryParameters(element, allParameters);
-            } else {
-                return Collections.emptyMap();
-            }
-        } else {
-            if (isValidParametersMap(parametersProvider.getParametersJson())) {
-                Map<String, Object> allParameters = MAPPER
-                    .readValue(parametersProvider.getParametersJson(), new TypeReference<Map<String, Object>>() {
-                });
-                return extractQueryParameters(element, allParameters);
-            } else {
-                return Collections.emptyMap();
-            }
+        if (element == null) return Collections.emptyMap();
+        Map<String, Object> allParameters = new HashMap<>();
+        if (isValidParametersMap(parametersProvider.getFileSpecificParametersJson())) {
+            Map<String, Object> parsedFileSpecific = MAPPER.readValue(parametersProvider.getFileSpecificParametersJson(),
+                    new TypeReference<Map<String, Object>>() {});
+            parsedFileSpecific.forEach(allParameters::putIfAbsent);
         }
+        if (isValidParametersMap(parametersProvider.getGlobalParametersJson())) {
+            Map<String, Object> parsedGlobal = MAPPER.readValue(parametersProvider.getGlobalParametersJson(),
+                    new TypeReference<Map<String, Object>>() {});
+            parsedGlobal.forEach(allParameters::putIfAbsent);
+        }
+        return extractQueryParameters(element, allParameters);
     }
 
     private Map<String, Object> extractQueryParameters(PsiElement element, Map<String, Object> allParameters) {

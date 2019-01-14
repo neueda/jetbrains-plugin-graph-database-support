@@ -13,11 +13,7 @@ public interface SettingsComponent extends ApplicationComponent {
 
     boolean isAnalyticEnabled();
 
-    boolean areFileSpecificParamsUsed();
-
     void enableAnalytics(boolean state);
-
-    void enableFileSpecificParams(boolean isFileSpecific);
 
     String getKnownPluginVersion();
 

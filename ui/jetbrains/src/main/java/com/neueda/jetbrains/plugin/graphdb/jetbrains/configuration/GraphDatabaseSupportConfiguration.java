@@ -43,12 +43,6 @@ public class GraphDatabaseSupportConfiguration implements Configurable {
         JPanel rootPane = new JPanel(new FlowLayout(FlowLayout.LEFT));
         rootPane.add(analyticsCheckBox);
 
-        // Enable when changes in Settings will automatically affect the button state in Graph Database Console
-//        globalParametersCheckbox = new JBCheckBox("Use custom parameters for each Cypher file separately",
-//                SettingsComponent.getInstance().areFileSpecificParamsUsed());
-//        globalParametersCheckbox.addActionListener(e -> isModified = true);
-//        rootPane.add(globalParametersCheckbox);
-
         return rootPane;
     }
 
@@ -60,15 +54,12 @@ public class GraphDatabaseSupportConfiguration implements Configurable {
     @Override
     public void apply() throws ConfigurationException {
         SettingsComponent.getInstance().enableAnalytics(analyticsCheckBox.isSelected());
-        SettingsComponent.getInstance().enableFileSpecificParams(globalParametersCheckbox.isSelected());
-
         isModified = false;
     }
 
     @Override
     public void reset() {
         analyticsCheckBox.setSelected(SettingsComponent.getInstance().isAnalyticEnabled());
-        globalParametersCheckbox.setSelected(SettingsComponent.getInstance().areFileSpecificParamsUsed());
         isModified = false;
     }
 
