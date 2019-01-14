@@ -15,7 +15,7 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
 
     private class TestParametersProvider implements ParametersProvider {
 
-        private String parametersJson, localParametersJson;
+        private String parametersJson, fileSpecificParametersJson;
 
         @Override
         public String getParametersJson() {
@@ -23,16 +23,16 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
         }
 
         @Override
-        public String getLocalParametersJson() {
-            return localParametersJson;
+        public String getFileSpecificParametersJson() {
+            return fileSpecificParametersJson;
         }
 
         public void setParametersJson(String parametersJson) {
             this.parametersJson = parametersJson;
         }
 
-        public void setLocalParametersJson(String localParametersJson) {
-            this.localParametersJson = localParametersJson;
+        public void setFileSpecificParametersJson(String fileSpecificParametersJson) {
+            this.fileSpecificParametersJson = fileSpecificParametersJson;
         }
     }
 
@@ -50,15 +50,15 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
     public void testParsingEmptyJsonObject() throws Exception {
         SettingsComponent.getInstance().enableFileSpecificParams(false);
         parametersProvider.setParametersJson("{}");
-        parametersProvider.setLocalParametersJson("{\"param\": \"non-empty\"}");
+        parametersProvider.setFileSpecificParametersJson("{\"param\": \"non-empty\"}");
         Map<String, Object> parameters = parametersService.getParameters(getPsiFile("RETURN $param"));
         assertThat(parameters).isEmpty();
     }
 
     public void testParsingEmptyJsonObjectInLocalParams() throws Exception {
         SettingsComponent.getInstance().enableFileSpecificParams(true);
-        parametersProvider.setLocalParametersJson("{}");
         parametersProvider.setParametersJson("{\"param\": \"non-empty\"}");
+        parametersProvider.setFileSpecificParametersJson("{}");
         // local (file-specific) parameters are returned from getParameters() here, and they must be empty
         Map<String, Object> parameters = parametersService.getParameters(getPsiFile("RETURN $param"));
         assertThat(parameters).isEmpty();
@@ -67,15 +67,15 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
     public void testParsingEmptyParameters() throws Exception {
         SettingsComponent.getInstance().enableFileSpecificParams(false);
         parametersProvider.setParametersJson("");
-        parametersProvider.setLocalParametersJson("{\"param\": \"non-empty\"}");
+        parametersProvider.setFileSpecificParametersJson("{\"param\": \"non-empty\"}");
         Map<String, Object> result = parametersService.getParameters(getPsiFile("RETURN $param"));
         assertThat(result).isEmpty();
     }
 
-    public void testParsingEmptyLocalParameters() throws Exception {
+    public void testParsingEmptyFileSpecificParameters() throws Exception {
         SettingsComponent.getInstance().enableFileSpecificParams(true);
-        parametersProvider.setLocalParametersJson("");
         parametersProvider.setParametersJson("{\"param\": \"non-empty\"}");
+        parametersProvider.setFileSpecificParametersJson("");
         Map<String, Object> result = parametersService.getParameters(getPsiFile("RETURN $param"));
         assertThat(result).isEmpty();
     }
@@ -119,7 +119,7 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
 
     public void testParsingMultipleParameters() throws Exception {
         parametersProvider.setParametersJson("{\"firstName\": \"Kaleb\", \"lastName\": \"Johnson\"}");
-        parametersProvider.setLocalParametersJson(
+        parametersProvider.setFileSpecificParametersJson(
                 "{\"country\": \"France\", \"city\": \"Paris\", \"age\": 90, \"lastName\": \"Green\"}"
         );
 

@@ -16,15 +16,15 @@ public class ToggleFileSpecificParametersUsedAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         SettingsComponent settings = SettingsComponent.getInstance();
-        boolean setToUseFileSpecificParams = !settings.areFileSpecificParamsUsed();
-        settings.enableFileSpecificParams(setToUseFileSpecificParams);
-        syncIconAndText(setToUseFileSpecificParams, e.getPresentation());
+        boolean areFileSpecificParamsUsed = settings.areFileSpecificParamsUsed();
+        settings.enableFileSpecificParams(!areFileSpecificParamsUsed);
+        syncIconAndText(!areFileSpecificParamsUsed, e.getPresentation());
 
         if (e.getProject() != null) {
             ToggleFileSpecificParametersEvent publisher = e.getProject().getMessageBus().syncPublisher(
                     ToggleFileSpecificParametersEvent.TOGGLE_FILE_SPECIFIC_PARAMETERS_EVENT_TOPIC
             );
-            publisher.toggle(setToUseFileSpecificParams);
+            publisher.toggle(!areFileSpecificParamsUsed);
         }
     }
 

@@ -61,7 +61,7 @@ public class ParametersPanel implements ParametersProvider {
         return editor.getDocument().getText();
     }
 
-    public String getLocalParametersJson() {
+    public String getFileSpecificParametersJson() {
         return localParamsEditor != null? localParamsEditor.getDocument().getText() : null;
     }
 
@@ -120,7 +120,7 @@ public class ParametersPanel implements ParametersProvider {
 
     private void releaseLocalEditor() {
         if (localParamsEditor != null) {
-            graphConsoleView.getLocalParametersTab().remove(localParamsEditor.getComponent());
+            graphConsoleView.getFileSpecificParametersTab().remove(localParamsEditor.getComponent());
             if (!localParamsEditor.isDisposed()) {
                 EditorFactory.getInstance().releaseEditor(localParamsEditor);
             }
@@ -149,7 +149,7 @@ public class ParametersPanel implements ParametersProvider {
                 localParamsEditor.setHeaderComponent(new JLabel("<html>Provide query parameters specific to <b>" +
                         tabTitle + "</b> file in JSON format here:</html>"));
                 setInitialContent(localParamDocument);
-                graphConsoleView.getLocalParametersTab().add(localParamsEditor.getComponent(), BorderLayout.CENTER);
+                graphConsoleView.getFileSpecificParametersTab().add(localParamsEditor.getComponent(), BorderLayout.CENTER);
             } catch (Throwable e) {
                 Throwables.throwIfUnchecked(e);
                 throw new RuntimeException(e);

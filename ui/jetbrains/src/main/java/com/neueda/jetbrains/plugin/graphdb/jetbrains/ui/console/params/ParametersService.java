@@ -45,9 +45,9 @@ public class ParametersService {
 
     public Map<String, Object> getParameters(PsiElement element) throws Exception {
         if (SettingsComponent.getInstance().areFileSpecificParamsUsed()) {
-            if (isValidParametersMap(parametersProvider.getLocalParametersJson())) {
+            if (isValidParametersMap(parametersProvider.getFileSpecificParametersJson())) {
                 Map<String, Object> allParameters = MAPPER
-                    .readValue(parametersProvider.getLocalParametersJson(), new TypeReference<Map<String, Object>>() {
+                    .readValue(parametersProvider.getFileSpecificParametersJson(), new TypeReference<Map<String, Object>>() {
                 });
                 return extractQueryParameters(element, allParameters);
             } else {
