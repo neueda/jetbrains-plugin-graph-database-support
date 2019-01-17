@@ -74,6 +74,21 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
         assertThat(result).containsEntry("param", "non-empty");
     }
 
+
+    public void testParsingEmptyJsonInGlobalParameters() throws Exception {
+        parametersProvider.setGlobalParametersJson("{}");
+        parametersProvider.setFileSpecificParametersJson("{\"param\": \"non-empty\"}");
+        Map<String, Object> result = parametersService.getParameters(getPsiFile("RETURN $param"));
+        assertThat(result).containsEntry("param", "non-empty");
+    }
+
+    public void testParsingEmptyJsonInFileSpecificParameters() throws Exception {
+        parametersProvider.setGlobalParametersJson("{\"param\": \"non-empty\"}");
+        parametersProvider.setFileSpecificParametersJson("{}");
+        Map<String, Object> result = parametersService.getParameters(getPsiFile("RETURN $param"));
+        assertThat(result).containsEntry("param", "non-empty");
+    }
+
     public void testParsingStringParameter() throws Exception {
         parametersProvider.setGlobalParametersJson("{\"name\": \"Anna\"}");
         Map<String, Object> result = parametersService
@@ -128,7 +143,7 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
                 .containsEntry("age", 90)
                 .containsEntry("city", "Paris");
     }
-    
+
     public void testParsingCommentOnly() throws Exception {
         parametersProvider.setGlobalParametersJson("// Provide query parameters in JSON format here:");
         Map<String, Object> result = parametersService.getParameters(getPsiFile("RETURN $param"));
