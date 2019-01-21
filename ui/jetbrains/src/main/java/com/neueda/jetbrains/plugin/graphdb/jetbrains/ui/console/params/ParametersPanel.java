@@ -117,7 +117,7 @@ public class ParametersPanel implements ParametersProvider {
         if (project == null || cypherFile == null) return;
             try {
                 String params = FileUtil.getParams(cypherFile);
-                LightVirtualFile lightVirtualFile = new LightVirtualFile("", new JsonFileType(), params);
+                LightVirtualFile lightVirtualFile = new LightVirtualFile("", JsonFileType.INSTANCE, params);
                 Document document = FileDocumentManager.getInstance().getDocument(lightVirtualFile);
                 fileSpecificParamEditor = createEditor(project, document);
                 VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileListener() {
@@ -167,7 +167,7 @@ public class ParametersPanel implements ParametersProvider {
     }
 
     private static Editor createEditor(Project project, Document document) {
-        return EditorFactory.getInstance().createEditor(document, project, new JsonFileType(), false);
+        return EditorFactory.getInstance().createEditor(document, project, JsonFileType.INSTANCE, false);
     }
 
 }
