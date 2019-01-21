@@ -34,30 +34,36 @@ public class FileUtil {
     public static VirtualFile getScratchFile(Project project, String fileName) throws IOException {
         return ScratchFileService.getInstance().findFile(
                 ParameterRootType.getInstance(),
-                project.getName() + "_" + fileName,
+                project.getName() + fileName,
                 ScratchFileService.Option.create_if_missing
         );
     }
 
     public static String getParams(VirtualFile file) {
         String userData = file.getUserData(MY_KEY);
-        if (userData == null) {
-            String attributeData = "";
-            if (file instanceof NewVirtualFile) {
-                try (DataInputStream is = QUERY_PARAMS_FILE_ATTRIBUTE.readAttribute(file)) {
-                    if (is != null && is.available() > 0) {
-                        attributeData = IOUtil.readString(is);
-                        if (attributeData != null) {
-                            file.putUserData(MY_KEY, attributeData);
-                        }
-                    }
-                } catch (IOException e) {
-                    return "{}";
-                }
-            }
-            return attributeData;
+        if (userData != null) {
+            return userData;
         }
-        return userData;
+
+        if (!(file instanceof NewVirtualFile)) {
+            return "{}";
+        }
+
+        try (DataInputStream is = QUERY_PARAMS_FILE_ATTRIBUTE.readAttribute(file)) {
+            if (is == null || is.available() <= 0) {
+                return "{}";
+            }
+
+            String attributeData = IOUtil.readString(is);
+            if (attributeData == null) {
+                return "{}";
+            } else {
+                file.putUserData(MY_KEY, attributeData);
+                return attributeData;
+            }
+        } catch (IOException e) {
+            return "{}";
+        }
     }
 
     public static void setParams(VirtualFile file, String params) {

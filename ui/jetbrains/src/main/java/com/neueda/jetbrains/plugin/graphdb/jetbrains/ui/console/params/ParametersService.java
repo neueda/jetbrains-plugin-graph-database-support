@@ -40,7 +40,9 @@ public class ParametersService {
     }
 
     public Map<String, Object> getParameters(PsiElement element) throws Exception {
-        if (element == null) return Collections.emptyMap();
+        if (element == null) {
+            return Collections.emptyMap();
+        }
         Map<String, Object> allParameters = new HashMap<>();
         if (isValidParametersMap(parametersProvider.getFileSpecificParametersJson())) {
             Map<String, Object> parsedFileSpecific = MAPPER.readValue(parametersProvider.getFileSpecificParametersJson(),

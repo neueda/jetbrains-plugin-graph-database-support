@@ -37,7 +37,8 @@ public class ParametersPanel implements ParametersProvider {
 
     private static final FileDocumentManager FILE_DOCUMENT_MANAGER = FileDocumentManager.getInstance();
 
-    private Editor globalParamEditor, fileSpecificParamEditor;
+    private Editor globalParamEditor;
+    private Editor fileSpecificParamEditor;
     private GraphConsoleView graphConsoleView;
     private MessageBus messageBus;
     private ParametersService service;
@@ -61,7 +62,7 @@ public class ParametersPanel implements ParametersProvider {
     }
 
     public String getFileSpecificParametersJson() {
-        return fileSpecificParamEditor != null? fileSpecificParamEditor.getDocument().getText() : null;
+        return fileSpecificParamEditor != null ? fileSpecificParamEditor.getDocument().getText() : null;
     }
 
     private void initializeUi() {
@@ -115,28 +116,28 @@ public class ParametersPanel implements ParametersProvider {
 
     private void setupFileSpecificEditor(Project project, VirtualFile cypherFile) {
         if (project == null || cypherFile == null) return;
-            try {
-                String params = FileUtil.getParams(cypherFile);
-                LightVirtualFile lightVirtualFile = new LightVirtualFile("", JsonFileType.INSTANCE, params);
-                Document document = FileDocumentManager.getInstance().getDocument(lightVirtualFile);
-                fileSpecificParamEditor = createEditor(project, document);
-                VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileListener() {
-                    @Override
-                    public void contentsChanged(@NotNull VirtualFileEvent event) {
-                        if (event.getFile().equals(cypherFile) && document != null)
-                            FileUtil.setParams(cypherFile, document.getText());
-                    }
-                });
+        try {
+            String params = FileUtil.getParams(cypherFile);
+            LightVirtualFile lightVirtualFile = new LightVirtualFile("", JsonFileType.INSTANCE, params);
+            Document document = FileDocumentManager.getInstance().getDocument(lightVirtualFile);
+            fileSpecificParamEditor = createEditor(project, document);
+            VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileListener() {
+                @Override
+                public void contentsChanged(@NotNull VirtualFileEvent event) {
+                    if (event.getFile().equals(cypherFile) && document != null)
+                        FileUtil.setParams(cypherFile, document.getText());
+                }
+            });
 
-                fileSpecificParamEditor.setHeaderComponent(new JLabel("<html>Provide query parameters specific to " +
-                        "connection <b>" + getTabTitle(cypherFile) + "</b> in JSON format here" +
-                        "(these have a higher priority than global):</html>"));
-                if (document != null) setInitialContent(document);
-                graphConsoleView.getFileSpecificParametersTab().add(fileSpecificParamEditor.getComponent(), BorderLayout.CENTER);
-            } catch (Throwable e) {
-                Throwables.throwIfUnchecked(e);
-                throw new RuntimeException(e);
-            }
+            fileSpecificParamEditor.setHeaderComponent(new JLabel("<html>Provide query parameters specific to " +
+                    "connection <b>" + getTabTitle(cypherFile) + "</b> in JSON format here" +
+                    "(these have a higher priority than global):</html>"));
+            if (document != null) setInitialContent(document);
+            graphConsoleView.getFileSpecificParametersTab().add(fileSpecificParamEditor.getComponent(), BorderLayout.CENTER);
+        } catch (Throwable e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
     }
 
     private void releaseFileSpecificEditor(VirtualFile oldFile) {

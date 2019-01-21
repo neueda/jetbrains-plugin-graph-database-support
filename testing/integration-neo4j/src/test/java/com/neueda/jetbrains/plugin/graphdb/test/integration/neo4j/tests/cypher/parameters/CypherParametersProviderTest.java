@@ -14,7 +14,8 @@ public class CypherParametersProviderTest extends BaseIntegrationTest {
 
     private class TestParametersProvider implements ParametersProvider {
 
-        private String globalParametersJson, fileSpecificParametersJson;
+        private String globalParametersJson;
+        private String fileSpecificParametersJson;
 
         @Override
         public String getGlobalParametersJson() {
