@@ -19,6 +19,7 @@ import com.intellij.openapi.vfs.VirtualFileEvent;
 import com.intellij.openapi.vfs.VirtualFileListener;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.wm.ex.WindowManagerEx;
+import com.intellij.testFramework.LightVirtualFile;
 import com.intellij.util.messages.MessageBus;
 import com.intellij.util.messages.MessageBusConnection;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
@@ -117,25 +118,20 @@ public class ParametersPanel implements ParametersProvider {
         if (project == null || cypherFile == null) return;
             try {
                 String params = FileUtil.getParams(cypherFile);
-                Document fileSpecificParamDocument = new DocumentImpl(params);
-                fileSpecificParamEditor = createEditor(project, fileSpecificParamDocument);
+                LightVirtualFile lightVirtualFile = new LightVirtualFile("fileSpecificQueryParam", new JsonFileType(), params);
+                Document document = FileDocumentManager.getInstance().getDocument(lightVirtualFile);
+                fileSpecificParamEditor = createEditor(project, document);
                 VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileListener() {
                     @Override
                     public void contentsChanged(@NotNull VirtualFileEvent event) {
-                        if (event.getFile().equals(cypherFile))
-                            FileUtil.setParams(cypherFile, fileSpecificParamDocument.getText());
-                    }
-
-                    @Override
-                    public void fileDeleted(@NotNull VirtualFileEvent event) {
-                        if (event.getFile().equals(cypherFile))
-                            FileUtil.setParams(cypherFile, "{}");
+                        if (event.getFile().equals(cypherFile) && document != null)
+                            FileUtil.setParams(cypherFile, document.getText());
                     }
                 });
 
                 fileSpecificParamEditor.setHeaderComponent(new JLabel("<html>Provide query parameters specific to " +
                         "connection <b>" + getTabTitle(cypherFile) + "</b> in JSON format here:</html>"));
-                setInitialContent(fileSpecificParamDocument);
+                if (document != null) setInitialContent(document);
                 graphConsoleView.getFileSpecificParametersTab().add(fileSpecificParamEditor.getComponent(), BorderLayout.CENTER);
             } catch (Throwable e) {
                 Throwables.throwIfUnchecked(e);
@@ -163,7 +159,7 @@ public class ParametersPanel implements ParametersProvider {
     }
 
     private void setInitialContent(Document document) {
-        if (document.getText().isEmpty()) {
+        if (document != null && document.getText().isEmpty()) {
             final Runnable setTextRunner = () -> document.setText("{}");
             ApplicationManager.getApplication()
                     .invokeLater(() -> ApplicationManager.getApplication().runWriteAction(setTextRunner));

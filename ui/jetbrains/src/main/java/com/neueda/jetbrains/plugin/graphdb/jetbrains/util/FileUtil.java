@@ -34,32 +34,25 @@ public class FileUtil {
     public static VirtualFile getScratchFile(Project project, String fileName) throws IOException {
         return ScratchFileService.getInstance().findFile(
                 ParameterRootType.getInstance(),
-                 project.getName() + "_" + fileName,
+                project.getName() + "_" + fileName,
                 ScratchFileService.Option.create_if_missing
         );
     }
 
     public static String getParams(VirtualFile file) {
         String userData = file.getUserData(MY_KEY);
-        if(userData == null) {
+        if (userData == null) {
             String attributeData = "";
             if (file instanceof NewVirtualFile) {
-                final DataInputStream is = QUERY_PARAMS_FILE_ATTRIBUTE.readAttribute(file);
-                if (is != null) {
-                    try {
-                        try {
-                            if (is.available() > 0) {
-                                attributeData = IOUtil.readString(is);
-                                if (attributeData != null) {
-                                    file.putUserData(MY_KEY, attributeData);
-                                }
-                            }
-                        } finally {
-                            is.close();
+                try (DataInputStream is = QUERY_PARAMS_FILE_ATTRIBUTE.readAttribute(file)) {
+                    if (is != null && is.available() > 0) {
+                        attributeData = IOUtil.readString(is);
+                        if (attributeData != null) {
+                            file.putUserData(MY_KEY, attributeData);
                         }
-                    } catch (IOException e) {
-                        return "{}";
                     }
+                } catch (IOException e) {
+                    return "{}";
                 }
             }
             return attributeData;
@@ -70,17 +63,9 @@ public class FileUtil {
     public static void setParams(VirtualFile file, String params) {
         file.putUserData(MY_KEY, params);
         if (file instanceof NewVirtualFile) {
-            DataOutputStream os = QUERY_PARAMS_FILE_ATTRIBUTE.writeAttribute(file);
-            try {
-                try {
-                    IOUtil.writeString(StringUtil.notNullize(params), os);
-//
-                } finally {
-                    os.close();
-                }
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
+            try (DataOutputStream os = QUERY_PARAMS_FILE_ATTRIBUTE.writeAttribute(file)) {
+                IOUtil.writeString(StringUtil.notNullize(params), os);
+            } catch (IOException e) {}
         }
     }
 
