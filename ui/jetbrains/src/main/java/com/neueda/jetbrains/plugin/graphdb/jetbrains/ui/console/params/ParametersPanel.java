@@ -8,7 +8,6 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.editor.impl.DocumentImpl;
 import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.fileEditor.impl.EditorTabPresentationUtil;
@@ -118,7 +117,7 @@ public class ParametersPanel implements ParametersProvider {
         if (project == null || cypherFile == null) return;
             try {
                 String params = FileUtil.getParams(cypherFile);
-                LightVirtualFile lightVirtualFile = new LightVirtualFile("fileSpecificQueryParam", new JsonFileType(), params);
+                LightVirtualFile lightVirtualFile = new LightVirtualFile("", new JsonFileType(), params);
                 Document document = FileDocumentManager.getInstance().getDocument(lightVirtualFile);
                 fileSpecificParamEditor = createEditor(project, document);
                 VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileListener() {
@@ -130,7 +129,8 @@ public class ParametersPanel implements ParametersProvider {
                 });
 
                 fileSpecificParamEditor.setHeaderComponent(new JLabel("<html>Provide query parameters specific to " +
-                        "connection <b>" + getTabTitle(cypherFile) + "</b> in JSON format here:</html>"));
+                        "connection <b>" + getTabTitle(cypherFile) + "</b> in JSON format here" +
+                        "(these have a higher priority than global):</html>"));
                 if (document != null) setInitialContent(document);
                 graphConsoleView.getFileSpecificParametersTab().add(fileSpecificParamEditor.getComponent(), BorderLayout.CENTER);
             } catch (Throwable e) {
