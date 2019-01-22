@@ -92,13 +92,42 @@
               </component>
             </children>
           </scrollpane>
-          <grid id="d329c" binding="parametersTab" layout-manager="BorderLayout" hgap="0" vgap="0">
+          <grid id="d329c" binding="parametersTab" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="Parameters"/>
             </constraints>
             <properties/>
             <border type="none"/>
-            <children/>
+            <children>
+              <grid id="57b1c" binding="globalParametersTab" layout-manager="BorderLayout" hgap="0" vgap="0">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children/>
+              </grid>
+              <component id="ff80c" class="com.intellij.ui.JBSplitter" binding="paramSplitter">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <firstComponent value="57b1c"/>
+                  <proportion value="0.5"/>
+                  <secondComponent value="f910e"/>
+                  <showDividerControls value="true"/>
+                </properties>
+              </component>
+              <grid id="f910e" binding="fileSpecificParametersTab" layout-manager="BorderLayout" hgap="0" vgap="0">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children/>
+              </grid>
+            </children>
           </grid>
         </children>
       </tabbedpane>

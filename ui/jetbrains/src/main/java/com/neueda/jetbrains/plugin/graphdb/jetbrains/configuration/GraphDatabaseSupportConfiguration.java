@@ -15,7 +15,7 @@ import java.awt.FlowLayout;
 public class GraphDatabaseSupportConfiguration implements Configurable {
 
     private boolean isModified = false;
-    private JBCheckBox analyticsCheckBox;
+    private JBCheckBox analyticsCheckBox, globalParametersCheckbox;
     private AnalyticsApplicationComponent analytics;
 
     @Nls
@@ -42,6 +42,7 @@ public class GraphDatabaseSupportConfiguration implements Configurable {
 
         JPanel rootPane = new JPanel(new FlowLayout(FlowLayout.LEFT));
         rootPane.add(analyticsCheckBox);
+
         return rootPane;
     }
 

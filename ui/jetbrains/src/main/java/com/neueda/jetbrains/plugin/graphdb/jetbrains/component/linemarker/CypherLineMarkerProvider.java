@@ -47,7 +47,7 @@ public class CypherLineMarkerProvider implements LineMarkerProvider {
                     return new LineMarkerGutterIconRenderer<PsiElement>(this) {
                         @Override
                         public AnAction getClickAction() {
-                            return new ExecuteQueryAction(queryElement.getText());
+                            return new ExecuteQueryAction(queryElement);
                         }
 
                         @Override

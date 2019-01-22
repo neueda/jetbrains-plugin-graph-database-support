@@ -4,6 +4,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.StatementCollector;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params.ParametersProvider;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params.ParametersService;
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.tests.cypher.util.BaseGenericTest;
 import org.mockito.Mockito;
@@ -14,10 +15,11 @@ import static org.mockito.Mockito.*;
 public class StatementCollectorTest extends BaseGenericTest {
 
     private static final String EMPTY_PARAMETERS = "{}";
-    private static final String PARAMETERS = "{\"name\": \"Andrew\"}";
+    private static final String VALID_PARAMETERS = "{\"name\": \"Andrew\"}";
     private static final String WRONG_PARAMETERS = "{wrong json}";
     private StatementCollector statementCollector;
     private ParametersService parametersService;
+    private ParametersProvider emptyParametersProvider, validParametersProvider, wrongParametersProvider;
     private MessageBus messageBusMock;
     private QueryParametersRetrievalErrorEvent eventMock;
 
@@ -29,11 +31,44 @@ public class StatementCollectorTest extends BaseGenericTest {
         when(messageBusMock.syncPublisher(any())).thenReturn(eventMock);
 
         parametersService = new ParametersService();
+        emptyParametersProvider = new ParametersProvider() {
+            @Override
+            public String getGlobalParametersJson() {
+                return EMPTY_PARAMETERS;
+            }
+
+            @Override
+            public String getFileSpecificParametersJson() {
+                return EMPTY_PARAMETERS;
+            }
+        };
+        validParametersProvider = new ParametersProvider() {
+            @Override
+            public String getGlobalParametersJson() {
+                return VALID_PARAMETERS;
+            }
+
+            @Override
+            public String getFileSpecificParametersJson() {
+                return VALID_PARAMETERS;
+            }
+        };
+        wrongParametersProvider = new ParametersProvider() {
+            @Override
+            public String getGlobalParametersJson() {
+                return WRONG_PARAMETERS;
+            }
+
+            @Override
+            public String getFileSpecificParametersJson() {
+                return WRONG_PARAMETERS;
+            }
+        };
         statementCollector = new StatementCollector(messageBusMock, parametersService);
     }
 
     public void testSingleQuery() {
-        parametersService.registerParametersProvider(() -> EMPTY_PARAMETERS);
+        parametersService.registerParametersProvider(emptyParametersProvider);
         PsiFile psiFile = myFixture.configureByText("test.cyp", "MATCH (n) RETURN n;");
         psiFile.accept(statementCollector);
 
@@ -48,7 +83,7 @@ public class StatementCollectorTest extends BaseGenericTest {
     }
 
     public void testMultipleQueriesInOneLine() {
-        parametersService.registerParametersProvider(() -> EMPTY_PARAMETERS);
+        parametersService.registerParametersProvider(emptyParametersProvider);
         PsiFile psiFile = myFixture.configureByText("test.cyp", "MATCH (n) RETURN n;MATCH (m) RETURN m;");
         psiFile.acceptChildren(statementCollector);
 
@@ -63,7 +98,7 @@ public class StatementCollectorTest extends BaseGenericTest {
     }
 
     public void testOneQueryWithError() {
-        parametersService.registerParametersProvider(() -> EMPTY_PARAMETERS);
+        parametersService.registerParametersProvider(emptyParametersProvider);
         PsiFile psiFile = myFixture.configureByText("test.cyp", "MATCH () ETURN n;");
         psiFile.accept(statementCollector);
 
@@ -78,7 +113,7 @@ public class StatementCollectorTest extends BaseGenericTest {
     }
 
     public void testMultipleQueriesInDifferentLinesWithError() {
-        parametersService.registerParametersProvider(() -> EMPTY_PARAMETERS);
+        parametersService.registerParametersProvider(emptyParametersProvider);
         PsiFile psiFile = myFixture.configureByText("test.cyp", "MATCH (n) RETURN *;\nMATCH () ETURN n;");
         psiFile.accept(statementCollector);
 
@@ -93,7 +128,7 @@ public class StatementCollectorTest extends BaseGenericTest {
     }
 
     public void testMultipleCorrectQueriesInDifferentLines() {
-        parametersService.registerParametersProvider(() -> EMPTY_PARAMETERS);
+        parametersService.registerParametersProvider(emptyParametersProvider);
         PsiFile psiFile = myFixture.configureByText("test.cyp", "MATCH (n) RETURN *;\nMATCH (m) RETURN m;");
         psiFile.accept(statementCollector);
 
@@ -108,7 +143,7 @@ public class StatementCollectorTest extends BaseGenericTest {
     }
 
     public void testMultipleCorrectQueriesInDifferentLinesWithParameters() {
-        parametersService.registerParametersProvider(() -> PARAMETERS);
+        parametersService.registerParametersProvider(validParametersProvider);
         PsiFile psiFile = myFixture.configureByText("test.cyp", "CREATE (n {name: $name});\nMATCH (m) RETURN m;");
         psiFile.accept(statementCollector);
 
@@ -123,7 +158,7 @@ public class StatementCollectorTest extends BaseGenericTest {
     }
 
     public void testParameterExtractionErrorOccurs() {
-        parametersService.registerParametersProvider(() -> WRONG_PARAMETERS);
+        parametersService.registerParametersProvider(wrongParametersProvider);
         PsiFile psiFile = myFixture.configureByText("test.cyp", "CREATE (n {name: $name});\nMATCH (m) RETURN m;");
         psiFile.accept(statementCollector);
 

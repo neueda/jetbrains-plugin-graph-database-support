@@ -9,6 +9,7 @@ import java.util.UUID;
 public class SettingsComponentImpl implements SettingsComponent {
 
     private static final String ANALYTICS_ENABLED_KEY = "GraphDbSupport.AnalyticsEnabled";
+    private static final String USE_FILE_SPECIFIC_PARAMS_KEY = "GraphDbSupport.UseFileSpecificParams";
     private static final String USER_ID = "GraphDbSupport.UserId";
     private static final String KNOWN_PLUGIN_VERSION = "GraphDbSupport.KnownPluginVersion";
 

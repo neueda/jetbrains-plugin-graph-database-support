@@ -12,10 +12,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.TraverseUtil;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ParametersService {
@@ -43,13 +40,20 @@ public class ParametersService {
     }
 
     public Map<String, Object> getParameters(PsiElement element) throws Exception {
-        if (!isValidParametersMap(parametersProvider.getParametersJson())) {
+        if (element == null) {
             return Collections.emptyMap();
         }
-
-        Map<String, Object> allParameters = MAPPER
-                .readValue(parametersProvider.getParametersJson(), new TypeReference<Map<String, Object>>() { });
-
+        Map<String, Object> allParameters = new HashMap<>();
+        if (isValidParametersMap(parametersProvider.getFileSpecificParametersJson())) {
+            Map<String, Object> parsedFileSpecific = MAPPER.readValue(parametersProvider.getFileSpecificParametersJson(),
+                    new TypeReference<Map<String, Object>>() {});
+            parsedFileSpecific.forEach(allParameters::putIfAbsent);
+        }
+        if (isValidParametersMap(parametersProvider.getGlobalParametersJson())) {
+            Map<String, Object> parsedGlobal = MAPPER.readValue(parametersProvider.getGlobalParametersJson(),
+                    new TypeReference<Map<String, Object>>() {});
+            parsedGlobal.forEach(allParameters::putIfAbsent);
+        }
         return extractQueryParameters(element, allParameters);
     }
 
@@ -61,7 +65,7 @@ public class ParametersService {
 
         return allParameters.entrySet().stream()
                 .filter(entry -> parameterNames.contains(entry.getKey()))
-                .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     private Set<String> extractParameterNames(PsiElement element) {
@@ -70,6 +74,15 @@ public class ParametersService {
                 .map(elem -> ((CypherParameter) elem).getParameterName())
                 .distinct()
                 .collect(Collectors.toSet());
+    }
+
+    private static boolean isEmptyParametersMap(String parametersJson) {
+        try {
+            return parametersJson == null || StringUtils.isBlank(parametersJson);
+        } catch (Exception e) {
+            Throwables.throwIfUnchecked(e);
+            throw new RuntimeException(e);
+        }
     }
 
     private static boolean isValidParametersMap(String parametersJson) {
