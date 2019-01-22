@@ -2,6 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params;
 
 import com.google.common.base.Throwables;
 import com.intellij.codeInsight.hint.HintManager;
+import com.intellij.icons.AllIcons;
 import com.intellij.json.JsonFileType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
@@ -36,6 +37,7 @@ import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.Que
 public class ParametersPanel implements ParametersProvider {
 
     private static final FileDocumentManager FILE_DOCUMENT_MANAGER = FileDocumentManager.getInstance();
+    public static final Icon ICON_HELP = AllIcons.Actions.Help;
 
     private Editor globalParamEditor;
     private Editor fileSpecificParamEditor;
@@ -103,7 +105,10 @@ public class ParametersPanel implements ParametersProvider {
                 VirtualFile file = FileUtil.getScratchFile(project, "Neo4jGraphDbConsoleParametersPanel.json");
                 Document document = FILE_DOCUMENT_MANAGER.getDocument(file);
                 globalParamEditor = createEditor(project, document);
-                globalParamEditor.setHeaderComponent(new JLabel("<html>Provide <b>global</b> query parameters in JSON format here:</html>"));
+                JLabel jLabel = new JLabel("<html>Global parameters:</html>");
+                jLabel.setIcon(ICON_HELP);
+                jLabel.setToolTipText("Enter parameters in JSON format. Will be applied to any data source when executed");
+                globalParamEditor.setHeaderComponent(jLabel);
                 setInitialContent(document);
 
                 initializeUi();
@@ -128,10 +133,12 @@ public class ParametersPanel implements ParametersProvider {
                         FileUtil.setParams(cypherFile, document.getText());
                 }
             });
-
-            fileSpecificParamEditor.setHeaderComponent(new JLabel("<html>Provide query parameters specific to " +
-                    "connection <b>" + getTabTitle(cypherFile) + "</b> in JSON format here" +
-                    "(these have a higher priority than global):</html>"));
+            JLabel jLabel = new JLabel("<html>Parameters for data source <b>" +
+                    getTabTitle(cypherFile) + "</b>:</html>");
+            jLabel.setIcon(ICON_HELP);
+            jLabel.setToolTipText("Enter parameters in JSON format. Will be applied to <b>" + getTabTitle(cypherFile) +
+                    "</b> data source when executed");
+            fileSpecificParamEditor.setHeaderComponent(jLabel);
             if (document != null) setInitialContent(document);
             graphConsoleView.getFileSpecificParametersTab().add(fileSpecificParamEditor.getComponent(), BorderLayout.CENTER);
         } catch (Throwable e) {
