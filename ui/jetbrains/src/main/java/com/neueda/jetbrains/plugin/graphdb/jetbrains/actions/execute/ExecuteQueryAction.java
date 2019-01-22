@@ -51,9 +51,9 @@ public class ExecuteQueryAction extends AnAction {
     public ExecuteQueryAction() {
     }
 
-    private String preSetQuery;
+    private PsiElement preSetQuery;
 
-    public ExecuteQueryAction(String element) {
+    public ExecuteQueryAction(PsiElement element) {
         preSetQuery = element;
     }
 
@@ -104,21 +104,14 @@ public class ExecuteQueryAction extends AnAction {
                     PsiElement cypherStatement = getCypherStatementAtOffset(psiFile, caret.getOffset());
                     if (nonNull(cypherStatement)) {
                         query = cypherStatement.getText();
-                        try { // support parameters for PsiElement only
-                            ParametersService service = ServiceManager.getService(project, ParametersService.class);
-                            parameters = service.getParameters(cypherStatement);
-                        } catch (Exception exception) {
-                            sendParametersRetrievalErrorEvent(messageBus, exception, editor);
-                            return;
-                        }
+                        parameters = getParametersFromQuery(cypherStatement, project, editor);
                     }
                 }
             }
-
-
         } else {
-            query = preSetQuery;
             analyticsEvent = CONTENT_FROM_LINE_MARKER_ACTION;
+            query = preSetQuery.getText();
+            parameters = getParametersFromQuery(preSetQuery, project, editor);
         }
 
         Analytics.event("query-content", analyticsEvent);
@@ -158,6 +151,16 @@ public class ExecuteQueryAction extends AnAction {
             popup.showUnderneathOf(eventComponent);
         } else {
             popup.showInBestPositionFor(e.getDataContext());
+        }
+    }
+
+    private Map<String, Object> getParametersFromQuery(PsiElement query, Project project, Editor editor) {
+        try { // support parameters for PsiElement only
+            ParametersService service = ServiceManager.getService(project, ParametersService.class);
+            return service.getParameters(query);
+        } catch (Exception exception) {
+            sendParametersRetrievalErrorEvent(project.getMessageBus(), exception, editor);
+            return Collections.emptyMap();
         }
     }
 

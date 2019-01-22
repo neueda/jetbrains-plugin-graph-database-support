@@ -62,7 +62,7 @@ Gradle is used as build system.
 ./gradlew buildPlugin
 
 # Run idea in development mode
-./gradlew runIdea
+./gradlew :graph-database-support-plugin:runIde
 ```
 
 ## Contacts
