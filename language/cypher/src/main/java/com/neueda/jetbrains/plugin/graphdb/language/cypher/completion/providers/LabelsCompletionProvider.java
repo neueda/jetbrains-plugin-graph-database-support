@@ -21,7 +21,6 @@ public final class LabelsCompletionProvider extends BaseCompletionProvider {
     protected void addCompletions(@NotNull CompletionParameters parameters,
                                   ProcessingContext context,
                                   @NotNull CompletionResultSet result) {
-        // TODO: find data, add completions from local query
         withCypherMetadataProvider(parameters, (metadataProvider ->
             Stream.concat(metadataProvider.getLabels().stream(), Stream.empty())
                 .map(CypherElement::getLookupElement)
