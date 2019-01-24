@@ -111,6 +111,7 @@ public interface CypherTypes {
   IElementType QUERY_OPTIONS = new CypherElementType("QUERY_OPTIONS");
   IElementType RANGE_LITERAL = new CypherElementType("RANGE_LITERAL");
   IElementType READING_CLAUSE = new CypherElementType("READING_CLAUSE");
+  IElementType READING_WITH_RETURN = new CypherElementType("READING_WITH_RETURN");
   IElementType REDUCE_FUNCTION_INVOCATION = new CypherElementType("REDUCE_FUNCTION_INVOCATION");
   IElementType REGULAR_QUERY = new CypherElementType("REGULAR_QUERY");
   IElementType RELATIONSHIPS_PATTERN = new CypherElementType("RELATIONSHIPS_PATTERN");
@@ -593,6 +594,9 @@ public interface CypherTypes {
       }
       else if (type == READING_CLAUSE) {
         return new CypherReadingClauseImpl(node);
+      }
+      else if (type == READING_WITH_RETURN) {
+        return new CypherReadingWithReturnImpl(node);
       }
       else if (type == REDUCE_FUNCTION_INVOCATION) {
         return new CypherReduceFunctionInvocationImpl(node);

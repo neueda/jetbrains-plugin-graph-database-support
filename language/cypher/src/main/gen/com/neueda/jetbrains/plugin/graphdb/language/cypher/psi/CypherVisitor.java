@@ -434,6 +434,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitReadingWithReturn(@NotNull CypherReadingWithReturn o) {
+    visitPsiElement(o);
+  }
+
   public void visitReduceFunctionInvocation(@NotNull CypherReduceFunctionInvocation o) {
     visitInvocation(o);
   }

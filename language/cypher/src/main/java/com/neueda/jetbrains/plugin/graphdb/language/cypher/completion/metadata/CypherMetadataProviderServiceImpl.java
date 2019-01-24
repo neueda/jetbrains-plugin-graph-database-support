@@ -36,51 +36,42 @@ public class CypherMetadataProviderServiceImpl implements CypherMetadataProvider
 
     @Override
     public List<CypherLabelElement> getLabels() {
-        List<CypherLabelElement> collect = sourceData.entrySet().stream()
-                .map(Map.Entry::getValue)
+        return sourceData.values().stream()
                 .flatMap((container) -> container.getLabels().stream())
                 .collect(Collectors.toList());
-//        collect.add(new CypherLabelElement("Testlabel"));
-//        collect.add(new CypherLabelElement("Testlabel2"));
-        return collect;
     }
 
     @Override
     public List<CypherRelationshipTypeElement> getRelationshipTypes() {
-        return sourceData.entrySet().stream()
-                .map(Map.Entry::getValue)
+        return sourceData.values().stream()
                 .flatMap((container) -> container.getRelationshipTypes().stream())
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<CypherPropertyKeyElement> getPropertyKeys() {
-        return sourceData.entrySet().stream()
-                .map(Map.Entry::getValue)
+        return sourceData.values().stream()
                 .flatMap((container) -> container.getPropertyKeys().stream())
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<CypherProcedureElement> getProcedures() {
-        return sourceData.entrySet().stream()
-                .map(Map.Entry::getValue)
+        return sourceData.values().stream()
                 .flatMap((container) -> container.getProcedures().stream())
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<CypherUserFunctionElement> getUserFunctions() {
-        return sourceData.entrySet().stream()
-                .map(Map.Entry::getValue)
+        return sourceData.values().stream()
                 .flatMap((container) -> container.getUserFunctions().stream())
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<CypherLabelElement> findLabel(String labelName) {
-        return sourceData.entrySet().stream()
-                .map(Map.Entry::getValue)
+        return sourceData.values().stream()
                 .flatMap((container) -> container.getLabels().stream())
                 .filter((labelElement) -> labelElement.getName().equals(labelName))
                 .findFirst();
@@ -88,8 +79,7 @@ public class CypherMetadataProviderServiceImpl implements CypherMetadataProvider
 
     @Override
     public Optional<CypherRelationshipTypeElement> findRelationshipType(String relationshipTypeName) {
-        return sourceData.entrySet().stream()
-                .map(Map.Entry::getValue)
+        return sourceData.values().stream()
                 .flatMap((container) -> container.getRelationshipTypes().stream())
                 .filter((relationshipTypeElement) -> relationshipTypeElement.getName().equals(relationshipTypeName))
                 .findFirst();
@@ -97,8 +87,7 @@ public class CypherMetadataProviderServiceImpl implements CypherMetadataProvider
 
     @Override
     public Optional<CypherPropertyKeyElement> findPropertyKey(String propertyKeyName) {
-        return sourceData.entrySet().stream()
-                .map(Map.Entry::getValue)
+        return sourceData.values().stream()
                 .flatMap((container) -> container.getPropertyKeys().stream())
                 .filter((propertyKeyElement) -> propertyKeyElement.getName().equals(propertyKeyName))
                 .findFirst();
@@ -106,8 +95,7 @@ public class CypherMetadataProviderServiceImpl implements CypherMetadataProvider
 
     @Override
     public Optional<CypherProcedureElement> findProcedure(String name) {
-        return sourceData.entrySet().stream()
-                .map(Map.Entry::getValue)
+        return sourceData.values().stream()
                 .flatMap((container) -> container.getProcedures().stream())
                 .filter((procedureElement) -> procedureElement.getName().equals(name))
                 .findFirst();
@@ -115,8 +103,7 @@ public class CypherMetadataProviderServiceImpl implements CypherMetadataProvider
 
     @Override
     public Optional<CypherUserFunctionElement> findUserFunction(String name) {
-        return sourceData.entrySet().stream()
-                .map(Map.Entry::getValue)
+        return sourceData.values().stream()
                 .flatMap((container) -> container.getUserFunctions().stream())
                 .filter((userFunctionElement) -> userFunctionElement.getName().equals(name))
                 .findFirst();
