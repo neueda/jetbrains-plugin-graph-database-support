@@ -1,5 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.language.cypher.editor;
 
+import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -7,7 +8,7 @@ import com.intellij.psi.PsiFile;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherStringLiteral;
 import org.jetbrains.annotations.NotNull;
 
-public class TypedHandlerDelegate extends com.intellij.codeInsight.editorActions.TypedHandlerDelegate {
+public class CypherTypedHandlerDelegate extends TypedHandlerDelegate {
 
     @NotNull
     @Override

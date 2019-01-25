@@ -165,7 +165,7 @@
 
         <codeInsight.parameterInfo language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.editor.CypherParameterInfoHandler"/>
         
-        <typedHandler implementation="com.neueda.jetbrains.plugin.graphdb.language.cypher.editor.TypedHandlerDelegate" />
+        <typedHandler implementation="com.neueda.jetbrains.plugin.graphdb.language.cypher.editor.CypherTypedHandlerDelegate" />
 
         <codeStyleSettingsProvider implementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.formatter.CypherCodeStyleSettingsProvider"/>
         <langCodeStyleSettingsProvider implementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.formatter.CypherLanguageCodeStyleSettingsProvider"/>
