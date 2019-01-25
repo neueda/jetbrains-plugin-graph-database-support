@@ -5,12 +5,18 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CypherSingleQuery extends PsiElement {
+public interface CypherMultiPartQuery extends PsiElement {
 
-  @Nullable
-  CypherMultiPartQuery getMultiPartQuery();
+  @NotNull
+  List<CypherReadingClause> getReadingClauseList();
 
-  @Nullable
+  @NotNull
   CypherSinglePartQuery getSinglePartQuery();
+
+  @NotNull
+  List<CypherUpdatingClause> getUpdatingClauseList();
+
+  @NotNull
+  List<CypherWith> getWithList();
 
 }

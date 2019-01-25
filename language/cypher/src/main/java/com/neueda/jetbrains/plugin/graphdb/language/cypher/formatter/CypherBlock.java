@@ -123,8 +123,12 @@ public class CypherBlock implements ASTBlock {
         IElementType parentType = this.node.getElementType();
         IElementType type = node.getElementType();
 
-        if (parentType == CypherTypes.SINGLE_QUERY
-                && (type == CypherTypes.READING_CLAUSE || type == CypherTypes.UPDATING_CLAUSE)) {
+        if ((parentType == CypherTypes.SINGLE_PART_QUERY || parentType == CypherTypes.MULTI_PART_QUERY)
+                && (type == CypherTypes.READING_CLAUSE || type == CypherTypes.UPDATING_CLAUSE ||
+                type == CypherTypes.READING_WITH_RETURN)) {
+            return Indent.getNoneIndent();
+        }
+        if (parentType == CypherTypes.READING_WITH_RETURN && type == CypherTypes.READING_CLAUSE) {
             return Indent.getNoneIndent();
         }
         if (type == CypherTypes.READING_CLAUSE || type == CypherTypes.UPDATING_CLAUSE) {
@@ -164,7 +168,7 @@ public class CypherBlock implements ASTBlock {
     private Wrap calcWrap(@NotNull ASTNode node) {
         IElementType type = node.getElementType();
 
-        if (type == CypherTypes.READING_CLAUSE || type == CypherTypes.UPDATING_CLAUSE
+        if (type == CypherTypes.READING_CLAUSE || type == CypherTypes.UPDATING_CLAUSE || type == CypherTypes.READING_WITH_RETURN
                 || type == CypherTypes.RETURN || type == CypherTypes.WITH) {
             return Wrap.createWrap(WrapType.ALWAYS, true);
         }

@@ -11,14 +11,14 @@ import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherType
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
-public class CypherSingleQueryImpl extends ASTWrapperPsiElement implements CypherSingleQuery {
+public class CypherReadingWithReturnImpl extends ASTWrapperPsiElement implements CypherReadingWithReturn {
 
-  public CypherSingleQueryImpl(@NotNull ASTNode node) {
+  public CypherReadingWithReturnImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CypherVisitor visitor) {
-    visitor.visitSingleQuery(this);
+    visitor.visitReadingWithReturn(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -27,15 +27,15 @@ public class CypherSingleQueryImpl extends ASTWrapperPsiElement implements Cyphe
   }
 
   @Override
-  @Nullable
-  public CypherMultiPartQuery getMultiPartQuery() {
-    return findChildByClass(CypherMultiPartQuery.class);
+  @NotNull
+  public List<CypherReadingClause> getReadingClauseList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CypherReadingClause.class);
   }
 
   @Override
   @Nullable
-  public CypherSinglePartQuery getSinglePartQuery() {
-    return findChildByClass(CypherSinglePartQuery.class);
+  public CypherReturn getReturn() {
+    return findChildByClass(CypherReturn.class);
   }
 
 }

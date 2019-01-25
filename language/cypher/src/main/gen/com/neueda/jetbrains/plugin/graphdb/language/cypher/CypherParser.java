@@ -215,6 +215,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == MERGE_ACTION) {
       r = MergeAction(b, 0);
     }
+    else if (t == MULTI_PART_QUERY) {
+      r = MultiPartQuery(b, 0);
+    }
     else if (t == NAMESPACE) {
       r = Namespace(b, 0);
     }
@@ -329,6 +332,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     else if (t == READING_CLAUSE) {
       r = ReadingClause(b, 0);
     }
+    else if (t == READING_WITH_RETURN) {
+      r = ReadingWithReturn(b, 0);
+    }
     else if (t == REDUCE_FUNCTION_INVOCATION) {
       r = ReduceFunctionInvocation(b, 0);
     }
@@ -403,6 +409,9 @@ public class CypherParser implements PsiParser, LightPsiParser {
     }
     else if (t == SINGLE_FUNCTION_INVOCATION) {
       r = SingleFunctionInvocation(b, 0);
+    }
+    else if (t == SINGLE_PART_QUERY) {
+      r = SinglePartQuery(b, 0);
     }
     else if (t == SINGLE_QUERY) {
       r = SingleQuery(b, 0);
@@ -2555,6 +2564,67 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // (ReadingClause* UpdatingClause* With)+ SinglePartQuery
+  public static boolean MultiPartQuery(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MultiPartQuery")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, MULTI_PART_QUERY, "<multi part query>");
+    r = MultiPartQuery_0(b, l + 1);
+    r = r && SinglePartQuery(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // (ReadingClause* UpdatingClause* With)+
+  private static boolean MultiPartQuery_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MultiPartQuery_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = MultiPartQuery_0_0(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!MultiPartQuery_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "MultiPartQuery_0", c)) break;
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ReadingClause* UpdatingClause* With
+  private static boolean MultiPartQuery_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MultiPartQuery_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = MultiPartQuery_0_0_0(b, l + 1);
+    r = r && MultiPartQuery_0_0_1(b, l + 1);
+    r = r && With(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ReadingClause*
+  private static boolean MultiPartQuery_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MultiPartQuery_0_0_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!ReadingClause(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "MultiPartQuery_0_0_0", c)) break;
+    }
+    return true;
+  }
+
+  // UpdatingClause*
+  private static boolean MultiPartQuery_0_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MultiPartQuery_0_0_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!UpdatingClause(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "MultiPartQuery_0_0_1", c)) break;
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
   // (SymbolicNameString ".")*
   public static boolean Namespace(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Namespace")) return false;
@@ -3471,6 +3541,30 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // ReadingClause* Return
+  public static boolean ReadingWithReturn(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ReadingWithReturn")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, READING_WITH_RETURN, "<reading with return>");
+    r = ReadingWithReturn_0(b, l + 1);
+    p = r; // pin = 1
+    r = r && Return(b, l + 1);
+    exit_section_(b, l, m, r, p, statement_recover_parser_);
+    return r || p;
+  }
+
+  // ReadingClause*
+  private static boolean ReadingWithReturn_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ReadingWithReturn_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!ReadingClause(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "ReadingWithReturn_0", c)) break;
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
   // K_REDUCE "(" Variable "=" Expression "," IdInColl "|" Expression ")"
   public static boolean ReduceFunctionInvocation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ReduceFunctionInvocation")) return false;
@@ -4343,29 +4437,71 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (ReadingClause | UpdatingClause | With | Return)+
-  public static boolean SingleQuery(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SingleQuery")) return false;
+  // (ReadingClause* UpdatingClause+ Return?) | ReadingWithReturn
+  public static boolean SinglePartQuery(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SinglePartQuery")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, SINGLE_QUERY, "<single query>");
-    r = SingleQuery_0(b, l + 1);
-    while (r) {
-      int c = current_position_(b);
-      if (!SingleQuery_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "SingleQuery", c)) break;
-    }
+    Marker m = enter_section_(b, l, _NONE_, SINGLE_PART_QUERY, "<single part query>");
+    r = SinglePartQuery_0(b, l + 1);
+    if (!r) r = ReadingWithReturn(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // ReadingClause | UpdatingClause | With | Return
-  private static boolean SingleQuery_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SingleQuery_0")) return false;
+  // ReadingClause* UpdatingClause+ Return?
+  private static boolean SinglePartQuery_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SinglePartQuery_0")) return false;
     boolean r;
-    r = ReadingClause(b, l + 1);
-    if (!r) r = UpdatingClause(b, l + 1);
-    if (!r) r = With(b, l + 1);
-    if (!r) r = Return(b, l + 1);
+    Marker m = enter_section_(b);
+    r = SinglePartQuery_0_0(b, l + 1);
+    r = r && SinglePartQuery_0_1(b, l + 1);
+    r = r && SinglePartQuery_0_2(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ReadingClause*
+  private static boolean SinglePartQuery_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SinglePartQuery_0_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!ReadingClause(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "SinglePartQuery_0_0", c)) break;
+    }
+    return true;
+  }
+
+  // UpdatingClause+
+  private static boolean SinglePartQuery_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SinglePartQuery_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = UpdatingClause(b, l + 1);
+    while (r) {
+      int c = current_position_(b);
+      if (!UpdatingClause(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "SinglePartQuery_0_1", c)) break;
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // Return?
+  private static boolean SinglePartQuery_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SinglePartQuery_0_2")) return false;
+    Return(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // MultiPartQuery | SinglePartQuery
+  public static boolean SingleQuery(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SingleQuery")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, SINGLE_QUERY, "<single query>");
+    r = MultiPartQuery(b, l + 1);
+    if (!r) r = SinglePartQuery(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 

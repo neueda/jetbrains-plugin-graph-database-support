@@ -41,15 +41,4 @@ public class CypherCompletionContributor extends CompletionContributor {
                 UserFunctionsCompletionProvider.PATTERN,
                 new UserFunctionsCompletionProvider());
     }
-
-    @Override
-    public boolean invokeAutoPopup(@NotNull PsiElement position, char typeChar) {
-        if (position instanceof CypherStringLiteral) {
-            return false;
-        }
-        return typeChar == ':'
-                   || typeChar == '.'
-                   || typeChar == '('
-                   || typeChar == '[';
-    }
 }

@@ -225,7 +225,13 @@ Query ::= StandaloneCall | BulkImportQuery | RegularQuery
 //-- RegularQuery
 RegularQuery ::= SingleQuery Union*
 Union ::= K_UNION K_ALL? SingleQuery
-SingleQuery ::= (ReadingClause | UpdatingClause | With | Return)+
+SingleQuery ::= MultiPartQuery | SinglePartQuery
+
+SinglePartQuery ::= ((ReadingClause* UpdatingClause+ Return?) | ReadingWithReturn)
+
+ReadingWithReturn ::= ReadingClause* Return {pin=1 recoverWhile=statement_recover}
+
+MultiPartQuery ::= ((ReadingClause* UpdatingClause* With)+ SinglePartQuery)
 
 UpdatingClause ::= Create
                | Merge
