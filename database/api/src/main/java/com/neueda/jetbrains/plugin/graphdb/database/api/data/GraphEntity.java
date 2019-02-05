@@ -2,7 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.database.api.data;
 
 import java.util.List;
 
-public interface GraphEntity {
+public interface GraphEntity extends NoIdGraphEntity {
 
     String getId();
 
@@ -12,7 +12,4 @@ public interface GraphEntity {
 
     String getTypesName();
 
-    boolean isTypesSingle();
-
-    String getRepresentation();
 }

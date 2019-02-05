@@ -219,6 +219,12 @@
                     icon="/actions/refresh.png"
                     description="Clean canvas">
             </action>
+            <action id="GraphDatabaseConsoleToolWindowActions.CopyQueryOutput"
+                    class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.ui.console.CopyQueryOutputAction"
+                    text="Copy query result to clipboard"
+                    icon="/actions/copy.png"
+                    description="Copy query result to clipboard">
+            </action>
         </group>
 
         <group id="GraphDatabaseFileActions"
