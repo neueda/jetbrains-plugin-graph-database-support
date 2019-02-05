@@ -22,14 +22,17 @@ public class TableContextMenuMouseAdapter extends MouseAdapter {
             int selectedRow = table.rowAtPoint(e.getPoint());
             int selectedColumn = table.columnAtPoint(e.getPoint());
 
-            Tree tree = (Tree) table.getModel().getValueAt(selectedRow, selectedColumn);
+            Object value = table.getModel().getValueAt(selectedRow, selectedColumn);
+            if (Tree.class.isAssignableFrom(value.getClass())) {
+                Tree tree = (Tree) value;
 
-            TreePath path = tree.getPathForLocation(e.getX(), e.getY());
-            DataContext dataContext = DataManager.getInstance()
-                    .getDataContext(table, e.getX(), e.getY());
+                TreePath path = tree.getPathForLocation(e.getX(), e.getY());
+                DataContext dataContext = DataManager.getInstance()
+                        .getDataContext(table, e.getX(), e.getY());
 
-            contextMenuService.getContextMenu(path)
-                    .ifPresent(dto -> dto.showPopup(dataContext));
+                contextMenuService.getContextMenu(path)
+                        .ifPresent(dto -> dto.showPopup(dataContext));
+            }
         }
     }
 }

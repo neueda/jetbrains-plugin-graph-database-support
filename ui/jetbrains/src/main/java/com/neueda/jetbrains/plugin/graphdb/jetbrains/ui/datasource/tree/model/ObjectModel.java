@@ -1,13 +1,15 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.model;
 
+import com.neueda.jetbrains.plugin.graphdb.database.api.data.NoIdGraphEntity;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jEntityViewNodeType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.NodeType;
+import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import java.util.Optional;
 
-public class ObjectModel extends RootObjectAwareModel {
+public class ObjectModel extends RootObjectAwareModel implements NoIdGraphEntity {
 
     private NodeType type = Neo4jEntityViewNodeType.OTHER;
     private Object object;
@@ -50,4 +52,15 @@ public class ObjectModel extends RootObjectAwareModel {
     public String toString() {
         return text;
     }
+
+    @Override
+    public boolean isTypesSingle() {
+        return true;
+    }
+
+    @Override
+    public String getRepresentation() {
+        return StringUtils.capitalize(getText().orElse(getType().toString()));
+    }
+
 }
