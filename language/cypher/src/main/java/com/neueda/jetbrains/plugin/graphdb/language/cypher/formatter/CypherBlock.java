@@ -124,8 +124,7 @@ public class CypherBlock implements ASTBlock {
         IElementType type = node.getElementType();
 
         if ((parentType == CypherTypes.SINGLE_PART_QUERY || parentType == CypherTypes.MULTI_PART_QUERY)
-                && (type == CypherTypes.READING_CLAUSE || type == CypherTypes.UPDATING_CLAUSE ||
-                type == CypherTypes.READING_WITH_RETURN)) {
+                && (type == CypherTypes.READING_CLAUSE || type == CypherTypes.UPDATING_CLAUSE || type == CypherTypes.READING_WITH_RETURN)) {
             return Indent.getNoneIndent();
         }
         if (parentType == CypherTypes.READING_WITH_RETURN && type == CypherTypes.READING_CLAUSE) {

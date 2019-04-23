@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface CypherReadingClause extends PsiElement {
 
   @Nullable
-  CypherCall getCall();
+  CypherInQueryCall getInQueryCall();
 
   @Nullable
   CypherLoadCSV getLoadCSV();

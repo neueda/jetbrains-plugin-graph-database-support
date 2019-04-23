@@ -33,18 +33,22 @@ public class CypherLabelNameImpl extends CypherNamedElementImpl implements Cyphe
     return findNotNullChildByClass(CypherSymbolicNameString.class);
   }
 
+  @Override
   public String getName() {
     return CypherPsiImplUtil.getName(this);
   }
 
+  @Override
   public CypherLabelName setName(String newName) {
     return CypherPsiImplUtil.setName(this, newName);
   }
 
+  @Override
   public PsiElement getNameIdentifier() {
     return CypherPsiImplUtil.getNameIdentifier(this);
   }
 
+  @Override
   @NotNull
   public PsiReference[] getReferences() {
     return CypherPsiImplUtil.getReferences(this);

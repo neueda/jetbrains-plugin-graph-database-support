@@ -38,6 +38,7 @@ public class CypherAnyFunctionInvocationImpl extends ASTWrapperPsiElement implem
     return findNotNullChildByType(K_ANY);
   }
 
+  @Override
   public String getFullName() {
     return CypherPsiImplUtil.getFullName(this);
   }

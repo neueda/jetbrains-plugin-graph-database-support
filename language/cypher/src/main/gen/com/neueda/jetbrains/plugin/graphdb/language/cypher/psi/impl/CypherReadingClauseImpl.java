@@ -28,8 +28,8 @@ public class CypherReadingClauseImpl extends ASTWrapperPsiElement implements Cyp
 
   @Override
   @Nullable
-  public CypherCall getCall() {
-    return findChildByClass(CypherCall.class);
+  public CypherInQueryCall getInQueryCall() {
+    return findChildByClass(CypherInQueryCall.class);
   }
 
   @Override

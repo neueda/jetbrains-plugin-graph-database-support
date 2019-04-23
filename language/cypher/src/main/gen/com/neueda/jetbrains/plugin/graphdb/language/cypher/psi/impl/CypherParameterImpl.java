@@ -38,6 +38,7 @@ public class CypherParameterImpl extends ASTWrapperPsiElement implements CypherP
     return findChildByClass(CypherOldParameter.class);
   }
 
+  @Override
   public String getParameterName() {
     return CypherPsiImplUtil.getParameterName(this);
   }

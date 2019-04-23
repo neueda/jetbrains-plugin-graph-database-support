@@ -33,18 +33,22 @@ public class CypherRelTypeNameImpl extends CypherNamedElementImpl implements Cyp
     return findNotNullChildByClass(CypherSymbolicNameString.class);
   }
 
+  @Override
   public String getName() {
     return CypherPsiImplUtil.getName(this);
   }
 
+  @Override
   public CypherRelTypeName setName(String newName) {
     return CypherPsiImplUtil.setName(this, newName);
   }
 
+  @Override
   public PsiElement getNameIdentifier() {
     return CypherPsiImplUtil.getNameIdentifier(this);
   }
 
+  @Override
   @NotNull
   public PsiReference[] getReferences() {
     return CypherPsiImplUtil.getReferences(this);

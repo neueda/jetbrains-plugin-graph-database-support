@@ -23,6 +23,6 @@ public class CypherTypedHandlerDelegate extends TypedHandlerDelegate {
         return charTyped == ':'
                 || charTyped == '.'
                 || charTyped == '('
-                || charTyped == '['? Result.CONTINUE : Result.STOP;
+                || charTyped == '[' ? Result.CONTINUE : Result.STOP;
     }
 }
