@@ -56,6 +56,7 @@ public interface CypherTypes {
   IElementType INDEX_QUERY = new CypherElementType("INDEX_QUERY");
   IElementType INDEX_SYNTAX = new CypherElementType("INDEX_SYNTAX");
   IElementType INTEGER_LITERAL = new CypherElementType("INTEGER_LITERAL");
+  IElementType IN_QUERY_CALL = new CypherElementType("IN_QUERY_CALL");
   IElementType LABEL_NAME = new CypherElementType("LABEL_NAME");
   IElementType LEFT_ARROW_HEAD = new CypherElementType("LEFT_ARROW_HEAD");
   IElementType LIMIT = new CypherElementType("LIMIT");
@@ -429,6 +430,9 @@ public interface CypherTypes {
       }
       else if (type == INTEGER_LITERAL) {
         return new CypherIntegerLiteralImpl(node);
+      }
+      else if (type == IN_QUERY_CALL) {
+        return new CypherInQueryCallImpl(node);
       }
       else if (type == LABEL_NAME) {
         return new CypherLabelNameImpl(node);

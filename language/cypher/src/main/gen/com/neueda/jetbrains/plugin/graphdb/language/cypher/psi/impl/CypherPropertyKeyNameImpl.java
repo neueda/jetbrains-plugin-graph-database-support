@@ -33,18 +33,22 @@ public class CypherPropertyKeyNameImpl extends CypherNamedElementImpl implements
     return findNotNullChildByClass(CypherSymbolicNameString.class);
   }
 
+  @Override
   public String getName() {
     return CypherPsiImplUtil.getName(this);
   }
 
+  @Override
   public CypherPropertyKeyName setName(String newName) {
     return CypherPsiImplUtil.setName(this, newName);
   }
 
+  @Override
   public PsiElement getNameIdentifier() {
     return CypherPsiImplUtil.getNameIdentifier(this);
   }
 
+  @Override
   @NotNull
   public PsiReference[] getReferences() {
     return CypherPsiImplUtil.getReferences(this);

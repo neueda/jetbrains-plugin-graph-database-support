@@ -38,6 +38,7 @@ public class CypherProcedureInvocationImpl extends ASTWrapperPsiElement implemen
     return findNotNullChildByClass(CypherProcedureInvocationBody.class);
   }
 
+  @Override
   public String getFullName() {
     return CypherPsiImplUtil.getFullName(this);
   }

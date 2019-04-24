@@ -2,10 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.language.cypher.completion;
 
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.psi.PsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.providers.*;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherStringLiteral;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Entry point for Cypher auto completion.

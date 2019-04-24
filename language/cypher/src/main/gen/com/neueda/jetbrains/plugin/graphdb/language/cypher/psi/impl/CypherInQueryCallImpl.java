@@ -11,14 +11,14 @@ import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherType
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.*;
 
-public class CypherFilterFunctionInvocationImpl extends ASTWrapperPsiElement implements CypherFilterFunctionInvocation {
+public class CypherInQueryCallImpl extends ASTWrapperPsiElement implements CypherInQueryCall {
 
-  public CypherFilterFunctionInvocationImpl(@NotNull ASTNode node) {
+  public CypherInQueryCallImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CypherVisitor visitor) {
-    visitor.visitFilterFunctionInvocation(this);
+    visitor.visitInQueryCall(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -28,19 +28,14 @@ public class CypherFilterFunctionInvocationImpl extends ASTWrapperPsiElement imp
 
   @Override
   @NotNull
-  public CypherFilterExpression getFilterExpression() {
-    return findNotNullChildByClass(CypherFilterExpression.class);
+  public CypherCall getCall() {
+    return findNotNullChildByClass(CypherCall.class);
   }
 
   @Override
-  @NotNull
-  public PsiElement getKFilter() {
-    return findNotNullChildByType(K_FILTER);
-  }
-
-  @Override
-  public String getFullName() {
-    return CypherPsiImplUtil.getFullName(this);
+  @Nullable
+  public CypherWhere getWhere() {
+    return findChildByClass(CypherWhere.class);
   }
 
 }

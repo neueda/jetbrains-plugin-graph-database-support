@@ -202,6 +202,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitInQueryCall(@NotNull CypherInQueryCall o) {
+    visitPsiElement(o);
+  }
+
   public void visitIndexQuery(@NotNull CypherIndexQuery o) {
     visitPsiElement(o);
   }

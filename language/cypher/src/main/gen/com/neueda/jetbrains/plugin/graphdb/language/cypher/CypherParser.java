@@ -6,6 +6,7 @@ import com.intellij.lang.PsiBuilder.Marker;
 import static com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes.*;
 import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.IFileElementType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.lang.PsiParser;
@@ -23,467 +24,11 @@ public class CypherParser implements PsiParser, LightPsiParser {
     boolean r;
     b = adapt_builder_(t, b, this, null);
     Marker m = enter_section_(b, 0, _COLLAPSE_, null);
-    if (t == ALIASED_PROCEDURE_RESULT) {
-      r = AliasedProcedureResult(b, 0);
-    }
-    else if (t == ALL_FUNCTION_INVOCATION) {
-      r = AllFunctionInvocation(b, 0);
-    }
-    else if (t == ALL_PROPERTIES_SELECTOR) {
-      r = AllPropertiesSelector(b, 0);
-    }
-    else if (t == ALL_SHORTEST_PATHS_FUNCTION_INVOCATION) {
-      r = AllShortestPathsFunctionInvocation(b, 0);
-    }
-    else if (t == ANONYMOUS_PATTERN_PART) {
-      r = AnonymousPatternPart(b, 0);
-    }
-    else if (t == ANY_CYPHER_OPTION) {
-      r = AnyCypherOption(b, 0);
-    }
-    else if (t == ANY_FUNCTION_INVOCATION) {
-      r = AnyFunctionInvocation(b, 0);
-    }
-    else if (t == ARRAY) {
-      r = Array(b, 0);
-    }
-    else if (t == BOOLEAN_LITERAL) {
-      r = BooleanLiteral(b, 0);
-    }
-    else if (t == BULK_IMPORT_QUERY) {
-      r = BulkImportQuery(b, 0);
-    }
-    else if (t == CALL) {
-      r = Call(b, 0);
-    }
-    else if (t == CASE_ALTERNATIVES) {
-      r = CaseAlternatives(b, 0);
-    }
-    else if (t == CASE_EXPRESSION) {
-      r = CaseExpression(b, 0);
-    }
-    else if (t == COMMAND) {
-      r = Command(b, 0);
-    }
-    else if (t == CONFIGURATION_OPTION) {
-      r = ConfigurationOption(b, 0);
-    }
-    else if (t == COUNT_STAR) {
-      r = CountStar(b, 0);
-    }
-    else if (t == CREATE) {
-      r = Create(b, 0);
-    }
-    else if (t == CREATE_INDEX) {
-      r = CreateIndex(b, 0);
-    }
-    else if (t == CREATE_NODE_PROPERTY_EXISTENCE_CONSTRAINT) {
-      r = CreateNodePropertyExistenceConstraint(b, 0);
-    }
-    else if (t == CREATE_RELATIONSHIP_PROPERTY_EXISTENCE_CONSTRAINT) {
-      r = CreateRelationshipPropertyExistenceConstraint(b, 0);
-    }
-    else if (t == CREATE_UNIQUE_CONSTRAINT) {
-      r = CreateUniqueConstraint(b, 0);
-    }
-    else if (t == CYPHER_OPTION) {
-      r = CypherOption(b, 0);
-    }
-    else if (t == DASH) {
-      r = Dash(b, 0);
-    }
-    else if (t == DELETE) {
-      r = Delete(b, 0);
-    }
-    else if (t == DOUBLE_LITERAL) {
-      r = DoubleLiteral(b, 0);
-    }
-    else if (t == DROP_INDEX) {
-      r = DropIndex(b, 0);
-    }
-    else if (t == DROP_NODE_PROPERTY_EXISTENCE_CONSTRAINT) {
-      r = DropNodePropertyExistenceConstraint(b, 0);
-    }
-    else if (t == DROP_RELATIONSHIP_PROPERTY_EXISTENCE_CONSTRAINT) {
-      r = DropRelationshipPropertyExistenceConstraint(b, 0);
-    }
-    else if (t == DROP_UNIQUE_CONSTRAINT) {
-      r = DropUniqueConstraint(b, 0);
-    }
-    else if (t == ESCAPED_SYMBOLIC_NAME_STRING) {
-      r = EscapedSymbolicNameString(b, 0);
-    }
-    else if (t == EXISTS_FUNCTION_INVOCATION) {
-      r = ExistsFunctionInvocation(b, 0);
-    }
-    else if (t == EXPLAIN) {
-      r = Explain(b, 0);
-    }
-    else if (t == EXPRESSION) {
-      r = Expression(b, 0);
-    }
-    else if (t == EXTRACT_FUNCTION_INVOCATION) {
-      r = ExtractFunctionInvocation(b, 0);
-    }
-    else if (t == FILTER_EXPRESSION) {
-      r = FilterExpression(b, 0);
-    }
-    else if (t == FILTER_FUNCTION_INVOCATION) {
-      r = FilterFunctionInvocation(b, 0);
-    }
-    else if (t == FOREACH) {
-      r = Foreach(b, 0);
-    }
-    else if (t == FUNCTION_ARGUMENTS) {
-      r = FunctionArguments(b, 0);
-    }
-    else if (t == FUNCTION_INVOCATION) {
-      r = FunctionInvocation(b, 0);
-    }
-    else if (t == FUNCTION_INVOCATION_BODY) {
-      r = FunctionInvocationBody(b, 0);
-    }
-    else if (t == FUNCTION_NAME) {
-      r = FunctionName(b, 0);
-    }
-    else if (t == HINT) {
-      r = Hint(b, 0);
-    }
-    else if (t == ID_IN_COLL) {
-      r = IdInColl(b, 0);
-    }
-    else if (t == ID_LOOKUP) {
-      r = IdLookup(b, 0);
-    }
-    else if (t == IDENTIFIED_INDEX_LOOKUP) {
-      r = IdentifiedIndexLookup(b, 0);
-    }
-    else if (t == INDEX_QUERY) {
-      r = IndexQuery(b, 0);
-    }
-    else if (t == INDEX_SYNTAX) {
-      r = IndexSyntax(b, 0);
-    }
-    else if (t == INTEGER_LITERAL) {
-      r = IntegerLiteral(b, 0);
-    }
-    else if (t == LABEL_NAME) {
-      r = LabelName(b, 0);
-    }
-    else if (t == LEFT_ARROW_HEAD) {
-      r = LeftArrowHead(b, 0);
-    }
-    else if (t == LIMIT) {
-      r = Limit(b, 0);
-    }
-    else if (t == LIST_COMPREHENSION) {
-      r = ListComprehension(b, 0);
-    }
-    else if (t == LITERAL_ENTRY) {
-      r = LiteralEntry(b, 0);
-    }
-    else if (t == LITERAL_IDS) {
-      r = LiteralIds(b, 0);
-    }
-    else if (t == LOAD_CSV) {
-      r = LoadCSV(b, 0);
-    }
-    else if (t == LOAD_CSV_QUERY) {
-      r = LoadCSVQuery(b, 0);
-    }
-    else if (t == LOOKUP) {
-      r = Lookup(b, 0);
-    }
-    else if (t == MAP_LITERAL) {
-      r = MapLiteral(b, 0);
-    }
-    else if (t == MAP_PROJECTION) {
-      r = MapProjection(b, 0);
-    }
-    else if (t == MAP_PROJECTION_VARIANTS) {
-      r = MapProjectionVariants(b, 0);
-    }
-    else if (t == MATCH) {
-      r = Match(b, 0);
-    }
-    else if (t == MAYBE_VARIABLE_LENGTH) {
-      r = MaybeVariableLength(b, 0);
-    }
-    else if (t == MERGE) {
-      r = Merge(b, 0);
-    }
-    else if (t == MERGE_ACTION) {
-      r = MergeAction(b, 0);
-    }
-    else if (t == MULTI_PART_QUERY) {
-      r = MultiPartQuery(b, 0);
-    }
-    else if (t == NAMESPACE) {
-      r = Namespace(b, 0);
-    }
-    else if (t == NEW_PARAMETER) {
-      r = NewParameter(b, 0);
-    }
-    else if (t == NODE_LABEL) {
-      r = NodeLabel(b, 0);
-    }
-    else if (t == NODE_LABELS) {
-      r = NodeLabels(b, 0);
-    }
-    else if (t == NODE_LOOKUP) {
-      r = NodeLookup(b, 0);
-    }
-    else if (t == NODE_PATTERN) {
-      r = NodePattern(b, 0);
-    }
-    else if (t == NODE_PROPERTY_EXISTENCE_CONSTRAINT_SYNTAX) {
-      r = NodePropertyExistenceConstraintSyntax(b, 0);
-    }
-    else if (t == NONE_FUNCTION_INVOCATION) {
-      r = NoneFunctionInvocation(b, 0);
-    }
-    else if (t == NULL_LITERAL) {
-      r = NullLiteral(b, 0);
-    }
-    else if (t == NUMBER_LITERAL) {
-      r = NumberLiteral(b, 0);
-    }
-    else if (t == OLD_PARAMETER) {
-      r = OldParameter(b, 0);
-    }
-    else if (t == ORDER) {
-      r = Order(b, 0);
-    }
-    else if (t == PARAMETER) {
-      r = Parameter(b, 0);
-    }
-    else if (t == PARENTHESIZED_EXPRESSION) {
-      r = ParenthesizedExpression(b, 0);
-    }
-    else if (t == PATTERN) {
-      r = Pattern(b, 0);
-    }
-    else if (t == PATTERN_COMPREHENSION) {
-      r = PatternComprehension(b, 0);
-    }
-    else if (t == PATTERN_ELEMENT) {
-      r = PatternElement(b, 0);
-    }
-    else if (t == PATTERN_ELEMENT_CHAIN) {
-      r = PatternElementChain(b, 0);
-    }
-    else if (t == PATTERN_PART) {
-      r = PatternPart(b, 0);
-    }
-    else if (t == PERIODIC_COMMIT_HINT) {
-      r = PeriodicCommitHint(b, 0);
-    }
-    else if (t == PROCEDURE_ARGUMENTS) {
-      r = ProcedureArguments(b, 0);
-    }
-    else if (t == PROCEDURE_INVOCATION) {
-      r = ProcedureInvocation(b, 0);
-    }
-    else if (t == PROCEDURE_INVOCATION_BODY) {
-      r = ProcedureInvocationBody(b, 0);
-    }
-    else if (t == PROCEDURE_NAME) {
-      r = ProcedureName(b, 0);
-    }
-    else if (t == PROCEDURE_OUTPUT) {
-      r = ProcedureOutput(b, 0);
-    }
-    else if (t == PROCEDURE_RESULT) {
-      r = ProcedureResult(b, 0);
-    }
-    else if (t == PROCEDURE_RESULTS) {
-      r = ProcedureResults(b, 0);
-    }
-    else if (t == PROFILE) {
-      r = Profile(b, 0);
-    }
-    else if (t == PROPERTIES) {
-      r = Properties(b, 0);
-    }
-    else if (t == PROPERTY_EXPRESSION) {
-      r = PropertyExpression(b, 0);
-    }
-    else if (t == PROPERTY_KEY_NAME) {
-      r = PropertyKeyName(b, 0);
-    }
-    else if (t == PROPERTY_KEY_NAMES) {
-      r = PropertyKeyNames(b, 0);
-    }
-    else if (t == PROPERTY_LOOKUP) {
-      r = PropertyLookup(b, 0);
-    }
-    else if (t == PROPERTY_SELECTOR) {
-      r = PropertySelector(b, 0);
-    }
-    else if (t == QUERY) {
-      r = Query(b, 0);
-    }
-    else if (t == QUERY_OPTIONS) {
-      r = QueryOptions(b, 0);
-    }
-    else if (t == RANGE_LITERAL) {
-      r = RangeLiteral(b, 0);
-    }
-    else if (t == READING_CLAUSE) {
-      r = ReadingClause(b, 0);
-    }
-    else if (t == READING_WITH_RETURN) {
-      r = ReadingWithReturn(b, 0);
-    }
-    else if (t == REDUCE_FUNCTION_INVOCATION) {
-      r = ReduceFunctionInvocation(b, 0);
-    }
-    else if (t == REGULAR_QUERY) {
-      r = RegularQuery(b, 0);
-    }
-    else if (t == REL_TYPE) {
-      r = RelType(b, 0);
-    }
-    else if (t == REL_TYPE_NAME) {
-      r = RelTypeName(b, 0);
-    }
-    else if (t == RELATIONSHIP_DETAIL) {
-      r = RelationshipDetail(b, 0);
-    }
-    else if (t == RELATIONSHIP_LOOKUP) {
-      r = RelationshipLookup(b, 0);
-    }
-    else if (t == RELATIONSHIP_PATTERN) {
-      r = RelationshipPattern(b, 0);
-    }
-    else if (t == RELATIONSHIP_PATTERN_SYNTAX) {
-      r = RelationshipPatternSyntax(b, 0);
-    }
-    else if (t == RELATIONSHIP_PROPERTY_EXISTENCE_CONSTRAINT_SYNTAX) {
-      r = RelationshipPropertyExistenceConstraintSyntax(b, 0);
-    }
-    else if (t == RELATIONSHIP_TYPES) {
-      r = RelationshipTypes(b, 0);
-    }
-    else if (t == RELATIONSHIPS_PATTERN) {
-      r = RelationshipsPattern(b, 0);
-    }
-    else if (t == REMOVE) {
-      r = Remove(b, 0);
-    }
-    else if (t == REMOVE_ITEM) {
-      r = RemoveItem(b, 0);
-    }
-    else if (t == RESERVED_WORD) {
-      r = ReservedWord(b, 0);
-    }
-    else if (t == RETURN) {
-      r = Return(b, 0);
-    }
-    else if (t == RETURN_BODY) {
-      r = ReturnBody(b, 0);
-    }
-    else if (t == RETURN_ITEM) {
-      r = ReturnItem(b, 0);
-    }
-    else if (t == RETURN_ITEMS) {
-      r = ReturnItems(b, 0);
-    }
-    else if (t == RIGHT_ARROW_HEAD) {
-      r = RightArrowHead(b, 0);
-    }
-    else if (t == SET_CLAUSE) {
-      r = SetClause(b, 0);
-    }
-    else if (t == SET_ITEM) {
-      r = SetItem(b, 0);
-    }
-    else if (t == SHORTEST_PATH_FUNCTION_INVOCATION) {
-      r = ShortestPathFunctionInvocation(b, 0);
-    }
-    else if (t == SHORTEST_PATH_PATTERN) {
-      r = ShortestPathPattern(b, 0);
-    }
-    else if (t == SIMPLE_PROCEDURE_RESULT) {
-      r = SimpleProcedureResult(b, 0);
-    }
-    else if (t == SINGLE_FUNCTION_INVOCATION) {
-      r = SingleFunctionInvocation(b, 0);
-    }
-    else if (t == SINGLE_PART_QUERY) {
-      r = SinglePartQuery(b, 0);
-    }
-    else if (t == SINGLE_QUERY) {
-      r = SingleQuery(b, 0);
-    }
-    else if (t == SKIP) {
-      r = Skip(b, 0);
-    }
-    else if (t == SORT_ITEM) {
-      r = SortItem(b, 0);
-    }
-    else if (t == STANDALONE_CALL) {
-      r = StandaloneCall(b, 0);
-    }
-    else if (t == START) {
-      r = Start(b, 0);
-    }
-    else if (t == START_POINT) {
-      r = StartPoint(b, 0);
-    }
-    else if (t == STATEMENT) {
-      r = Statement(b, 0);
-    }
-    else if (t == STATEMENT_ITEM) {
-      r = StatementItem(b, 0);
-    }
-    else if (t == STRING_LITERAL) {
-      r = StringLiteral(b, 0);
-    }
-    else if (t == SYMBOLIC_NAME_STRING) {
-      r = SymbolicNameString(b, 0);
-    }
-    else if (t == UNARY_OPERATOR) {
-      r = UnaryOperator(b, 0);
-    }
-    else if (t == UNESCAPED_SYMBOLIC_NAME_STRING) {
-      r = UnescapedSymbolicNameString(b, 0);
-    }
-    else if (t == UNION) {
-      r = Union(b, 0);
-    }
-    else if (t == UNIQUE_CONSTRAINT_SYNTAX) {
-      r = UniqueConstraintSyntax(b, 0);
-    }
-    else if (t == UNSIGNED_DOUBLE) {
-      r = UnsignedDouble(b, 0);
-    }
-    else if (t == UNSIGNED_INTEGER) {
-      r = UnsignedInteger(b, 0);
-    }
-    else if (t == UNWIND) {
-      r = Unwind(b, 0);
-    }
-    else if (t == UPDATING_CLAUSE) {
-      r = UpdatingClause(b, 0);
-    }
-    else if (t == VARIABLE) {
-      r = Variable(b, 0);
-    }
-    else if (t == VARIABLE_SELECTOR) {
-      r = VariableSelector(b, 0);
-    }
-    else if (t == VERSION_NUMBER) {
-      r = VersionNumber(b, 0);
-    }
-    else if (t == WHERE) {
-      r = Where(b, 0);
-    }
-    else if (t == WITH) {
-      r = With(b, 0);
+    if (t instanceof IFileElementType) {
+      r = parse_root_(t, b, 0);
     }
     else {
-      r = parse_root_(t, b, 0);
+      r = false;
     }
     exit_section_(b, 0, m, t, r, true, TRUE_CONDITION);
   }
@@ -2084,6 +1629,26 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // Call Where?
+  public static boolean InQueryCall(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "InQueryCall")) return false;
+    if (!nextTokenIs(b, K_CALL)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Call(b, l + 1);
+    r = r && InQueryCall_1(b, l + 1);
+    exit_section_(b, m, IN_QUERY_CALL, r);
+    return r;
+  }
+
+  // Where?
+  private static boolean InQueryCall_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "InQueryCall_1")) return false;
+    Where(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
   // ":" SymbolicNameString "(" (StringLiteral | Parameter) ")"
   public static boolean IndexQuery(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IndexQuery")) return false;
@@ -3526,7 +3091,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   //               | Start
   //               | Match
   //               | Unwind
-  //               | Call
+  //               | InQueryCall
   public static boolean ReadingClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ReadingClause")) return false;
     boolean r;
@@ -3535,7 +3100,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
     if (!r) r = Start(b, l + 1);
     if (!r) r = Match(b, l + 1);
     if (!r) r = Unwind(b, l + 1);
-    if (!r) r = Call(b, l + 1);
+    if (!r) r = InQueryCall(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -4549,7 +4114,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Call (Where Return)?
+  // Call (Where? Return)?
   public static boolean StandaloneCall(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StandaloneCall")) return false;
     if (!nextTokenIs(b, K_CALL)) return false;
@@ -4561,22 +4126,29 @@ public class CypherParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (Where Return)?
+  // (Where? Return)?
   private static boolean StandaloneCall_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StandaloneCall_1")) return false;
     StandaloneCall_1_0(b, l + 1);
     return true;
   }
 
-  // Where Return
+  // Where? Return
   private static boolean StandaloneCall_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StandaloneCall_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Where(b, l + 1);
+    r = StandaloneCall_1_0_0(b, l + 1);
     r = r && Return(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // Where?
+  private static boolean StandaloneCall_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "StandaloneCall_1_0_0")) return false;
+    Where(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
