@@ -101,7 +101,7 @@ public class SerialisationHelper {
         Object userObj = entity.getUserObject();
         if (userObj instanceof LabelsModel) {
             LabelsModel labelsModel = (LabelsModel) userObj;
-            Object rootObj = labelsModel.getRootObjectValue().get();
+            Object rootObj = labelsModel.getRootObjectValue().orElse(null);
             if (rootObj instanceof Neo4jBoltNode) {
                 Neo4jBoltNode obj = ((Neo4jBoltNode) rootObj);
                 return '"' + obj.getTypesName() + "\":" + convertToCsv(obj.getTypes());
@@ -113,7 +113,7 @@ public class SerialisationHelper {
         }
         if (userObj instanceof PropertiesModel) {
             PropertiesModel propertiesModel = (PropertiesModel) userObj;
-            Object rootObj = propertiesModel.getRootObjectValue().get();
+            Object rootObj = propertiesModel.getRootObjectValue().orElse(null);
             if (rootObj instanceof Neo4jBoltNode) {
                 Neo4jBoltNode obj = ((Neo4jBoltNode) rootObj);
                 return "\"properties\":" + convertToCsv(obj.getPropertyContainer().getProperties());

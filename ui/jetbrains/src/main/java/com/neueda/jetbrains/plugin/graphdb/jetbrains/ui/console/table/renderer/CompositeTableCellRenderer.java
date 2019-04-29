@@ -46,7 +46,7 @@ public class CompositeTableCellRenderer implements TableCellRenderer {
         if (value instanceof Tree) {
             Component component = treeModelTableCellRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-            if (Arrays.asList(((Tree) value).getKeyListeners()).stream().noneMatch(o -> o.equals(COPY_KEY_ADAPTER))) {
+            if (Arrays.stream(((Tree) value).getKeyListeners()).noneMatch(o -> o.equals(COPY_KEY_ADAPTER))) {
                 ((Tree) value).addKeyListener(COPY_KEY_ADAPTER);
             }
             return component;

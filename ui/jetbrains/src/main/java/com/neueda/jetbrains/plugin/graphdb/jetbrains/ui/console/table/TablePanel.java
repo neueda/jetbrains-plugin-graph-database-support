@@ -71,9 +71,7 @@ public class TablePanel {
                 result.getRows().forEach((row) -> {
                     List<Object> data = new ArrayList<>(columns.size());
 
-                    columns.forEach((column) -> {
-                        data.add(valueConverter.convert(column.getName(), row.getValue(column), this.dataSourceApi));
-                    });
+                    columns.forEach((column) -> data.add(valueConverter.convert(column.getName(), row.getValue(column), this.dataSourceApi)));
 
                     tableModel.addRow(data.toArray());
                 });

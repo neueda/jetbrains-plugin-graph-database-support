@@ -31,7 +31,7 @@ public class CypherParameterInfoHandler
     @Override
     @SuppressWarnings("unchecked")
     public PsiElement[] getActualParameters(@NotNull CypherInvocation o) {
-        return ArrayUtil.toObjectArray((List) o.arguments(), PsiElement.class);
+        return ArrayUtil.toObjectArray(o.arguments(), PsiElement.class);
     }
 
     @NotNull

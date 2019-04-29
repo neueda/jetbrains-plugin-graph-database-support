@@ -54,7 +54,7 @@ public class CypherReferenceContributor extends PsiReferenceContributor {
     }
 
     private void register(PsiReferenceRegistrar registrar,
-                          @NotNull ElementPattern pattern,
+                          @NotNull ElementPattern<PsiElement> pattern,
                           CypherReferenceContributionPriority contributionPriority,
                           ReferenceFactory referenceFactory) {
         registrar.registerReferenceProvider(

@@ -69,11 +69,8 @@ public class CypherDocumentationProvider extends AbstractDocumentationProvider {
         }
 
         Optional<String> userFunctionDocumentation = userFunctionDocumentation(element);
-        if (userFunctionDocumentation.isPresent()) {
-            return userFunctionDocumentation.get();
-        }
+        return userFunctionDocumentation.orElse(null);
 
-        return null;
     }
 
     private Optional<String> builtInFunctionDocumentation(PsiElement element) {

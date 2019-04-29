@@ -101,7 +101,7 @@ public class EditEntityDialog extends DialogWrapper {
             setTitle("Create New Node");
             nodeLabel.setText("Node [?]");
         } else {
-            setTitle(isEditNode ? "Edit Node" : "Edit relationship");
+            setTitle(isEditNode ? "Edit Node" : "Edit Relationship");
             nodeLabel.setText(node.getRepresentation());
         }
     }
@@ -129,20 +129,7 @@ public class EditEntityDialog extends DialogWrapper {
             }
         });
 
-        JLabel remove = new JLabel(AllIcons.Actions.Close);
-        remove.setBorder(BorderFactory.createEmptyBorder());
-        panel.add(remove);
-
-        remove.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                parent.remove(panel);
-                parent.revalidate();
-                validate();
-                repaint();
-            }
-        });
-
+        addCloseLabel(parent, panel);
         return panel;
     }
 
@@ -169,6 +156,11 @@ public class EditEntityDialog extends DialogWrapper {
             }
         });
 
+        addCloseLabel(parent, panel);
+        return panel;
+    }
+
+    private void addCloseLabel(Container parent, JPanel panel) {
         JLabel remove = new JLabel(AllIcons.Actions.Close);
         remove.setBorder(BorderFactory.createEmptyBorder());
         panel.add(remove);
@@ -182,8 +174,6 @@ public class EditEntityDialog extends DialogWrapper {
                 repaint();
             }
         });
-
-        return panel;
     }
 
     public GraphEntity getUpdatedEntity() {

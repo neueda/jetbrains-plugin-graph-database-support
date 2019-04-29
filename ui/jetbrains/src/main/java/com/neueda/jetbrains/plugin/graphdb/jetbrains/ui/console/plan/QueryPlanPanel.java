@@ -137,7 +137,7 @@ public class QueryPlanPanel implements Disposable {
                 .map(GraphQueryPlan::children)
                 .flatMap(Collection::stream)
                 .map(QueryPlanPanel::calculateTotalDbHits)
-                .reduce(0L, (a, b) -> a + b);
+                .reduce(0L, Long::sum);
     }
 
     @NotNull

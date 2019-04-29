@@ -20,10 +20,8 @@ public final class ProceduresCompletionProvider extends BaseCompletionProvider {
     protected void addCompletions(@NotNull CompletionParameters parameters,
                                   ProcessingContext context,
                                   @NotNull CompletionResultSet result) {
-        withCypherMetadataProvider(parameters, (metadataProvider -> {
-            metadataProvider.getProcedures().stream()
-                       .map(CypherElement::getLookupElement)
-                       .forEach(result::addElement);
-        }));
+        withCypherMetadataProvider(parameters, (metadataProvider -> metadataProvider.getProcedures().stream()
+                   .map(CypherElement::getLookupElement)
+                   .forEach(result::addElement)));
     }
 }

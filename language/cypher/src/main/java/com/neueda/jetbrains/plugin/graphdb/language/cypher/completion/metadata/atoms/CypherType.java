@@ -32,11 +32,7 @@ public interface CypherType {
             return true;
         }
 
-        if (this instanceof CypherList && t instanceof CypherList) {
-            return true;
-        }
-
-        return false;
+        return this instanceof CypherList && t instanceof CypherList;
     }
 
 }

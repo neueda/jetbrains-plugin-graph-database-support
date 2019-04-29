@@ -5,6 +5,7 @@ import com.intellij.openapi.util.Pair;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.inspections.CypherFunctionCallInspection;
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.tests.cypher.util.BaseInspectionTest;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -125,7 +126,7 @@ public class CypherFunctionCallInspectionTest extends BaseInspectionTest {
 
     public void testStringTypeCheck() {
         String query = "MATCH p=(n)-[r]-() RETURN ltrim(%s)";
-        generateTypeCompatibilityTests(query, "STRING", asList("STRING"));
+        generateTypeCompatibilityTests(query, "STRING", Collections.singletonList("STRING"));
     }
 
     public void testNullableStringTypeCheck() {
@@ -145,7 +146,7 @@ public class CypherFunctionCallInspectionTest extends BaseInspectionTest {
 
     public void testIntegerTypeCheck() {
         String query = "MATCH p=(n)-[r]-() RETURN substring(\"a\", %s)";
-        generateTypeCompatibilityTests(query, "INTEGER", asList("INTEGER"));
+        generateTypeCompatibilityTests(query, "INTEGER", Collections.singletonList("INTEGER"));
     }
 
     public void testNullableIntegerTypeCheck() {
@@ -155,7 +156,7 @@ public class CypherFunctionCallInspectionTest extends BaseInspectionTest {
 
     public void testBooleanTypeCheck() {
         String query = "MATCH p=(n)-[r]-() CALL test.bool(%s) RETURN p";
-        generateTypeCompatibilityTests(query, "BOOLEAN", asList("BOOLEAN"));
+        generateTypeCompatibilityTests(query, "BOOLEAN", Collections.singletonList("BOOLEAN"));
     }
 
     public void testNullableBooleanTypeCheck() {
@@ -175,17 +176,17 @@ public class CypherFunctionCallInspectionTest extends BaseInspectionTest {
 
     public void testPathTypeCheck() {
         String query = "MATCH p=(n)-[r]-() RETURN ufrpath(%s)";
-        generateTypeCompatibilityTests(query, "PATH", asList("PATH"));
+        generateTypeCompatibilityTests(query, "PATH", Collections.singletonList("PATH"));
     }
 
     public void testNodeTypeCheck() {
         String query = "MATCH p=(n)-[r]-() RETURN ufrnode(%s)";
-        generateTypeCompatibilityTests(query, "NODE", asList("NODE"));
+        generateTypeCompatibilityTests(query, "NODE", Collections.singletonList("NODE"));
     }
 
     public void testRelationshipTypeCheck() {
         String query = "MATCH p=(n)-[r]-() RETURN ufrrel(%s)";
-        generateTypeCompatibilityTests(query, "RELATIONSHIP", asList("RELATIONSHIP"));
+        generateTypeCompatibilityTests(query, "RELATIONSHIP", Collections.singletonList("RELATIONSHIP"));
     }
 
     public void testSizeArray() {
