@@ -20,10 +20,8 @@ public class UserFunctionsCompletionProvider extends BaseCompletionProvider {
 
     @Override
     protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-        withCypherMetadataProvider(parameters, (metadataProvider -> {
-            metadataProvider.getUserFunctions().stream()
-                    .map(CypherElement::getLookupElement)
-                    .forEach(result::addElement);
-        }));
+        withCypherMetadataProvider(parameters, (metadataProvider -> metadataProvider.getUserFunctions().stream()
+                .map(CypherElement::getLookupElement)
+                .forEach(result::addElement)));
     }
 }

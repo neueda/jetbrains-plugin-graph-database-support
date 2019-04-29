@@ -16,6 +16,6 @@ public class LabelTreeNodeModel extends MetadataTreeNodeModel {
 
     @Override
     public Optional<String> getText() {
-        return Optional.of(String.format(NAME_WITH_COUNT, getValue().get(), count));
+        return Optional.of(String.format(NAME_WITH_COUNT, getValue().orElse(""), count));
     }
 }

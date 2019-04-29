@@ -9,9 +9,6 @@ public class QueryResultTableModel extends DefaultTableModel {
     @Override
     public boolean isCellEditable(int row, int column) {
         Object valueAt = getValueAt(row, column);
-        if (valueAt != null && valueAt instanceof Tree) {
-            return true;
-        }
-        return false;
+        return valueAt != null && valueAt instanceof Tree;
     }
 }

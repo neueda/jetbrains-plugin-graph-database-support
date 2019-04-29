@@ -62,7 +62,7 @@ public interface CypherInvocation extends PsiElement, CypherTyped {
         if (this instanceof CypherProcedureInvocation) {
             svc.findProcedure(getFullName())
                 .map(CypherProcedureElement::getInvokableInformation)
-                .ifPresent(info -> matchedInvocations.add(info));
+                .ifPresent(matchedInvocations::add);
             return matchedInvocations;
         }
 
@@ -74,7 +74,7 @@ public interface CypherInvocation extends PsiElement, CypherTyped {
         if (matchedInvocations.isEmpty()) {
             svc.findUserFunction(getFullName())
                 .map(CypherUserFunctionElement::getInvokableInformation)
-                .ifPresent(info -> matchedInvocations.add(info));
+                .ifPresent(matchedInvocations::add);
         }
         return matchedInvocations;
     }

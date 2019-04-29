@@ -20,12 +20,12 @@ public class DiffService {
     }
 
     public void updateNode(DataSourceApi api, GraphEntity oldNode, GraphEntity newNode) {
-        StringBuilder sb = new StringBuilder("MATCH (n) WHERE ID(n) = $id ")
-                .append(diffLabels(oldNode.getTypes(), newNode.getTypes()))
-                .append(" SET n = $props")
-                .append(" RETURN n");
 
-        service.executeQuery(api, new ExecuteQueryPayload(sb.toString(),
+        String query = "MATCH (n) WHERE ID(n) = $id " +
+                diffLabels(oldNode.getTypes(), newNode.getTypes()) +
+                " SET n = $props" +
+                " RETURN n";
+        service.executeQuery(api, new ExecuteQueryPayload(query,
                 ImmutableMap.of(
                         "id", Long.parseLong(oldNode.getId()),
                         "props", newNode.getPropertyContainer().getProperties()),
@@ -35,11 +35,11 @@ public class DiffService {
 
     public void updateRelationShip(DataSourceApi api, GraphEntity relationship,
                                    GraphEntity updatedRel) {
-        StringBuilder sb = new StringBuilder("MATCH ()-[n]->() WHERE ID(n) = $id ")
-                .append(" SET n = $props")
-                .append(" RETURN n");
 
-        service.executeQuery(api, new ExecuteQueryPayload(sb.toString(),
+        String query = "MATCH ()-[n]->() WHERE ID(n) = $id " +
+                " SET n = $props" +
+                " RETURN n";
+        service.executeQuery(api, new ExecuteQueryPayload(query,
                 ImmutableMap.of(
                         "id", Long.parseLong(relationship.getId()),
                         "props", updatedRel.getPropertyContainer().getProperties()),

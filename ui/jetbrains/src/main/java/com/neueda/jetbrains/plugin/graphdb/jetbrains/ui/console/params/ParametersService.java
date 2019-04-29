@@ -72,7 +72,6 @@ public class ParametersService {
         List<PsiElement> parameterElements = TraverseUtil.collectPsiElementsByType(element, CypherTypes.PARAMETER);
         return parameterElements.stream()
                 .map(elem -> ((CypherParameter) elem).getParameterName())
-                .distinct()
                 .collect(Collectors.toSet());
     }
 

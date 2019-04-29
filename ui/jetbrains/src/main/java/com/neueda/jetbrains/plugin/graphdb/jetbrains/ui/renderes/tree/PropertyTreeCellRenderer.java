@@ -17,7 +17,7 @@ public class PropertyTreeCellRenderer extends ColoredTreeCellRenderer {
         if (userObject instanceof TreeNodeModelApi) {
             TreeNodeModelApi model = (TreeNodeModelApi) userObject;
 
-            append(model.getText().get() + ": ", SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES, true);
+            append(model.getText().orElse("") + ": ", SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES, true);
             if (model.getDescription().isPresent()) {
                 append(model.getDescription().get(), SimpleTextAttributes.GRAYED_SMALL_ATTRIBUTES);
             } else {

@@ -1,4 +1,5 @@
 dependencies {
     compile project(':database:api')
     compile "org.neo4j.driver:neo4j-java-driver:$versionNeo4jJavaBoltDriver"
+    compile("com.fasterxml.jackson.core:jackson-annotations:$versionJacksonMapper")
 }

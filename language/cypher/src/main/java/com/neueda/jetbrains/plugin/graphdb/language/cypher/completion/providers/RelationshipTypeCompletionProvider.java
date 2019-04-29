@@ -19,10 +19,8 @@ public final class RelationshipTypeCompletionProvider extends BaseCompletionProv
     protected void addCompletions(@NotNull CompletionParameters parameters,
                                   ProcessingContext context,
                                   @NotNull CompletionResultSet result) {
-        withCypherMetadataProvider(parameters, (metadataProvider -> {
-            metadataProvider.getRelationshipTypes().stream()
-                    .map(CypherElement::getLookupElement)
-                    .forEach(result::addElement);
-        }));
+        withCypherMetadataProvider(parameters, (metadataProvider -> metadataProvider.getRelationshipTypes().stream()
+                .map(CypherElement::getLookupElement)
+                .forEach(result::addElement)));
     }
 }

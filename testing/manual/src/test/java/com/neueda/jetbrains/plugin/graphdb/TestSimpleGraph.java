@@ -18,7 +18,7 @@ public class TestSimpleGraph {
     public static void main(String[] argv) {
         PrefuseVisualization v = new PrefuseVisualization(new IdeaLookAndFeelService());
 
-        Map<String, String> config = new HashMap<String, String>();
+        Map<String, String> config = new HashMap<>();
         config.put(Neo4jBoltConfiguration.HOST, "localhost");
 //        config.put(Neo4jBoltConfiguration.PASSWORD)
 //        config.put(Neo4jBoltConfiguration.PORT)

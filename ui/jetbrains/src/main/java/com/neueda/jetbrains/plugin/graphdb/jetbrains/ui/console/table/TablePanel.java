@@ -8,13 +8,19 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultCo
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.CopyQueryOutputEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.editor.CompositeTableCellEditor;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.renderer.CompositeTableCellRenderer;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TableContextMenuMouseAdapter;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.SerialisationHelper;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +40,12 @@ public class TablePanel {
         tableModel = new QueryResultTableModel();
         table = graphConsoleView.getTableExecuteResults();
         table.setModel(tableModel);
-        table.setCellSelectionEnabled(false);
+
+        table.setCellSelectionEnabled(true);
+        table.setRowSelectionAllowed(true);
+        table.setColumnSelectionAllowed(true);
+        table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+
         table.setDefaultRenderer(Object.class, new CompositeTableCellRenderer());
         table.setDefaultEditor(Object.class, new CompositeTableCellEditor());
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -60,9 +71,7 @@ public class TablePanel {
                 result.getRows().forEach((row) -> {
                     List<Object> data = new ArrayList<>(columns.size());
 
-                    columns.forEach((column) -> {
-                        data.add(valueConverter.convert(column.getName(), row.getValue(column), this.dataSourceApi));
-                    });
+                    columns.forEach((column) -> data.add(valueConverter.convert(column.getName(), row.getValue(column), this.dataSourceApi)));
 
                     tableModel.addRow(data.toArray());
                 });
@@ -82,6 +91,29 @@ public class TablePanel {
             public void executionCompleted(ExecuteQueryPayload payload) {
             }
         });
+
+        table.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+                if (e.isControlDown()) {
+                    if (e.getKeyCode() == KeyEvent.VK_C) { // Copy
+                        StringSelection selection = new StringSelection(SerialisationHelper.convertToCsv(table, true));
+                        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                        clipboard.setContents(selection, selection);
+                    }
+                }
+            }
+        });
+
+        messageBus.connect().subscribe(CopyQueryOutputEvent.COPY_QUERY_OUTPUT_TOPIC, () -> {
+            JBTable tableToExport = graphConsoleView.getTableExecuteResults();
+            StringSelection selection = new StringSelection(SerialisationHelper.convertToCsv(tableToExport, false));
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(selection, selection);
+
+        });
+
     }
 
     public void updateRowHeights() {

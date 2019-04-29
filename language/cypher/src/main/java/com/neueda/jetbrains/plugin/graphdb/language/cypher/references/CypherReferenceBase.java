@@ -11,10 +11,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * TODO: Description
@@ -56,7 +53,7 @@ public abstract class CypherReferenceBase extends PsiReferenceBase<PsiElement> i
         Map<String, T> variants = new HashMap<>();
 
         data.stream()
-                .filter(element -> element != null)
+                .filter(Objects::nonNull)
                 .forEach(element -> {
                     String name = element.getName();
                     if (name != null && name.length() > 0) {

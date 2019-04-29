@@ -19,10 +19,8 @@ public final class PropertyKeyCompletionProvider extends BaseCompletionProvider 
     protected void addCompletions(@NotNull CompletionParameters parameters,
                                   ProcessingContext context,
                                   @NotNull CompletionResultSet result) {
-        withCypherMetadataProvider(parameters, (metadataProvider -> {
-            metadataProvider.getPropertyKeys().stream()
-                    .map(CypherElement::getLookupElement)
-                    .forEach(result::addElement);
-        }));
+        withCypherMetadataProvider(parameters, (metadataProvider -> metadataProvider.getPropertyKeys().stream()
+                .map(CypherElement::getLookupElement)
+                .forEach(result::addElement)));
     }
 }

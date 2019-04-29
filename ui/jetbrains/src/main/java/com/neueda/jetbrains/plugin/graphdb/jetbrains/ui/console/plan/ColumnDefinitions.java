@@ -85,8 +85,7 @@ class ColumnDefinitions {
                 @Nullable
                 @Override
                 public String valueOf(DefaultMutableTreeNode o) {
-                    return ((GraphQueryPlan) o.getUserObject()).getIdentifiers().stream()
-                            .collect(joining(", "));
+                    return String.join(", ", ((GraphQueryPlan) o.getUserObject()).getIdentifiers());
                 }
             };
 
