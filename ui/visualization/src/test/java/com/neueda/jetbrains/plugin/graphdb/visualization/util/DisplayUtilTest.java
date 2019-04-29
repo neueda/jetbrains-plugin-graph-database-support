@@ -151,7 +151,7 @@ public class DisplayUtilTest {
         properties.put(FIRST_KEY, FIRST_VALUE);
 
         assertThat(DisplayUtil.getTooltipText(node))
-                .containsSequence(FIRST_KEY, FIRST_VALUE);
+                .containsSubsequence(FIRST_KEY, FIRST_VALUE);
     }
 
     @Test
@@ -162,7 +162,7 @@ public class DisplayUtilTest {
         properties.put(FOURTH_KEY, FOURTH_VALUE);
 
         assertThat(DisplayUtil.getTooltipText(node))
-                .containsSequence(FIRST_KEY, FIRST_VALUE,
+                .containsSubsequence(FIRST_KEY, FIRST_VALUE,
                         SECOND_KEY, SECOND_VALUE,
                         THIRD_KEY, THIRD_VALUE);
     }
@@ -175,7 +175,7 @@ public class DisplayUtilTest {
         properties.put(FOURTH_KEY, FOURTH_VALUE);
 
         assertThat(DisplayUtil.getTooltipText(node))
-                .containsSequence(FIRST_KEY, FIRST_VALUE,
+                .containsSubsequence(FIRST_KEY, FIRST_VALUE,
                         SECOND_KEY, SECOND_VALUE,
                         FOURTH_KEY, FOURTH_VALUE);
     }
@@ -207,7 +207,7 @@ public class DisplayUtilTest {
         properties.put(FOURTH_KEY, FOURTH_VALUE);
 
         assertThat(DisplayUtil.getTooltipText(node))
-                .containsSequence(types.toString(),
+                .containsSubsequence(types.toString(),
                         FIRST_KEY, FIRST_VALUE,
                         SECOND_KEY, SECOND_VALUE,
                         THIRD_KEY, THIRD_VALUE);
