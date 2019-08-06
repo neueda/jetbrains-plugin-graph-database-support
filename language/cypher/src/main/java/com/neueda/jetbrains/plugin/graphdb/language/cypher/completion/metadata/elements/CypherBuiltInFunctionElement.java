@@ -3,7 +3,7 @@ package com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
+import icons.GraphIcons;
 
 public class CypherBuiltInFunctionElement implements CypherElement {
 

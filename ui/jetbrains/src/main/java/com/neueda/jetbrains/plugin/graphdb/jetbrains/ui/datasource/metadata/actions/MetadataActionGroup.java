@@ -8,7 +8,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.NodeType
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons.Database.NEO4J;
+import static icons.GraphIcons.Database.NEO4J;
 
 public class MetadataActionGroup extends ActionGroup {
 

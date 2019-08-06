@@ -9,7 +9,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.LabelTre
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.MetadataTreeNodeModel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.RelationshipTypeTreeNodeModel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModelApi;
-import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
+import icons.GraphIcons;
 
 import javax.swing.tree.MutableTreeNode;
 import java.util.List;

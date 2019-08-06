@@ -1,6 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource;
 
-import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
+import icons.GraphIcons;
 
 import javax.swing.Icon;
 
