@@ -9,7 +9,7 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.psi.CypherTypes;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.references.CypherReferenceBase;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.CypherUtil;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.util.PsiTraversalUtilities;
-import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
+import icons.GraphIcons;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -1,6 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.language.cypher;
 
-import com.neueda.jetbrains.plugin.graphdb.platform.GraphIcons;
+import icons.GraphIcons;
 
 import javax.swing.Icon;
 
