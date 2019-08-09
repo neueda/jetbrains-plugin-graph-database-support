@@ -22,11 +22,10 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.*;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.FileUtil;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
@@ -111,7 +110,7 @@ public class DataSourcesView implements Disposable {
         dataSourceTree.setModel(treeModel);
         dataSourceTree.setRootVisible(false);
         dataSourceTree.setToggleClickCount(0);
-        dataSourceTree.addMouseListener(new TreeContextMenuMouseAdapter());
+        dataSourceTree.addMouseListener(new TreeMouseAdapter());
     }
 
     private void decorateDataSourceTree() {

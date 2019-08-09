@@ -2,6 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.renderes.tree;
 
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
+import com.intellij.ui.components.labels.LinkLabel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModelApi;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,6 +26,9 @@ public class PropertyTreeCellRenderer extends ColoredTreeCellRenderer {
                     append(model.getValue().get().toString());
                 }
             }
+        } else if (userObject instanceof LinkLabel) {
+            String text = ((LinkLabel) userObject).getText();
+            append(text, SimpleTextAttributes.LINK_ATTRIBUTES);
         } else if (userObject != null) {
             append(userObject.toString());
         }

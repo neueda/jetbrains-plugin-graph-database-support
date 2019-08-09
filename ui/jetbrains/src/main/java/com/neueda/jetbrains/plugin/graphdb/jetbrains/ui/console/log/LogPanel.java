@@ -60,11 +60,15 @@ public class LogPanel implements Disposable {
                 info(String.format("Query executed in %sms. %s", result.getExecutionTimeMs(), result.getResultSummary()));
                 if (result.getRows().isEmpty()) {
                     info("No results.");
+                } else if (result.getNodes().isEmpty()) {
+                    info(String.format("Got %s rows. View results: %s",
+                            result.getRows().size(),
+                            GoToTabFilter.TABLE_TAB_LINK));
                 } else {
                     info(String.format("Got %s rows. View results: %s, %s",
-                        result.getRows().size(),
-                        GoToTabFilter.GRAPH_TAB_LINK,
-                        GoToTabFilter.TABLE_TAB_LINK));
+                            result.getRows().size(),
+                            GoToTabFilter.GRAPH_TAB_LINK,
+                            GoToTabFilter.TABLE_TAB_LINK));
                 }
                 newLine();
             }

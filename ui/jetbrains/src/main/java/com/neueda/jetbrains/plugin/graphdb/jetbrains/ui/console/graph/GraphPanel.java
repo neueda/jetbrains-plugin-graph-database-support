@@ -6,6 +6,8 @@ import com.intellij.openapi.ui.popup.BalloonBuilder;
 import com.intellij.ui.ColorUtil;
 import com.intellij.ui.awt.RelativePoint;
 import com.intellij.ui.components.JBLabel;
+import com.intellij.ui.components.labels.LinkLabel;
+import com.intellij.ui.components.labels.LinkListener;
 import com.intellij.ui.popup.BalloonPopupBuilderImpl;
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.intellij.ui.treeStructure.Tree;
@@ -18,9 +20,10 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQuer
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeContextMenuMouseAdapter;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeMouseAdapter;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.renderes.tree.PropertyTreeCellRenderer;
+import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants.ToolWindow.Tabs;
 import com.neueda.jetbrains.plugin.graphdb.visualization.PrefuseVisualization;
 import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
 import prefuse.visual.VisualItem;
@@ -31,6 +34,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Enumeration;
 
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.OpenTabEvent.*;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil.*;
 
 public class GraphPanel {
@@ -53,7 +57,7 @@ public class GraphPanel {
         MessageBus messageBus = project.getMessageBus();
         this.lookAndFeelService = graphConsoleView.getLookAndFeelService();
         this.entityDetailsTree = graphConsoleView.getEntityDetailsTree();
-        entityDetailsTree.addMouseListener(new TreeContextMenuMouseAdapter());
+        entityDetailsTree.addMouseListener(new TreeMouseAdapter());
 
         // Bootstrap visualisation
         visualization = new PrefuseVisualization(lookAndFeelService);
@@ -71,8 +75,12 @@ public class GraphPanel {
 
             @Override
             public void resultReceived(ExecuteQueryPayload payload, GraphQueryResult result) {
-                if (result.getNodes().isEmpty()) {
-                    entityDetailsTreeModel.setRoot(null);
+                if (result.getNodes().isEmpty() && !result.getRows().isEmpty()) {
+                    LinkListener<?> openTableTab = (l, s) -> messageBus.syncPublisher(OPEN_TAB_TOPIC).openTab(Tabs.TABLE);
+                    LinkLabel<?> link = new LinkLabel<>("Nothing to display in Graph. Click to view results as Table.", null, openTableTab);
+                    entityDetailsTreeModel.setRoot(new PatchedDefaultMutableTreeNode(link));
+                } else if (result.getNodes().isEmpty()) {
+                    entityDetailsTreeModel.setRoot(new PatchedDefaultMutableTreeNode("Query returned no results."));
                 } else {
                     entityDetailsTreeModel.setRoot(new PatchedDefaultMutableTreeNode("Select an item in the graph to view details..."));
                 }
