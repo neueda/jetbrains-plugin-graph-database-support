@@ -3,7 +3,7 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table;
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
 import com.intellij.ui.treeStructure.Tree;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeContextMenuMouseAdapter;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeMouseAdapter;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.renderes.tree.PropertyTreeCellRenderer;
 
 import javax.swing.event.TreeExpansionEvent;
@@ -11,9 +11,7 @@ import javax.swing.event.TreeExpansionListener;
 import javax.swing.tree.DefaultTreeModel;
 import java.util.Objects;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper.canBeTree;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper.keyValueToTreeNode;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper.representUiString;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper.*;
 
 public class ValueConverter {
 
@@ -50,7 +48,7 @@ public class ValueConverter {
             }
         });
 
-        tree.addMouseListener(new TreeContextMenuMouseAdapter());
+        tree.addMouseListener(new TreeMouseAdapter());
 
         treeModel.reload();
         return tree;
