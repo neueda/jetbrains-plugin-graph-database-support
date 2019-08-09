@@ -30,6 +30,8 @@ public class LogPanel implements Disposable {
         log = TextConsoleBuilderFactory.getInstance()
                 .createBuilder(project)
                 .getConsole();
+        log.addMessageFilter(new GoToTabFilter(log));
+
         Disposer.register(graphConsoleView, log);
         graphConsoleView.getLogTab().add(log.getComponent(), BorderLayout.CENTER);
 
@@ -56,6 +58,14 @@ public class LogPanel implements Disposable {
             @Override
             public void resultReceived(ExecuteQueryPayload payload, GraphQueryResult result) {
                 info(String.format("Query executed in %sms. %s", result.getExecutionTimeMs(), result.getResultSummary()));
+                if (result.getRows().isEmpty()) {
+                    info("No results.");
+                } else {
+                    info(String.format("Got %s rows. View results: %s, %s",
+                        result.getRows().size(),
+                        GoToTabFilter.GRAPH_TAB_LINK,
+                        GoToTabFilter.TABLE_TAB_LINK));
+                }
                 newLine();
             }
 

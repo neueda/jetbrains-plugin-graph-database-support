@@ -24,6 +24,7 @@ import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analytics;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.OpenTabEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryPlanEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.graph.GraphPanel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.log.LogPanel;
@@ -32,6 +33,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.plan.QueryPlanPa
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.status.ExecutionStatusBarWidget;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.table.TablePanel;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants;
+import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants.ToolWindow.Tabs;
 import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
 
 import javax.swing.*;
@@ -117,19 +119,21 @@ public class GraphConsoleView implements Disposable {
             // Tabs
             consoleTabs.setFirstTabOffset(0);
             consoleTabs.addTab(new TabInfo(logTab)
-                    .setText("Log"));
+                .setText(Tabs.LOG));
             consoleTabs.addTab(new TabInfo(graphTab)
-                    .setText("Graph"));
+                .setText(Tabs.GRAPH));
             consoleTabs.addTab(new TabInfo(tableScrollPane)
-                    .setText("Table"));
+                .setText(Tabs.TABLE));
             consoleTabs.addTab(new TabInfo(parametersTab)
-                    .setText("Parameters"));
+                .setText(Tabs.PARAMETERS));
             consoleTabs.setSelectionChangeHandler((info, requestFocus, doChangeSelection) -> {
                 Analytics.event("console", "openTab[" + info.getText() + "]");
                 ActionCallback callback = doChangeSelection.run();
                 graphPanel.resetPan();
                 return callback;
             });
+
+            project.getMessageBus().connect().subscribe(OpenTabEvent.OPEN_TAB_TOPIC, this::selectTab);
 
             AtomicInteger tabId = new AtomicInteger(0);
             project.getMessageBus().connect().subscribe(QueryPlanEvent.QUERY_PLAN_EVENT,
@@ -145,6 +149,17 @@ public class GraphConsoleView implements Disposable {
             consoleToolbarPanel.validate();
             initialized = true;
         }
+    }
+
+    private void selectTab(String name) {
+        for (TabInfo tab : consoleTabs.getTabs()) {
+            if (name.equals(tab.getText())) {
+                consoleTabs.select(tab, true);
+                return;
+            }
+        }
+
+        throw new IllegalArgumentException("No tab found with name: " + name);
     }
 
     private void createUIComponents() {
