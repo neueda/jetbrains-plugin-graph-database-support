@@ -71,7 +71,8 @@ public class FileUtil {
         if (file instanceof NewVirtualFile) {
             try (DataOutputStream os = QUERY_PARAMS_FILE_ATTRIBUTE.writeAttribute(file)) {
                 IOUtil.writeString(StringUtil.notNullize(params), os);
-            } catch (IOException e) {}
+            } catch (IOException e) {
+            }
         }
     }
 
