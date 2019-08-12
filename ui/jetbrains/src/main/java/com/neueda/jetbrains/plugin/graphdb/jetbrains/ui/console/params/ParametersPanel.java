@@ -120,7 +120,9 @@ public class ParametersPanel implements ParametersProvider {
     }
 
     private void setupFileSpecificEditor(Project project, VirtualFile cypherFile) {
-        if (project == null || cypherFile == null) return;
+        if (project == null || cypherFile == null) {
+            return;
+        }
         try {
             String params = FileUtil.getParams(cypherFile);
             LightVirtualFile lightVirtualFile = new LightVirtualFile("", JsonFileType.INSTANCE, params);
@@ -129,8 +131,9 @@ public class ParametersPanel implements ParametersProvider {
             VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileListener() {
                 @Override
                 public void contentsChanged(@NotNull VirtualFileEvent event) {
-                    if (event.getFile().equals(cypherFile) && document != null)
+                    if (event.getFile().equals(cypherFile) && document != null) {
                         FileUtil.setParams(cypherFile, document.getText());
+                    }
                 }
             });
             JLabel jLabel = new JLabel("<html>Parameters for data source <b>" +
@@ -139,7 +142,9 @@ public class ParametersPanel implements ParametersProvider {
             jLabel.setToolTipText("Enter parameters in JSON format. Will be applied to <b>" + getTabTitle(cypherFile) +
                     "</b> data source when executed");
             fileSpecificParamEditor.setHeaderComponent(jLabel);
-            if (document != null) setInitialContent(document);
+            if (document != null) {
+                setInitialContent(document);
+            }
             graphConsoleView.getFileSpecificParametersTab().add(fileSpecificParamEditor.getComponent(), BorderLayout.CENTER);
         } catch (Throwable e) {
             Throwables.throwIfUnchecked(e);

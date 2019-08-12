@@ -18,4 +18,4 @@ deploy:
     branch: master
     tags: true
 script:
-  - ./gradlew clean test
+  - ./gradlew clean check
