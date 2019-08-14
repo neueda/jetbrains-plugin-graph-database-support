@@ -3,7 +3,7 @@
     <name>Graph Database support</name>
     <!-- Should be automatically replaced by gradle build -->
     <version>9.9.9</version>
-    <vendor email="dmitry.vrublevsky@neueda.com" url="https://neueda.lv">Neueda R&amp;D</vendor>
+    <vendor email="roberts.luksa@neueda.com" url="https://technologies.neueda.com">Neueda Technologies</vendor>
 
     <description><![CDATA[
         <p>
