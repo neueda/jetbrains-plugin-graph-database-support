@@ -35,7 +35,7 @@ public class ObjectModel extends RootObjectAwareModel implements NoIdGraphEntity
 
     @Override
     public Optional<String> getText() {
-        return Optional.of(text);
+        return Optional.ofNullable(text);
     }
 
     @Override
