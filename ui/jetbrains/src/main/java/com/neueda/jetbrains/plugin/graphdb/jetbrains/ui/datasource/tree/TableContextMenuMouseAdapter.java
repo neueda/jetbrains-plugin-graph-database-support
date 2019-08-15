@@ -4,11 +4,15 @@ import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.ui.table.JBTable;
 import com.intellij.ui.treeStructure.Tree;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.model.ObjectModel;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Optional;
+
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper.cast;
 
 public class TableContextMenuMouseAdapter extends MouseAdapter {
 
@@ -23,16 +27,28 @@ public class TableContextMenuMouseAdapter extends MouseAdapter {
             int selectedColumn = table.columnAtPoint(e.getPoint());
 
             Object value = table.getModel().getValueAt(selectedRow, selectedColumn);
-            if (Tree.class.isAssignableFrom(value.getClass())) {
-                Tree tree = (Tree) value;
 
-                TreePath path = tree.getPathForLocation(e.getX(), e.getY());
-                DataContext dataContext = DataManager.getInstance()
-                        .getDataContext(table, e.getX(), e.getY());
+            DataContext dataContext = DataManager.getInstance()
+                    .getDataContext(table, e.getX(), e.getY());
 
-                contextMenuService.getContextMenu(path)
-                        .ifPresent(dto -> dto.showPopup(dataContext));
-            }
+            cast(value, Tree.class)
+                    .map(tree -> {
+                        TreePath path = tree.getPathForLocation(e.getX(), e.getY());
+                        return contextMenuService.getContextMenu(path);
+                    })
+                    .orElseGet(() -> {
+                        String columnName = table.getModel().getColumnName(selectedColumn);
+                        return new ObjectModel(trim(value), columnName, String.valueOf(value), null, value)
+                                .getContextMenu();
+                    })
+                    .ifPresent(c -> c.showPopup(dataContext));
         }
+    }
+
+    private Object trim(Object value) {
+        return Optional.ofNullable(value)
+                .flatMap(e -> cast(e, String.class))
+                .map(s -> s.replaceAll("^\"|\"$", ""))
+                .orElse(null);
     }
 }

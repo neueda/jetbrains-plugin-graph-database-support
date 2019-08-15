@@ -12,6 +12,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Optional;
 
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper.cast;
+
 public class TreeMouseAdapter extends MouseAdapter {
 
     private ContextMenuService contextMenuService = new ContextMenuService();
@@ -30,15 +32,6 @@ public class TreeMouseAdapter extends MouseAdapter {
             DataContext dataContext = DataManager.getInstance().getDataContext(tree);
             contextMenuService.getContextMenu(pathForLocation)
                     .ifPresent(dto -> dto.showPopup(dataContext));
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> Optional<T> cast(Object o, Class<T> clazz) {
-        if (clazz.isInstance(o)) {
-            return Optional.of((T) o);
-        } else {
-            return Optional.empty();
         }
     }
 }

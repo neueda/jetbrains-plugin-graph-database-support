@@ -7,17 +7,12 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphPath;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphRelationship;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModelApi;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.model.LabelsModel;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.model.ListModel;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.model.MapModel;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.model.NodeModel;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.model.ObjectModel;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.model.PropertiesModel;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.model.RelationshipModel;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.model.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import static java.lang.String.format;
 
@@ -161,5 +156,14 @@ public final class UiHelper {
 
     public static String representUiString(String value) {
             return format("\"%s\"", Objects.toString(value));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static  <T> Optional<T> cast(Object o, Class<T> clazz) {
+        if (clazz.isInstance(o)) {
+            return Optional.of((T) o);
+        } else {
+            return Optional.empty();
+        }
     }
 }
