@@ -27,9 +27,11 @@ public class SchemaProvider {
         return fontSchema;
     }
 
-    public static Schema provideFontSchemaWithBackground() {
+    public static Schema provideLabelFontSchema() {
         Schema schema = provideFontSchema();
-        schema.setDefault(VisualItem.FILLCOLOR, ColorLib.rgb(240, 230, 80));
+        schema.setDefault(VisualItem.FILLCOLOR, ColorLib.rgb(178, 178, 178));
+        Font font = FontLib.getFont(UIManager.getFont(UI_DEFAULT_FONT_KEY).getFontName(), FONT_SIZE - 2);
+        schema.setDefault(VisualItem.FONT, font);
 
         return schema;
     }

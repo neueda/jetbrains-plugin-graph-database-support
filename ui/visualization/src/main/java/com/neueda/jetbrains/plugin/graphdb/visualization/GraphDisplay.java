@@ -35,7 +35,7 @@ import java.util.Map;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphColumns.*;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.GraphGroups.*;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.settings.RendererProvider.*;
-import static prefuse.Constants.*;
+import static prefuse.Constants.SHAPE_ELLIPSE;
 
 public class GraphDisplay extends Display {
 
@@ -50,6 +50,7 @@ public class GraphDisplay extends Display {
     private Map<String, GraphNode> graphNodeMap = new HashMap<>();
     private Map<String, GraphRelationship> graphRelationshipMap = new HashMap<>();
     private CustomNeighborHighlightControl highlightControl;
+    private DisplayStatus status = new DisplayStatus();
 
     public GraphDisplay(LookAndFeelService lookAndFeel) {
         super(new Visualization());
@@ -70,7 +71,7 @@ public class GraphDisplay extends Display {
         m_vis.setValue(NODES, null, VisualItem.SHAPE, SHAPE_ELLIPSE);
 
         m_vis.addDecorators(NODE_LABEL, NODES, SchemaProvider.provideFontSchema());
-//        m_vis.addDecorators(EDGE_LABEL, EDGES, SchemaProvider.provideFontSchemaWithBackground());
+        m_vis.addDecorators(EDGE_LABEL, EDGES, SchemaProvider.provideLabelFontSchema());
 
         m_vis.setRendererFactory(setupRenderer());
 
@@ -87,6 +88,7 @@ public class GraphDisplay extends Display {
         addControlListener(new PanControl());
         highlightControl = new CustomNeighborHighlightControl();
         addControlListener(highlightControl);
+        addControlListener(status);
     }
 
     public void clearGraph() {
@@ -119,7 +121,11 @@ public class GraphDisplay extends Display {
 
             Edge edge = graph.addEdge(nodeMap.get(start), nodeMap.get(end));
             edge.set(ID, graphRelationship.getId());
-            edge.set(TITLE, graphRelationship.getId());
+
+            if (!graphRelationship.getTypes().isEmpty()) {
+                String types = String.join(",", graphRelationship.getTypes());
+                edge.set(TITLE, types);
+            }
             graphRelationshipMap.put(graphRelationship.getId(), graphRelationship);
         }
     }
@@ -127,7 +133,7 @@ public class GraphDisplay extends Display {
     private RendererFactory setupRenderer() {
         DefaultRendererFactory rendererFactory = new DefaultRendererFactory(nodeRenderer(), edgeRenderer());
         rendererFactory.add(new InGroupPredicate(NODE_LABEL), labelRenderer());
-        rendererFactory.add(new InGroupPredicate(EDGE_LABEL), edgeLabelRenderer());
+        rendererFactory.add(new InGroupPredicate(EDGE_LABEL), edgeLabelRenderer(status));
 
         return rendererFactory;
     }

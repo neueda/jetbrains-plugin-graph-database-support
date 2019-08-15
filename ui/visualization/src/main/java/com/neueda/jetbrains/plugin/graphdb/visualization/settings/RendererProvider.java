@@ -1,7 +1,9 @@
 package com.neueda.jetbrains.plugin.graphdb.visualization.settings;
 
+import com.neueda.jetbrains.plugin.graphdb.visualization.DisplayStatus;
 import com.neueda.jetbrains.plugin.graphdb.visualization.constants.VisualizationParameters;
 import com.neueda.jetbrains.plugin.graphdb.visualization.renderers.CustomEdgeRenderer;
+import com.neueda.jetbrains.plugin.graphdb.visualization.renderers.LabelRendererAngled;
 import prefuse.render.EdgeRenderer;
 import prefuse.render.LabelRenderer;
 import prefuse.render.ShapeRenderer;
@@ -21,11 +23,8 @@ public class RendererProvider {
         return labelRenderer;
     }
 
-    public static LabelRenderer edgeLabelRenderer() {
-        LabelRenderer labelRenderer = new LabelRenderer(TITLE);
-        labelRenderer.setMaxTextWidth(NODE_DIAMETER - TEXT_OVERLAP);
-
-        return labelRenderer;
+    public static LabelRenderer edgeLabelRenderer(DisplayStatus status) {
+        return new LabelRendererAngled(TITLE, status);
     }
 
     public static ShapeRenderer nodeRenderer() {

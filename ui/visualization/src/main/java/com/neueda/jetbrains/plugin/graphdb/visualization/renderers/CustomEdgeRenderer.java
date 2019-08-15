@@ -16,6 +16,7 @@ import java.util.Spliterator;
 
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.VisualizationParameters.EDGE_THICKNESS;
 import static com.neueda.jetbrains.plugin.graphdb.visualization.constants.VisualizationParameters.NODE_DIAMETER;
+import static com.neueda.jetbrains.plugin.graphdb.visualization.util.DisplayUtil.cast;
 import static java.lang.Math.*;
 import static java.util.Spliterators.spliteratorUnknownSize;
 import static java.util.stream.Collectors.toList;
@@ -131,15 +132,6 @@ public class CustomEdgeRenderer extends EdgeRenderer {
             double halfWidth = width / 2.0;
             return s.intersects(p.getX() - halfWidth, p.getY() - halfWidth, width, width)
                     || (m_curArrow != null && m_curArrow.contains(p.getX(), p.getY()));
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> Optional<T> cast(Object o, Class<T> clazz) {
-        if (clazz.isInstance(o)) {
-            return Optional.of((T) o);
-        } else {
-            return Optional.empty();
         }
     }
 }

@@ -101,4 +101,13 @@ public class DisplayUtil {
     private static String truncate(String text, int length) {
         return text.length() > length ? text.substring(0, length - 1) + "..." : text;
     }
+
+    @SuppressWarnings("unchecked")
+    public static  <T> Optional<T> cast(Object o, Class<T> clazz) {
+        if (clazz.isInstance(o)) {
+            return Optional.of((T) o);
+        } else {
+            return Optional.empty();
+        }
+    }
 }
