@@ -1,7 +1,7 @@
 plugins {
     id 'idea'
     id 'java'
-    id "org.jetbrains.intellij" version "0.4.8"
+    id 'org.jetbrains.intellij' version '0.4.10'
     id 'net.researchgate.release' version '2.8.0'
 }
 
@@ -36,6 +36,7 @@ allprojects {
     intellij {
         version intellijSdkVersion
         instrumentCode = true
+        plugins 'java'
     }
 
     checkstyle {

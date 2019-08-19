@@ -3,6 +3,7 @@ apply plugin: "org.jetbrains.intellij"
 intellij {
     version intellijSdkVersion
     instrumentCode = true
+    plugins 'java'
 }
 
 sourceSets {

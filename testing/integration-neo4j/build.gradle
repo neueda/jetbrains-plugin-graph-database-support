@@ -2,6 +2,7 @@ apply plugin: "org.jetbrains.intellij"
 
 intellij {
     version intellijSdkVersion
+    plugins 'java'
 }
 
 dependencies {
