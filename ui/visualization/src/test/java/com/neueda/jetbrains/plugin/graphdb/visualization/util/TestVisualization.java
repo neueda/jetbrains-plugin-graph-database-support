@@ -278,6 +278,11 @@ public class TestVisualization {
             public Color getTextColor() {
                 return JBColor.WHITE;
             }
+
+            @Override
+            public boolean isGraphViewZoomInverted() {
+                return true;
+            }
         };
     }
 

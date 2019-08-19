@@ -50,9 +50,12 @@ public class GraphDisplay extends Display {
     private Map<String, GraphNode> graphNodeMap = new HashMap<>();
     private Map<String, GraphRelationship> graphRelationshipMap = new HashMap<>();
     private CustomNeighborHighlightControl highlightControl;
+    private WheelZoomControl zoomControl;
+    private LookAndFeelService lookAndFeel;
 
     public GraphDisplay(LookAndFeelService lookAndFeel) {
         super(new Visualization());
+        this.lookAndFeel = lookAndFeel;
 
         if (UIUtil.isUnderDarcula()) {
             setBackground(lookAndFeel.getBackgroundColor().darker());
@@ -82,7 +85,8 @@ public class GraphDisplay extends Display {
         setHighQuality(true);
 
         addControlListener(new DragControl());
-        addControlListener(new WheelZoomControl());
+        zoomControl = new WheelZoomControl(lookAndFeel.isGraphViewZoomInverted(), lookAndFeel.isGraphViewZoomInverted());
+        addControlListener(zoomControl);
         addControlListener(new ZoomToFitControl());
         addControlListener(new PanControl());
         highlightControl = new CustomNeighborHighlightControl();
@@ -144,5 +148,12 @@ public class GraphDisplay extends Display {
 
     public void zoomAndPanToFit() {
         PrefuseUtil.zoomAndPanToFit(m_vis, this);
+    }
+
+    public void updateSettings() {
+        removeControlListener(zoomControl);
+        zoomControl = new WheelZoomControl(lookAndFeel.isGraphViewZoomInverted(), lookAndFeel.isGraphViewZoomInverted());
+        addControlListener(zoomControl);
+
     }
 }

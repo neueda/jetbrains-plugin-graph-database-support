@@ -12,6 +12,7 @@ public class SettingsComponentImpl implements SettingsComponent {
     private static final String USE_FILE_SPECIFIC_PARAMS_KEY = "GraphDbSupport.UseFileSpecificParams";
     private static final String USER_ID = "GraphDbSupport.UserId";
     private static final String KNOWN_PLUGIN_VERSION = "GraphDbSupport.KnownPluginVersion";
+    private static final String GRAPH_VIEW_INVERT_ZOOM = "GraphDbSupport.GraphViewInvertZoom";
 
     @NotNull
     @Override
@@ -45,6 +46,16 @@ public class SettingsComponentImpl implements SettingsComponent {
     public void enableAnalytics(boolean state) {
         Analytics.forceEvent("settings", state ? "enableAnalytics" : "disableAnalytics");
         properties().setValue(ANALYTICS_ENABLED_KEY, state, true);
+    }
+
+    @Override
+    public boolean isGraphViewZoomInverted() {
+        return properties().getBoolean(GRAPH_VIEW_INVERT_ZOOM, true);
+    }
+
+    @Override
+    public void invertGraphViewZoom(boolean state) {
+        properties().setValue(GRAPH_VIEW_INVERT_ZOOM, state, true);
     }
 
     @Override

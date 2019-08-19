@@ -2,6 +2,7 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.services;
 
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.UIUtil;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.settings.SettingsComponent;
 import com.neueda.jetbrains.plugin.graphdb.visualization.services.LookAndFeelService;
 
 import javax.swing.*;
@@ -52,6 +53,11 @@ public class IdeaLookAndFeelService implements LookAndFeelService {
     @Override
     public Color getTextColor() {
         return UIManager.getColor("text");
+    }
+
+    @Override
+    public boolean isGraphViewZoomInverted() {
+        return SettingsComponent.getInstance().isGraphViewZoomInverted();
     }
 
 }
