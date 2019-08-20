@@ -14,4 +14,6 @@ public interface LookAndFeelService {
     Color getEdgeFillColor();
 
     Color getTextColor();
+
+    boolean isGraphViewZoomInverted();
 }

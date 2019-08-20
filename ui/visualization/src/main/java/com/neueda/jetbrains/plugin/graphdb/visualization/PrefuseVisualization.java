@@ -61,4 +61,9 @@ public class PrefuseVisualization implements VisualizationApi {
     public void resetPan() {
         display.zoomAndPanToFit();
     }
+
+    @Override
+    public void updateSettings() {
+        display.updateSettings();
+    }
 }

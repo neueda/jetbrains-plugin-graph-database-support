@@ -20,6 +20,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQuer
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.PluginSettingsUpdated;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeMouseAdapter;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.helpers.UiHelper;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.renderes.tree.PropertyTreeCellRenderer;
@@ -98,6 +99,8 @@ public class GraphPanel {
             public void executionCompleted(ExecuteQueryPayload payload) {
             }
         });
+
+        messageBus.connect().subscribe(PluginSettingsUpdated.TOPIC, visualization::updateSettings);
 
         // Tooltips
         balloonBuilder();

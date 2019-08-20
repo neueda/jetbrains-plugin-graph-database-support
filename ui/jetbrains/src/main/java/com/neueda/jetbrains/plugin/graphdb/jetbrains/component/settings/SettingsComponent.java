@@ -15,6 +15,10 @@ public interface SettingsComponent extends ApplicationComponent {
 
     void enableAnalytics(boolean state);
 
+    boolean isGraphViewZoomInverted();
+
+    void invertGraphViewZoom(boolean state);
+
     String getKnownPluginVersion();
 
     void setKnownPluginVersion(String version);
