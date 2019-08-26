@@ -1,10 +1,12 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.component.linemarker;
 
-import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.icons.AllIcons;
+import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.ex.ActionUtil;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.psi.PsiElement;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryAction;
@@ -13,8 +15,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
-import static java.util.Objects.isNull;
+import static java.util.Objects.*;
 
 public class CypherLineMarkerProvider implements LineMarkerProvider {
 
@@ -38,9 +44,10 @@ public class CypherLineMarkerProvider implements LineMarkerProvider {
             return new LineMarkerInfo<PsiElement>(element,
                     element.getTextRange(),
                     AllIcons.Actions.Execute,
-                    Pass.LINE_MARKERS,
                     element1 -> "Execute Query",
-                    null,
+                    (mouseEvent, psiElement) ->
+                            getDataContext().ifPresent(c ->
+                                    ActionUtil.invokeAction(new ExecuteQueryAction(queryElement), c, "", mouseEvent, null)),
                     GutterIconRenderer.Alignment.CENTER) {
                 @Override
                 public GutterIconRenderer createGutterRenderer() {
@@ -59,6 +66,18 @@ public class CypherLineMarkerProvider implements LineMarkerProvider {
             };
         }
         return null;
+    }
+
+    private Optional<DataContext> getDataContext() {
+        try {
+            return Optional.ofNullable(
+                    DataManager.getInstance()
+                            .getDataContextFromFocusAsync()
+                            .blockingGet(100, TimeUnit.MILLISECONDS));
+        } catch (TimeoutException | ExecutionException e) {
+            return Optional.empty();
+        }
+
     }
 
     @Override
