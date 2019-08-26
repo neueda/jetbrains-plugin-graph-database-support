@@ -70,7 +70,7 @@ Gradle is used as build system.
 Please report any bugs or feature request by creating [new issue on Github](https://github.com/neueda/jetbrains-plugin-graph-database-support/issues/new).
 
 You can easily reach us in case you have any questions or just want to chat about graph databases:
-
+- [Product Support](mailto:product.support@neueda.com) 
 - Dmitry Vrublevsky ([@FylmTM](https://twitter.com/FylmTM))
 - Neueda Technologies ([@NeuedaDev](https://twitter.com/NeuedaDev))
 
