@@ -18,10 +18,23 @@ public class DataSourceActionGroup extends ActionGroup {
     @NotNull
     @Override
     public AnAction[] getChildren(@Nullable AnActionEvent e) {
-        return new AnAction[]{
-                new DataSourceAction("Open editor", "", null, dataSourceApi),
-                new DataSourceOpenBrowserAction("Open in browser", "", null, dataSourceApi),
-                new CreateNodeAction("Create new node", dataSourceApi)
-        };
+        switch (dataSourceApi.getDataSourceType()) {
+            case NEO4J_BOLT:
+                return new AnAction[]{
+                        new DataSourceAction("Open editor", "", null, dataSourceApi),
+                        new DataSourceOpenBrowserAction("Open in browser", "", null, dataSourceApi),
+                        new CreateNodeAction("Create new node", dataSourceApi)
+                };
+            case OPENCYPHER_GREMLIN:
+                return new AnAction[]{
+                        new DataSourceAction("Open editor", "", null, dataSourceApi),
+                        new CreateNodeAction("Create new node", dataSourceApi)
+                };
+            default:
+                throw new IllegalStateException("Unknown data source type encountered: " + dataSourceApi.getDataSourceType());
+        }
+
+
+
     }
 }

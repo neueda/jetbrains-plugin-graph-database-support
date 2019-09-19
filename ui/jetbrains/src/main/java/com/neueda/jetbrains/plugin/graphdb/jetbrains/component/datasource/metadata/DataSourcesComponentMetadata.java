@@ -1,25 +1,28 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata;
 
+import static java.util.Collections.emptyMap;
+import static java.util.stream.Collectors.toList;
+
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
+import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphMetadata;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultColumn;
+import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.OpenCypherGremlinDatabase;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DatabaseManagerService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.MetadataRetrieveEvent;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataContainer;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
+import org.apache.tinkerpop.gremlin.driver.Result;
+import org.jetbrains.annotations.NotNull;
 
 public class DataSourcesComponentMetadata implements ProjectComponent {
 
@@ -33,6 +36,12 @@ public class DataSourcesComponentMetadata implements ProjectComponent {
         this.cypherMetadataProviderService = ServiceManager.getService(project, CypherMetadataProviderService.class);
     }
 
+    public DataSourcesComponentMetadata(MessageBus messageBus, DatabaseManagerService databaseManager, CypherMetadataProviderService cypherMetadataProviderService) {
+        this.messageBus = messageBus;
+        this.databaseManager = databaseManager;
+        this.cypherMetadataProviderService = cypherMetadataProviderService;
+    }
+
     public Optional<DataSourceMetadata> getMetadata(DataSourceApi dataSource) {
         MetadataRetrieveEvent metadataRetrieveEvent = messageBus.syncPublisher(MetadataRetrieveEvent.METADATA_RETRIEVE_EVENT);
 
@@ -41,6 +50,16 @@ public class DataSourcesComponentMetadata implements ProjectComponent {
             case NEO4J_BOLT:
                 try {
                     DataSourceMetadata metadata = getNeo4jBoltMetadata(dataSource);
+                    updateNeo4jBoltMetadata(dataSource, (Neo4jBoltCypherDataSourceMetadata) metadata);
+                    metadataRetrieveEvent.metadataRefreshSucceed(dataSource);
+                    return Optional.of(metadata);
+                } catch (Exception exception) {
+                    metadataRetrieveEvent.metadataRefreshFailed(dataSource, exception);
+                }
+                break;
+            case OPENCYPHER_GREMLIN:
+                try {
+                    DataSourceMetadata metadata = getOpenCypherGremlinMetadata(dataSource);
                     updateNeo4jBoltMetadata(dataSource, (Neo4jBoltCypherDataSourceMetadata) metadata);
                     metadataRetrieveEvent.metadataRefreshSucceed(dataSource);
                     return Optional.of(metadata);
@@ -94,6 +113,31 @@ public class DataSourcesComponentMetadata implements ProjectComponent {
         }
 
         return metadata;
+    }
+
+    private DataSourceMetadata getOpenCypherGremlinMetadata(DataSourceApi dataSource) {
+        GraphDatabaseApi db = databaseManager.getDatabaseFor(dataSource);
+        Neo4jBoltCypherDataSourceMetadata result = new Neo4jBoltCypherDataSourceMetadata();
+
+        GraphMetadata metadata = db.metadata();
+
+        for (Map.Entry<String, Number> entry : metadata.labels().entrySet()) {
+            result.addLabel(new Neo4jLabelMetadata(entry.getKey(), entry.getValue().longValue()));
+        }
+
+        for (Map.Entry<String, Number> entry : metadata.relationships().entrySet()) {
+            result.addRelationshipType(new Neo4jRelationshipTypeMetadata(entry.getKey(), entry.getValue().longValue()));
+        }
+
+        for (String vertexProperty : metadata.vertexProperties()) {
+            result.addPropertyKey(vertexProperty);
+        }
+
+        for (String edgeProperty : metadata.edgeProperties()) {
+            result.addPropertyKey(edgeProperty);
+        }
+
+        return result;
     }
 
     private List<String> extractRelationshipTypes(GraphQueryResult relationshipQueryResult) {

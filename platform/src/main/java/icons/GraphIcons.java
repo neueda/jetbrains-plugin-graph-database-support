@@ -10,6 +10,7 @@ public final class GraphIcons {
     public static final class Database {
         public static final Icon UNKNOWN = AllIcons.FileTypes.Unknown;
         public static final Icon NEO4J = getIcon("/graphdb/icons/database/neo4j.svg");
+        public static final Icon OPENCYPHER = getIcon("/graphdb/icons/language/cypher.svg");
     }
 
     public static final class Language {

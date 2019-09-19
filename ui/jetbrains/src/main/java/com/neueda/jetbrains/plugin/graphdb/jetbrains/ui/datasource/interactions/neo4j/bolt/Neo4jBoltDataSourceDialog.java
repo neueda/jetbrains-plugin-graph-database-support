@@ -19,6 +19,8 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DatabaseManagerService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceDialog;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,11 +37,7 @@ import java.util.Map;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Validation.validation;
 
 public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
-
-    public static final int THICKNESS = 10;
-    public static final int HEIGHT = 150;
     private final DataSourcesComponent dataSourcesComponent;
-    private final DatabaseManagerService databaseManager;
     private DataSourceApi dataSourceToEdit;
 
     private Data data;
@@ -58,59 +56,9 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
     }
 
     public Neo4jBoltDataSourceDialog(Project project, DataSourcesView dataSourcesView) {
-        super(project);
-        Disposer.register(project, myDisposable);
-        init();
-
-        databaseManager = ServiceManager.getService(DatabaseManagerService.class);
+        super(project, dataSourcesView);
         dataSourcesComponent = dataSourcesView.getComponent();
-
-        testConnectionButton.addActionListener(e -> {
-            JPanel popupPanel = new JPanel(new BorderLayout());
-            popupPanel.setBorder(JBUI.Borders.empty(THICKNESS));
-
-            ValidationInfo validationInfo = doValidate();
-            if (validationInfo != null) {
-                JLabel connectionFailed = new JLabel("Connection failed: " + validationInfo.message, AllIcons.Process.State.RedExcl, JLabel.LEFT);
-                popupPanel.add(connectionFailed, BorderLayout.CENTER);
-            } else {
-                try {
-                    DataSourceApi dataSource = constructDataSource();
-                    GraphDatabaseApi db = databaseManager.getDatabaseFor(dataSource);
-                    GraphQueryResult result = db.execute("RETURN 'ok'");
-
-                    Object value = result.getRows().get(0).getValue(result.getColumns().get(0));
-                    if (value.equals("ok")) {
-                        JLabel connectionSuccessful = new JLabel("Connection successful!", AllIcons.Process.State.GreenOK, JLabel.LEFT);
-                        popupPanel.add(connectionSuccessful, BorderLayout.CENTER);
-                    } else {
-                        throw new RuntimeException("Unexpected test query output: " + value);
-                    }
-                } catch (Exception exception) {
-                    JLabel connectionFailed = new JLabel("Connection failed: " + exception.getMessage(), AllIcons.Process.State.RedExcl, JLabel.LEFT);
-
-                    JTextArea exceptionCauses = new JTextArea();
-                    exceptionCauses.setLineWrap(true);
-
-                    Throwable cause = exception.getCause();
-                    while (cause != null) {
-                        exceptionCauses.append(cause.getMessage() + "\n");
-                        cause = cause.getCause();
-                    }
-
-                    JBScrollPane scrollPane = new JBScrollPane(exceptionCauses);
-                    scrollPane.setPreferredSize(new Dimension(-1, HEIGHT));
-                    popupPanel.add(connectionFailed, BorderLayout.CENTER);
-                    popupPanel.add(scrollPane, BorderLayout.SOUTH);
-                }
-            }
-
-            JBPopupFactory.getInstance()
-                    .createComponentPopupBuilder(popupPanel, this.getPreferredFocusedComponent())
-                    .setTitle("Test connection")
-                    .createPopup()
-                    .showInCenterOf(this.getContentPanel());
-        });
+        testConnectionButton.addActionListener(e -> this.validationPopup());
     }
 
     @Nullable

@@ -5,6 +5,7 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultCo
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultRow;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
 
     @Override
     public List<Map<String, String>> getMetadata(String metadataKey) {
-        return dataReceiver.get(metadataKey);
+        return dataReceiver.getOrDefault(metadataKey, new ArrayList<>());
     }
 
     @Override
@@ -91,6 +92,12 @@ public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
 
     public void addRelationshipType(Neo4jRelationshipTypeMetadata relationshipTypeMetadata) {
         relationshipTypes.add(relationshipTypeMetadata);
+    }
+
+    public void addPropertyKey(String key) {
+        List<Map<String, String>> propertyKeys = getMetadata(PROPERTY_KEYS);
+        propertyKeys.add(Collections.singletonMap("propertyKey", key));
+        dataReceiver.put(PROPERTY_KEYS, propertyKeys);
     }
 
     public List<Neo4jRelationshipTypeMetadata> getRelationshipTypes() {

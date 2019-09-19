@@ -1,6 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt;
 
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
+import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphMetadata;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.query.Neo4jBoltQueryResult;
 import org.neo4j.driver.v1.AuthToken;
@@ -78,19 +79,7 @@ public class Neo4jBoltDatabase implements GraphDatabaseApi {
     }
 
     @Override
-    public GraphQueryResult executeBatch(List<String> queries, Map<String, Object> statementParameters) {
-        try (Driver driver = GraphDatabase.driver(url, auth);
-             Session session = driver.session()) {
-
-            Neo4jBoltBuffer buffer = new Neo4jBoltBuffer();
-
-            long startTime = System.currentTimeMillis();
-            for (String query : queries) {
-                session.run(query, statementParameters).consume();
-            }
-            long endTime = System.currentTimeMillis();
-
-            return new Neo4jBoltQueryResult(endTime - startTime, buffer);
-        }
+    public GraphMetadata metadata() {
+        throw new IllegalStateException("Not implemented");
     }
 }
