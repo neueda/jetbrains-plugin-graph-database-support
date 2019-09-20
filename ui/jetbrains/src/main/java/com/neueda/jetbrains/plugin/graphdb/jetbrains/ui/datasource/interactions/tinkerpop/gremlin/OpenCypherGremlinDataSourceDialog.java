@@ -68,21 +68,6 @@ public class OpenCypherGremlinDataSourceDialog extends DataSourceDialog {
     }
 
     @NotNull
-    private FocusListener validationListener() {
-        return new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                validate();
-            }
-        };
-    }
-
-    @NotNull
     @Override
     protected List<ValidationInfo> doValidateAll() {
         List<ValidationInfo> validations = new ArrayList<>();

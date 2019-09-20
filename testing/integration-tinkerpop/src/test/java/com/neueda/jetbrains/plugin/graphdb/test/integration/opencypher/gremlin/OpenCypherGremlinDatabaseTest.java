@@ -2,12 +2,15 @@ package com.neueda.jetbrains.plugin.graphdb.test.integration.opencypher.gremlin;
 
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphEntity;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphMetadata;
+import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.OpenCypherGremlinConfiguration;
 import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.OpenCypherGremlinDatabase;
 import org.apache.tinkerpop.gremlin.server.GremlinServer;
 import org.apache.tinkerpop.gremlin.server.Settings;
+import org.assertj.core.api.iterable.ThrowingExtractor;
+import org.assertj.core.groups.Tuple;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -53,7 +56,6 @@ public class OpenCypherGremlinDatabaseTest {
                 .extracting("count")
                 .containsExactly(6L);
     }
-
 
     @Test
     public void parameterQuery() throws Exception {
@@ -131,6 +133,45 @@ public class OpenCypherGremlinDatabaseTest {
 
         assertThat(metadata.vertexProperties()).containsExactlyInAnyOrder("name", "age", "lang");
     }
+
+    @Test
+    public void returnPath() throws Exception {
+        GraphQueryResult results = database.execute("MATCH p=(n {name: 'peter'})-[r]->(m) RETURN p");
+
+        Tuple peter = tuple(true, "6", singletonList("person"), "peter");
+        Tuple lop = tuple(true, "3", singletonList("software"), "lop");
+        Tuple peter_created_lop = tuple(false, "12", singletonList("created"), null);
+
+        assertThat(results.getNodes())
+                .extracting(extractElement())
+                .containsExactly(
+                        peter,
+                        lop
+                );
+
+        assertThat(results.getRelationships())
+                .extracting(extractElement())
+                .containsExactly(
+                        peter_created_lop
+                );
+
+        assertThat(extractValues(results))
+                .extracting("p")
+                .flatExtracting("components")
+                .extracting(extractElement())
+                .containsExactly(peter, peter_created_lop, lop);
+    }
+
+    private ThrowingExtractor<Object, Tuple, RuntimeException> extractElement() {
+        return o -> {
+            if (!(o instanceof GraphEntity)) {
+                throw new RuntimeException("Expected GraphEntity got: "+o);
+            }
+            GraphEntity e = (GraphEntity) o;
+            return tuple(e instanceof GraphNode, e.getId(), e.getTypes(), e.getPropertyContainer().getProperties().get("name"));
+        };
+    }
+
 
     private static GremlinServer setupGremlinServer() throws Exception {
         Settings serverSettings = getServerSettings();
