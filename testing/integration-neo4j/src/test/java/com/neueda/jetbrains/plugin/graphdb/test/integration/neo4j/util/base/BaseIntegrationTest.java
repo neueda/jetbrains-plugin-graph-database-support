@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.TaskExecutor.SYNC_TASK_EXECUTION;
+
 public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCase {
 
     private static final String NEO4J30 = "neo4j30";
@@ -36,6 +38,8 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
 
     @Override
     public void setUp() throws Exception {
+        System.setProperty(SYNC_TASK_EXECUTION, "true");
+
         super.setUp();
         components = new Components();
         dataSources = new DataSources();

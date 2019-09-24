@@ -20,17 +20,24 @@ import org.junit.Test;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.*;
-import static java.util.Arrays.*;
-import static java.util.Collections.*;
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.PROPERTY_KEYS;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.TaskExecutor.SYNC_TASK_EXECUTION;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonMap;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class GremlinMetadataTest {
     @Test
     @SuppressWarnings("unchecked")
-    public void getMetadata() {
+    public void getMetadata() throws ExecutionException, InterruptedException {
+        System.setProperty(SYNC_TASK_EXECUTION, "true");
+
         DataSourceV1 dataSource = new DataSourceV1(UUID.randomUUID().toString(), "test", DataSourceType.OPENCYPHER_GREMLIN, emptyMap());
         CypherMetadataContainer container = new CypherMetadataContainer();
 
@@ -48,7 +55,7 @@ public class GremlinMetadataTest {
 
         DataSourcesComponentMetadata componentMetadata = new DataSourcesComponentMetadata(messageBusMock, databaseManagerMock, containerMock);
 
-        Optional<DataSourceMetadata> result = componentMetadata.getMetadata(dataSource);
+        Optional<DataSourceMetadata> result = componentMetadata.getMetadata(dataSource).get();
 
         assertThat(result).isPresent();
         assertThat(result.get().getMetadata(PROPERTY_KEYS))

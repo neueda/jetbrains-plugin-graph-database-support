@@ -1,6 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata;
 
 import com.intellij.ui.treeStructure.PatchedDefaultMutableTreeNode;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourceMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourcesComponentMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata;
@@ -10,13 +11,32 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Metadata
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.RelationshipTypeTreeNodeModel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModelApi;
 import icons.GraphIcons;
-
-import javax.swing.tree.MutableTreeNode;
-import java.util.List;
-import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.*;
+import javax.swing.tree.MutableTreeNode;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
+
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType.NEO4J_BOLT;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType.OPENCYPHER_GREMLIN;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.CONSTRAINT;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.CONSTRAINTS;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.INDEX;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.INDEXES;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.LABEL;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.LABELS;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.PROPERTY_KEY;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.PROPERTY_KEYS;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.RELATIONSHIP;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.RELATIONSHIPS;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.STORED_PROCEDURE;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.STORED_PROCEDURES;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.USER_FUNCTION;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType.USER_FUNCTIONS;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public class DataSourceMetadataUi {
 
@@ -30,24 +50,25 @@ public class DataSourceMetadataUi {
 
     private final DataSourcesComponentMetadata dataSourcesComponent;
 
+    private final Map<DataSourceType, BiFunction<PatchedDefaultMutableTreeNode, Neo4jBoltCypherDataSourceMetadata, Boolean>> handlers = new HashMap<>();
+
     public DataSourceMetadataUi(DataSourcesComponentMetadata dataSourcesComponent) {
         this.dataSourcesComponent = dataSourcesComponent;
+
+        handlers.put(NEO4J_BOLT, this::updateNeo4jBoltCypherMetadataUi);
+        handlers.put(OPENCYPHER_GREMLIN, this::updateOpenCypherGremlinMetadataUi);
     }
 
-    public boolean updateDataSourceMetadataUi(PatchedDefaultMutableTreeNode node, DataSourceApi nodeDataSource) {
-        switch (nodeDataSource.getDataSourceType()) {
-            case NEO4J_BOLT:
-                return dataSourcesComponent.getMetadata(nodeDataSource)
-                    .map(genericMetadata -> (Neo4jBoltCypherDataSourceMetadata) genericMetadata)
-                    .map(neo4jMetadata -> updateNeo4jBoltCypherMetadataUi(node, neo4jMetadata))
-                    .orElse(false);
-            case OPENCYPHER_GREMLIN:
-                return dataSourcesComponent.getMetadata(nodeDataSource)
-                    .map(genericMetadata -> (Neo4jBoltCypherDataSourceMetadata) genericMetadata)
-                    .map(neo4jMetadata -> updateOpenCypherGremlinMetadataUi(node, neo4jMetadata))
-                    .orElse(false);
-            default:
-                return false;
+    public CompletableFuture<Boolean> updateDataSourceMetadataUi(PatchedDefaultMutableTreeNode node, DataSourceApi nodeDataSource) {
+        DataSourceType sourceType = nodeDataSource.getDataSourceType();
+        if (handlers.containsKey(sourceType)) {
+            return dataSourcesComponent.getMetadata(nodeDataSource)
+                    .thenApply((data) ->
+                            data.map(genericMetadata -> (Neo4jBoltCypherDataSourceMetadata) genericMetadata)
+                                    .map(neo4jMetadata -> handlers.get(sourceType).apply(node, neo4jMetadata))
+                                    .orElse(false));
+        } else {
+            return completedFuture(false);
         }
     }
 

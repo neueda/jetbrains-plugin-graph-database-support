@@ -3,7 +3,6 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.ActionToolbarPosition;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.ToolbarDecorator;
@@ -16,11 +15,13 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSo
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourcesComponentMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.actions.RefreshDataSourcesAction;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceInteractions;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.DataSourceMetadataUi;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.*;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.DataSourceTreeNodeModel;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.GraphColoredTreeCellRenderer;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.RootTreeNodeModel;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeMouseAdapter;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModelApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.FileUtil;
-import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -30,6 +31,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 public class DataSourcesView implements Disposable {
 
@@ -37,7 +39,6 @@ public class DataSourcesView implements Disposable {
 
     private DataSourcesComponent component;
     private DataSourcesComponentMetadata componentMetadata;
-    private DataSourceInteractions interactions;
     private PatchedDefaultMutableTreeNode treeRoot;
     private DefaultTreeModel treeModel;
 
@@ -45,7 +46,6 @@ public class DataSourcesView implements Disposable {
     private JPanel treePanel;
     private Tree dataSourceTree;
     private ToolbarDecorator decorator;
-    private CypherMetadataProviderService cypherMetadataProviderService;
     private DataSourceMetadataUi dataSourceMetadataUi;
 
     public DataSourcesView() {
@@ -60,7 +60,6 @@ public class DataSourcesView implements Disposable {
 
             component = project.getComponent(DataSourcesComponent.class);
             componentMetadata = project.getComponent(DataSourcesComponentMetadata.class);
-            cypherMetadataProviderService = ServiceManager.getService(project, CypherMetadataProviderService.class);
             dataSourceMetadataUi = new DataSourceMetadataUi(componentMetadata);
             treeRoot = new PatchedDefaultMutableTreeNode(new RootTreeNodeModel());
             treeModel = new DefaultTreeModel(treeRoot, false);
@@ -69,8 +68,6 @@ public class DataSourcesView implements Disposable {
 
             configureDataSourceTree();
             decorateDataSourceTree();
-
-            interactions = new DataSourceInteractions(project, this);
 
             replaceTreeWithDecorated();
             showDataSources();
@@ -131,19 +128,17 @@ public class DataSourcesView implements Disposable {
 
     public void refreshDataSourcesMetadata() {
         Enumeration children = treeRoot.children();
-        boolean isRefreshed = false;
         while (children.hasMoreElements()) {
-            if (refreshDataSourceMetadata((PatchedDefaultMutableTreeNode) children.nextElement())) {
-                isRefreshed = true;
-            }
-        }
-
-        if (isRefreshed) {
-            treeModel.reload();
+            refreshDataSourceMetadata((PatchedDefaultMutableTreeNode) children.nextElement())
+                    .thenAccept((isRefreshed) -> {
+                        if (isRefreshed) {
+                            treeModel.reload();
+                        }
+                    });
         }
     }
 
-    public boolean refreshDataSourceMetadata(PatchedDefaultMutableTreeNode treeNode) {
+    public CompletableFuture<Boolean> refreshDataSourceMetadata(PatchedDefaultMutableTreeNode treeNode) {
         TreeNodeModelApi userObject = (TreeNodeModelApi) treeNode.getUserObject();
         DataSourceApi nodeDataSource = userObject.getDataSourceApi();
         Analytics.event(nodeDataSource, "refreshMetadata");

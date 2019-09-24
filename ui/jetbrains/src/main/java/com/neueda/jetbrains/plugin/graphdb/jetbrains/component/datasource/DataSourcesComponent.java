@@ -32,7 +32,7 @@ public class DataSourcesComponent implements ProjectComponent, PersistentStateCo
     @Override
     public void loadState(DataSourcesComponentState state) {
         this.state = state;
-        refreshAllMetadata();
+        refreshAllMetadata(); //todo: postpone till Idea index is built
     }
 
     /**

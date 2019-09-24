@@ -8,6 +8,8 @@ import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.base.Base
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.STORED_PROCEDURES;
@@ -24,8 +26,8 @@ public abstract class AbstractDataSourceMetadataTest extends BaseIntegrationTest
 
     public abstract DataSourceApi getDataSource();
 
-    public void testMetadataExists() {
-        Optional<DataSourceMetadata> metadata = component().dataSourcesMetadata().getMetadata(getDataSource());
+    public void testMetadataExists() throws ExecutionException, InterruptedException {
+        Optional<DataSourceMetadata> metadata = component().dataSourcesMetadata().getMetadata(getDataSource()).get();
         assertThat(metadata).isPresent();
     }
 
@@ -34,10 +36,10 @@ public abstract class AbstractDataSourceMetadataTest extends BaseIntegrationTest
         List<Map<String, String>> storedProcedures = metadata.getMetadata(STORED_PROCEDURES);
 
         List<Map<String, String>> requiredProcedures = requiredProcedures().stream()
-                   .map(StoredProcedure::asMap)
-                   .collect(Collectors.toList());
+                .map(StoredProcedure::asMap)
+                .collect(Collectors.toList());
         assertThat(storedProcedures)
-                   .containsAll(requiredProcedures);
+                .containsAll(requiredProcedures);
     }
 
     protected abstract List<StoredProcedure> requiredProcedures();
@@ -51,9 +53,14 @@ public abstract class AbstractDataSourceMetadataTest extends BaseIntegrationTest
     }
 
     protected DataSourceMetadata getMetadata() {
-        return component()
-                   .dataSourcesMetadata()
-                   .getMetadata(getDataSource())
-                   .orElseThrow(() -> new IllegalStateException("Metadata should not be null"));
+
+        try {
+            return component().dataSourcesMetadata().getMetadata(getDataSource())
+                    .get(30, TimeUnit.SECONDS)
+                    .orElseThrow(() -> new IllegalStateException("Metadata should not be null"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
