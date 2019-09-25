@@ -3,6 +3,7 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.ActionToolbarPosition;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.ToolbarDecorator;
@@ -15,6 +16,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSo
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourcesComponentMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.actions.RefreshDataSourcesAction;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceInteractions;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.DataSourceMetadataUi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.DataSourceTreeNodeModel;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.GraphColoredTreeCellRenderer;
@@ -22,6 +24,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.RootTree
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeMouseAdapter;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModelApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.FileUtil;
+import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -60,6 +63,7 @@ public class DataSourcesView implements Disposable {
 
             component = project.getComponent(DataSourcesComponent.class);
             componentMetadata = project.getComponent(DataSourcesComponentMetadata.class);
+            ServiceManager.getService(project, CypherMetadataProviderService.class);
             dataSourceMetadataUi = new DataSourceMetadataUi(componentMetadata);
             treeRoot = new PatchedDefaultMutableTreeNode(new RootTreeNodeModel());
             treeModel = new DefaultTreeModel(treeRoot, false);
@@ -68,6 +72,8 @@ public class DataSourcesView implements Disposable {
 
             configureDataSourceTree();
             decorateDataSourceTree();
+
+            new DataSourceInteractions(project, this);
 
             replaceTreeWithDecorated();
             showDataSources();
