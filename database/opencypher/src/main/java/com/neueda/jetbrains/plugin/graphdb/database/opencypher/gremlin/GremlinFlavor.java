@@ -19,8 +19,7 @@ public enum GremlinFlavor {
                     .inlineParameters()
                     .enableMultipleLabels()
                     .build(neptune()))),
-    PLUGIN("Cypher for Gremlin plugin", CypherGremlinClient::plugin),
-    ;
+    PLUGIN("Cypher for Gremlin plugin", CypherGremlinClient::plugin);
 
     final String displayName;
     final Function<Client, CypherGremlinClient> wrapClient;

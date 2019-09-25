@@ -1,8 +1,5 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.tinkerpop.gremlin;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Validation.*;
-import static org.apache.tinkerpop.gremlin.driver.ser.Serializers.*;
-
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.EnumComboBoxModel;
@@ -16,17 +13,17 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSo
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceDialog;
-
-import javax.swing.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.tinkerpop.gremlin.driver.ser.Serializers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Validation.*;
+import static org.apache.tinkerpop.gremlin.driver.ser.Serializers.*;
 
 public class OpenCypherGremlinDataSourceDialog extends DataSourceDialog {
 

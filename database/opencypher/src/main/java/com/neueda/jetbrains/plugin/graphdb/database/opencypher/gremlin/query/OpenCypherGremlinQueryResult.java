@@ -15,7 +15,11 @@ public class OpenCypherGremlinQueryResult implements GraphQueryResult {
     private List<GraphNode> nodes;
     private List<GraphRelationship> relationships;
 
-    public OpenCypherGremlinQueryResult(long executionTimeMs, List<GraphQueryResultColumn> columns, List<GraphQueryResultRow> rows, List<GraphNode> nodes, List<GraphRelationship> relationships) {
+    public OpenCypherGremlinQueryResult(long executionTimeMs,
+                                        List<GraphQueryResultColumn> columns,
+                                        List<GraphQueryResultRow> rows,
+                                        List<GraphNode> nodes,
+                                        List<GraphRelationship> relationships) {
         this.executionTimeMs = executionTimeMs;
         this.columns = columns;
         this.rows = rows;

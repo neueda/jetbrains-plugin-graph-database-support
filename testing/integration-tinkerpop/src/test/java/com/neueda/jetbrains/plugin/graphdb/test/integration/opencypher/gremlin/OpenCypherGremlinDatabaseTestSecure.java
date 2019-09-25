@@ -1,31 +1,18 @@
 package com.neueda.jetbrains.plugin.graphdb.test.integration.opencypher.gremlin;
 
-import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphEntity;
-import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphMetadata;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
-import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.OpenCypherGremlinConfiguration;
 import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.OpenCypherGremlinDatabase;
 import org.apache.tinkerpop.gremlin.server.GremlinServer;
 import org.apache.tinkerpop.gremlin.server.Settings;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.ClassRule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
-import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static com.neueda.jetbrains.plugin.graphdb.test.integration.opencypher.gremlin.OpenCypherGremlinDatabaseTest.*;
 import static java.util.Collections.*;
-import static java.util.stream.Collectors.*;
 import static org.assertj.core.api.Assertions.*;
 
 public class OpenCypherGremlinDatabaseTestSecure {
@@ -85,12 +72,6 @@ public class OpenCypherGremlinDatabaseTestSecure {
         Settings serverSettings = getServerSettings();
         serverSettings.authentication.authenticator = org.apache.tinkerpop.gremlin.server.auth.SimpleAuthenticator.class.getCanonicalName();
         serverSettings.authentication.config = singletonMap("credentialsDb", credentialsDbPath);
-
-        //todo
-//        serverSettings.ssl = new Settings.SslSettings();
-//        serverSettings.ssl.keyStore = "/home/dmi3/work/jetbrains-plugin-graph-database-support/testing/integration-tinkerpop/src/test/resources/com/neueda/jetbrains/plugin/graphdb/test/integration/opencypher/gremlin/keystore.jks";
-//        serverSettings.ssl.keyStorePassword = "password";
-//        serverSettings.ssl.enabled = true;
 
         GremlinServer gremlinServer = new GremlinServer(serverSettings);
         gremlinServer.start().join();

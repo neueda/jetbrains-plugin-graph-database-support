@@ -100,7 +100,7 @@ public class OpenCypherGremlinDatabaseTest {
                 .extracting(GraphQueryResultColumn::getName)
                 .containsExactly("n", "r", "m");
 
-        assertThat(results.getNodes()).flatExtracting(GraphEntity::getTypes).containsExactly("person", "software");
+        assertThat(results.getNodes()).flatExtracting(GraphEntity::getTypes).containsExactlyInAnyOrder("person", "software");
         assertThat(results.getRelationships()).flatExtracting(GraphEntity::getTypes).containsExactly("created");
 
         assertThat(results.getNotifications()).isEmpty();
@@ -144,14 +144,14 @@ public class OpenCypherGremlinDatabaseTest {
 
         assertThat(results.getNodes())
                 .extracting(extractElement())
-                .containsExactly(
+                .containsExactlyInAnyOrder(
                         peter,
                         lop
                 );
 
         assertThat(results.getRelationships())
                 .extracting(extractElement())
-                .containsExactly(
+                .containsExactlyInAnyOrder(
                         peter_created_lop
                 );
 

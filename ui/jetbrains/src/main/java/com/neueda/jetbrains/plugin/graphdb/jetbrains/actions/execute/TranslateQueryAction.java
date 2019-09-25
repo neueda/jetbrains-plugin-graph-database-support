@@ -18,7 +18,7 @@ public class TranslateQueryAction extends QueryAction {
     protected void actionPerformed(AnActionEvent e, Project project, Editor editor, String query, Map<String, Object> parameters) {
         String gremlin = new OpenCypherGremlinSimpleTranslator().translate(query, parameters);
 
-        JTextArea translation = new JTextArea( gremlin);
+        JTextArea translation = new JTextArea(gremlin);
         translation.setEditable(false);
         translation.setLineWrap(true);
 
