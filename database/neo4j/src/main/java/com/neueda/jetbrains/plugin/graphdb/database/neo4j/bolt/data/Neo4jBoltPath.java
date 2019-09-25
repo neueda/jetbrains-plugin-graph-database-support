@@ -13,6 +13,10 @@ public class Neo4jBoltPath implements GraphPath {
         this.pathComponents = new ArrayList<>();
     }
 
+    public Neo4jBoltPath(List<Object> pathComponents) {
+        this.pathComponents = new ArrayList<>(pathComponents);
+    }
+
     public void add(Object object) {
         pathComponents.add(object);
     }

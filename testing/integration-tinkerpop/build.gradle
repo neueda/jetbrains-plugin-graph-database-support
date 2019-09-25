@@ -1,0 +1,8 @@
+dependencies {
+    testCompile project(':database:opencypher')
+    testCompile "org.apache.tinkerpop:gremlin-core:3.4.0"
+    testCompile "org.apache.tinkerpop:gremlin-server:3.4.0"
+
+    testCompile "junit:junit:$versionJunit"
+    testCompile "org.assertj:assertj-core:$versionAssertj"
+}

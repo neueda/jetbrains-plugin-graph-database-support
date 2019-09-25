@@ -28,6 +28,14 @@ public class Neo4jBoltRelationship implements GraphRelationship {
         this.endNodeId = String.valueOf(rel.endNodeId());
     }
 
+    public Neo4jBoltRelationship(String id, List<String> types, GraphPropertyContainer propertyContainer, String startNodeId, String endNodeId) {
+        this.id = id;
+        this.types = types;
+        this.propertyContainer = propertyContainer;
+        this.startNodeId = startNodeId;
+        this.endNodeId = endNodeId;
+    }
+
     @Override
     public String getStartNodeId() {
         return startNodeId;

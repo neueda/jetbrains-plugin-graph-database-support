@@ -38,6 +38,6 @@ public class DataSourceMetadataTest extends AbstractDataSourceMetadataTest {
     public void testNoUserFunctions() {
         DataSourceMetadata metadata = getMetadata();
         List<Map<String, String>> userFunctionsMetadata = metadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.USER_FUNCTIONS);
-        assertThat(userFunctionsMetadata).isNull();
+        assertThat(userFunctionsMetadata).isEmpty();
     }
 }

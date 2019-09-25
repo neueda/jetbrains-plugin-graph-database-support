@@ -6,6 +6,7 @@ include 'language:cypher'
 include 'database'
 include 'database:api'
 include 'database:neo4j'
+include 'database:opencypher'
 
 // UI
 include 'ui'
@@ -28,4 +29,5 @@ include 'testing:database:neo4j-3.3'
 include 'testing:database:neo4j-3.4'
 include 'testing:database:neo4j-3.5'
 include 'testing:integration-neo4j'
+include 'testing:integration-tinkerpop'
 

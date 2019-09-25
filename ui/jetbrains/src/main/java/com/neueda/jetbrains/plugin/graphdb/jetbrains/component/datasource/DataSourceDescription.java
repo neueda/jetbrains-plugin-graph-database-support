@@ -35,4 +35,26 @@ public interface DataSourceDescription {
             return "Neo4j - Bolt";
         }
     };
+
+    DataSourceDescription OPENCYPHER_GREMLIN = new DataSourceDescription() {
+        @Override
+        public DataSourceType getType() {
+            return DataSourceType.OPENCYPHER_GREMLIN;
+        }
+
+        @Override
+        public Icon getIcon() {
+            return GraphIcons.Database.OPENCYPHER;
+        }
+
+        @Override
+        public String getDefaultFileExtension() {
+            return "cypher";
+        }
+
+        @Override
+        public String geTypeName() {
+            return "openCypher - Gremlin";
+        }
+    };
 }

@@ -11,18 +11,18 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSo
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.neo4j.bolt.Neo4jBoltDataSourceDialog;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.tinkerpop.gremlin.OpenCypherGremlinDataSourceDialog;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTreeNodeType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModelApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.FileUtil;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Notifier;
-
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 public class DataSourceInteractions {
 
@@ -96,6 +96,8 @@ public class DataSourceInteractions {
                 DataSourceDialog dialog = null;
                 if (dataSourceToEdit.getDataSourceType().equals(DataSourceType.NEO4J_BOLT)) {
                     dialog = new Neo4jBoltDataSourceDialog(project, dataSourcesView, dataSourceToEdit);
+                } else if (dataSourceToEdit.getDataSourceType().equals(DataSourceType.OPENCYPHER_GREMLIN)) {
+                    dialog = new OpenCypherGremlinDataSourceDialog(project, dataSourcesView, dataSourceToEdit);
                 }
 
                 if (dialog != null) {

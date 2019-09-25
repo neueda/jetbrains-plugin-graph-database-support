@@ -1,0 +1,8 @@
+dependencies {
+    compile project(':database:api')
+    compile project(':database:neo4j')
+    compile ("org.opencypher.gremlin:cypher-gremlin-server-client:$cypherForGremlinVersion") {
+         exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
+    compile("com.fasterxml.jackson.core:jackson-annotations:$versionJacksonMapper")
+}

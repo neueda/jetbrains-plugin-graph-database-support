@@ -183,7 +183,7 @@
 
             <action id="GraphDatabaseActionGroup.ExecuteQuery"
                     class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryAction"
-                    text="Execute query"
+                    text="Execute Query"
                     icon="AllIcons.RunConfigurations.TestState.Run"
                     description="Execute query">
                 <keyboard-shortcut first-keystroke="ctrl ENTER"
@@ -191,14 +191,20 @@
             </action>
             <action id="GraphDatabaseActionGroup.ExplainQuery"
                     class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExplainQueryAction"
-                    text="Explain query"
+                    text="Explain Query"
                     icon="AllIcons.RunConfigurations.TestState.Run"
                     description="Explain query">
             </action>
             <action id="GraphDatabaseActionGroup.ProfileQuery"
                     class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ProfileQueryAction"
-                    text="Profile query"
+                    text="Profile Query"
                     icon="AllIcons.RunConfigurations.TestState.Run"
+                    description="Profile query">
+            </action>
+            <action id="GraphDatabaseActionGroup.TranslateQuery"
+                    class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.TranslateQueryAction"
+                    text="Translate Query to Gremlin..."
+                    icon="GraphIcons.Database.OPENCYPHER"
                     description="Profile query">
             </action>
             <add-to-group group-id="EditorPopupMenu"/>
@@ -209,26 +215,26 @@
 
             <action id="GraphDatabaseConsoleToolWindowActions.ExecuteQuery"
                     class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryAction"
-                    text="Execute query"
+                    text="Execute Query"
                     icon="AllIcons.Toolwindows.ToolWindowRun"
                     description="Execute query">
             </action>
             <action id="GraphDatabaseConsoleToolWindowActions.CleanCanvas"
                     class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.ui.console.CleanCanvasAction"
-                    text="Clean canvas"
+                    text="Clean Canvas"
                     icon="AllIcons.Actions.Refresh"
                     description="Clean canvas">
             </action>
             <action id="GraphDatabaseConsoleToolWindowActions.CopyQueryOutput"
                     class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.ui.console.CopyQueryOutputAction"
-                    text="Copy query result to clipboard"
+                    text="Copy Query Result to Clipboard"
                     icon="AllIcons.Actions.Copy"
                     description="Copy query result to clipboard">
             </action>
         </group>
 
         <group id="GraphDatabaseFileActions"
-               text="Graph Database File Actions" description="Graph Database File Actions"
+               text="Graph Database File Actions" description="Graph database file actions"
                icon="GraphIcons.Window.GRAPH" popup="true">
             <action id="GraphDatabaseFileActions.ExecuteAll"
                     class="com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteAllAction"

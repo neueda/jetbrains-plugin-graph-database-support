@@ -20,6 +20,12 @@ public class Neo4jBoltNode implements GraphNode {
         this.propertyContainer = new Neo4jBoltPropertyContainer(value.asMap());
     }
 
+    public Neo4jBoltNode(String id, List<String> types, Neo4jBoltPropertyContainer propertyContainer) {
+        this.id = id;
+        this.propertyContainer = propertyContainer;
+        this.types = types;
+    }
+
     @Override
     public String getId() {
         return id;
