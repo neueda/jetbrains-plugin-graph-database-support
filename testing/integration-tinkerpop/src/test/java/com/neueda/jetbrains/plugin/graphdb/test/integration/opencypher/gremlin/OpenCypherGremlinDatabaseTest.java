@@ -20,16 +20,22 @@ import org.junit.rules.TemporaryFolder;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Arrays.*;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 import static org.assertj.core.api.Assertions.*;
 
 public class OpenCypherGremlinDatabaseTest {
     final static Integer PORT = 8183;
+
+    private final static Tuple PETER = tuple(true, "6", singletonList("person"), "peter");
+    private final static Tuple LOP = tuple(true, "3", singletonList("software"), "lop");
+    private final static Tuple PETER_CREATED_LOP = tuple(false, "12", singletonList("created"), null);
 
     private static GremlinServer server;
     private static OpenCypherGremlinDatabase database;
@@ -138,28 +144,85 @@ public class OpenCypherGremlinDatabaseTest {
     public void returnPath() throws Exception {
         GraphQueryResult results = database.execute("MATCH p=(n {name: 'peter'})-[r]->(m) RETURN p");
 
-        Tuple peter = tuple(true, "6", singletonList("person"), "peter");
-        Tuple lop = tuple(true, "3", singletonList("software"), "lop");
-        Tuple peter_created_lop = tuple(false, "12", singletonList("created"), null);
-
         assertThat(results.getNodes())
                 .extracting(extractElement())
                 .containsExactlyInAnyOrder(
-                        peter,
-                        lop
+                        PETER,
+                        LOP
                 );
 
         assertThat(results.getRelationships())
                 .extracting(extractElement())
                 .containsExactlyInAnyOrder(
-                        peter_created_lop
+                        PETER_CREATED_LOP
                 );
 
         assertThat(extractValues(results))
                 .extracting("p")
                 .flatExtracting("components")
                 .extracting(extractElement())
-                .containsExactly(peter, peter_created_lop, lop);
+                .containsExactly(PETER, PETER_CREATED_LOP, LOP);
+    }
+
+    @Test
+    public void returnListElements() throws Exception {
+        GraphQueryResult results = database.execute("MATCH p=(n {name: 'peter'})-[r]->(m) RETURN " +
+                "nodes(p) as myNodes," +
+                "relationships(p) as myRels");
+
+        assertThat(results.getNodes())
+                .extracting(extractElement())
+                .containsExactlyInAnyOrder(
+                        PETER,
+                        LOP
+                );
+
+        assertThat(results.getRelationships())
+                .extracting(extractElement())
+                .containsExactlyInAnyOrder(
+                        PETER_CREATED_LOP
+                );
+
+        assertThat(extractValues(results))
+                .flatExtracting("myNodes")
+                .extracting(extractElement())
+                .containsExactlyInAnyOrder(PETER, LOP);
+
+        assertThat(extractValues(results))
+                .flatExtracting("myRels")
+                .extracting(extractElement())
+                .containsExactly(PETER_CREATED_LOP);
+    }
+
+    @Test
+    public void returnList() throws Exception {
+        GraphQueryResult results = database.execute("RETURN [1, 2, 3] as list");
+
+        assertThat(results.getNodes()).isEmpty();
+        assertThat(results.getRelationships()).isEmpty();
+
+        assertThat(extractValues(results))
+                .extracting("list")
+                .containsExactly(asList(1L, 2L, 3L));
+    }
+
+    @Test
+    public void returnMap() throws Exception {
+        GraphQueryResult results = database.execute("RETURN { key: 'Value', listKey: [{ inner: 'Map1' }, { inner: 'Map2' }]} as nap");
+
+        assertThat(results.getNodes()).isEmpty();
+        assertThat(results.getRelationships()).isEmpty();
+
+        HashMap<Object, Object> expected = new HashMap<>();
+        expected.put("key", "Value");
+        expected.put("listKey", Arrays.asList(
+                singletonMap("inner", "Map1"),
+                singletonMap("inner", "Map2")
+        ));
+
+        assertThat(extractValues(results))
+                .extracting("nap")
+                .containsExactly(expected);
     }
 
     private ThrowingExtractor<Object, Tuple, RuntimeException> extractElement() {
