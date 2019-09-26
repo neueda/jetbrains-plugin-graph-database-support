@@ -1,0 +1,10 @@
+apply plugin: "org.jetbrains.intellij"
+
+intellij {
+    version intellijSdkVersion
+    plugins 'java'
+}
+
+dependencies {
+    compile project(':graph-database-support-plugin')
+}

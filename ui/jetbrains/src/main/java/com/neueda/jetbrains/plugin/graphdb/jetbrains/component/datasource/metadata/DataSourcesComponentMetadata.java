@@ -9,8 +9,8 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultCo
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DatabaseManagerService;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.services.ExecutorService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.MetadataRetrieveEvent;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.TaskExecutor;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataContainer;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +30,7 @@ import static java.util.stream.Collectors.toList;
 public class DataSourcesComponentMetadata implements ProjectComponent {
 
     private CypherMetadataProviderService cypherMetadataProviderService;
+    private ExecutorService executorService;
     private DatabaseManagerService databaseManager;
     private MessageBus messageBus;
 
@@ -37,10 +38,13 @@ public class DataSourcesComponentMetadata implements ProjectComponent {
 
     public DataSourcesComponentMetadata(MessageBus messageBus,
                                         DatabaseManagerService databaseManager,
-                                        CypherMetadataProviderService cypherMetadataProviderService) {
+                                        CypherMetadataProviderService cypherMetadataProviderService,
+                                        ExecutorService executorService
+    ) {
         this.messageBus = messageBus;
         this.databaseManager = databaseManager;
         this.cypherMetadataProviderService = cypherMetadataProviderService;
+        this.executorService = executorService;
 
         handlers.put(NEO4J_BOLT, this::getNeo4jBoltMetadata);
         handlers.put(OPENCYPHER_GREMLIN, this::getOpenCypherGremlinMetadata);
@@ -54,7 +58,7 @@ public class DataSourcesComponentMetadata implements ProjectComponent {
         CompletableFuture<Optional<DataSourceMetadata>> future = new CompletableFuture<>();
         DataSourceType sourceType = dataSource.getDataSourceType();
         if (handlers.containsKey(sourceType)) {
-            TaskExecutor.getInstance().runInBackground(
+            executorService.runInBackground(
                     () -> handlers.get(sourceType).apply(dataSource),
                     (metadata) -> {
                         updateNeo4jBoltMetadata(dataSource, (Neo4jBoltCypherDataSourceMetadata) metadata);

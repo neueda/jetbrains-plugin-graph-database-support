@@ -14,13 +14,12 @@ import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.server.Ne
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.server.Neo4j31ServerLoader;
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.server.Neo4j32ServerLoader;
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.server.Neo4j33ServerLoader;
+import com.neueda.jetbrains.plugin.graphdb.test.mocks.services.DummyExecutorService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.TaskExecutor.SYNC_TASK_EXECUTION;
 
 public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCase {
 
@@ -38,9 +37,9 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
 
     @Override
     public void setUp() throws Exception {
-        System.setProperty(SYNC_TASK_EXECUTION, "true");
-
         super.setUp();
+        DummyExecutorService.register();
+
         components = new Components();
         dataSources = new DataSources();
         services = new Services();

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.STORED_PROCEDURES;
@@ -58,9 +59,8 @@ public abstract class AbstractDataSourceMetadataTest extends BaseIntegrationTest
             return component().dataSourcesMetadata().getMetadata(getDataSource())
                     .get(30, TimeUnit.SECONDS)
                     .orElseThrow(() -> new IllegalStateException("Metadata should not be null"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            throw new RuntimeException("Failed to retrieve metadata", e);
         }
     }
 }
