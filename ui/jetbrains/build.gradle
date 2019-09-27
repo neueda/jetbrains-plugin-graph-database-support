@@ -23,6 +23,8 @@ dependencies {
     compile("com.fasterxml.jackson.core:jackson-core:$versionJacksonMapper")
     compile("com.fasterxml.jackson.core:jackson-databind:$versionJacksonMapper")
 
+    testCompile project(':testing:common')
+
     testCompile "org.apache.tinkerpop:tinkergraph-gremlin:3.4.0"
     testCompile "junit:junit:$versionJunit"
     testCompile "org.assertj:assertj-core:$versionAssertj"

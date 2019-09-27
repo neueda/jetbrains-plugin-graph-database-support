@@ -14,15 +14,17 @@ import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.C
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherLabelElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherPropertyKeyElement;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.elements.CypherRelationshipTypeElement;
+import com.neueda.jetbrains.plugin.graphdb.test.mocks.services.DummyExecutorService;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.*;
-import static java.util.Arrays.*;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.PROPERTY_KEYS;
+import static java.util.Arrays.asList;
 import static java.util.Collections.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -30,7 +32,8 @@ import static org.mockito.Mockito.*;
 public class GremlinMetadataTest {
     @Test
     @SuppressWarnings("unchecked")
-    public void getMetadata() {
+    public void getMetadata() throws ExecutionException, InterruptedException {
+
         DataSourceV1 dataSource = new DataSourceV1(UUID.randomUUID().toString(), "test", DataSourceType.OPENCYPHER_GREMLIN, emptyMap());
         CypherMetadataContainer container = new CypherMetadataContainer();
 
@@ -46,9 +49,15 @@ public class GremlinMetadataTest {
         CypherMetadataProviderService containerMock = mock(CypherMetadataProviderService.class);
         when(containerMock.getContainer(dataSource.getName())).thenReturn(container);
 
-        DataSourcesComponentMetadata componentMetadata = new DataSourcesComponentMetadata(messageBusMock, databaseManagerMock, containerMock);
+        DataSourcesComponentMetadata componentMetadata =
+                new DataSourcesComponentMetadata(
+                        messageBusMock,
+                        databaseManagerMock,
+                        containerMock,
+                        new DummyExecutorService()
+                );
 
-        Optional<DataSourceMetadata> result = componentMetadata.getMetadata(dataSource);
+        Optional<DataSourceMetadata> result = componentMetadata.getMetadata(dataSource).get();
 
         assertThat(result).isPresent();
         assertThat(result.get().getMetadata(PROPERTY_KEYS))

@@ -1,77 +1,79 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata;
 
 import com.intellij.openapi.components.ProjectComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphMetadata;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultColumn;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DatabaseManagerService;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.services.ExecutorService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.MetadataRetrieveEvent;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataContainer;
 import com.neueda.jetbrains.plugin.graphdb.language.cypher.completion.metadata.CypherMetadataProviderService;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.*;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType.NEO4J_BOLT;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType.OPENCYPHER_GREMLIN;
+import static java.util.stream.Collectors.toList;
 
 public class DataSourcesComponentMetadata implements ProjectComponent {
 
+    private final Map<DataSourceType, Function<DataSourceApi, DataSourceMetadata>> handlers = new HashMap<>();
     private CypherMetadataProviderService cypherMetadataProviderService;
+    private ExecutorService executorService;
     private DatabaseManagerService databaseManager;
     private MessageBus messageBus;
 
-    public DataSourcesComponentMetadata(Project project) {
-        this.messageBus = project.getMessageBus();
-        this.databaseManager = ServiceManager.getService(DatabaseManagerService.class);
-        this.cypherMetadataProviderService = ServiceManager.getService(project, CypherMetadataProviderService.class);
-    }
-
     public DataSourcesComponentMetadata(MessageBus messageBus,
                                         DatabaseManagerService databaseManager,
-                                        CypherMetadataProviderService cypherMetadataProviderService) {
+                                        CypherMetadataProviderService cypherMetadataProviderService,
+                                        ExecutorService executorService
+    ) {
         this.messageBus = messageBus;
         this.databaseManager = databaseManager;
         this.cypherMetadataProviderService = cypherMetadataProviderService;
+        this.executorService = executorService;
+
+        handlers.put(NEO4J_BOLT, this::getNeo4jBoltMetadata);
+        handlers.put(OPENCYPHER_GREMLIN, this::getOpenCypherGremlinMetadata);
     }
 
-    public Optional<DataSourceMetadata> getMetadata(DataSourceApi dataSource) {
+    public CompletableFuture<Optional<DataSourceMetadata>> getMetadata(DataSourceApi dataSource) {
         MetadataRetrieveEvent metadataRetrieveEvent = messageBus.syncPublisher(MetadataRetrieveEvent.METADATA_RETRIEVE_EVENT);
 
         metadataRetrieveEvent.startMetadataRefresh(dataSource);
-        switch (dataSource.getDataSourceType()) {
-            case NEO4J_BOLT:
-                try {
-                    DataSourceMetadata metadata = getNeo4jBoltMetadata(dataSource);
-                    updateNeo4jBoltMetadata(dataSource, (Neo4jBoltCypherDataSourceMetadata) metadata);
-                    metadataRetrieveEvent.metadataRefreshSucceed(dataSource);
-                    return Optional.of(metadata);
-                } catch (Exception exception) {
-                    metadataRetrieveEvent.metadataRefreshFailed(dataSource, exception);
-                }
-                break;
-            case OPENCYPHER_GREMLIN:
-                try {
-                    DataSourceMetadata metadata = getOpenCypherGremlinMetadata(dataSource);
-                    updateNeo4jBoltMetadata(dataSource, (Neo4jBoltCypherDataSourceMetadata) metadata);
-                    metadataRetrieveEvent.metadataRefreshSucceed(dataSource);
-                    return Optional.of(metadata);
-                } catch (Exception exception) {
-                    metadataRetrieveEvent.metadataRefreshFailed(dataSource, exception);
-                }
-                break;
-            default:
-                metadataRetrieveEvent.metadataRefreshFailed(dataSource, new RuntimeException("Metadata are not supported"));
-                break;
+
+        CompletableFuture<Optional<DataSourceMetadata>> future = new CompletableFuture<>();
+        DataSourceType sourceType = dataSource.getDataSourceType();
+        if (handlers.containsKey(sourceType)) {
+            executorService.runInBackground(
+                    () -> handlers.get(sourceType).apply(dataSource),
+                    (metadata) -> {
+                        updateNeo4jBoltMetadata(dataSource, (Neo4jBoltCypherDataSourceMetadata) metadata);
+                        metadataRetrieveEvent.metadataRefreshSucceed(dataSource, metadata);
+                        future.complete(Optional.of(metadata));
+                    },
+                    (exception) -> {
+                        metadataRetrieveEvent.metadataRefreshFailed(dataSource, exception);
+                        future.complete(Optional.empty());
+                    }
+            );
+        } else {
+            metadataRetrieveEvent.metadataRefreshFailed(dataSource, new RuntimeException("Metadata are not supported"));
+            future.complete(Optional.empty());
         }
-        return Optional.empty();
+        return future;
     }
 
     private DataSourceMetadata getNeo4jBoltMetadata(DataSourceApi dataSource) {

@@ -7,6 +7,7 @@ intellij {
 
 dependencies {
     testCompile project(':graph-database-support-plugin')
+    testCompile project(':testing:common')
     testCompile project(':testing:database:neo4j-common')
     testCompile 'org.xeustechnologies:jcl-core:2.8'
     testCompile "org.assertj:assertj-core:$versionAssertj"

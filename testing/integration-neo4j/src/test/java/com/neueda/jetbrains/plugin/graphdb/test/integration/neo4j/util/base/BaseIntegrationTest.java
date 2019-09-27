@@ -14,6 +14,7 @@ import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.server.Ne
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.server.Neo4j31ServerLoader;
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.server.Neo4j32ServerLoader;
 import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.server.Neo4j33ServerLoader;
+import com.neueda.jetbrains.plugin.graphdb.test.mocks.services.DummyExecutorService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,16 +28,16 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
     private static final String NEO4J32 = "neo4j32";
     private static final String NEO4J33 = "neo4j33";
     private static final String UNAVAILABLE_DS = "unavailable";
-
+    protected CypherMetadataContainer metadata;
     private Components components;
     private DataSources dataSources;
     private Services services;
 
-    protected CypherMetadataContainer metadata;
-
     @Override
     public void setUp() throws Exception {
+        DummyExecutorService.register();
         super.setUp();
+
         components = new Components();
         dataSources = new DataSources();
         services = new Services();
@@ -78,6 +79,18 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
 
     private DataSourceApi createDataSource(String name, Neo4jServer neo4jServer) {
         return createDataSource(name, neo4jServer.getBoltHost(), neo4jServer.getBoltPort(), null, null);
+    }
+
+    private DataSourceApi getNeo4jDataSource(String dataSourceName, Neo4jServer server) {
+        return component().dataSources()
+                .getDataSourceContainer()
+                .getDataSource(dataSourceName)
+                .orElseGet(() -> {
+                    DataSourceApi dataSource = createDataSource(dataSourceName, server);
+                    component().dataSources().getDataSourceContainer().addDataSource(dataSource);
+                    component().dataSources().refreshAllMetadata();
+                    return dataSource;
+                });
     }
 
     public final class Services {
@@ -150,17 +163,5 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
             }
             return unavailableDataSource;
         }
-    }
-
-    private DataSourceApi getNeo4jDataSource(String dataSourceName, Neo4jServer server) {
-        return component().dataSources()
-            .getDataSourceContainer()
-            .getDataSource(dataSourceName)
-            .orElseGet(() -> {
-                DataSourceApi dataSource = createDataSource(dataSourceName, server);
-                component().dataSources().getDataSourceContainer().addDataSource(dataSource);
-                component().dataSources().refreshAllMetadata();
-                return dataSource;
-            });
     }
 }
