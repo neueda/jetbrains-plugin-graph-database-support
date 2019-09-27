@@ -1,19 +1,21 @@
 package com.neueda.jetbrains.plugin.graphdb.test.mocks.services;
 
 import com.intellij.openapi.application.ApplicationManager;
-import com.neueda.jetbrains.plugin.graphdb.jetbrains.services.ExecutorServiceInternal;
+import com.intellij.testFramework.LightPlatformTestCase;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.services.ExecutorService;
 import org.picocontainer.MutablePicoContainer;
 
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
-public class DummyExecutorService implements ExecutorServiceInternal {
+public class DummyExecutorService implements ExecutorService {
 
     public static void register() {
+        LightPlatformTestCase.initApplication();
         MutablePicoContainer container = (MutablePicoContainer) ApplicationManager.getApplication().getPicoContainer();
 
-        container.unregisterComponent(ExecutorServiceInternal.class.getName());
-        container.registerComponentInstance(ExecutorServiceInternal.class.getName(), new DummyExecutorService());
+        container.unregisterComponent(ExecutorService.class.getName());
+        container.registerComponentInstance(ExecutorService.class.getName(), new DummyExecutorService());
     }
 
     @Override

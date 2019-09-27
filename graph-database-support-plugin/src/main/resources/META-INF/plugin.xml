@@ -126,9 +126,6 @@
         <applicationService
                 serviceInterface="com.neueda.jetbrains.plugin.graphdb.jetbrains.services.ExecutorService"
                 serviceImplementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.services.ExecutorServiceImpl"/>
-        <applicationService
-                serviceInterface="com.neueda.jetbrains.plugin.graphdb.jetbrains.services.ExecutorServiceInternal"
-                serviceImplementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.services.ExecutorServiceInternalImpl"/>
         <projectService serviceInterface="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView"
                         serviceImplementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView"/>
         <projectService serviceInterface="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView"

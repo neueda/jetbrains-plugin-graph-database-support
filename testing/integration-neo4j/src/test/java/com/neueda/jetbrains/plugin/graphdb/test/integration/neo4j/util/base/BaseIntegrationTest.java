@@ -37,8 +37,8 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
 
     @Override
     public void setUp() throws Exception {
-        super.setUp();
         DummyExecutorService.register();
+        super.setUp();
 
         components = new Components();
         dataSources = new DataSources();
