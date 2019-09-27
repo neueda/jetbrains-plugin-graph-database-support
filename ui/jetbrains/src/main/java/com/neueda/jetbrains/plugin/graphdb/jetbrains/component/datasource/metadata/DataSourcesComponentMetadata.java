@@ -29,12 +29,11 @@ import static java.util.stream.Collectors.toList;
 
 public class DataSourcesComponentMetadata implements ProjectComponent {
 
+    private final Map<DataSourceType, Function<DataSourceApi, DataSourceMetadata>> handlers = new HashMap<>();
     private CypherMetadataProviderService cypherMetadataProviderService;
     private ExecutorService executorService;
     private DatabaseManagerService databaseManager;
     private MessageBus messageBus;
-
-    private final Map<DataSourceType, Function<DataSourceApi, DataSourceMetadata>> handlers = new HashMap<>();
 
     public DataSourcesComponentMetadata(MessageBus messageBus,
                                         DatabaseManagerService databaseManager,

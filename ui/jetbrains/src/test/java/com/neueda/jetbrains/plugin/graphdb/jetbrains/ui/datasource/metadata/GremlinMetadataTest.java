@@ -25,12 +25,9 @@ import java.util.concurrent.ExecutionException;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.Neo4jBoltCypherDataSourceMetadata.PROPERTY_KEYS;
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.singletonMap;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.entry;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static java.util.Collections.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class GremlinMetadataTest {
     @Test

@@ -28,12 +28,10 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
     private static final String NEO4J32 = "neo4j32";
     private static final String NEO4J33 = "neo4j33";
     private static final String UNAVAILABLE_DS = "unavailable";
-
+    protected CypherMetadataContainer metadata;
     private Components components;
     private DataSources dataSources;
     private Services services;
-
-    protected CypherMetadataContainer metadata;
 
     @Override
     public void setUp() throws Exception {
@@ -81,6 +79,18 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
 
     private DataSourceApi createDataSource(String name, Neo4jServer neo4jServer) {
         return createDataSource(name, neo4jServer.getBoltHost(), neo4jServer.getBoltPort(), null, null);
+    }
+
+    private DataSourceApi getNeo4jDataSource(String dataSourceName, Neo4jServer server) {
+        return component().dataSources()
+                .getDataSourceContainer()
+                .getDataSource(dataSourceName)
+                .orElseGet(() -> {
+                    DataSourceApi dataSource = createDataSource(dataSourceName, server);
+                    component().dataSources().getDataSourceContainer().addDataSource(dataSource);
+                    component().dataSources().refreshAllMetadata();
+                    return dataSource;
+                });
     }
 
     public final class Services {
@@ -153,17 +163,5 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
             }
             return unavailableDataSource;
         }
-    }
-
-    private DataSourceApi getNeo4jDataSource(String dataSourceName, Neo4jServer server) {
-        return component().dataSources()
-            .getDataSourceContainer()
-            .getDataSource(dataSourceName)
-            .orElseGet(() -> {
-                DataSourceApi dataSource = createDataSource(dataSourceName, server);
-                component().dataSources().getDataSourceContainer().addDataSource(dataSource);
-                component().dataSources().refreshAllMetadata();
-                return dataSource;
-            });
     }
 }
