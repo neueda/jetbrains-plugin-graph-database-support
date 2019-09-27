@@ -42,6 +42,7 @@ public class DataSourcesView implements Disposable {
 
     private DataSourcesComponent component;
     private DataSourcesComponentMetadata componentMetadata;
+    private DataSourceInteractions interactions;
     private PatchedDefaultMutableTreeNode treeRoot;
     private DefaultTreeModel treeModel;
 
@@ -73,7 +74,7 @@ public class DataSourcesView implements Disposable {
             configureDataSourceTree();
             decorateDataSourceTree();
 
-            new DataSourceInteractions(project, this);
+            interactions = new DataSourceInteractions(project, this);
 
             replaceTreeWithDecorated();
             showDataSources();
