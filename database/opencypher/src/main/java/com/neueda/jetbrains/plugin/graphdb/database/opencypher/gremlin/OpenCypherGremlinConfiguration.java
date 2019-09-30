@@ -33,7 +33,12 @@ public class OpenCypherGremlinConfiguration {
     }
 
     public Integer getPort() {
-        return Integer.valueOf(configuration.getOrDefault(PORT, "7687"));
+        String port = configuration.getOrDefault(PORT, "7687");
+        if ("".equals(port)) {
+            return 0;
+        } else {
+            return Integer.valueOf(port);
+        }
     }
 
     public String getUser() {
