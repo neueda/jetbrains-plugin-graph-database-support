@@ -5,6 +5,7 @@ import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.EnumComboBoxModel;
 import com.intellij.ui.components.JBPasswordField;
 import com.intellij.ui.components.JBTextField;
+import com.intellij.util.ui.AsyncProcessIcon;
 import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.GremlinFlavor;
 import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.OpenCypherGremlinConfiguration;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.LandingPageAction;
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +46,8 @@ public class OpenCypherGremlinDataSourceDialog extends DataSourceDialog {
     private JButton testConnectionButton;
     private JCheckBox useSSLCheckBox;
     private JCheckBox optimizeTranslatedQueriesCheckBox;
+    private JPanel loadingPanel;
+    private AsyncProcessIcon loadingIcon;
 
     public OpenCypherGremlinDataSourceDialog(Project project, DataSourcesView dataSourcesView, DataSourceApi dataSourceToEdit) {
         this(project, dataSourcesView);
@@ -52,11 +56,15 @@ public class OpenCypherGremlinDataSourceDialog extends DataSourceDialog {
 
     public OpenCypherGremlinDataSourceDialog(Project project, DataSourcesView dataSourcesView) {
         super(project, dataSourcesView);
+        loadingIcon = new AsyncProcessIcon("validateConnectionIcon");
+        loadingPanel.setLayout(new FlowLayout());
+        loadingPanel.add(loadingIcon);
+        loadingPanel.setVisible(false);
         flavorField.setModel(new EnumComboBoxModel<>(GremlinFlavor.class));
         serializerField.setModel(new EnumComboBoxModel<>(Serializers.class));
         serializerField.setSelectedItem(GRAPHSON_V3D0);
         dataSourcesComponent = dataSourcesView.getComponent();
-        testConnectionButton.addActionListener(e -> this.validationPopup());
+        testConnectionButton.addActionListener(e -> this.validationPopup(testConnectionButton, loadingPanel, loadingIcon));
         optimizeTranslatedQueriesCheckBox.addActionListener(e -> {
             LandingPageAction.open();
             optimizeTranslatedQueriesCheckBox.setSelected(false);
