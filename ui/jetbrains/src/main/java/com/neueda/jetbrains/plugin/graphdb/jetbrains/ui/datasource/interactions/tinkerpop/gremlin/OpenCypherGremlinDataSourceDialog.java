@@ -27,6 +27,9 @@ import static org.apache.tinkerpop.gremlin.driver.ser.Serializers.*;
 
 public class OpenCypherGremlinDataSourceDialog extends DataSourceDialog {
 
+    private static final String COSMOS_DB_USER_REGEX = "^\\/dbs\\/[^\\/\\\\#?]+\\/colls\\/[^\\/\\\\#?]+$";
+    private static final String COSMOS_DB_USER_ERROR = "User should be of form '/dbs/__DATABASE_NAME__/colls/__COLLECTION_NAME__' for Cosmos DB";
+
     private final DataSourcesComponent dataSourcesComponent;
     private DataSourceApi dataSourceToEdit;
 
@@ -80,6 +83,9 @@ public class OpenCypherGremlinDataSourceDialog extends DataSourceDialog {
         }
 
         if (hostField.getText().endsWith("cosmos.azure.com") || GremlinFlavor.COSMOSDB.equals(flavorField.getSelectedItem())) {
+            if (!userField.getText().matches(COSMOS_DB_USER_REGEX)) {
+                validations.add(warning(COSMOS_DB_USER_ERROR, userField));
+            }
             if (!useSSLCheckBox.isSelected()) {
                 validations.add(warning("SSL is recommended for Cosmos DB", useSSLCheckBox));
             }
@@ -131,10 +137,10 @@ public class OpenCypherGremlinDataSourceDialog extends DataSourceDialog {
         extractData();
 
         return dataSourcesComponent.getDataSourceContainer().createDataSource(
-            dataSourceToEdit,
-            DataSourceType.OPENCYPHER_GREMLIN,
-            dataSourceName,
-            configuration.getConfiguration()
+                dataSourceToEdit,
+                DataSourceType.OPENCYPHER_GREMLIN,
+                dataSourceName,
+                configuration.getConfiguration()
         );
     }
 
