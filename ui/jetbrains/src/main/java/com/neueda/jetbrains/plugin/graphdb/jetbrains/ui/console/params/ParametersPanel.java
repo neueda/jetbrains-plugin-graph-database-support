@@ -33,6 +33,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.PARAMS_ERROR_COMMON_MSG;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.truncateString;
 
 public class ParametersPanel implements ParametersProvider {
 
@@ -78,7 +79,7 @@ public class ParametersPanel implements ParametersProvider {
                     }
                     String errorMessage;
                     if (exception.getMessage() != null) {
-                        errorMessage = String.format("%s: %s", PARAMS_ERROR_COMMON_MSG, exception.getMessage());
+                        errorMessage = String.format("%s: %s", PARAMS_ERROR_COMMON_MSG, truncateString(exception.getMessage(), 120));
                     } else {
                         errorMessage = PARAMS_ERROR_COMMON_MSG;
                     }

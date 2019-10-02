@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.truncateString;
+
 public class DataSourceInteractions {
 
     private final DataSourcesView dataSourcesView;
@@ -128,7 +130,7 @@ public class DataSourceInteractions {
                     try {
                         FileUtil.openFile(project, FileUtil.getDataSourceFile(project, dataSource));
                     } catch (IOException exception) {
-                        Notifier.error("Open editor error", exception.getMessage());
+                        Notifier.error("Open editor error", truncateString(exception.getMessage(), 120));
                     }
                 }
             }
