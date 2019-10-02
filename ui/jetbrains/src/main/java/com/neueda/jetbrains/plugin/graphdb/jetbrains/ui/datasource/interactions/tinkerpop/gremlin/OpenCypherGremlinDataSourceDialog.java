@@ -5,6 +5,7 @@ import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.EnumComboBoxModel;
 import com.intellij.ui.components.JBPasswordField;
 import com.intellij.ui.components.JBTextField;
+import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.util.ui.AsyncProcessIcon;
 import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.GremlinFlavor;
 import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.OpenCypherGremlinConfiguration;
@@ -56,9 +57,6 @@ public class OpenCypherGremlinDataSourceDialog extends DataSourceDialog {
 
     public OpenCypherGremlinDataSourceDialog(Project project, DataSourcesView dataSourcesView) {
         super(project, dataSourcesView);
-        loadingIcon = new AsyncProcessIcon("validateConnectionIcon");
-        loadingPanel.setLayout(new FlowLayout());
-        loadingPanel.add(loadingIcon);
         loadingPanel.setVisible(false);
         flavorField.setModel(new EnumComboBoxModel<>(GremlinFlavor.class));
         serializerField.setModel(new EnumComboBoxModel<>(Serializers.class));
@@ -155,5 +153,9 @@ public class OpenCypherGremlinDataSourceDialog extends DataSourceDialog {
         configuration.setFlavor((GremlinFlavor) flavorField.getSelectedItem());
         configuration.setSerializer((Serializers) serializerField.getSelectedItem());
         configuration.setSSL(useSSLCheckBox.isSelected());
+    }
+
+    private void createUIComponents() {
+        loadingIcon = new AsyncProcessIcon("validateConnectionIcon");
     }
 }

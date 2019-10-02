@@ -10,15 +10,7 @@ public class ExecutorServiceImpl implements ExecutorService {
 
     @Override
     public <T> void runInBackground(Callable<T> task, Consumer<T> onSuccess, Consumer<Exception> onFailure) {
-        ApplicationManager.getApplication().executeOnPooledThread(() -> {
-            try {
-                T result = task.call();
-                ApplicationManager.getApplication().invokeLater(() -> onSuccess.accept(result));
-
-            } catch (Exception exception) {
-                ApplicationManager.getApplication().invokeLater(() -> onFailure.accept(exception));
-            }
-        });
+        runInBackground(task, onSuccess, onFailure, ModalityState.defaultModalityState());
     }
 
     @Override

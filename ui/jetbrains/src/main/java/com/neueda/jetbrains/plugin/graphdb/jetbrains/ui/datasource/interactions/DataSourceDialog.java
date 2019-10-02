@@ -67,11 +67,13 @@ public abstract class DataSourceDialog extends DialogWrapper {
     }
 
     private void createPopup(JPanel popupPanel, JComponent contentPanel) {
-        JBPopupFactory.getInstance()
-                .createComponentPopupBuilder(popupPanel, getPreferredFocusedComponent())
-                .setTitle("Test connection")
-                .createPopup()
-                .showInCenterOf(contentPanel);
+        if (contentPanel.isShowing()) {
+            JBPopupFactory.getInstance()
+                    .createComponentPopupBuilder(popupPanel, getPreferredFocusedComponent())
+                    .setTitle("Test connection")
+                    .createPopup()
+                    .showInCenterOf(contentPanel);
+        }
     }
 
     private void validateConnection(
