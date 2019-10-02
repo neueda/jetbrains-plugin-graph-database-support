@@ -35,7 +35,7 @@ public class OpenCypherGremlinQueryResult implements GraphQueryResult {
 
     @Override
     public String getResultSummary() {
-        return "Execution time: " + getExecutionTimeMs() + "ms";
+        return "";
     }
 
     @Override

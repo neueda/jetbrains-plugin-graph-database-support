@@ -84,7 +84,7 @@ public class OpenCypherGremlinDatabaseTest {
         assertThat(results.getRelationships()).isEmpty();
 
         assertThat(results.getNotifications()).isEmpty();
-        assertThat(results.getResultSummary()).contains("Execution time");
+        assertThat(results.getResultSummary()).isEmpty();
         assertThat(results.getExecutionTimeMs()).isGreaterThan(0);
 
         assertThat(results.hasPlan()).isFalse();
@@ -110,7 +110,7 @@ public class OpenCypherGremlinDatabaseTest {
         assertThat(results.getRelationships()).flatExtracting(GraphEntity::getTypes).containsExactly("created");
 
         assertThat(results.getNotifications()).isEmpty();
-        assertThat(results.getResultSummary()).contains("Execution time");
+        assertThat(results.getResultSummary()).isEmpty();
         assertThat(results.getExecutionTimeMs()).isGreaterThan(0);
 
         assertThat(results.hasPlan()).isFalse();
