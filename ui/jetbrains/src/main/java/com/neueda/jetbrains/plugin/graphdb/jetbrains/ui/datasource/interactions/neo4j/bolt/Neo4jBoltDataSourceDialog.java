@@ -47,7 +47,7 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
         super(project, dataSourcesView);
         loadingPanel.setVisible(false);
         dataSourcesComponent = dataSourcesView.getComponent();
-        testConnectionButton.addActionListener(e -> this.validationPopup(testConnectionButton, loadingPanel, loadingIcon));
+        testConnectionButton.addActionListener(e -> this.validationPopup());
     }
 
     @Nullable
@@ -109,6 +109,20 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
                 data.dataSourceName,
                 configuration
         );
+    }
+
+    @Override
+    protected void showLoading() {
+        testConnectionButton.setEnabled(false);
+        loadingIcon.resume();
+        loadingPanel.setVisible(true);
+    }
+
+    @Override
+    protected void hideLoading() {
+        testConnectionButton.setEnabled(true);
+        loadingIcon.suspend();
+        loadingPanel.setVisible(false);
     }
 
     private void extractData() {

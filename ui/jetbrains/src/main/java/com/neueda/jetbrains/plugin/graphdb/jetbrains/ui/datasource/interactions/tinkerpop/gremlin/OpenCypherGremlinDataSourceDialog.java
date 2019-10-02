@@ -62,7 +62,7 @@ public class OpenCypherGremlinDataSourceDialog extends DataSourceDialog {
         serializerField.setModel(new EnumComboBoxModel<>(Serializers.class));
         serializerField.setSelectedItem(GRAPHSON_V3D0);
         dataSourcesComponent = dataSourcesView.getComponent();
-        testConnectionButton.addActionListener(e -> this.validationPopup(testConnectionButton, loadingPanel, loadingIcon));
+        testConnectionButton.addActionListener(e -> this.validationPopup());
         optimizeTranslatedQueriesCheckBox.addActionListener(e -> {
             LandingPageAction.open();
             optimizeTranslatedQueriesCheckBox.setSelected(false);
@@ -142,6 +142,20 @@ public class OpenCypherGremlinDataSourceDialog extends DataSourceDialog {
             dataSourceName,
             configuration.getConfiguration()
         );
+    }
+
+    @Override
+    protected void showLoading() {
+        testConnectionButton.setEnabled(false);
+        loadingIcon.resume();
+        loadingPanel.setVisible(true);
+    }
+
+    @Override
+    protected void hideLoading() {
+        testConnectionButton.setEnabled(true);
+        loadingIcon.suspend();
+        loadingPanel.setVisible(false);
     }
 
     private void extractData() {

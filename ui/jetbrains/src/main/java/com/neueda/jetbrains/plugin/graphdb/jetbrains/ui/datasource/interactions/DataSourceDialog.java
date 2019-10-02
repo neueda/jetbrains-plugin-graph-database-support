@@ -35,24 +35,17 @@ public abstract class DataSourceDialog extends DialogWrapper {
 
     public abstract DataSourceApi constructDataSource();
 
+    protected abstract void showLoading();
+    protected abstract void hideLoading();
+
     public boolean go() {
         init();
         return showAndGet();
     }
 
-    private void showLoading(JButton testConnectionButton, JPanel loadingPanel, AsyncProcessIcon loadingIcon) {
-        testConnectionButton.setEnabled(false);
-        loadingIcon.resume();
-        loadingPanel.setVisible(true);
-    }
 
-    private void hideLoading(JButton testConnectionButton, JPanel loadingPanel, AsyncProcessIcon loadingIcon) {
-        testConnectionButton.setEnabled(true);
-        loadingIcon.suspend();
-        loadingPanel.setVisible(false);
-    }
 
-    public void validationPopup(JButton testConnectionButton, JPanel loadingPanel, AsyncProcessIcon loadingIcon) {
+    public void validationPopup() {
         JPanel popupPanel = new JPanel(new BorderLayout());
         popupPanel.setBorder(JBUI.Borders.empty(THICKNESS));
 
@@ -62,7 +55,7 @@ public abstract class DataSourceDialog extends DialogWrapper {
             popupPanel.add(connectionFailed, BorderLayout.CENTER);
             createPopup(popupPanel, getContentPanel());
         } else {
-            validateConnection(popupPanel, getContentPanel(), testConnectionButton, loadingPanel, loadingIcon);
+            validateConnection(popupPanel, getContentPanel());
         }
     }
 
@@ -78,16 +71,13 @@ public abstract class DataSourceDialog extends DialogWrapper {
 
     private void validateConnection(
             JPanel popupPanel,
-            JComponent contentPanel,
-            JButton testConnectionButton,
-            JPanel loadingPanel,
-            AsyncProcessIcon loadingIcon) {
+            JComponent contentPanel) {
         ExecutorService executorService = ServiceManager.getService(ExecutorService.class);
-        showLoading(testConnectionButton, loadingPanel, loadingIcon);
+        showLoading();
         executorService.runInBackground(
                 this::executeOkQuery,
-                (status) -> connectionSuccessful(popupPanel, contentPanel, testConnectionButton, loadingPanel, loadingIcon),
-                (exception) -> connectionFailed(exception, popupPanel, contentPanel, testConnectionButton, loadingPanel, loadingIcon),
+                (status) -> connectionSuccessful(popupPanel, contentPanel),
+                (exception) -> connectionFailed(exception, popupPanel, contentPanel),
                 ModalityState.current()
         );
     }
@@ -109,11 +99,8 @@ public abstract class DataSourceDialog extends DialogWrapper {
 
     private void connectionSuccessful(
             JPanel popupPanel,
-            JComponent contentPanel,
-            JButton testConnectionButton,
-            JPanel loadingPanel,
-            AsyncProcessIcon loadingIcon) {
-        hideLoading(testConnectionButton, loadingPanel, loadingIcon);
+            JComponent contentPanel) {
+        hideLoading();
         JLabel connectionSuccessful = new JLabel("Connection successful!", AllIcons.Process.State.GreenOK, JLabel.LEFT);
         popupPanel.add(connectionSuccessful, BorderLayout.CENTER);
 
@@ -123,11 +110,8 @@ public abstract class DataSourceDialog extends DialogWrapper {
     private void connectionFailed(
             Exception exception,
             JPanel popupPanel,
-            JComponent contentPanel,
-            JButton testConnectionButton,
-            JPanel loadingPanel,
-            AsyncProcessIcon loadingIcon) {
-        hideLoading(testConnectionButton, loadingPanel, loadingIcon);
+            JComponent contentPanel) {
+        hideLoading();
 
         JLabel connectionFailed = new JLabel("Connection failed: " + exception.getMessage(), AllIcons.Process.State.RedExcl, JLabel.LEFT);
 
