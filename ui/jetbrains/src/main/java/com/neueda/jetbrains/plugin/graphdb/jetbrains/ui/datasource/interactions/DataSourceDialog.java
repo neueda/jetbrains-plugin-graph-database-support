@@ -3,7 +3,6 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
@@ -75,7 +74,12 @@ public abstract class DataSourceDialog extends DialogWrapper {
                 .showInCenterOf(contentPanel);
     }
 
-    private void validateConnection(JPanel popupPanel, JComponent contentPanel, JButton testConnectionButton, JPanel loadingPanel, AsyncProcessIcon loadingIcon) {
+    private void validateConnection(
+            JPanel popupPanel,
+            JComponent contentPanel,
+            JButton testConnectionButton,
+            JPanel loadingPanel,
+            AsyncProcessIcon loadingIcon) {
         ExecutorService executorService = ServiceManager.getService(ExecutorService.class);
         showLoading(testConnectionButton, loadingPanel, loadingIcon);
         executorService.runInBackground(
@@ -101,7 +105,12 @@ public abstract class DataSourceDialog extends DialogWrapper {
         }
     }
 
-    private void connectionSuccessful(JPanel popupPanel, JComponent contentPanel, JButton testConnectionButton, JPanel loadingPanel, AsyncProcessIcon loadingIcon) {
+    private void connectionSuccessful(
+            JPanel popupPanel,
+            JComponent contentPanel,
+            JButton testConnectionButton,
+            JPanel loadingPanel,
+            AsyncProcessIcon loadingIcon) {
         hideLoading(testConnectionButton, loadingPanel, loadingIcon);
         JLabel connectionSuccessful = new JLabel("Connection successful!", AllIcons.Process.State.GreenOK, JLabel.LEFT);
         popupPanel.add(connectionSuccessful, BorderLayout.CENTER);
@@ -109,7 +118,13 @@ public abstract class DataSourceDialog extends DialogWrapper {
         createPopup(popupPanel, contentPanel);
     }
 
-    private void connectionFailed(Exception exception, JPanel popupPanel, JComponent contentPanel, JButton testConnectionButton, JPanel loadingPanel, AsyncProcessIcon loadingIcon) {
+    private void connectionFailed(
+            Exception exception,
+            JPanel popupPanel,
+            JComponent contentPanel,
+            JButton testConnectionButton,
+            JPanel loadingPanel,
+            AsyncProcessIcon loadingIcon) {
         hideLoading(testConnectionButton, loadingPanel, loadingIcon);
 
         JLabel connectionFailed = new JLabel("Connection failed: " + exception.getMessage(), AllIcons.Process.State.RedExcl, JLabel.LEFT);
