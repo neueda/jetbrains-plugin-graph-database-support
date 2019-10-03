@@ -3,8 +3,10 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.log;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.util.messages.MessageBus;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
@@ -17,15 +19,18 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParam
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.MetadataRetrieveEvent;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.PARAMS_ERROR_COMMON_MSG;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.log.ShowExceptionDetailsFilter.SHOW_DETAILS;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.getCause;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.wrapExceptionInMeaningMessage;
 
 public class LogPanel implements Disposable {
+    private static final String SHOW_DETAILS = "Show details";
+
     private ConsoleView log;
     private Map<String, String> exceptions = new HashMap<>();
     private Map<String, String> causes = new HashMap<>();
@@ -37,7 +42,6 @@ public class LogPanel implements Disposable {
                 .createBuilder(project)
                 .getConsole();
         log.addMessageFilter(new GoToTabFilter(log));
-        log.addMessageFilter(new ShowExceptionDetailsFilter(log, exceptions));
 
         Disposer.register(graphConsoleView, log);
         graphConsoleView.getLogTab().add(log.getComponent(), BorderLayout.CENTER);
@@ -152,17 +156,31 @@ public class LogPanel implements Disposable {
     private String printException(Exception exception) {
         String errorMessage;
         if (exception.getMessage() != null) {
-            errorMessage = wrapExceptionInMeaningMessage(exception) + " " + SHOW_DETAILS;
+            errorMessage = wrapExceptionInMeaningMessage(exception);
         } else {
-            errorMessage = exception.toString() + " " + SHOW_DETAILS;
+            errorMessage = exception.toString();
         }
         error(errorMessage);
+        String details = exception.getMessage() + '\n' + getCause(exception);
+        log.printHyperlink(SHOW_DETAILS, p -> showPopup("Error", details));
         newLine();
         return errorMessage;
     }
 
     private void newLine() {
         log.print("\n", ConsoleViewContentType.NORMAL_OUTPUT);
+    }
+
+    private void showPopup(String title, String text) {
+        JBPopupFactory.getInstance()
+                .createComponentPopupBuilder(
+                        new JLabel(text,
+                                AllIcons.General.Error,
+                                JLabel.LEFT),
+                        log.getComponent())
+                .setTitle(title)
+                .createPopup()
+                .showInFocusCenter();
     }
 
     @Override

@@ -13,7 +13,6 @@ import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.query.Ope
 import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.driver.Result;
-import org.neo4j.driver.v1.exceptions.ClientException;
 import org.opencypher.gremlin.client.CypherGremlinClient;
 
 import java.net.URI;
@@ -24,8 +23,10 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.*;
-import static java.util.stream.Collectors.*;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static java.util.Collections.singletonMap;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Communicates with TinkerPop database by translating Cypher to Gremlin

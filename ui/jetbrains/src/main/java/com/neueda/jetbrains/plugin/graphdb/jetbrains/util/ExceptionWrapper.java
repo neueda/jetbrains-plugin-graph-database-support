@@ -1,5 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.util;
 
+import org.apache.commons.lang.WordUtils;
+
 public class ExceptionWrapper {
     private final static String NON_THIN_CHARS = "[^iIl1\\.,']";
     private final static int SHORT_STRING_LENGTH = 140;
@@ -24,6 +26,10 @@ public class ExceptionWrapper {
         } while (textWidth(text.substring(0, newEnd) + "...") < targetLength);
 
         return text.substring(0, end) + "...";
+    }
+
+    public static String wrapLongLine(String longLine) {
+        return WordUtils.wrap(longLine, 100);
     }
 
     public static String getCause(Exception exception) {
