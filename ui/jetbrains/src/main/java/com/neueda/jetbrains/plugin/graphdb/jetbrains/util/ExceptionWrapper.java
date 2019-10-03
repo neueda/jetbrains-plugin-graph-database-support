@@ -1,9 +1,8 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.util;
 
-import org.apache.commons.lang.WordUtils;
-
 public class ExceptionWrapper {
     private final static String NON_THIN_CHARS = "[^iIl1\\.,']";
+    private final static int SHORT_STRING_LENGTH = 140;
 
     private static int textWidth(String str) {
         return str.length() - str.replaceAll(NON_THIN_CHARS, "").length() / 2;
@@ -37,10 +36,6 @@ public class ExceptionWrapper {
         return exceptionCauses.toString();
     }
 
-    public static String wrapText(String message) {
-        return WordUtils.wrap(message, 20);
-    }
-
     public static String wrapExceptionInMeaningMessage(Exception exception) {
         String exceptionMessage = exception.getMessage();
         if (exceptionMessage.contains("org.apache.tinkerpop.gremlin.driver.ser.SerializationException")) {
@@ -52,6 +47,9 @@ public class ExceptionWrapper {
         if (exceptionMessage.contains("org.apache.tinkerpop.gremlin.driver.exception.ConnectionException")) {
             return "Database connection failed with gremlin driver connection exception. Please check database configuration.";
         }
-        return truncateString(exception.getMessage(), 120);
+        if (exceptionMessage.length() > SHORT_STRING_LENGTH) {
+            return truncateString(exceptionMessage, SHORT_STRING_LENGTH);
+        }
+        return exceptionMessage;
     }
 }

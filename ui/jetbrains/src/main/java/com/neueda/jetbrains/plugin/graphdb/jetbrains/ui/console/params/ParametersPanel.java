@@ -9,7 +9,11 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.fileEditor.*;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.fileEditor.FileEditor;
+import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
+import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.fileEditor.impl.EditorTabPresentationUtil;
 import com.intellij.openapi.fileEditor.impl.EditorWindow;
@@ -33,7 +37,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.PARAMS_ERROR_COMMON_MSG;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.truncateString;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.wrapExceptionInMeaningMessage;
 
 public class ParametersPanel implements ParametersProvider {
 
@@ -79,7 +83,7 @@ public class ParametersPanel implements ParametersProvider {
                     }
                     String errorMessage;
                     if (exception.getMessage() != null) {
-                        errorMessage = String.format("%s: %s", PARAMS_ERROR_COMMON_MSG, truncateString(exception.getMessage(), 120));
+                        errorMessage = String.format("%s: %s", PARAMS_ERROR_COMMON_MSG, wrapExceptionInMeaningMessage(exception));
                     } else {
                         errorMessage = PARAMS_ERROR_COMMON_MSG;
                     }
