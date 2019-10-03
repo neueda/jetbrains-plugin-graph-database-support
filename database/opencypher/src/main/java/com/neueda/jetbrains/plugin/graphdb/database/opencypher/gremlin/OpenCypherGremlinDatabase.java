@@ -98,7 +98,7 @@ public class OpenCypherGremlinDatabase implements GraphDatabaseApi {
             if (query.toUpperCase().startsWith("EXPLAIN")) {
                 return new OpenCypherGremlinQueryResult(0, emptyList(), emptyList(), emptyList(), emptyList());
             } else {
-                throw new ClientException(e.getMessage());
+                throw e;
             }
         }
     }

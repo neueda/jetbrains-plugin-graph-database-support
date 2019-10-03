@@ -1,5 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.util;
 
+import org.apache.commons.lang.WordUtils;
+
 public class ExceptionWrapper {
     private final static String NON_THIN_CHARS = "[^iIl1\\.,']";
 
@@ -35,21 +37,21 @@ public class ExceptionWrapper {
         return exceptionCauses.toString();
     }
 
+    public static String wrapText(String message) {
+        return WordUtils.wrap(message, 20);
+    }
 
     public static String wrapExceptionInMeaningMessage(Exception exception) {
-        String exceptionName = exception.getClass().getCanonicalName();
-        System.out.println("+++++++++++ Exception name: " + exceptionName + "+++++++++++++");
-        switch (exceptionName) {
-            case "org.apache.tinkerpop.gremlin.driver.exception.ResponseException":
-                return "Response exception occurred";
-            case "org.apache.tinkerpop.gremlin.driver.exception.ConnectionException":
-                return "Connection exception occurred";
-            case "java.util.concurrent.TimeoutException":
-                return "Timed out while waiting for available host - check the client configuration" +
-                        "and connectivity to the server";
-            case "java.lang.RuntimeException":
-            default:
-                return exception.getMessage();
+        String exceptionMessage = exception.getMessage();
+        if (exceptionMessage.contains("org.apache.tinkerpop.gremlin.driver.ser.SerializationException")) {
+            return "Wrong serializer selected. Please check connection configuration";
         }
+        if (exceptionMessage.contains("org.apache.tinkerpop.gremlin.driver.exception.ResponseException")) {
+            return "Database connection failed with gremlin driver response exception. Please check database configuration.";
+        }
+        if (exceptionMessage.contains("org.apache.tinkerpop.gremlin.driver.exception.ConnectionException")) {
+            return "Database connection failed with gremlin driver connection exception. Please check database configuration.";
+        }
+        return truncateString(exception.getMessage(), 120);
     }
 }

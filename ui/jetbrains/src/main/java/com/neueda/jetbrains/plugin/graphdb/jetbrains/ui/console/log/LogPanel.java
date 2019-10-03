@@ -23,6 +23,7 @@ import java.util.Map;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.PARAMS_ERROR_COMMON_MSG;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.getCause;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.truncateString;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.wrapExceptionInMeaningMessage;
 
 public class LogPanel implements Disposable {
 
@@ -146,15 +147,16 @@ public class LogPanel implements Disposable {
 
     public void printException(Exception exception) {
         if (exception.getMessage() != null) {
-            error(truncateString(exception.getMessage(), 120));
+            error(wrapExceptionInMeaningMessage(exception));
         } else {
-            error(truncateString(exception.getMessage(), 120));
+            error(exception.toString());
         }
         newLine();
 
         String cause = getCause(exception);
-        error(truncateString(cause, 120));
+        error(truncateString(cause, 100));
     }
+
 
     public void newLine() {
         log.print("\n", ConsoleViewContentType.NORMAL_OUTPUT);
