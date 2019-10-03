@@ -8,7 +8,9 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.util.Disposer;
+import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.messages.MessageBus;
+import com.intellij.util.ui.JBUI;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourceMetadata;
@@ -25,11 +27,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.PARAMS_ERROR_COMMON_MSG;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceDialog.HEIGHT;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceDialog.THICKNESS;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.getCause;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.truncateString;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.wrapExceptionInMeaningMessage;
 
 public class LogPanel implements Disposable {
-    private static final String SHOW_DETAILS = "Show details";
+    private static final String SHOW_DETAILS = "Details...";
 
     private ConsoleView log;
     private Map<String, String> exceptions = new HashMap<>();
@@ -162,7 +167,7 @@ public class LogPanel implements Disposable {
         }
         error(errorMessage);
         String details = exception.getMessage() + '\n' + getCause(exception);
-        log.printHyperlink(SHOW_DETAILS, p -> showPopup("Error", details));
+        log.printHyperlink(SHOW_DETAILS, p -> showPopup("Error details", details));
         newLine();
         return errorMessage;
     }
@@ -171,12 +176,23 @@ public class LogPanel implements Disposable {
         log.print("\n", ConsoleViewContentType.NORMAL_OUTPUT);
     }
 
-    private void showPopup(String title, String text) {
+    private void showPopup(String title, String details) {
+        JPanel popupPanel = new JPanel(new BorderLayout());
+        popupPanel.setBorder(JBUI.Borders.empty(THICKNESS));
+
+        JTextArea exceptionDetails = new JTextArea();
+        exceptionDetails.setLineWrap(true);
+        exceptionDetails.append(details);
+        JLabel jLabel = new JLabel(truncateString(details, 120), AllIcons.Process.State.RedExcl, JLabel.LEFT);
+
+        JBScrollPane scrollPane = new JBScrollPane(exceptionDetails);
+        scrollPane.setPreferredSize(new Dimension(-1, HEIGHT));
+        popupPanel.add(jLabel, BorderLayout.CENTER);
+        popupPanel.add(scrollPane, BorderLayout.SOUTH);
+
         JBPopupFactory.getInstance()
                 .createComponentPopupBuilder(
-                        new JLabel(text,
-                                AllIcons.General.Error,
-                                JLabel.LEFT),
+                        popupPanel,
                         log.getComponent())
                 .setTitle(title)
                 .createPopup()
