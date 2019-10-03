@@ -5,7 +5,6 @@ import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.EnumComboBoxModel;
 import com.intellij.ui.components.JBPasswordField;
 import com.intellij.ui.components.JBTextField;
-import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.util.ui.AsyncProcessIcon;
 import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.GremlinFlavor;
 import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.OpenCypherGremlinConfiguration;
@@ -21,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
