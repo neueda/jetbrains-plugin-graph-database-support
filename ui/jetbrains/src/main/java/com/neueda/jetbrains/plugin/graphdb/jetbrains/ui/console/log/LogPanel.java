@@ -18,16 +18,17 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.Meta
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.PARAMS_ERROR_COMMON_MSG;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.getCause;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.truncateString;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.log.ShowExceptionDetailsFilter.SHOW_DETAILS;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.wrapExceptionInMeaningMessage;
 
 public class LogPanel implements Disposable {
-
     private ConsoleView log;
+    private Map<String, String> exceptions = new HashMap<>();
+    private Map<String, String> causes = new HashMap<>();
 
     public void initialize(GraphConsoleView graphConsoleView, Project project) {
         MessageBus messageBus = project.getMessageBus();
@@ -36,6 +37,7 @@ public class LogPanel implements Disposable {
                 .createBuilder(project)
                 .getConsole();
         log.addMessageFilter(new GoToTabFilter(log));
+        log.addMessageFilter(new ShowExceptionDetailsFilter(log, exceptions));
 
         Disposer.register(graphConsoleView, log);
         graphConsoleView.getLogTab().add(log.getComponent(), BorderLayout.CENTER);
@@ -110,8 +112,10 @@ public class LogPanel implements Disposable {
 
             @Override
             public void metadataRefreshFailed(DataSourceApi nodeDataSource, Exception exception) {
-                error(String.format("DataSource[%s] - metadata refresh failed. Reason: ", nodeDataSource.getName()));
-                printException(exception);
+                String prefix = String.format("DataSource[%s] - metadata refresh failed. Reason: ", nodeDataSource.getName());
+                error(prefix);
+                String errorMessage = prefix + printException(exception) + "\n";
+                exceptions.put(errorMessage, exception.getMessage());
                 newLine();
             }
         });
@@ -123,11 +127,11 @@ public class LogPanel implements Disposable {
                 });
     }
 
-    public void userInput(String message) {
+    private void userInput(String message) {
         log.print(message, ConsoleViewContentType.USER_INPUT);
     }
 
-    public void printParametersMap(Map<String, Object> parameters) {
+    private void printParametersMap(Map<String, Object> parameters) {
         for (Map.Entry<String, Object> entry : parameters.entrySet()) {
             String message = String.format("%s: %s", entry.getKey(), entry.getValue());
             log.print(message, ConsoleViewContentType.USER_INPUT);
@@ -135,7 +139,7 @@ public class LogPanel implements Disposable {
         }
     }
 
-    public void info(String message) {
+    private void info(String message) {
         log.print(message, ConsoleViewContentType.NORMAL_OUTPUT);
     }
 
@@ -145,20 +149,19 @@ public class LogPanel implements Disposable {
         }
     }
 
-    public void printException(Exception exception) {
+    private String printException(Exception exception) {
+        String errorMessage;
         if (exception.getMessage() != null) {
-            error(wrapExceptionInMeaningMessage(exception));
+            errorMessage = wrapExceptionInMeaningMessage(exception) + " " + SHOW_DETAILS;
         } else {
-            error(exception.toString());
+            errorMessage = exception.toString() + " " + SHOW_DETAILS;
         }
+        error(errorMessage);
         newLine();
-
-        String cause = getCause(exception);
-        error(truncateString(cause, 100));
+        return errorMessage;
     }
 
-
-    public void newLine() {
+    private void newLine() {
         log.print("\n", ConsoleViewContentType.NORMAL_OUTPUT);
     }
 
