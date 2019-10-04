@@ -5,6 +5,7 @@ import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.EnumComboBoxModel;
 import com.intellij.ui.components.JBPasswordField;
 import com.intellij.ui.components.JBTextField;
+import com.intellij.util.ui.AsyncProcessIcon;
 import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.GremlinFlavor;
 import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.OpenCypherGremlinConfiguration;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.LandingPageAction;
@@ -47,6 +48,8 @@ public class OpenCypherGremlinDataSourceDialog extends DataSourceDialog {
     private JButton testConnectionButton;
     private JCheckBox useSSLCheckBox;
     private JCheckBox optimizeTranslatedQueriesCheckBox;
+    private JPanel loadingPanel;
+    private AsyncProcessIcon loadingIcon;
 
     public OpenCypherGremlinDataSourceDialog(Project project, DataSourcesView dataSourcesView, DataSourceApi dataSourceToEdit) {
         this(project, dataSourcesView);
@@ -55,6 +58,7 @@ public class OpenCypherGremlinDataSourceDialog extends DataSourceDialog {
 
     public OpenCypherGremlinDataSourceDialog(Project project, DataSourcesView dataSourcesView) {
         super(project, dataSourcesView);
+        loadingPanel.setVisible(false);
         flavorField.setModel(new EnumComboBoxModel<>(GremlinFlavor.class));
         serializerField.setModel(new EnumComboBoxModel<>(Serializers.class));
         serializerField.setSelectedItem(GRAPHSON_V3D0);
@@ -144,6 +148,20 @@ public class OpenCypherGremlinDataSourceDialog extends DataSourceDialog {
         );
     }
 
+    @Override
+    protected void showLoading() {
+        testConnectionButton.setEnabled(false);
+        loadingIcon.resume();
+        loadingPanel.setVisible(true);
+    }
+
+    @Override
+    protected void hideLoading() {
+        testConnectionButton.setEnabled(true);
+        loadingIcon.suspend();
+        loadingPanel.setVisible(false);
+    }
+
     private void extractData() {
         dataSourceName = dataSourceNameField.getText();
         configuration.setHost(hostField.getText());
@@ -153,5 +171,9 @@ public class OpenCypherGremlinDataSourceDialog extends DataSourceDialog {
         configuration.setFlavor((GremlinFlavor) flavorField.getSelectedItem());
         configuration.setSerializer((Serializers) serializerField.getSelectedItem());
         configuration.setSSL(useSSLCheckBox.isSelected());
+    }
+
+    private void createUIComponents() {
+        loadingIcon = new AsyncProcessIcon("validateConnectionIcon");
     }
 }

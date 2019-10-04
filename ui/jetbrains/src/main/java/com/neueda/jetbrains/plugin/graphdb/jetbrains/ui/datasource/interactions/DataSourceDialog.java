@@ -1,6 +1,7 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions;
 
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -13,9 +14,12 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DatabaseManagerService;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.services.ExecutorService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView;
+
 import java.awt.*;
 import javax.swing.*;
+
 import org.jetbrains.annotations.Nullable;
 
 public abstract class DataSourceDialog extends DialogWrapper {
@@ -30,10 +34,15 @@ public abstract class DataSourceDialog extends DialogWrapper {
 
     public abstract DataSourceApi constructDataSource();
 
+    protected abstract void showLoading();
+    protected abstract void hideLoading();
+
     public boolean go() {
         init();
         return showAndGet();
     }
+
+
 
     public void validationPopup() {
         JPanel popupPanel = new JPanel(new BorderLayout());
@@ -43,43 +52,82 @@ public abstract class DataSourceDialog extends DialogWrapper {
         if (validationInfo != null) {
             JLabel connectionFailed = new JLabel("Connection failed: " + validationInfo.message, AllIcons.Process.State.RedExcl, JLabel.LEFT);
             popupPanel.add(connectionFailed, BorderLayout.CENTER);
+            createPopup(popupPanel, getContentPanel());
         } else {
-            try {
-                DataSourceApi dataSource = constructDataSource();
-                DatabaseManagerService databaseManager = ServiceManager.getService(DatabaseManagerService.class);
-                GraphDatabaseApi db = databaseManager.getDatabaseFor(dataSource);
-                GraphQueryResult result = db.execute("RETURN 'ok'");
+            validateConnection(popupPanel, getContentPanel());
+        }
+    }
 
-                Object value = result.getRows().get(0).getValue(result.getColumns().get(0));
-                if (value.equals("ok")) {
-                    JLabel connectionSuccessful = new JLabel("Connection successful!", AllIcons.Process.State.GreenOK, JLabel.LEFT);
-                    popupPanel.add(connectionSuccessful, BorderLayout.CENTER);
-                } else {
-                    throw new RuntimeException("Unexpected test query output: " + value);
-                }
-            } catch (Exception exception) {
-                JLabel connectionFailed = new JLabel("Connection failed: " + exception.getMessage(), AllIcons.Process.State.RedExcl, JLabel.LEFT);
+    private void createPopup(JPanel popupPanel, JComponent contentPanel) {
+        if (contentPanel.isShowing()) {
+            JBPopupFactory.getInstance()
+                    .createComponentPopupBuilder(popupPanel, getPreferredFocusedComponent())
+                    .setTitle("Test connection")
+                    .createPopup()
+                    .showInCenterOf(contentPanel);
+        }
+    }
 
-                JTextArea exceptionCauses = new JTextArea();
-                exceptionCauses.setLineWrap(true);
+    private void validateConnection(
+            JPanel popupPanel,
+            JComponent contentPanel) {
+        ExecutorService executorService = ServiceManager.getService(ExecutorService.class);
+        showLoading();
+        executorService.runInBackground(
+                this::executeOkQuery,
+                (status) -> connectionSuccessful(popupPanel, contentPanel),
+                (exception) -> connectionFailed(exception, popupPanel, contentPanel),
+                ModalityState.current()
+        );
+    }
 
-                Throwable cause = exception.getCause();
-                while (cause != null) {
-                    exceptionCauses.append(cause.getMessage() + "\n");
-                    cause = cause.getCause();
-                }
+    private String executeOkQuery() {
+        DataSourceApi dataSource = constructDataSource();
+        DatabaseManagerService databaseManager = ServiceManager.getService(DatabaseManagerService.class);
+        GraphDatabaseApi db = databaseManager.getDatabaseFor(dataSource);
+        GraphQueryResult result = db.execute("RETURN 'ok'");
 
-                JBScrollPane scrollPane = new JBScrollPane(exceptionCauses);
-                scrollPane.setPreferredSize(new Dimension(-1, HEIGHT));
-                popupPanel.add(connectionFailed, BorderLayout.CENTER);
-                popupPanel.add(scrollPane, BorderLayout.SOUTH);
-            }
+        Object value = result.getRows().get(0).getValue(result.getColumns().get(0));
+
+        if (value.equals("ok")) {
+            return "ok";
+        } else {
+            throw new RuntimeException("Unexpected test query output: " + value);
+        }
+    }
+
+    private void connectionSuccessful(
+            JPanel popupPanel,
+            JComponent contentPanel) {
+        hideLoading();
+        JLabel connectionSuccessful = new JLabel("Connection successful!", AllIcons.Process.State.GreenOK, JLabel.LEFT);
+        popupPanel.add(connectionSuccessful, BorderLayout.CENTER);
+
+        createPopup(popupPanel, contentPanel);
+    }
+
+    private void connectionFailed(
+            Exception exception,
+            JPanel popupPanel,
+            JComponent contentPanel) {
+        hideLoading();
+
+        JLabel connectionFailed = new JLabel("Connection failed: " + exception.getMessage(), AllIcons.Process.State.RedExcl, JLabel.LEFT);
+
+        JTextArea exceptionCauses = new JTextArea();
+        exceptionCauses.setLineWrap(true);
+
+        Throwable cause = exception.getCause();
+        while (cause != null) {
+            exceptionCauses.append(cause.getMessage() + "\n");
+            cause = cause.getCause();
         }
 
-        JBPopupFactory.getInstance()
-            .createComponentPopupBuilder(popupPanel, getPreferredFocusedComponent())
-            .setTitle("Test connection")
-            .createPopup()
-            .showInCenterOf(getContentPanel());
+        JBScrollPane scrollPane = new JBScrollPane(exceptionCauses);
+        scrollPane.setPreferredSize(new Dimension(-1, HEIGHT));
+        popupPanel.add(connectionFailed, BorderLayout.CENTER);
+        popupPanel.add(scrollPane, BorderLayout.SOUTH);
+
+        createPopup(popupPanel, contentPanel);
     }
 }

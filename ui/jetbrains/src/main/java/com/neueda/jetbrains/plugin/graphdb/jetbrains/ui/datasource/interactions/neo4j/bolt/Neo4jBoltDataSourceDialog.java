@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.components.JBPasswordField;
 import com.intellij.ui.components.JBTextField;
+import com.intellij.util.ui.AsyncProcessIcon;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.Neo4jBoltConfiguration;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourceType;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.DataSourcesComponent;
@@ -32,6 +33,8 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
     private JBPasswordField passwordField;
     private JBTextField portField;
     private JButton testConnectionButton;
+    private JPanel loadingPanel;
+    private AsyncProcessIcon loadingIcon;
 
     public Neo4jBoltDataSourceDialog(Project project, DataSourcesView dataSourcesView, DataSourceApi dataSourceToEdit) {
         this(project, dataSourcesView);
@@ -40,6 +43,7 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
 
     public Neo4jBoltDataSourceDialog(Project project, DataSourcesView dataSourcesView) {
         super(project, dataSourcesView);
+        loadingPanel.setVisible(false);
         dataSourcesComponent = dataSourcesView.getComponent();
         testConnectionButton.addActionListener(e -> this.validationPopup());
     }
@@ -105,6 +109,20 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
         );
     }
 
+    @Override
+    protected void showLoading() {
+        testConnectionButton.setEnabled(false);
+        loadingIcon.resume();
+        loadingPanel.setVisible(true);
+    }
+
+    @Override
+    protected void hideLoading() {
+        testConnectionButton.setEnabled(true);
+        loadingIcon.suspend();
+        loadingPanel.setVisible(false);
+    }
+
     private void extractData() {
         data = new Data();
         data.dataSourceName = dataSourceNameField.getText();
@@ -112,6 +130,10 @@ public class Neo4jBoltDataSourceDialog extends DataSourceDialog {
         data.port = portField.getText();
         data.user = userField.getText();
         data.password = String.valueOf(passwordField.getPassword()); // TODO: use password API
+    }
+
+    private void createUIComponents() {
+        loadingIcon = new AsyncProcessIcon("validateConnectionIcon");
     }
 
     private static final class Data {
