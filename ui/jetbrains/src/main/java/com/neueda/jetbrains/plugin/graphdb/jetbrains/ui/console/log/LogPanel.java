@@ -15,6 +15,7 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.GraphConsoleView
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecutionProcessEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.MetadataRetrieveEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.Map;
@@ -135,8 +136,10 @@ public class LogPanel implements Disposable {
         log.print(message, ConsoleViewContentType.NORMAL_OUTPUT);
     }
 
-    public void error(String message) {
-        log.print(message, ConsoleViewContentType.ERROR_OUTPUT);
+    public void error(@Nullable String message) {
+        if (message != null) {
+            log.print(message, ConsoleViewContentType.ERROR_OUTPUT);
+        }
     }
 
     public void printException(Exception exception) {
