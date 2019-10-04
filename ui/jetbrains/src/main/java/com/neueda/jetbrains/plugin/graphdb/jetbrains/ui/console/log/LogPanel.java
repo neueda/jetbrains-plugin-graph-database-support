@@ -6,6 +6,7 @@ import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.popup.IconButton;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.ui.components.JBScrollPane;
@@ -182,7 +183,7 @@ public class LogPanel implements Disposable {
         popupPanel.setBorder(JBUI.Borders.empty(THICKNESS));
 
         JTextArea exceptionDetails = new JTextArea();
-        exceptionDetails.setLineWrap(true);
+        exceptionDetails.setLineWrap(false);
         exceptionDetails.append(details);
         JLabel jLabel = new JLabel(truncateString(details, SHORT_STRING_LENGTH), AllIcons.Process.State.RedExcl, JLabel.LEFT);
 
@@ -196,6 +197,7 @@ public class LogPanel implements Disposable {
                         popupPanel,
                         log.getComponent())
                 .setTitle(title)
+                .setCancelButton(new IconButton("Close", AllIcons.Actions.Close, AllIcons.Actions.CloseHovered))
                 .createPopup()
                 .showInFocusCenter();
     }

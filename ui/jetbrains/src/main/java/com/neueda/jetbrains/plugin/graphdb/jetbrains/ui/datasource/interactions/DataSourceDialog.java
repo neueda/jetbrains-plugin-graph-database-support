@@ -68,6 +68,7 @@ public abstract class DataSourceDialog extends DialogWrapper {
                     .createComponentPopupBuilder(popupPanel, getPreferredFocusedComponent())
                     .setCancelButton(new IconButton("Close", AllIcons.Actions.Close))
                     .setTitle("Test connection")
+                    .setCancelButton(new IconButton("Close", AllIcons.Actions.Close, AllIcons.Actions.CloseHovered))
                     .createPopup()
                     .showInCenterOf(contentPanel);
         }
@@ -120,7 +121,7 @@ public abstract class DataSourceDialog extends DialogWrapper {
         JLabel connectionFailed = new JLabel("Connection failed: " + truncateString(exception.getMessage(), SHORT_STRING_LENGTH), AllIcons.Process.State.RedExcl, JLabel.LEFT);
 
         JTextArea exceptionCauses = new JTextArea();
-        exceptionCauses.setLineWrap(true);
+        exceptionCauses.setLineWrap(false);
         exceptionCauses.append(getCause(exception));
 
         JBScrollPane scrollPane = new JBScrollPane(exceptionCauses);
