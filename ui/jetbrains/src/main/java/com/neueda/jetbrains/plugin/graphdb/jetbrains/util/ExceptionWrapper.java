@@ -4,7 +4,7 @@ import org.apache.commons.lang.WordUtils;
 
 public class ExceptionWrapper {
     private final static String NON_THIN_CHARS = "[^iIl1\\.,']";
-    private final static int SHORT_STRING_LENGTH = 140;
+    public final static int SHORT_STRING_LENGTH = 140;
 
     private static int textWidth(String str) {
         return str.length() - str.replaceAll(NON_THIN_CHARS, "").length() / 2;

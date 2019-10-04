@@ -29,6 +29,7 @@ import java.util.Map;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.PARAMS_ERROR_COMMON_MSG;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceDialog.HEIGHT;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceDialog.THICKNESS;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.SHORT_STRING_LENGTH;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.getCause;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.truncateString;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.wrapExceptionInMeaningMessage;
@@ -167,7 +168,7 @@ public class LogPanel implements Disposable {
         }
         error(errorMessage);
         String details = exception.getMessage() + '\n' + getCause(exception);
-        log.printHyperlink(SHOW_DETAILS, p -> showPopup("Error details", details));
+        log.printHyperlink(" " + SHOW_DETAILS, p -> showPopup("Error details", details));
         newLine();
         return errorMessage;
     }
@@ -183,7 +184,7 @@ public class LogPanel implements Disposable {
         JTextArea exceptionDetails = new JTextArea();
         exceptionDetails.setLineWrap(true);
         exceptionDetails.append(details);
-        JLabel jLabel = new JLabel(truncateString(details, 120), AllIcons.Process.State.RedExcl, JLabel.LEFT);
+        JLabel jLabel = new JLabel(truncateString(details, SHORT_STRING_LENGTH), AllIcons.Process.State.RedExcl, JLabel.LEFT);
 
         JBScrollPane scrollPane = new JBScrollPane(exceptionDetails);
         scrollPane.setPreferredSize(new Dimension(-1, HEIGHT));

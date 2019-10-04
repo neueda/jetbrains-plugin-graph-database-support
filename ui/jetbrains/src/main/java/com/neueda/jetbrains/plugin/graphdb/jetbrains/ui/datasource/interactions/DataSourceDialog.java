@@ -22,6 +22,8 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.SHORT_STRING_LENGTH;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.getCause;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.truncateString;
 
 public abstract class DataSourceDialog extends DialogWrapper {
@@ -37,13 +39,13 @@ public abstract class DataSourceDialog extends DialogWrapper {
     public abstract DataSourceApi constructDataSource();
 
     protected abstract void showLoading();
+
     protected abstract void hideLoading();
 
     public boolean go() {
         init();
         return showAndGet();
     }
-
 
 
     public void validationPopup() {
@@ -115,16 +117,11 @@ public abstract class DataSourceDialog extends DialogWrapper {
             JComponent contentPanel) {
         hideLoading();
 
-        JLabel connectionFailed = new JLabel("Connection failed: " + truncateString(exception.getMessage()), AllIcons.Process.State.RedExcl, JLabel.LEFT);
+        JLabel connectionFailed = new JLabel("Connection failed: " + truncateString(exception.getMessage(), SHORT_STRING_LENGTH), AllIcons.Process.State.RedExcl, JLabel.LEFT);
 
         JTextArea exceptionCauses = new JTextArea();
         exceptionCauses.setLineWrap(true);
-
-        Throwable cause = exception.getCause();
-        while (cause != null) {
-            exceptionCauses.append(cause.getMessage() + "\n");
-            cause = cause.getCause();
-        }
+        exceptionCauses.append(getCause(exception));
 
         JBScrollPane scrollPane = new JBScrollPane(exceptionCauses);
         scrollPane.setPreferredSize(new Dimension(-1, HEIGHT));
