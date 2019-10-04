@@ -3,25 +3,28 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.util;
 import org.apache.commons.lang.WordUtils;
 
 public class ExceptionWrapper {
-    private final static String NON_THIN_CHARS = "[^iIl1\\.,']";
-    public final static int SHORT_STRING_LENGTH = 140;
+    public static final int SHORT_STRING_LENGTH = 140;
+    private static final String NON_THIN_CHARS = "[^iIl1\\.,']";
 
     private static int textWidth(String str) {
         return str.length() - str.replaceAll(NON_THIN_CHARS, "").length() / 2;
     }
 
     public static String truncateString(String text, int targetLength) {
-        if (textWidth(text) <= targetLength)
+        if (textWidth(text) <= targetLength) {
             return text;
+        }
         int end = text.lastIndexOf(' ', targetLength - 3);
-        if (end == -1)
+        if (end == -1) {
             return text.substring(0, targetLength - 3) + "...";
+        }
         int newEnd = end;
         do {
             end = newEnd;
             newEnd = text.indexOf(' ', end + 1);
-            if (newEnd == -1)
+            if (newEnd == -1) {
                 newEnd = text.length();
+            }
 
         } while (textWidth(text.substring(0, newEnd) + "...") < targetLength);
 

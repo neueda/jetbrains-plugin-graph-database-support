@@ -118,7 +118,8 @@ public abstract class DataSourceDialog extends DialogWrapper {
             JComponent contentPanel) {
         hideLoading();
 
-        JLabel connectionFailed = new JLabel("Connection failed: " + truncateString(exception.getMessage(), SHORT_STRING_LENGTH), AllIcons.Process.State.RedExcl, JLabel.LEFT);
+        JLabel connectionFailed = new JLabel("Connection failed: " +
+                truncateString(exception.getMessage(), SHORT_STRING_LENGTH), AllIcons.Process.State.RedExcl, JLabel.LEFT);
 
         JTextArea exceptionCauses = new JTextArea();
         exceptionCauses.setLineWrap(false);
