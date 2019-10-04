@@ -9,11 +9,11 @@ import java.awt.*;
 import java.net.URI;
 
 public class LandingPageAction {
-    public static final String URL = "https://google.com";
+    public static final String URL = "https://technologies.neueda.com/plugin";
 
     public static void open() {
         Analytics.event("landingPage", "clicked");
-        int ok = Messages.showOkCancelDialog("todo " + URL, "todo", "Read more", "Cancel",
+        int ok = Messages.showOkCancelDialog("To find more visit " + URL, "Premium Version", "Find more", "Cancel",
                 AllIcons.General.QuestionDialog);
         if (ok == 0) {
             Analytics.event("landingPage", "land");
