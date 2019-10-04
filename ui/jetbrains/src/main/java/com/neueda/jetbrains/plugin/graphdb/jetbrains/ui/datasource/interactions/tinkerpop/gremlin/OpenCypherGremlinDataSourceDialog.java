@@ -82,6 +82,9 @@ public class OpenCypherGremlinDataSourceDialog extends DataSourceDialog {
         if (StringUtils.isBlank(hostField.getText())) {
             validations.add(validation("Host must not be empty", hostField));
         }
+        if (StringUtils.isBlank(portField.getText())) {
+            validations.add(validation("Port must not be empty", portField));
+        }
         if (!StringUtils.isNumeric(portField.getText())) {
             validations.add(validation("Port must be numeric", portField));
         }
