@@ -10,6 +10,9 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultRo
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryResultRow;
 import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.query.OpenCypherGremlinQueryResult;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
@@ -164,9 +167,18 @@ public class OpenCypherGremlinDatabase implements GraphDatabaseApi {
         );
     }
 
+    @SuppressWarnings("unchecked")
     private static void disableGremlinLog() {
+        final String gremlinDriver = "org.apache.tinkerpop.gremlin.driver";
+
         Properties props = new Properties();
-        props.setProperty("log4j.logger.org.apache.tinkerpop.gremlin.driver", "OFF");
+        props.setProperty("log4j.logger." + gremlinDriver, Level.OFF.toString());
         PropertyConfigurator.configure(props);
+
+        Enumeration<Logger> loggers = LogManager.getCurrentLoggers();
+        Collections.list(loggers)
+                .stream()
+                .filter(logger -> logger.getName().startsWith(gremlinDriver))
+                .forEach(logger -> logger.setLevel(Level.OFF));
     }
 }
