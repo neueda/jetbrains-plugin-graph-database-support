@@ -6,6 +6,7 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
+import com.intellij.openapi.ui.popup.IconButton;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.ui.components.JBScrollPane;
@@ -62,6 +63,7 @@ public abstract class DataSourceDialog extends DialogWrapper {
         if (contentPanel.isShowing()) {
             JBPopupFactory.getInstance()
                     .createComponentPopupBuilder(popupPanel, getPreferredFocusedComponent())
+                    .setCancelButton(new IconButton("Close", AllIcons.Actions.Close))
                     .setTitle("Test connection")
                     .createPopup()
                     .showInCenterOf(contentPanel);
