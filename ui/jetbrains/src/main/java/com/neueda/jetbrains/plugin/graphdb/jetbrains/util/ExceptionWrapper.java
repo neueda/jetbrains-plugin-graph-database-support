@@ -51,6 +51,9 @@ public class ExceptionWrapper {
 
     public static String wrapExceptionInMeaningMessage(Exception exception) {
         String exceptionMessage = exception.getMessage();
+        if (exceptionMessage.isEmpty()) {
+            return ExceptionErrorMessages.ERROR_OCCURRED.getDescription();
+        }
         if (exceptionMessage.contains("SerializationException")) {
             return ExceptionErrorMessages.SERIALIZER_EXCEPTION.getDescription();
         }
@@ -61,7 +64,7 @@ public class ExceptionWrapper {
             return ExceptionErrorMessages.CONNECTION_EXCEPTION.getDescription();
         }
         if (exceptionMessage.contains("SyntaxException")) {
-            return ExceptionErrorMessages.SYNTAX_EXCEPTION.getDescription();
+            return ExceptionErrorMessages.SYNTAX_WARNING.getDescription();
         }
         if (exceptionMessage.length() > SHORT_STRING_LENGTH) {
             return ellipseString(exceptionMessage, SHORT_STRING_LENGTH);

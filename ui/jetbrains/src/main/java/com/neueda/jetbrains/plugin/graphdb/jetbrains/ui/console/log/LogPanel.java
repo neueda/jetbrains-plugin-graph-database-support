@@ -164,7 +164,7 @@ public class LogPanel implements Disposable {
             errorMessage = exception.toString();
         }
         error(errorMessage);
-        String newLine = "\n";
+        String newLine = System.lineSeparator();
         String details = exception.getMessage() + newLine + getCause(exception) + newLine + getStackTrace(exception);
         log.printHyperlink(" " + SHOW_DETAILS, p -> showPopup("Error details", details, exception));
         newLine();
