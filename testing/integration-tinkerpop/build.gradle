@@ -5,4 +5,5 @@ dependencies {
 
     testCompile "junit:junit:$versionJunit"
     testCompile "org.assertj:assertj-core:$versionAssertj"
+    testCompile "log4j:log4j:1.2.17"
 }
