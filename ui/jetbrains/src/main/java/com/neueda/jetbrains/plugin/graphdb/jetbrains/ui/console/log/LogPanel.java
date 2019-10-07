@@ -30,17 +30,12 @@ import java.util.Map;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.PARAMS_ERROR_COMMON_MSG;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceDialog.HEIGHT;
 import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceDialog.THICKNESS;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.SHORT_STRING_LENGTH;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.getCause;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.truncateString;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.wrapExceptionInMeaningMessage;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.*;
 
 public class LogPanel implements Disposable {
     private static final String SHOW_DETAILS = "Details...";
 
     private ConsoleView log;
-    private Map<String, String> exceptions = new HashMap<>();
-    private Map<String, String> causes = new HashMap<>();
 
     public void initialize(GraphConsoleView graphConsoleView, Project project) {
         MessageBus messageBus = project.getMessageBus();
@@ -123,6 +118,7 @@ public class LogPanel implements Disposable {
 
             @Override
             public void metadataRefreshFailed(DataSourceApi nodeDataSource, Exception exception) {
+                Map<String, String> exceptions = new HashMap<>();
                 String prefix = String.format("DataSource[%s] - metadata refresh failed. Reason: ", nodeDataSource.getName());
                 error(prefix);
                 String errorMessage = prefix + printException(exception) + "\n";
@@ -168,8 +164,9 @@ public class LogPanel implements Disposable {
             errorMessage = exception.toString();
         }
         error(errorMessage);
-        String details = exception.getMessage() + '\n' + getCause(exception);
-        log.printHyperlink(" " + SHOW_DETAILS, p -> showPopup("Error details", details));
+        String newLine = "\n";
+        String details = exception.getMessage() + newLine + getCause(exception) + newLine + getStackTrace(exception);
+        log.printHyperlink(" " + SHOW_DETAILS, p -> showPopup("Error details", details, exception));
         newLine();
         return errorMessage;
     }
@@ -178,14 +175,14 @@ public class LogPanel implements Disposable {
         log.print("\n", ConsoleViewContentType.NORMAL_OUTPUT);
     }
 
-    private void showPopup(String title, String details) {
+    private void showPopup(String title, String details, Exception exception) {
         JPanel popupPanel = new JPanel(new BorderLayout());
         popupPanel.setBorder(JBUI.Borders.empty(THICKNESS));
 
         JTextArea exceptionDetails = new JTextArea();
         exceptionDetails.setLineWrap(false);
         exceptionDetails.append(details);
-        JLabel jLabel = new JLabel(truncateString(details, SHORT_STRING_LENGTH), AllIcons.Process.State.RedExcl, JLabel.LEFT);
+        JLabel jLabel = new JLabel(wrapExceptionInMeaningMessage(exception), AllIcons.Process.State.RedExcl, JLabel.LEFT);
 
         JBScrollPane scrollPane = new JBScrollPane(exceptionDetails);
         scrollPane.setPreferredSize(new Dimension(-1, HEIGHT));
@@ -197,6 +194,8 @@ public class LogPanel implements Disposable {
                         popupPanel,
                         log.getComponent())
                 .setTitle(title)
+                .setResizable(true)
+                .setMovable(true)
                 .setCancelButton(new IconButton("Close", AllIcons.Actions.Close, AllIcons.Actions.CloseHovered))
                 .createPopup()
                 .showInFocusCenter();

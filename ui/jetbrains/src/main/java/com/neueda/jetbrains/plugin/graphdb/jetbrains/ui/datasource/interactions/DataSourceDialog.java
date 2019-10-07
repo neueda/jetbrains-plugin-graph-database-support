@@ -22,9 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.SHORT_STRING_LENGTH;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.getCause;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.truncateString;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.*;
 
 public abstract class DataSourceDialog extends DialogWrapper {
     public static final int THICKNESS = 10;
@@ -68,6 +66,8 @@ public abstract class DataSourceDialog extends DialogWrapper {
                     .createComponentPopupBuilder(popupPanel, getPreferredFocusedComponent())
                     .setCancelButton(new IconButton("Close", AllIcons.Actions.Close))
                     .setTitle("Test connection")
+                    .setResizable(true)
+                    .setMovable(true)
                     .setCancelButton(new IconButton("Close", AllIcons.Actions.Close, AllIcons.Actions.CloseHovered))
                     .createPopup()
                     .showInCenterOf(contentPanel);
@@ -119,7 +119,7 @@ public abstract class DataSourceDialog extends DialogWrapper {
         hideLoading();
 
         JLabel connectionFailed = new JLabel("Connection failed: " +
-                truncateString(exception.getMessage(), SHORT_STRING_LENGTH), AllIcons.Process.State.RedExcl, JLabel.LEFT);
+                wrapExceptionInMeaningMessage(exception), AllIcons.Process.State.RedExcl, JLabel.LEFT);
 
         JTextArea exceptionCauses = new JTextArea();
         exceptionCauses.setLineWrap(false);

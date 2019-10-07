@@ -1,16 +1,17 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.util;
 
-import org.apache.commons.lang.WordUtils;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 public class ExceptionWrapper {
-    public static final int SHORT_STRING_LENGTH = 140;
+    public static final int SHORT_STRING_LENGTH = 150;
     private static final String NON_THIN_CHARS = "[^iIl1\\.,']";
 
     private static int textWidth(String str) {
         return str.length() - str.replaceAll(NON_THIN_CHARS, "").length() / 2;
     }
 
-    public static String truncateString(String text, int targetLength) {
+    public static String ellipseString(String text, int targetLength) {
         if (textWidth(text) <= targetLength) {
             return text;
         }
@@ -31,10 +32,6 @@ public class ExceptionWrapper {
         return text.substring(0, end) + "...";
     }
 
-    public static String wrapLongLine(String longLine) {
-        return WordUtils.wrap(longLine, 100);
-    }
-
     public static String getCause(Exception exception) {
         StringBuilder exceptionCauses = new StringBuilder();
         Throwable cause = exception.getCause();
@@ -45,19 +42,29 @@ public class ExceptionWrapper {
         return exceptionCauses.toString();
     }
 
+    public static String getStackTrace(final Throwable throwable) {
+        final StringWriter sw = new StringWriter();
+        final PrintWriter pw = new PrintWriter(sw, true);
+        throwable.printStackTrace(pw);
+        return sw.getBuffer().toString();
+    }
+
     public static String wrapExceptionInMeaningMessage(Exception exception) {
         String exceptionMessage = exception.getMessage();
-        if (exceptionMessage.contains("org.apache.tinkerpop.gremlin.driver.ser.SerializationException")) {
-            return "Wrong serializer selected. Please check connection configuration";
+        if (exceptionMessage.contains("SerializationException")) {
+            return ExceptionErrorMessages.SERIALIZER_EXCEPTION.getDescription();
         }
-        if (exceptionMessage.contains("org.apache.tinkerpop.gremlin.driver.exception.ResponseException")) {
-            return "Database connection failed with gremlin driver response exception. Please check database configuration.";
+        if (exceptionMessage.contains("ResponseException")) {
+            return ExceptionErrorMessages.RESPONSE_EXCEPTION.getDescription();
         }
-        if (exceptionMessage.contains("org.apache.tinkerpop.gremlin.driver.exception.ConnectionException")) {
-            return "Database connection failed with gremlin driver connection exception. Please check database configuration.";
+        if (exceptionMessage.contains("ConnectionException")) {
+            return ExceptionErrorMessages.CONNECTION_EXCEPTION.getDescription();
+        }
+        if (exceptionMessage.contains("SyntaxException")) {
+            return ExceptionErrorMessages.SYNTAX_EXCEPTION.getDescription();
         }
         if (exceptionMessage.length() > SHORT_STRING_LENGTH) {
-            return truncateString(exceptionMessage, SHORT_STRING_LENGTH);
+            return ellipseString(exceptionMessage, SHORT_STRING_LENGTH);
         }
         return exceptionMessage;
     }
