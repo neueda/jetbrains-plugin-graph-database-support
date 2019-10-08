@@ -2,8 +2,6 @@ package com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.exceptio
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ExceptionWrapper {
     public static final int SHORT_STRING_LENGTH = 150;
@@ -36,13 +34,12 @@ public class ExceptionWrapper {
 
     public static String getCause(Exception exception) {
         StringBuilder exceptionCauses = new StringBuilder();
-        Set<Throwable> causesList = new HashSet<>();
-        Throwable cause;
-
-        while (exception.getCause() != null && !causesList.contains(exception.getCause())) {
-            cause = exception.getCause();
-            causesList.add(cause);
-            exceptionCauses.append(cause).append("\n");
+        Throwable cause = exception.getCause();
+        int counter = 0;
+        while (cause != null && counter <= 50) {
+            exceptionCauses.append(cause.getMessage()).append(System.lineSeparator());
+            cause = cause.getCause();
+            counter++;
         }
         return exceptionCauses.toString();
     }
