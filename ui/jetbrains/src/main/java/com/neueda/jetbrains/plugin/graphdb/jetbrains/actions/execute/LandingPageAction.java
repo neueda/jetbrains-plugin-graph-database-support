@@ -13,7 +13,8 @@ public class LandingPageAction {
 
     public static void open() {
         Analytics.event("landingPage", "clicked");
-        int ok = Messages.showOkCancelDialog("To find more visit " + URL, "Premium Version", "Find more", "Cancel",
+        int ok = Messages.showOkCancelDialog("This feature is planned for a \nfuture release of the premium version.\n" +
+                        "If you are interested, please visit: \n\n" + URL, "Premium Version", "Find more", "Cancel",
                 AllIcons.General.QuestionDialog);
         if (ok == 0) {
             Analytics.event("landingPage", "land");
