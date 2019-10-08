@@ -5,4 +5,5 @@ dependencies {
          exclude group: 'org.slf4j', module: 'slf4j-api'
     }
     compile("com.fasterxml.jackson.core:jackson-annotations:$versionJacksonMapper")
+    compileOnly("log4j:log4j:1.2.17")
 }

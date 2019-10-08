@@ -10,6 +10,10 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultRo
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryResultRow;
 import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.query.OpenCypherGremlinQueryResult;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.driver.Result;
@@ -17,16 +21,12 @@ import org.neo4j.driver.v1.exceptions.ClientException;
 import org.opencypher.gremlin.client.CypherGremlinClient;
 
 import java.net.URI;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.*;
-import static java.util.stream.Collectors.*;
-
+import static java.util.stream.Collectors.toList;
 /**
  * Communicates with TinkerPop database by translating Cypher to Gremlin
  */
@@ -34,6 +34,10 @@ public class OpenCypherGremlinDatabase implements GraphDatabaseApi {
     private final OpenCypherGremlinValueConverter converter;
     private final Cluster cluster;
     private final GremlinFlavor flavor;
+
+    static {
+        disableGremlinLog();
+    }
 
     public OpenCypherGremlinDatabase(Map<String, String> configuration) {
         this(new OpenCypherGremlinConfiguration(configuration));
@@ -161,5 +165,20 @@ public class OpenCypherGremlinDatabase implements GraphDatabaseApi {
                 emptyList(),
                 emptyList()
         );
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void disableGremlinLog() {
+        final String gremlinDriver = "org.apache.tinkerpop.gremlin.driver";
+
+        Properties props = new Properties();
+        props.setProperty("log4j.logger." + gremlinDriver, Level.OFF.toString());
+        PropertyConfigurator.configure(props);
+
+        Enumeration<Logger> loggers = LogManager.getCurrentLoggers();
+        Collections.list(loggers)
+                .stream()
+                .filter(logger -> logger.getName().startsWith(gremlinDriver))
+                .forEach(logger -> logger.setLevel(Level.OFF));
     }
 }
