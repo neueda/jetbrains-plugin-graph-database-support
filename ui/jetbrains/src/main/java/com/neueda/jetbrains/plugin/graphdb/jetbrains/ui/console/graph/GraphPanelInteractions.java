@@ -13,8 +13,6 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryExecu
 import com.neueda.jetbrains.plugin.graphdb.visualization.VisualizationApi;
 import com.neueda.jetbrains.plugin.graphdb.visualization.events.EventType;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.wrapExceptionInMeaningMessage;
-
 public class GraphPanelInteractions {
 
     private final GraphConsoleView graphConsoleView;
@@ -63,7 +61,7 @@ public class GraphPanelInteractions {
 
                     @Override
                     public void handleError(ExecuteQueryPayload payload, Exception exception) {
-                        String errorMessage = exception.getMessage() == null ? "Error occurred" : "Error occurred: " + wrapExceptionInMeaningMessage(exception);
+                        String errorMessage = exception.getMessage() == null ? "Error occurred" : "Error occurred: " + exception.getMessage();
                         payload.getEditor().ifPresent(editor -> HintManager.getInstance().showErrorHint(editor, errorMessage));
 
                         visualization.stop();

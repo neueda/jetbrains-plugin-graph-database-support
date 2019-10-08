@@ -1,4 +1,8 @@
-package com.neueda.jetbrains.plugin.graphdb.jetbrains.util;
+package com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.exceptions;
+
+import org.apache.tinkerpop.gremlin.driver.exception.ConnectionException;
+import org.apache.tinkerpop.gremlin.driver.exception.ResponseException;
+import org.apache.tinkerpop.gremlin.driver.ser.SerializationException;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -62,9 +66,6 @@ public class ExceptionWrapper {
         }
         if (exceptionMessage.contains("ConnectionException")) {
             return ExceptionErrorMessages.CONNECTION_EXCEPTION.getDescription();
-        }
-        if (exceptionMessage.contains("SyntaxException")) {
-            return ExceptionErrorMessages.SYNTAX_WARNING.getDescription();
         }
         if (exceptionMessage.length() > SHORT_STRING_LENGTH) {
             return ellipseString(exceptionMessage, SHORT_STRING_LENGTH);

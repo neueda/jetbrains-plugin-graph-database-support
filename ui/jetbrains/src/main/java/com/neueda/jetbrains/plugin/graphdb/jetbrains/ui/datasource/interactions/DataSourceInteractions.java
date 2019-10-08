@@ -25,8 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.wrapExceptionInMeaningMessage;
-
 public class DataSourceInteractions {
 
     private final DataSourcesView dataSourcesView;
@@ -131,7 +129,7 @@ public class DataSourceInteractions {
                     try {
                         FileUtil.openFile(project, FileUtil.getDataSourceFile(project, dataSource));
                     } catch (IOException exception) {
-                        Notifier.error("Open editor error", wrapExceptionInMeaningMessage(exception));
+                        Notifier.error("Open editor error", exception.getMessage());
                     }
                 }
             }

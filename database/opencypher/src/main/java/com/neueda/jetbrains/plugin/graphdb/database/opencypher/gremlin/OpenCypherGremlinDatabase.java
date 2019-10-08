@@ -9,6 +9,7 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultCo
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultRow;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryResultRow;
+import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.exceptions.OpenCypherGremlinException;
 import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.query.OpenCypherGremlinQueryResult;
 import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
@@ -23,10 +24,9 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
-import static java.util.Collections.singletonMap;
-import static java.util.stream.Collectors.toList;
+import static com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.exceptions.ExceptionWrapper.*;
+import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
 
 /**
  * Communicates with TinkerPop database by translating Cypher to Gremlin
@@ -99,7 +99,8 @@ public class OpenCypherGremlinDatabase implements GraphDatabaseApi {
             if (query.toUpperCase().startsWith("EXPLAIN")) {
                 return new OpenCypherGremlinQueryResult(0, emptyList(), emptyList(), emptyList(), emptyList());
             } else {
-                throw e;
+                String exceptionMessage = wrapExceptionInMeaningMessage(e);
+                throw new OpenCypherGremlinException(exceptionMessage, e);
             }
         }
     }

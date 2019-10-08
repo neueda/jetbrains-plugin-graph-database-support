@@ -13,6 +13,8 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.messages.MessageBus;
 import com.intellij.util.ui.JBUI;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
+import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.exceptions.ExceptionErrorMessages;
+import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.exceptions.OpenCypherGremlinException;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourceMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
@@ -27,10 +29,9 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.PARAMS_ERROR_COMMON_MSG;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceDialog.HEIGHT;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceDialog.THICKNESS;
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.*;
+import static com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.exceptions.ExceptionWrapper.*;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.*;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceDialog.*;
 
 public class LogPanel implements Disposable {
     private static final String SHOW_DETAILS = "Details...";
@@ -182,18 +183,20 @@ public class LogPanel implements Disposable {
         JTextArea exceptionDetails = new JTextArea();
         exceptionDetails.setLineWrap(false);
         exceptionDetails.append(details);
-        JLabel jLabel = new JLabel(wrapExceptionInMeaningMessage(exception), AllIcons.Process.State.RedExcl, JLabel.LEFT);
+        JLabel jLabel = new JLabel(exception.getMessage(), AllIcons.Process.State.RedExcl, JLabel.LEFT);
 
         JBScrollPane scrollPane = new JBScrollPane(exceptionDetails);
         scrollPane.setPreferredSize(new Dimension(-1, HEIGHT));
         popupPanel.add(jLabel, BorderLayout.CENTER);
         popupPanel.add(scrollPane, BorderLayout.SOUTH);
+        String gremlinTranslationWarning = exception instanceof OpenCypherGremlinException ? ExceptionErrorMessages.SYNTAX_WARNING.getDescription() : "";
 
         JBPopupFactory.getInstance()
                 .createComponentPopupBuilder(
                         popupPanel,
                         log.getComponent())
                 .setTitle(title)
+                .setAdText(gremlinTranslationWarning)
                 .setResizable(true)
                 .setMovable(true)
                 .setCancelButton(new IconButton("Close", AllIcons.Actions.Close, AllIcons.Actions.CloseHovered))

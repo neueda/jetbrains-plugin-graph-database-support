@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.*;
+import static com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.exceptions.ExceptionWrapper.*;
 
 public abstract class DataSourceDialog extends DialogWrapper {
     public static final int THICKNESS = 10;
@@ -119,7 +119,7 @@ public abstract class DataSourceDialog extends DialogWrapper {
         hideLoading();
 
         JLabel connectionFailed = new JLabel("Connection failed: " +
-                wrapExceptionInMeaningMessage(exception), AllIcons.Process.State.RedExcl, JLabel.LEFT);
+                exception.getMessage(), AllIcons.Process.State.RedExcl, JLabel.LEFT);
 
         JTextArea exceptionCauses = new JTextArea();
         exceptionCauses.setLineWrap(false);

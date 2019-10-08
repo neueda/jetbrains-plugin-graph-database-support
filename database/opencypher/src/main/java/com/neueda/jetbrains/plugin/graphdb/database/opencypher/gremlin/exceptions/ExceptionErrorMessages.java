@@ -1,4 +1,4 @@
-package com.neueda.jetbrains.plugin.graphdb.jetbrains.util;
+package com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.exceptions;
 
 public enum ExceptionErrorMessages {
     ERROR_OCCURRED("Error occurred."),

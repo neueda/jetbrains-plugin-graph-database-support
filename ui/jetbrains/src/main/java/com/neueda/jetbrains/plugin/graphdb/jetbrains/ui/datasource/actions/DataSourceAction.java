@@ -11,8 +11,6 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Notifier;
 import javax.swing.*;
 import java.io.IOException;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.util.ExceptionWrapper.wrapExceptionInMeaningMessage;
-
 public class DataSourceAction extends AnAction {
 
     private DataSourceApi dataSource;
@@ -29,7 +27,7 @@ public class DataSourceAction extends AnAction {
         try {
             FileUtil.openFile(project, FileUtil.getDataSourceFile(project, dataSource));
         } catch (IOException exception) {
-            Notifier.error("Open editor error", wrapExceptionInMeaningMessage(exception));
+            Notifier.error("Open editor error", exception.getMessage());
         }
     }
 }
