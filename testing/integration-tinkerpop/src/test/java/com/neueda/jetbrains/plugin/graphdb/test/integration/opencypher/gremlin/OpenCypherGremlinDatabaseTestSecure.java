@@ -40,7 +40,7 @@ public class OpenCypherGremlinDatabaseTestSecure {
         OpenCypherGremlinDatabase database = new OpenCypherGremlinDatabase(config);
 
         assertThatThrownBy(() -> database.execute("RETURN 1"))
-                    .hasMessageContaining("Database connection failed. Please check database configuration (including username and password) and retry" +
+                    .hasMessageContaining("Database connection failed. Please check database configuration (including username and password) and retry " +
                             "to connect.");
     }
 
