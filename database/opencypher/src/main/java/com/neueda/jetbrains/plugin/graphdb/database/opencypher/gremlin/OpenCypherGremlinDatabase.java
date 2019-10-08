@@ -148,7 +148,8 @@ public class OpenCypherGremlinDatabase implements GraphDatabaseApi {
 
             return new OpenCypherGremlinGraphMetadata(labelResult, relResult, vertexPropResult, edgePropResult);
         } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
+            String exceptionMessage = wrapExceptionInMeaningMessage(e);
+            throw new OpenCypherGremlinException(exceptionMessage, e);
         } finally {
             gremlinClient.close();
         }

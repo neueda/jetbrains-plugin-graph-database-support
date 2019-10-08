@@ -26,7 +26,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.exceptions.ExceptionWrapper.*;
@@ -119,11 +118,9 @@ public class LogPanel implements Disposable {
 
             @Override
             public void metadataRefreshFailed(DataSourceApi nodeDataSource, Exception exception) {
-                Map<String, String> exceptions = new HashMap<>();
                 String prefix = String.format("DataSource[%s] - metadata refresh failed. Reason: ", nodeDataSource.getName());
                 error(prefix);
-                String errorMessage = prefix + printException(exception) + "\n";
-                exceptions.put(errorMessage, exception.getMessage());
+                printException(exception);
                 newLine();
             }
         });
@@ -160,13 +157,13 @@ public class LogPanel implements Disposable {
     private String printException(Exception exception) {
         String errorMessage;
         if (exception.getMessage() != null) {
-            errorMessage = wrapExceptionInMeaningMessage(exception);
+            errorMessage = exception.getMessage();
         } else {
             errorMessage = exception.toString();
         }
         error(errorMessage);
         String newLine = System.lineSeparator();
-        String details = exception.getMessage() + newLine + getCause(exception) + newLine + getStackTrace(exception);
+        String details = getCause(exception) + newLine + getStackTrace(exception);
         log.printHyperlink(" " + SHOW_DETAILS, p -> showPopup("Error details", details, exception));
         newLine();
         return errorMessage;

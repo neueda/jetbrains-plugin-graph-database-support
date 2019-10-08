@@ -1,11 +1,9 @@
 package com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.exceptions;
 
-import org.apache.tinkerpop.gremlin.driver.exception.ConnectionException;
-import org.apache.tinkerpop.gremlin.driver.exception.ResponseException;
-import org.apache.tinkerpop.gremlin.driver.ser.SerializationException;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ExceptionWrapper {
     public static final int SHORT_STRING_LENGTH = 150;
@@ -38,10 +36,13 @@ public class ExceptionWrapper {
 
     public static String getCause(Exception exception) {
         StringBuilder exceptionCauses = new StringBuilder();
-        Throwable cause = exception.getCause();
-        while (cause != null) {
-            exceptionCauses.append(cause.getMessage()).append("\n");
-            cause = cause.getCause();
+        Set<Throwable> causesList = new HashSet<>();
+        Throwable cause;
+
+        while (exception.getCause() != null && !causesList.contains(exception.getCause())) {
+            cause = exception.getCause();
+            causesList.add(cause);
+            exceptionCauses.append(cause).append("\n");
         }
         return exceptionCauses.toString();
     }
@@ -55,21 +56,22 @@ public class ExceptionWrapper {
 
     public static String wrapExceptionInMeaningMessage(Exception exception) {
         String exceptionMessage = exception.getMessage();
-        if (exceptionMessage.isEmpty()) {
+        if (exceptionMessage != null) {
+            if (exceptionMessage.contains("SerializationException")) {
+                return ExceptionErrorMessages.SERIALIZER_EXCEPTION.getDescription();
+            }
+            if (exceptionMessage.contains("ResponseException")) {
+                return ExceptionErrorMessages.RESPONSE_EXCEPTION.getDescription();
+            }
+            if (exceptionMessage.contains("ConnectionException")) {
+                return ExceptionErrorMessages.CONNECTION_EXCEPTION.getDescription();
+            }
+            if (exceptionMessage.length() > SHORT_STRING_LENGTH) {
+                return ellipseString(exceptionMessage, SHORT_STRING_LENGTH);
+            }
+            return exceptionMessage;
+        } else {
             return ExceptionErrorMessages.ERROR_OCCURRED.getDescription();
         }
-        if (exceptionMessage.contains("SerializationException")) {
-            return ExceptionErrorMessages.SERIALIZER_EXCEPTION.getDescription();
-        }
-        if (exceptionMessage.contains("ResponseException")) {
-            return ExceptionErrorMessages.RESPONSE_EXCEPTION.getDescription();
-        }
-        if (exceptionMessage.contains("ConnectionException")) {
-            return ExceptionErrorMessages.CONNECTION_EXCEPTION.getDescription();
-        }
-        if (exceptionMessage.length() > SHORT_STRING_LENGTH) {
-            return ellipseString(exceptionMessage, SHORT_STRING_LENGTH);
-        }
-        return exceptionMessage;
     }
 }
