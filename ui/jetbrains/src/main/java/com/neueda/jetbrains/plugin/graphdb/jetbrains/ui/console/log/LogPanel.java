@@ -184,8 +184,8 @@ public class LogPanel implements Disposable {
 
         JBScrollPane scrollPane = new JBScrollPane(exceptionDetails);
         scrollPane.setPreferredSize(new Dimension(-1, HEIGHT));
-        popupPanel.add(jLabel, BorderLayout.CENTER);
-        popupPanel.add(scrollPane, BorderLayout.SOUTH);
+        popupPanel.add(jLabel, BorderLayout.NORTH);
+        popupPanel.add(scrollPane, BorderLayout.CENTER);
         String gremlinTranslationWarning = exception instanceof OpenCypherGremlinException ? ExceptionErrorMessages.SYNTAX_WARNING.getDescription() : "";
 
         JBPopupFactory.getInstance()

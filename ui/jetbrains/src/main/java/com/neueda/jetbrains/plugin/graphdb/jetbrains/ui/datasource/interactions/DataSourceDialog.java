@@ -52,7 +52,8 @@ public abstract class DataSourceDialog extends DialogWrapper {
 
         ValidationInfo validationInfo = doValidate();
         if (validationInfo != null) {
-            JLabel connectionFailed = new JLabel("Connection failed: " + validationInfo.message, AllIcons.Process.State.RedExcl, JLabel.LEFT);
+            JLabel connectionFailed = new JLabel("Connection failed: " + validationInfo.message,
+                    AllIcons.Process.State.RedExcl, JLabel.LEFT);
             popupPanel.add(connectionFailed, BorderLayout.CENTER);
             createPopup(popupPanel, getContentPanel());
         } else {
@@ -127,8 +128,8 @@ public abstract class DataSourceDialog extends DialogWrapper {
 
         JBScrollPane scrollPane = new JBScrollPane(exceptionCauses);
         scrollPane.setPreferredSize(new Dimension(-1, HEIGHT));
-        popupPanel.add(connectionFailed, BorderLayout.CENTER);
-        popupPanel.add(scrollPane, BorderLayout.SOUTH);
+        popupPanel.add(connectionFailed, BorderLayout.NORTH);
+        popupPanel.add(scrollPane, BorderLayout.CENTER);
 
         createPopup(popupPanel, contentPanel);
     }
