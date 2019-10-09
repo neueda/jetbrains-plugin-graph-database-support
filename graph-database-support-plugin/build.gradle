@@ -13,8 +13,7 @@ intellij {
     sameSinceUntilBuild false
 
     publishPlugin {
-        username System.getenv("INTELLIJ_USERNAME")
-        password System.getenv("INTELLIJ_PASSWORD")
+        token System.getenv("INTELLIJ_TOKEN")
     }
 
     if (System.getenv("CI_SERVER") == "yes") {
