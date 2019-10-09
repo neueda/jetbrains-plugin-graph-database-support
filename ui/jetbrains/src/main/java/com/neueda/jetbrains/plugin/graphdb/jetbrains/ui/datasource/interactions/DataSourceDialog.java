@@ -17,11 +17,12 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.database.DatabaseManagerService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.services.ExecutorService;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.DataSourcesView;
-
-import java.awt.*;
-import javax.swing.*;
-
 import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.awt.*;
+
+import static com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.exceptions.ExceptionWrapper.*;
 
 public abstract class DataSourceDialog extends DialogWrapper {
     public static final int THICKNESS = 10;
@@ -36,6 +37,7 @@ public abstract class DataSourceDialog extends DialogWrapper {
     public abstract DataSourceApi constructDataSource();
 
     protected abstract void showLoading();
+
     protected abstract void hideLoading();
 
     public boolean go() {
@@ -44,14 +46,14 @@ public abstract class DataSourceDialog extends DialogWrapper {
     }
 
 
-
     public void validationPopup() {
         JPanel popupPanel = new JPanel(new BorderLayout());
         popupPanel.setBorder(JBUI.Borders.empty(THICKNESS));
 
         ValidationInfo validationInfo = doValidate();
         if (validationInfo != null) {
-            JLabel connectionFailed = new JLabel("Connection failed: " + validationInfo.message, AllIcons.Process.State.RedExcl, JLabel.LEFT);
+            JLabel connectionFailed = new JLabel("Connection failed: " + validationInfo.message,
+                    AllIcons.Process.State.RedExcl, JLabel.LEFT);
             popupPanel.add(connectionFailed, BorderLayout.CENTER);
             createPopup(popupPanel, getContentPanel());
         } else {
@@ -65,6 +67,9 @@ public abstract class DataSourceDialog extends DialogWrapper {
                     .createComponentPopupBuilder(popupPanel, getPreferredFocusedComponent())
                     .setCancelButton(new IconButton("Close", AllIcons.Actions.Close))
                     .setTitle("Test connection")
+                    .setResizable(true)
+                    .setMovable(true)
+                    .setCancelButton(new IconButton("Close", AllIcons.Actions.Close, AllIcons.Actions.CloseHovered))
                     .createPopup()
                     .showInCenterOf(contentPanel);
         }
@@ -114,21 +119,17 @@ public abstract class DataSourceDialog extends DialogWrapper {
             JComponent contentPanel) {
         hideLoading();
 
-        JLabel connectionFailed = new JLabel("Connection failed: " + exception.getMessage(), AllIcons.Process.State.RedExcl, JLabel.LEFT);
+        JLabel connectionFailed = new JLabel("Connection failed: " +
+                exception.getMessage(), AllIcons.Process.State.RedExcl, JLabel.LEFT);
 
         JTextArea exceptionCauses = new JTextArea();
-        exceptionCauses.setLineWrap(true);
-
-        Throwable cause = exception.getCause();
-        while (cause != null) {
-            exceptionCauses.append(cause.getMessage() + "\n");
-            cause = cause.getCause();
-        }
+        exceptionCauses.setLineWrap(false);
+        exceptionCauses.append(getCause(exception));
 
         JBScrollPane scrollPane = new JBScrollPane(exceptionCauses);
         scrollPane.setPreferredSize(new Dimension(-1, HEIGHT));
-        popupPanel.add(connectionFailed, BorderLayout.CENTER);
-        popupPanel.add(scrollPane, BorderLayout.SOUTH);
+        popupPanel.add(connectionFailed, BorderLayout.NORTH);
+        popupPanel.add(scrollPane, BorderLayout.CENTER);
 
         createPopup(popupPanel, contentPanel);
     }

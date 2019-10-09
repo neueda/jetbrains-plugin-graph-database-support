@@ -3,11 +3,18 @@ package com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.log;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.popup.IconButton;
+import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.util.Disposer;
+import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.messages.MessageBus;
+import com.intellij.util.ui.JBUI;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
+import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.exceptions.ExceptionErrorMessages;
+import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.exceptions.OpenCypherGremlinException;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.actions.execute.ExecuteQueryPayload;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.metadata.DataSourceMetadata;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.datasource.state.DataSourceApi;
@@ -17,12 +24,16 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParam
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.metadata.MetadataRetrieveEvent;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
 
-import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.PARAMS_ERROR_COMMON_MSG;
+import static com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.exceptions.ExceptionWrapper.*;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.event.QueryParametersRetrievalErrorEvent.*;
+import static com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.interactions.DataSourceDialog.*;
 
 public class LogPanel implements Disposable {
+    private static final String SHOW_DETAILS = "Details...";
 
     private ConsoleView log;
 
@@ -107,7 +118,8 @@ public class LogPanel implements Disposable {
 
             @Override
             public void metadataRefreshFailed(DataSourceApi nodeDataSource, Exception exception) {
-                error(String.format("DataSource[%s] - metadata refresh failed. Reason: ", nodeDataSource.getName()));
+                String prefix = String.format("DataSource[%s] - metadata refresh failed. Reason: ", nodeDataSource.getName());
+                error(prefix);
                 printException(exception);
                 newLine();
             }
@@ -120,11 +132,11 @@ public class LogPanel implements Disposable {
                 });
     }
 
-    public void userInput(String message) {
+    private void userInput(String message) {
         log.print(message, ConsoleViewContentType.USER_INPUT);
     }
 
-    public void printParametersMap(Map<String, Object> parameters) {
+    private void printParametersMap(Map<String, Object> parameters) {
         for (Map.Entry<String, Object> entry : parameters.entrySet()) {
             String message = String.format("%s: %s", entry.getKey(), entry.getValue());
             log.print(message, ConsoleViewContentType.USER_INPUT);
@@ -132,7 +144,7 @@ public class LogPanel implements Disposable {
         }
     }
 
-    public void info(String message) {
+    private void info(String message) {
         log.print(message, ConsoleViewContentType.NORMAL_OUTPUT);
     }
 
@@ -142,24 +154,51 @@ public class LogPanel implements Disposable {
         }
     }
 
-    public void printException(Exception exception) {
+    private String printException(Exception exception) {
+        String errorMessage;
         if (exception.getMessage() != null) {
-            error(exception.getMessage());
+            errorMessage = exception.getMessage();
         } else {
-            error(exception.toString());
+            errorMessage = exception.toString();
         }
+        error(errorMessage);
+        String newLine = System.lineSeparator();
+        String details = getCause(exception) + newLine + getStackTrace(exception);
+        log.printHyperlink(" " + SHOW_DETAILS, p -> showPopup("Error details", details, exception));
         newLine();
-
-        Throwable cause = exception.getCause();
-        while (cause != null) {
-            error(cause.getMessage());
-            newLine();
-            cause = cause.getCause();
-        }
+        return errorMessage;
     }
 
-    public void newLine() {
+    private void newLine() {
         log.print("\n", ConsoleViewContentType.NORMAL_OUTPUT);
+    }
+
+    private void showPopup(String title, String details, Exception exception) {
+        JPanel popupPanel = new JPanel(new BorderLayout());
+        popupPanel.setBorder(JBUI.Borders.empty(THICKNESS));
+
+        JTextArea exceptionDetails = new JTextArea();
+        exceptionDetails.setLineWrap(false);
+        exceptionDetails.append(details);
+        JLabel jLabel = new JLabel(exception.getMessage(), AllIcons.Process.State.RedExcl, JLabel.LEFT);
+
+        JBScrollPane scrollPane = new JBScrollPane(exceptionDetails);
+        scrollPane.setPreferredSize(new Dimension(-1, HEIGHT));
+        popupPanel.add(jLabel, BorderLayout.NORTH);
+        popupPanel.add(scrollPane, BorderLayout.CENTER);
+        String gremlinTranslationWarning = exception instanceof OpenCypherGremlinException ? ExceptionErrorMessages.SYNTAX_WARNING.getDescription() : "";
+
+        JBPopupFactory.getInstance()
+                .createComponentPopupBuilder(
+                        popupPanel,
+                        log.getComponent())
+                .setTitle(title)
+                .setAdText(gremlinTranslationWarning)
+                .setResizable(true)
+                .setMovable(true)
+                .setCancelButton(new IconButton("Close", AllIcons.Actions.Close, AllIcons.Actions.CloseHovered))
+                .createPopup()
+                .showInFocusCenter();
     }
 
     @Override

@@ -16,13 +16,14 @@ import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.Neo4jTre
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.datasource.tree.TreeNodeModelApi;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.FileUtil;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.Notifier;
+
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 public class DataSourceInteractions {
 

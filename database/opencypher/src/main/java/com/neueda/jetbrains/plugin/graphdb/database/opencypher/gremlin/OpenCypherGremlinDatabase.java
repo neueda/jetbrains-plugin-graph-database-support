@@ -9,6 +9,7 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultCo
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultRow;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryResultRow;
+import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.exceptions.OpenCypherGremlinException;
 import com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.query.OpenCypherGremlinQueryResult;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
@@ -17,7 +18,6 @@ import org.apache.log4j.PropertyConfigurator;
 import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.apache.tinkerpop.gremlin.driver.Result;
-import org.neo4j.driver.v1.exceptions.ClientException;
 import org.opencypher.gremlin.client.CypherGremlinClient;
 
 import java.net.URI;
@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+import static com.neueda.jetbrains.plugin.graphdb.database.opencypher.gremlin.exceptions.ExceptionWrapper.*;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.toList;
 /**
@@ -102,7 +103,8 @@ public class OpenCypherGremlinDatabase implements GraphDatabaseApi {
             if (query.toUpperCase().startsWith("EXPLAIN")) {
                 return new OpenCypherGremlinQueryResult(0, emptyList(), emptyList(), emptyList(), emptyList());
             } else {
-                throw new ClientException(e.getMessage());
+                String exceptionMessage = wrapExceptionInMeaningMessage(e);
+                throw new OpenCypherGremlinException(exceptionMessage, e);
             }
         }
     }
@@ -150,7 +152,8 @@ public class OpenCypherGremlinDatabase implements GraphDatabaseApi {
 
             return new OpenCypherGremlinGraphMetadata(labelResult, relResult, vertexPropResult, edgePropResult);
         } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
+            String exceptionMessage = wrapExceptionInMeaningMessage(e);
+            throw new OpenCypherGremlinException(exceptionMessage, e);
         } finally {
             gremlinClient.close();
         }
