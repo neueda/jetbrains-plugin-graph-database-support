@@ -25,6 +25,14 @@
             <b>Supported databases:</b>
         <ul>
             <li>Neo4j 3.0+ (Bolt)</li>
+            <li>TinkerPop databases (<a href="https://github.com/opencypher/cypher-for-gremlin">Cypher for Gremlin</a> translation)
+                <ul>
+                    <li>AWS Neptune</li>
+                    <li>JanusGraph</li>
+                    <li>Azure Cosmos DB</li>
+                    <li>Other TinkerPop-enabled databases</li>
+                </ul>
+            </li>
         </ul>
         </p>
 
