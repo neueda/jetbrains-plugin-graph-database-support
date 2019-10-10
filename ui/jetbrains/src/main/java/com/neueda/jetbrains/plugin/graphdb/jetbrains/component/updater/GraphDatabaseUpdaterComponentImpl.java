@@ -1,5 +1,6 @@
 package com.neueda.jetbrains.plugin.graphdb.jetbrains.component.updater;
 
+import com.intellij.notification.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.project.ProjectManagerListener;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class GraphDatabaseUpdaterComponentImpl implements GraphDatabaseUpdaterComponent {
 
-    private boolean isUpdated;
+    private static final String NOTIFICATION_ID = "GraphDatabaseSupportUpdateNotification";
     private boolean isUpdateNotificationShown;
 
     @NotNull
@@ -26,23 +27,32 @@ public class GraphDatabaseUpdaterComponentImpl implements GraphDatabaseUpdaterCo
         String currentVersion = PluginUtil.getVersion();
         String knownVersion = SettingsComponent.getInstance().getKnownPluginVersion();
 
-        isUpdated = !currentVersion.equals(knownVersion);
+        boolean isUpdated = !currentVersion.equals(knownVersion);
         isUpdateNotificationShown = false;
         if (isUpdated || GraphConstants.IS_DEVELOPMENT) {
             SettingsComponent.getInstance().setKnownPluginVersion(currentVersion);
 
             ProjectManager.getInstance().addProjectManagerListener(new ProjectManagerListener() {
                 @Override
-                public void projectOpened(Project project) {
+                public void projectOpened(@NotNull Project project) {
                     if (!isUpdateNotificationShown) {
-                        Notifier.info(
-                                GraphBundle.message("updater.title", currentVersion),
-                                GraphBundle.message("updater.notification"));
+                        showNotification(project, currentVersion);
                         isUpdateNotificationShown = true;
                     }
                 }
             });
         }
+    }
+
+    private void showNotification(Project project, String currentVersion) {
+        NotificationGroup group = new NotificationGroup(NOTIFICATION_ID, NotificationDisplayType.STICKY_BALLOON, true);
+        Notification notification = group.createNotification(
+                GraphBundle.message("updater.title", currentVersion),
+                GraphBundle.message("updater.notification"),
+                NotificationType.INFORMATION,
+                new NotificationListener.UrlOpeningListener(false)
+        );
+        Notifications.Bus.notify(notification, project);
     }
 
     @Override
