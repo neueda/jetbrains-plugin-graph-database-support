@@ -82,11 +82,6 @@
             <interface-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.settings.SettingsComponent</interface-class>
             <implementation-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.settings.SettingsComponentImpl</implementation-class>
         </component>
-        <!-- Update notification -->
-        <component>
-            <interface-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.updater.GraphDatabaseUpdaterComponent</interface-class>
-            <implementation-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.updater.GraphDatabaseUpdaterComponentImpl</implementation-class>
-        </component>
         <!-- Google analytics component -->
         <component>
             <interface-class>com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.AnalyticsApplicationComponent</interface-class>
@@ -144,7 +139,8 @@
         <scratch.rootType implementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.ui.console.params.ParameterRootType"/>
         <applicationConfigurable groupId="tools"
                                  instance="com.neueda.jetbrains.plugin.graphdb.jetbrains.configuration.GraphDatabaseSupportConfiguration"/>
-
+        <!-- Update notification -->
+        <postStartupActivity implementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.component.updater.PluginUpdateActivity" />
         <!-- Cypher -->
         <fileTypeFactory implementation="com.neueda.jetbrains.plugin.graphdb.language.cypher.file.CypherFileTypeFactory"/>
         <lang.parserDefinition
