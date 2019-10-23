@@ -1,7 +1,7 @@
 # [Graph Database support](https://github.com/neueda/jetbrains-plugin-graph-database-support)
 [![Build Status](https://travis-ci.org/neueda/jetbrains-plugin-graph-database-support.svg?branch=master)](https://travis-ci.org/neueda/jetbrains-plugin-graph-database-support)
 
-|![ ](https://user-images.githubusercontent.com/2183130/67284837-0b8a2d00-f4df-11e9-8735-a34cdbc7d0f1.png)|<sub>More information, including the Premium version functionality:</sub>    |
+|![ ](https://user-images.githubusercontent.com/2183130/67284837-0b8a2d00-f4df-11e9-8735-a34cdbc7d0f1.png)|More information, including the Premium version functionality:               |
 |---------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
 |                                                                                                         | **[technologies.neueda.com/plugin](https://technologies.neueda.com/plugin)**|
 
