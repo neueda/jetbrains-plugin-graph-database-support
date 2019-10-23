@@ -1,8 +1,23 @@
 # [Graph Database support](https://github.com/neueda/jetbrains-plugin-graph-database-support)
 [![Build Status](https://travis-ci.org/neueda/jetbrains-plugin-graph-database-support.svg?branch=master)](https://travis-ci.org/neueda/jetbrains-plugin-graph-database-support)
 
-<sub>More information, including the Premium version functionality:</sub>  
-**[technologies.neueda.com/plugin](https://technologies.neueda.com/plugin)**
+<table>
+    <tbody>
+        <tr>
+          <td rowspan=2>
+            <img src="https://user-images.githubusercontent.com/2183130/67284837-0b8a2d00-f4df-11e9-8735-a34cdbc7d0f1.png" />
+          </td>
+          <td>
+            <b><sub>More information, including the Premium version functionality:</sub></b>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <b><a href=https://technologies.neueda.com/plugin>technologies.neueda.com/plugin</a></b>
+          </td>
+        </tr>
+    </tbody>
+</table>
 
 ### Graph Database support plugin allows you to work with databases without leaving IDE.
 
