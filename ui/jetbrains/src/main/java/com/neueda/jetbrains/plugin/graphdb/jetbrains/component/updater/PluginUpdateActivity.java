@@ -4,11 +4,14 @@ import com.intellij.notification.*;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
+import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.analytics.Analytics;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.component.settings.SettingsComponent;
 import com.neueda.jetbrains.plugin.graphdb.jetbrains.util.PluginUtil;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphBundle;
 import com.neueda.jetbrains.plugin.graphdb.platform.GraphConstants;
 import org.jetbrains.annotations.NotNull;
+
+import javax.swing.event.HyperlinkEvent;
 
 public class PluginUpdateActivity implements StartupActivity, DumbAware {
 
@@ -36,9 +39,22 @@ public class PluginUpdateActivity implements StartupActivity, DumbAware {
                 GraphBundle.message("updater.title", currentVersion),
                 GraphBundle.message("updater.notification"),
                 NotificationType.INFORMATION,
-                new NotificationListener.UrlOpeningListener(false)
+                new UrlOpeningListenerWithAnalytics(false)
         );
         Notifications.Bus.notify(notification, project);
+    }
+
+    static class UrlOpeningListenerWithAnalytics extends NotificationListener.UrlOpeningListener {
+
+        UrlOpeningListenerWithAnalytics(boolean expireNotification) {
+            super(expireNotification);
+        }
+
+        @Override
+        protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
+            Analytics.event("landingPage", "landFromNotification");
+            super.hyperlinkActivated(notification, event);
+        }
     }
 
 }
