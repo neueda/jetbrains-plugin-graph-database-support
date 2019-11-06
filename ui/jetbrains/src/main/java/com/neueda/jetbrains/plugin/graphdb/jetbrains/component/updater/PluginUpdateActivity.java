@@ -46,7 +46,7 @@ public class PluginUpdateActivity implements StartupActivity, DumbAware {
 
     static class UrlOpeningListenerWithAnalytics extends NotificationListener.UrlOpeningListener {
 
-        public UrlOpeningListenerWithAnalytics(boolean expireNotification) {
+        UrlOpeningListenerWithAnalytics(boolean expireNotification) {
             super(expireNotification);
         }
 
