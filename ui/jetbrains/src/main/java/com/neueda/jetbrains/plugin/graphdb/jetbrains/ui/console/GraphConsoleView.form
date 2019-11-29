@@ -131,7 +131,7 @@
           </grid>
         </children>
       </tabbedpane>
-      <component id="b903c" class="com.intellij.ui.tabs.newImpl.JBTabsImpl" binding="consoleTabs" custom-create="true">
+      <component id="b903c" class="com.intellij.ui.tabs.impl.JBTabsImpl" binding="consoleTabs" custom-create="true">
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
