@@ -19,7 +19,7 @@ Please note that:
 - **Travis.org** is used for publishing
 - Plugin is automatically deployed to Jetbrains Plugin Registry when new tag is pushed (see `deploy` in [.travis.yml](.travis.yml))
 - The next version code will be added to gradle.properties
-  - So you can start working on the next version right away
+  - So you can start working on the next version right away3.
 - `[skip ci]` git commit message prefix tells Travis not to execute a build (because unnecessary) 
 - JetBrains credentials are [stored in Travis](https://travis-ci.org/neueda/jetbrains-plugin-graph-database-support/settings#ember7449)
   - Currently, only INTELLIJ_TOKEN environment variable is needed for publishing
