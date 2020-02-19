@@ -61,8 +61,8 @@ public abstract class AbstractDataSourceMetadataTest extends BaseIntegrationTest
     protected DataSourceMetadata getMetadata() {
 
         try {
-            CompletableFuture<Optional<DataSourceMetadata>> meta = component().dataSourcesMetadata().getMetadata(getDataSource());
-            return meta.get(30, TimeUnit.SECONDS)
+            CompletableFuture<Optional<DataSourceMetadata>> futureMeta = component().dataSourcesMetadata().getMetadata(getDataSource());
+            return futureMeta.get(30, TimeUnit.SECONDS)
                     .orElseThrow(() -> new IllegalStateException("Metadata should not be null"));
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             throw new RuntimeException("Failed to retrieve metadata", e);

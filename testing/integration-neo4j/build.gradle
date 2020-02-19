@@ -21,6 +21,7 @@ test {
     systemProperty "neo4j-package-3.3", "${project(":testing:database:neo4j-3.3").projectDir}/build/libs/neo4j33-shadow.jar"
     systemProperty "neo4j-package-3.4", "${project(":testing:database:neo4j-3.4").projectDir}/build/libs/neo4j34-shadow.jar"
     systemProperty "neo4j-package-3.5", "${project(":testing:database:neo4j-3.5").projectDir}/build/libs/neo4j35-shadow.jar"
+    systemProperty "neo4j-package-4.0", "${project(":testing:database:neo4j-4.0").projectDir}/build/libs/neo4j40-shadow.jar"
     jvmArgs '-Xms2048m', '-Xmx2048m'
 }
 
@@ -30,3 +31,4 @@ test.dependsOn ":testing:database:neo4j-3.2:assemble"
 test.dependsOn ":testing:database:neo4j-3.3:assemble"
 test.dependsOn ":testing:database:neo4j-3.4:assemble"
 test.dependsOn ":testing:database:neo4j-3.5:assemble"
+test.dependsOn ":testing:database:neo4j-4.0:assemble"
