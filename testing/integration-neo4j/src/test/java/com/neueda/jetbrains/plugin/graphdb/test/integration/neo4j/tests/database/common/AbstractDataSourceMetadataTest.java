@@ -52,6 +52,9 @@ public abstract class AbstractDataSourceMetadataTest extends BaseIntegrationTest
     protected StoredProcedure procedure(final String name, final String signature, final String description) {
         return new StoredProcedure(name, signature, description);
     }
+    protected StoredProcedure procedure(final String name, final String signature, final String description, final String mode) {
+        return new StoredProcedure(name, signature, description, mode);
+    }
 
     protected DataSourceMetadata getMetadata() {
 
