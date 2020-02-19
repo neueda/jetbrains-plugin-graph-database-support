@@ -8,6 +8,7 @@ import com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.base.Base
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -52,6 +53,7 @@ public abstract class AbstractDataSourceMetadataTest extends BaseIntegrationTest
     protected StoredProcedure procedure(final String name, final String signature, final String description) {
         return new StoredProcedure(name, signature, description);
     }
+
     protected StoredProcedure procedure(final String name, final String signature, final String description, final String mode) {
         return new StoredProcedure(name, signature, description, mode);
     }
@@ -59,8 +61,8 @@ public abstract class AbstractDataSourceMetadataTest extends BaseIntegrationTest
     protected DataSourceMetadata getMetadata() {
 
         try {
-            return component().dataSourcesMetadata().getMetadata(getDataSource())
-                    .get(30, TimeUnit.SECONDS)
+            CompletableFuture<Optional<DataSourceMetadata>> meta = component().dataSourcesMetadata().getMetadata(getDataSource());
+            return meta.get(30, TimeUnit.SECONDS)
                     .orElseThrow(() -> new IllegalStateException("Metadata should not be null"));
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             throw new RuntimeException("Failed to retrieve metadata", e);

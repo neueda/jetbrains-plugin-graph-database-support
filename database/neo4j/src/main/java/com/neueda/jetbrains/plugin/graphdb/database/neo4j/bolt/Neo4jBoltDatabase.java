@@ -4,8 +4,8 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.GraphDatabaseApi;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphMetadata;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.query.Neo4jBoltQueryResult;
-import org.neo4j.driver.v1.*;
-import org.neo4j.driver.v1.exceptions.ClientException;
+import org.neo4j.driver.*;
+import org.neo4j.driver.exceptions.ClientException;
 
 import java.nio.channels.UnresolvedAddressException;
 import java.util.Collections;
@@ -51,7 +51,7 @@ public class Neo4jBoltDatabase implements GraphDatabaseApi {
                     Neo4jBoltBuffer buffer = new Neo4jBoltBuffer();
 
                     long startTime = System.currentTimeMillis();
-                    StatementResult statementResult = session.run(query, statementParameters);
+                    Result statementResult = session.run(query, statementParameters);
                     buffer.addColumns(statementResult.keys());
 
                     for (Record record : statementResult.list()) {

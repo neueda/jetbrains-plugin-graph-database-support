@@ -114,7 +114,7 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
      * Some tests might even don't need running Neo4j server!
      */
     public final class DataSources {
-        private DataSourceApi neo4j30DataSource;
+//        private DataSourceApi neo4j30DataSource;
         private DataSourceApi neo4j31DataSource;
         private DataSourceApi neo4j32DataSource;
         private DataSourceApi neo4j33DataSource;
@@ -123,12 +123,12 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
         private DataSourceApi neo4j40DataSource;
         private DataSourceApi unavailableDataSource;
 
-        public DataSourceApi neo4j30() {
-            if (neo4j30DataSource == null) {
-                neo4j30DataSource = getNeo4jDataSource(NEO4J30, Neo4j30ServerLoader.getInstance());
-            }
-            return neo4j30DataSource;
-        }
+//        public DataSourceApi neo4j30() {
+//            if (neo4j30DataSource == null) {
+//                neo4j30DataSource = getNeo4jDataSource(NEO4J30, Neo4j30ServerLoader.getInstance());
+//            }
+//            return neo4j30DataSource;
+//        }
 
         public DataSourceApi neo4j31() {
             if (neo4j31DataSource == null) {
@@ -163,6 +163,13 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
                 neo4j35DataSource = getNeo4jDataSource(NEO4J35, Neo4j35ServerLoader.getInstance());
             }
             return neo4j35DataSource;
+        }
+
+        public DataSourceApi neo4j40() {
+            if (neo4j40DataSource == null) {
+                neo4j40DataSource = getNeo4jDataSource(NEO4J40, Neo4j40ServerLoader.getInstance());
+            }
+            return neo4j40DataSource;
         }
 
         public DataSourceApi unavailable() {
