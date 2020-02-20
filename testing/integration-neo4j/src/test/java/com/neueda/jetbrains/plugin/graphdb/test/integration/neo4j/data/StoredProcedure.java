@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StoredProcedure {
-    enum Style {nullsIncluded, nullsHidden}
-
-    private Style style;
     private final String name;
     private final String signature;
     private final String description;
@@ -24,7 +21,6 @@ public class StoredProcedure {
 
     public StoredProcedure(String name, String signature, String description, String mode) {
         this(name, signature, description, mode, null);
-        style = Style.nullsHidden;
     }
 
     public StoredProcedure(String name, String signature, String description, String mode, String worksOnSystem) {
@@ -38,27 +34,23 @@ public class StoredProcedure {
         this.mode = mode;
         this.worksOnSystem = worksOnSystem;
         this.defaultBuiltInRoles = defaultBuiltInRoles;
-        this.style = Style.nullsIncluded;
     }
 
     public Map<String, String> asMap() {
         Map<String, String> procedure = new HashMap<>();
         procedure.put("name", name);
         procedure.put("signature", signature);
-        switch (style) {
-            case nullsHidden:
-                if (description != null) {
-                    procedure.put("description", description);
-                }
-                if (mode != null) {
-                    procedure.put("mode", mode);
-                }
-                break;
-            case nullsIncluded:
-                procedure.put("description", description);
-                procedure.put("mode", mode);
-                procedure.put("worksOnSystem", worksOnSystem);
-                procedure.put("defaultBuiltInRoles", defaultBuiltInRoles);
+        if (description != null) {
+            procedure.put("description", description);
+        }
+        if (mode != null) {
+            procedure.put("mode", mode);
+        }
+        if (worksOnSystem != null) {
+            procedure.put("worksOnSystem", worksOnSystem);
+        }
+        if (defaultBuiltInRoles != null) {
+            procedure.put("defaultBuiltInRoles", defaultBuiltInRoles);
         }
         return procedure;
     }

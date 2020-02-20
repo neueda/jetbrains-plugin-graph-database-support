@@ -50,7 +50,9 @@ public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
 
             for (GraphQueryResultColumn column : columns) {
                 Object value = row.getValue(column);
-                data.put(column.getName(), value == null ? null : value.toString());
+                if (value != null) {
+                    data.put(column.getName(), value.toString());
+                }
             }
 
             dataSourceMetadata.add(data);
