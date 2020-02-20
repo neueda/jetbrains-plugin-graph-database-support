@@ -40,13 +40,13 @@ public class CypherExplainWarningInspectionTest extends BaseInspectionTest {
     }
 
     public void testDataSourceFile_NoDataSource() {
-        component().dataSources().getDataSourceContainer().removeDataSources(singletonList(dataSource().neo4j35()));
+        component().dataSources().getDataSourceContainer().removeDataSources(singletonList(dataSource().neo4j40()));
         addFileAndCheck(GraphConstants.BOUND_DATA_SOURCE_PREFIX + "imaginary-ds-uuid-with-36-symbols-in.cypher",
                 "MATCH (a:Turbo)-->() RETURN *;");
     }
 
     public void testDataSourceFile_UserCreatedDSLikeFile() {
-        component().dataSources().getDataSourceContainer().removeDataSources(singletonList(dataSource().neo4j35()));
+        component().dataSources().getDataSourceContainer().removeDataSources(singletonList(dataSource().neo4j40()));
         // uuid should be 36 symbols long, let's assume user created a file with a name, starting like ds file
         // but does not match the expected format
         addFileAndCheck(GraphConstants.BOUND_DATA_SOURCE_PREFIX + "ds-uuid-with-23-symbols.cypher",

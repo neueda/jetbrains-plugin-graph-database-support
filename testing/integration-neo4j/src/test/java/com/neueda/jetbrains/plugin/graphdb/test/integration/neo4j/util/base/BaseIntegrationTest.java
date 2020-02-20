@@ -22,10 +22,6 @@ import java.util.Map;
 
 public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCase {
 
-    //    private static final String NEO4J30 = "neo4j30";
-//    private static final String NEO4J31 = "neo4j31";
-//    private static final String NEO4J32 = "neo4j32";
-//    private static final String NEO4J33 = "neo4j33";
     private static final String NEO4J34 = "neo4j34";
     private static final String NEO4J35 = "neo4j35";
     private static final String NEO4J40 = "neo4j40";
@@ -116,42 +112,10 @@ public abstract class BaseIntegrationTest extends LightCodeInsightFixtureTestCas
      * Some tests might even don't need running Neo4j server!
      */
     public final class DataSources {
-//        private DataSourceApi neo4j30DataSource;
-        private DataSourceApi neo4j31DataSource;
-        private DataSourceApi neo4j32DataSource;
-        private DataSourceApi neo4j33DataSource;
         private DataSourceApi neo4j34DataSource;
         private DataSourceApi neo4j35DataSource;
         private DataSourceApi neo4j40DataSource;
         private DataSourceApi unavailableDataSource;
-
-//        public DataSourceApi neo4j30() {
-//            if (neo4j30DataSource == null) {
-//                neo4j30DataSource = getNeo4jDataSource(NEO4J30, Neo4j30ServerLoader.getInstance());
-//            }
-//            return neo4j30DataSource;
-//        }
-
-//        public DataSourceApi neo4j31() {
-//            if (neo4j31DataSource == null) {
-//                neo4j31DataSource = getNeo4jDataSource(NEO4J31, Neo4j31ServerLoader.getInstance());
-//            }
-//            return neo4j31DataSource;
-//        }
-
-//        public DataSourceApi neo4j32() {
-//            if (neo4j32DataSource == null) {
-//                neo4j32DataSource = getNeo4jDataSource(NEO4J32, Neo4j32ServerLoader.getInstance());
-//            }
-//            return neo4j32DataSource;
-//        }
-
-//        public DataSourceApi neo4j33() {
-//            if (neo4j33DataSource == null) {
-//                neo4j33DataSource = getNeo4jDataSource(NEO4J33, Neo4j33ServerLoader.getInstance());
-//            }
-//            return neo4j33DataSource;
-//        }
 
         public DataSourceApi neo4j34() {
             if (neo4j34DataSource == null) {
