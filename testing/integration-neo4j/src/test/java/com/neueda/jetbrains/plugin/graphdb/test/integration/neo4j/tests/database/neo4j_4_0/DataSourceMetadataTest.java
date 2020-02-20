@@ -26,8 +26,9 @@ public class DataSourceMetadataTest extends AbstractDataSourceMetadataTest {
         return Arrays.asList(
                 procedure("db.labels",
                         "db.labels() :: (label :: STRING?)",
-                        "List all labels in the database.",
-                        "READ")
+                        "List all available labels in the database.",
+                        "READ",
+                        "true")
         );
     }
 
@@ -36,6 +37,6 @@ public class DataSourceMetadataTest extends AbstractDataSourceMetadataTest {
         List<Map<String, String>> userFunctionsMetadata = metadata.getMetadata(Neo4jBoltCypherDataSourceMetadata.USER_FUNCTIONS);
         assertThat(userFunctionsMetadata)
                 .isNotNull()
-                .hasSize(35);
+                .hasSize(124);
     }
 }

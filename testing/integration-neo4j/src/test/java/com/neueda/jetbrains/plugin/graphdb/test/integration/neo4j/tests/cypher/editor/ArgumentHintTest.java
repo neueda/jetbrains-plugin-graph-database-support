@@ -18,7 +18,7 @@ public class ArgumentHintTest extends BaseIntegrationTest {
         super.setUp();
         parameterInfoHandler = new CypherParameterInfoHandler();
 
-        dataSource().neo4j31();
+        dataSource().neo4j35();
     }
 
 
@@ -73,7 +73,7 @@ public class ArgumentHintTest extends BaseIntegrationTest {
     }
 
     public void testUserDefinedFunction() {
-        doTest("RETURN com.neueda.jetbrains.plugin.graphdb.test.database.neo4j_3_1.secondTestFunction(<caret>\"test\");",
+        doTest("RETURN com.neueda.jetbrains.plugin.graphdb.test.database.neo4j_3_5.secondTestFunction(<caret>\"test\");",
                 "<html>(<b color=1d1d1d>param :: STRING?</b>)</html>");
     }
 
