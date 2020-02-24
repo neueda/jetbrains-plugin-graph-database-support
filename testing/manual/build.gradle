@@ -7,5 +7,6 @@ intellij {
 
 dependencies {
     compile project(':ui:jetbrains')
+    testAnnotationProcessor("org.apache.tinkerpop:gremlin-core:$tinkerpopVersion")
 }
 

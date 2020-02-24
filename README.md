@@ -59,6 +59,8 @@ Plugin is [available for download](https://plugins.jetbrains.com/plugin/8087) fr
 
 ## Development
 
+Warning: Required to switch local environment to JDK 11.
+
 Gradle is used as build system.
 
 ```shell

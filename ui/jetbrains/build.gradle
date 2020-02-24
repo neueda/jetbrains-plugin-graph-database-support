@@ -12,6 +12,7 @@ dependencies {
     compile project(':language:cypher')
     compile project(':database:neo4j')
     compile project(':database:opencypher')
+    annotationProcessor("org.apache.tinkerpop:gremlin-core:$tinkerpopVersion")
 
     compile project(':ui:visualization')
 
@@ -25,7 +26,8 @@ dependencies {
 
     testCompile project(':testing:common')
 
-    testCompile "org.apache.tinkerpop:tinkergraph-gremlin:3.4.0"
+    testCompile "org.apache.tinkerpop:tinkergraph-gremlin:$tinkerpopVersion"
+    testAnnotationProcessor("org.apache.tinkerpop:gremlin-core:$tinkerpopVersion")
     testCompile "junit:junit:$versionJunit"
     testCompile "org.assertj:assertj-core:$versionAssertj"
     testCompile "org.mockito:mockito-core:$versionMockito"
