@@ -5,6 +5,10 @@ Be sure to check that plugin works before releasing!
 <sub>Commands to be executed straight from the root directory of [neueda/jetbrains-plugin-graph-database-support](https://github.com/neueda/jetbrains-plugin-graph-database-support)
 repository, on the master branch.</sub>
 
+# Update first-start release notes notification before releasing
+
+Release notes: ./platform/src/main/resources/graphdb/messages/GraphBundle.properties
+
 # So, how?
 
 1. Execute this command: `./gradlew release`
