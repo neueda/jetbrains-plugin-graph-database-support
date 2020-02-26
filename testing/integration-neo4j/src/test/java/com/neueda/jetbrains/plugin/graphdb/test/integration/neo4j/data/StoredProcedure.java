@@ -11,14 +11,6 @@ public class StoredProcedure {
     private final String worksOnSystem;
     private final String defaultBuiltInRoles;
 
-//    public StoredProcedure(String name, String signature) {
-//        this(name, signature, null);
-//    }
-
-//    public StoredProcedure(String name, String signature, String description) {
-//        this(name, signature, description, null);
-//}
-
     public StoredProcedure(String name, String signature, String description, String mode) {
         this(name, signature, description, mode, null);
     }

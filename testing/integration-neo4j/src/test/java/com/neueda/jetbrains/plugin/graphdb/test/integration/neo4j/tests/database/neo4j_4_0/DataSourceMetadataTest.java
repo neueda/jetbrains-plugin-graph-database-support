@@ -12,7 +12,6 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-//TODO: fix `Neo4j server should not be null`
 public class DataSourceMetadataTest extends AbstractDataSourceMetadataTest {
 
     @Override

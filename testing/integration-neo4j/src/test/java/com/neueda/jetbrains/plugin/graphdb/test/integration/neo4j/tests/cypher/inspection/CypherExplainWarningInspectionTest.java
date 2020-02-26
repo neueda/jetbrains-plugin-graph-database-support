@@ -26,8 +26,9 @@ public class CypherExplainWarningInspectionTest extends BaseInspectionTest {
     }
 
     public void testDataSourceFile_HighlightExplainWarning() {
-//TODO: discover, wtf and how to improve
-//        addDataSourceFileAndCheck("MATCH (a)-[r:<warning descr=\"The provided relationship type is not in the database.\">ART</warning>]-(b) RETURN *;");
+//TODO: investigate if there's way of improvement of warning tag positioning, as it was more logical prior neo4.0
+
+//previous positioning:// addDataSourceFileAndCheck("MATCH (a)-[r:<warning descr=\"The provided relationship type is not in the database.\">ART</warning>]-(b) RETURN *;");
         addDataSourceFileAndCheck("MATCH (a)-[r:ART]-(b)<warning descr=\"The provided relationship type is not in the database.\"> </warning>RETURN *;");
     }
 
