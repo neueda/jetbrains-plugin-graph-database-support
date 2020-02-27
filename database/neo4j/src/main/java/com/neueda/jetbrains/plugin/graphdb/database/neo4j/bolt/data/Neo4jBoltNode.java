@@ -3,7 +3,7 @@ package com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphNode;
 import com.neueda.jetbrains.plugin.graphdb.database.api.data.GraphPropertyContainer;
 import org.neo4j.driver.internal.util.Iterables;
-import org.neo4j.driver.v1.types.Node;
+import org.neo4j.driver.types.Node;
 
 import java.util.List;
 import java.util.Objects;

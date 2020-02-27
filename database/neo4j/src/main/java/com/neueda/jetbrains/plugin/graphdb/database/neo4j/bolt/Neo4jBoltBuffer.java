@@ -10,9 +10,9 @@ import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQue
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryPlan;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltQueryResultRow;
-import org.neo4j.driver.v1.summary.InputPosition;
-import org.neo4j.driver.v1.summary.Plan;
-import org.neo4j.driver.v1.summary.ResultSummary;
+import org.neo4j.driver.summary.InputPosition;
+import org.neo4j.driver.summary.Plan;
+import org.neo4j.driver.summary.ResultSummary;
 
 import java.util.ArrayList;
 import java.util.Collections;

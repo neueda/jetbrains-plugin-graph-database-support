@@ -24,7 +24,7 @@
         <p>
             <b>Supported databases:</b>
         <ul>
-            <li>Neo4j 3.0+ (Bolt)</li>
+            <li>Neo4j 3.4+ (Bolt)</li>
             <li>TinkerPop databases (<a href="https://github.com/opencypher/cypher-for-gremlin">Cypher for Gremlin</a> translation)
                 <ul>
                     <li>AWS Neptune</li>
@@ -171,7 +171,7 @@
                          implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.inspections.CypherFunctionCallInspection"/>
 
         <codeInsight.parameterInfo language="Cypher" implementationClass="com.neueda.jetbrains.plugin.graphdb.language.cypher.editor.CypherParameterInfoHandler"/>
-        
+
         <typedHandler implementation="com.neueda.jetbrains.plugin.graphdb.language.cypher.editor.CypherTypedHandlerDelegate" />
 
         <codeStyleSettingsProvider implementation="com.neueda.jetbrains.plugin.graphdb.jetbrains.formatter.CypherCodeStyleSettingsProvider"/>

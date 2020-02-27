@@ -4,11 +4,7 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResult;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultColumn;
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultRow;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
 
@@ -53,7 +49,10 @@ public class Neo4jBoltCypherDataSourceMetadata implements DataSourceMetadata {
             Map<String, String> data = new HashMap<>();
 
             for (GraphQueryResultColumn column : columns) {
-                data.put(column.getName(), row.getValue(column).toString());
+                Object value = row.getValue(column);
+                if (value != null) {
+                    data.put(column.getName(), value.toString());
+                }
             }
 
             dataSourceMetadata.add(data);

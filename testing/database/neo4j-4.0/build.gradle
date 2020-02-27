@@ -1,0 +1,22 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+dependencies {
+    compile 'org.neo4j.test:neo4j-harness:4.0.0'
+    compile project(":testing:database:neo4j-common")
+    annotationProcessor("org.neo4j.test:neo4j-harness:4.0.0")
+}
+
+shadowJar {
+    mergeServiceFiles()
+    baseName = 'neo4j40-shadow'
+    classifier = null
+    version = null
+    zip64 true
+}
+
+jar.finalizedBy(shadowJar)

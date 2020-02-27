@@ -9,11 +9,11 @@ import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultCo
 import com.neueda.jetbrains.plugin.graphdb.database.api.query.GraphQueryResultRow;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.Neo4jBoltBuffer;
 import com.neueda.jetbrains.plugin.graphdb.database.neo4j.bolt.data.Neo4jBoltRelationship;
-import org.neo4j.driver.v1.summary.Notification;
-import org.neo4j.driver.v1.summary.Plan;
-import org.neo4j.driver.v1.summary.ProfiledPlan;
-import org.neo4j.driver.v1.summary.ResultSummary;
-import org.neo4j.driver.v1.summary.SummaryCounters;
+import org.neo4j.driver.summary.Notification;
+import org.neo4j.driver.summary.Plan;
+import org.neo4j.driver.summary.ProfiledPlan;
+import org.neo4j.driver.summary.ResultSummary;
+import org.neo4j.driver.summary.SummaryCounters;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +49,7 @@ public class Neo4jBoltQueryResult implements GraphQueryResult {
         SummaryCounters counters = summary.counters();
 
         StringBuilder sb = new StringBuilder();
-        sb.append(format("Query type: %s.\n", summary.statementType()));
+        sb.append(format("Query type: %s.\n", summary.queryType()));
         if (counters.containsUpdates()) {
             if (counters.nodesCreated() > 0) {
                 sb.append(format("Nodes created: %s\n", counters.nodesCreated()));

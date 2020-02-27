@@ -1,5 +1,8 @@
 apply plugin: "org.jetbrains.intellij"
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 dependencies {
     compile project(':language:cypher')
     compile project(':ui:jetbrains')

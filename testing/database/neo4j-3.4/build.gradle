@@ -1,10 +1,11 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '1.2.4'
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
 }
 
 dependencies {
     compile 'org.neo4j.test:neo4j-harness:3.4.10'
     compile project(":testing:database:neo4j-common")
+    annotationProcessor("org.neo4j.test:neo4j-harness:3.4.10")
 }
 
 shadowJar {

@@ -29,7 +29,7 @@ Plugin is [available for download](https://plugins.jetbrains.com/plugin/8087) fr
 - Write and execute queries
 - Explore query results in graph or table view
 - Supported databases:
-  - Neo4j 3.0+ (Bolt)
+  - Neo4j 3.4+ (Bolt)
 - [Cypher](https://github.com/opencypher/openCypher) query language:
   - Understands queries in `.cyp`, `.cypher` or `.cql` files
   - Syntax highlight and error reporting
@@ -58,6 +58,8 @@ Plugin is [available for download](https://plugins.jetbrains.com/plugin/8087) fr
 * CLion
 
 ## Development
+
+Warning: Required to switch local environment to JDK 11.
 
 Gradle is used as build system.
 

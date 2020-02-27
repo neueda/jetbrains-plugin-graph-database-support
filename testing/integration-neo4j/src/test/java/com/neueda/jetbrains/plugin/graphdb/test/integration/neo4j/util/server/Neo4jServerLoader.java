@@ -3,7 +3,7 @@ package com.neueda.jetbrains.plugin.graphdb.test.integration.neo4j.util.server;
 import com.google.common.base.Throwables;
 import com.intellij.openapi.util.io.FileUtil;
 import com.neueda.jetbrains.plugin.graphdb.test.database.neo4j.common.Neo4jServer;
-import org.neo4j.driver.v1.Config;
+import org.neo4j.driver.Config;
 import org.xeustechnologies.jcl.JarClassLoader;
 import org.xeustechnologies.jcl.JclObjectFactory;
 import org.xeustechnologies.jcl.proxy.CglibProxyProvider;

@@ -26,9 +26,10 @@ public class CypherExplainWarningInspectionTest extends BaseInspectionTest {
     }
 
     public void testDataSourceFile_HighlightExplainWarning() {
-        addDataSourceFileAndCheck("MATCH (a)-[r:" +
-                "<warning descr=\"The provided relationship type is not in the database.\">" +
-                "ART</warning>]-(b) RETURN *;");
+//TODO: investigate if there's way of improvement of warning tag positioning, as it was more logical prior neo4.0
+
+//previous positioning:// addDataSourceFileAndCheck("MATCH (a)-[r:<warning descr=\"The provided relationship type is not in the database.\">ART</warning>]-(b) RETURN *;");
+        addDataSourceFileAndCheck("MATCH (a)-[r:ART]-(b)<warning descr=\"The provided relationship type is not in the database.\"> </warning>RETURN *;");
     }
 
     public void testDataSourceFile_NoHighlightQueryError() {
@@ -40,13 +41,13 @@ public class CypherExplainWarningInspectionTest extends BaseInspectionTest {
     }
 
     public void testDataSourceFile_NoDataSource() {
-        component().dataSources().getDataSourceContainer().removeDataSources(singletonList(dataSource().neo4j31()));
+        component().dataSources().getDataSourceContainer().removeDataSources(singletonList(dataSource().neo4j40()));
         addFileAndCheck(GraphConstants.BOUND_DATA_SOURCE_PREFIX + "imaginary-ds-uuid-with-36-symbols-in.cypher",
                 "MATCH (a:Turbo)-->() RETURN *;");
     }
 
     public void testDataSourceFile_UserCreatedDSLikeFile() {
-        component().dataSources().getDataSourceContainer().removeDataSources(singletonList(dataSource().neo4j31()));
+        component().dataSources().getDataSourceContainer().removeDataSources(singletonList(dataSource().neo4j40()));
         // uuid should be 36 symbols long, let's assume user created a file with a name, starting like ds file
         // but does not match the expected format
         addFileAndCheck(GraphConstants.BOUND_DATA_SOURCE_PREFIX + "ds-uuid-with-23-symbols.cypher",
