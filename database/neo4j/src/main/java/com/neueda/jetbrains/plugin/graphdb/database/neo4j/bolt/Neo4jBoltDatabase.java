@@ -28,7 +28,11 @@ public class Neo4jBoltDatabase implements GraphDatabaseApi {
         Integer port = configuration.getPort();
         String username = configuration.getUser();
         String password = configuration.getPassword();
-        this.url = String.format("bolt://%s:%s", host, port);
+        if (host.startsWith("bolt://") || host.startsWith("bolt+routing://")) {
+            this.url = String.format("%s:%s", host, port);
+        } else {
+            this.url = String.format("bolt://%s:%s", host, port);
+        }
         if (username != null && password != null) {
             auth = AuthTokens.basic(username, password);
         } else {
