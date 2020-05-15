@@ -8,6 +8,14 @@ public class CommandParsingTest extends BaseParsingTest {
         super("command");
     }
 
+    public void testConstraintNodeKeyCreate() {
+        doTest(true);
+    }
+
+    public void testConstraintNodeKeyDrop() {
+        doTest(true);
+    }
+
     public void testConstraintPropertyExistsNodeCreate() {
         doTest(true);
     }

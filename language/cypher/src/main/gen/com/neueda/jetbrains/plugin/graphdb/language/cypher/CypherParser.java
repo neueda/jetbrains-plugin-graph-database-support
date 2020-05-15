@@ -331,6 +331,8 @@ public class CypherParser implements PsiParser, LightPsiParser {
   //           | DropNodePropertyExistenceConstraint
   //           | CreateRelationshipPropertyExistenceConstraint
   //           | DropRelationshipPropertyExistenceConstraint
+  //           | CreateNodeKeyConstraint
+  //           | DropNodeKeyConstraint
   public static boolean Command(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Command")) return false;
     if (!nextTokenIs(b, "<command>", K_CREATE, K_DROP)) return false;
@@ -344,6 +346,8 @@ public class CypherParser implements PsiParser, LightPsiParser {
     if (!r) r = DropNodePropertyExistenceConstraint(b, l + 1);
     if (!r) r = CreateRelationshipPropertyExistenceConstraint(b, l + 1);
     if (!r) r = DropRelationshipPropertyExistenceConstraint(b, l + 1);
+    if (!r) r = CreateNodeKeyConstraint(b, l + 1);
+    if (!r) r = DropNodeKeyConstraint(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -404,6 +408,19 @@ public class CypherParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, K_CREATE);
     r = r && IndexSyntax(b, l + 1);
     exit_section_(b, m, CREATE_INDEX, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // K_CREATE NodeKeySyntax
+  public static boolean CreateNodeKeyConstraint(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CreateNodeKeyConstraint")) return false;
+    if (!nextTokenIs(b, K_CREATE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_CREATE);
+    r = r && NodeKeySyntax(b, l + 1);
+    exit_section_(b, m, CREATE_NODE_KEY_CONSTRAINT, r);
     return r;
   }
 
@@ -556,6 +573,19 @@ public class CypherParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, K_DROP);
     r = r && IndexSyntax(b, l + 1);
     exit_section_(b, m, DROP_INDEX, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // K_DROP NodeKeySyntax
+  public static boolean DropNodeKeyConstraint(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "DropNodeKeyConstraint")) return false;
+    if (!nextTokenIs(b, K_DROP)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_DROP);
+    r = r && NodeKeySyntax(b, l + 1);
+    exit_section_(b, m, DROP_NODE_KEY_CONSTRAINT, r);
     return r;
   }
 
@@ -2237,6 +2267,46 @@ public class CypherParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // K_CONSTRAINT K_ON "(" Variable NodeLabel ")" K_ASSERT "(" PropertyExpression ("," PropertyExpression)* ")" K_IS K_NODE K_KEY
+  public static boolean NodeKeySyntax(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NodeKeySyntax")) return false;
+    if (!nextTokenIs(b, K_CONSTRAINT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, K_CONSTRAINT, K_ON, PARENTHESE_OPEN);
+    r = r && Variable(b, l + 1);
+    r = r && NodeLabel(b, l + 1);
+    r = r && consumeTokens(b, 0, PARENTHESE_CLOSE, K_ASSERT, PARENTHESE_OPEN);
+    r = r && PropertyExpression(b, l + 1);
+    r = r && NodeKeySyntax_9(b, l + 1);
+    r = r && consumeTokens(b, 0, PARENTHESE_CLOSE, K_IS, K_NODE, K_KEY);
+    exit_section_(b, m, NODE_KEY_SYNTAX, r);
+    return r;
+  }
+
+  // ("," PropertyExpression)*
+  private static boolean NodeKeySyntax_9(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NodeKeySyntax_9")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!NodeKeySyntax_9_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "NodeKeySyntax_9", c)) break;
+    }
+    return true;
+  }
+
+  // "," PropertyExpression
+  private static boolean NodeKeySyntax_9_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NodeKeySyntax_9_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, OP_COMMA);
+    r = r && PropertyExpression(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // ":" LabelName
   public static boolean NodeLabel(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NodeLabel")) return false;
@@ -3609,6 +3679,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
   //                 | K_ALLSHORTESTPATHS
   //                 | K_ALL
   //                 | K_ADD
+  //                 | K_KEY
   public static boolean ReservedWord(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ReservedWord")) return false;
     boolean r;
@@ -3698,6 +3769,7 @@ public class CypherParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, K_ALLSHORTESTPATHS);
     if (!r) r = consumeToken(b, K_ALL);
     if (!r) r = consumeToken(b, K_ADD);
+    if (!r) r = consumeToken(b, K_KEY);
     exit_section_(b, l, m, r, false, null);
     return r;
   }

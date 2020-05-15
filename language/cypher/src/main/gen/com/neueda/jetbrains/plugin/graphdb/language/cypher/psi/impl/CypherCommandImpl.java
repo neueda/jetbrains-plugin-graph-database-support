@@ -34,6 +34,12 @@ public class CypherCommandImpl extends ASTWrapperPsiElement implements CypherCom
 
   @Override
   @Nullable
+  public CypherCreateNodeKeyConstraint getCreateNodeKeyConstraint() {
+    return findChildByClass(CypherCreateNodeKeyConstraint.class);
+  }
+
+  @Override
+  @Nullable
   public CypherCreateNodePropertyExistenceConstraint getCreateNodePropertyExistenceConstraint() {
     return findChildByClass(CypherCreateNodePropertyExistenceConstraint.class);
   }
@@ -54,6 +60,12 @@ public class CypherCommandImpl extends ASTWrapperPsiElement implements CypherCom
   @Nullable
   public CypherDropIndex getDropIndex() {
     return findChildByClass(CypherDropIndex.class);
+  }
+
+  @Override
+  @Nullable
+  public CypherDropNodeKeyConstraint getDropNodeKeyConstraint() {
+    return findChildByClass(CypherDropNodeKeyConstraint.class);
   }
 
   @Override

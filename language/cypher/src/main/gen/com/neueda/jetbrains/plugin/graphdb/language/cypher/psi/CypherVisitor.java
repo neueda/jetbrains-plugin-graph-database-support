@@ -94,6 +94,10 @@ public class CypherVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitCreateNodeKeyConstraint(@NotNull CypherCreateNodeKeyConstraint o) {
+    visitPsiElement(o);
+  }
+
   public void visitCreateNodePropertyExistenceConstraint(@NotNull CypherCreateNodePropertyExistenceConstraint o) {
     visitPsiElement(o);
   }
@@ -123,6 +127,10 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitDropIndex(@NotNull CypherDropIndex o) {
+    visitPsiElement(o);
+  }
+
+  public void visitDropNodeKeyConstraint(@NotNull CypherDropNodeKeyConstraint o) {
     visitPsiElement(o);
   }
 
@@ -291,6 +299,10 @@ public class CypherVisitor extends PsiElementVisitor {
   }
 
   public void visitNewParameter(@NotNull CypherNewParameter o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNodeKeySyntax(@NotNull CypherNodeKeySyntax o) {
     visitPsiElement(o);
   }
 

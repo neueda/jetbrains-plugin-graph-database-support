@@ -26,6 +26,7 @@ public interface CypherTypes {
   IElementType COUNT_STAR = new CypherElementType("COUNT_STAR");
   IElementType CREATE = new CypherElementType("CREATE");
   IElementType CREATE_INDEX = new CypherElementType("CREATE_INDEX");
+  IElementType CREATE_NODE_KEY_CONSTRAINT = new CypherElementType("CREATE_NODE_KEY_CONSTRAINT");
   IElementType CREATE_NODE_PROPERTY_EXISTENCE_CONSTRAINT = new CypherElementType("CREATE_NODE_PROPERTY_EXISTENCE_CONSTRAINT");
   IElementType CREATE_RELATIONSHIP_PROPERTY_EXISTENCE_CONSTRAINT = new CypherElementType("CREATE_RELATIONSHIP_PROPERTY_EXISTENCE_CONSTRAINT");
   IElementType CREATE_UNIQUE_CONSTRAINT = new CypherElementType("CREATE_UNIQUE_CONSTRAINT");
@@ -34,6 +35,7 @@ public interface CypherTypes {
   IElementType DELETE = new CypherElementType("DELETE");
   IElementType DOUBLE_LITERAL = new CypherElementType("DOUBLE_LITERAL");
   IElementType DROP_INDEX = new CypherElementType("DROP_INDEX");
+  IElementType DROP_NODE_KEY_CONSTRAINT = new CypherElementType("DROP_NODE_KEY_CONSTRAINT");
   IElementType DROP_NODE_PROPERTY_EXISTENCE_CONSTRAINT = new CypherElementType("DROP_NODE_PROPERTY_EXISTENCE_CONSTRAINT");
   IElementType DROP_RELATIONSHIP_PROPERTY_EXISTENCE_CONSTRAINT = new CypherElementType("DROP_RELATIONSHIP_PROPERTY_EXISTENCE_CONSTRAINT");
   IElementType DROP_UNIQUE_CONSTRAINT = new CypherElementType("DROP_UNIQUE_CONSTRAINT");
@@ -76,6 +78,7 @@ public interface CypherTypes {
   IElementType MULTI_PART_QUERY = new CypherElementType("MULTI_PART_QUERY");
   IElementType NAMESPACE = new CypherElementType("NAMESPACE");
   IElementType NEW_PARAMETER = new CypherElementType("NEW_PARAMETER");
+  IElementType NODE_KEY_SYNTAX = new CypherElementType("NODE_KEY_SYNTAX");
   IElementType NODE_LABEL = new CypherElementType("NODE_LABEL");
   IElementType NODE_LABELS = new CypherElementType("NODE_LABELS");
   IElementType NODE_LOOKUP = new CypherElementType("NODE_LOOKUP");
@@ -212,6 +215,7 @@ public interface CypherTypes {
   IElementType K_INDEX = new CypherTokenType("K_INDEX");
   IElementType K_IS = new CypherTokenType("K_IS");
   IElementType K_JOIN = new CypherTokenType("K_JOIN");
+  IElementType K_KEY = new CypherTokenType("K_KEY");
   IElementType K_LIMIT = new CypherTokenType("K_LIMIT");
   IElementType K_LOAD = new CypherTokenType("K_LOAD");
   IElementType K_MANDATORY = new CypherTokenType("K_MANDATORY");
@@ -341,6 +345,9 @@ public interface CypherTypes {
       else if (type == CREATE_INDEX) {
         return new CypherCreateIndexImpl(node);
       }
+      else if (type == CREATE_NODE_KEY_CONSTRAINT) {
+        return new CypherCreateNodeKeyConstraintImpl(node);
+      }
       else if (type == CREATE_NODE_PROPERTY_EXISTENCE_CONSTRAINT) {
         return new CypherCreateNodePropertyExistenceConstraintImpl(node);
       }
@@ -364,6 +371,9 @@ public interface CypherTypes {
       }
       else if (type == DROP_INDEX) {
         return new CypherDropIndexImpl(node);
+      }
+      else if (type == DROP_NODE_KEY_CONSTRAINT) {
+        return new CypherDropNodeKeyConstraintImpl(node);
       }
       else if (type == DROP_NODE_PROPERTY_EXISTENCE_CONSTRAINT) {
         return new CypherDropNodePropertyExistenceConstraintImpl(node);
@@ -490,6 +500,9 @@ public interface CypherTypes {
       }
       else if (type == NEW_PARAMETER) {
         return new CypherNewParameterImpl(node);
+      }
+      else if (type == NODE_KEY_SYNTAX) {
+        return new CypherNodeKeySyntaxImpl(node);
       }
       else if (type == NODE_LABEL) {
         return new CypherNodeLabelImpl(node);

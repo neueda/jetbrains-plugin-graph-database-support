@@ -292,6 +292,12 @@ public class CypherReservedWordImpl extends ASTWrapperPsiElement implements Cyph
 
   @Override
   @Nullable
+  public PsiElement getKKey() {
+    return findChildByType(K_KEY);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getKLimit() {
     return findChildByType(K_LIMIT);
   }
