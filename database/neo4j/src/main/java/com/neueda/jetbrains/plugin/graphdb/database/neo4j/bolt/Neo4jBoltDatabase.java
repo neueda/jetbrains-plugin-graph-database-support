@@ -48,7 +48,8 @@ public class Neo4jBoltDatabase implements GraphDatabaseApi {
     @Override
     public GraphQueryResult execute(String query, Map<String, Object> statementParameters) {
         try {
-            Driver driver = GraphDatabase.driver(url, auth);
+            Config config = Config.builder().withEncryption().build();
+            Driver driver = GraphDatabase.driver(url, auth,config);
             try {
                 try (Session session = driver.session()) {
 
