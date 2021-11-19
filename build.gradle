@@ -11,6 +11,14 @@ def configDir = new File(buildscript.sourceFile.parentFile, 'config')
 ext.checkstyleConfigDir = "$configDir/checkstyle"
 
 allprojects {
+    tasks.withType(Test).configureEach {
+        maxParallelForks = 4
+        if (!project.hasProperty("createReports")) {
+            reports.html.required = false
+            reports.junitXml.required = false
+        }
+    }
+
 
     buildscript {
         repositories {
